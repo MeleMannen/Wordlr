@@ -14,14 +14,14 @@ struct WordleApp: App {
     @State var selection: TabSelection = .home
     
     init() {
-        let tabBarAppearance = UITabBarAppearance()
-        tabBarAppearance.configureWithOpaqueBackground()
-        tabBarAppearance.backgroundColor = UIColor.systemBackground
-        
-        UITabBar.appearance().standardAppearance = tabBarAppearance
-        if #available(iOS 15.0, *) {
-            UITabBar.appearance().scrollEdgeAppearance = tabBarAppearance
-        }
+//        let tabBarAppearance = UITabBarAppearance()
+//        tabBarAppearance.configureWithOpaqueBackground()
+//        tabBarAppearance.backgroundColor = UIColor.systemBackground
+//        
+//        UITabBar.appearance().standardAppearance = tabBarAppearance
+//        if #available(iOS 15.0, *) {
+//            UITabBar.appearance().scrollEdgeAppearance = tabBarAppearance
+//        }
         
     }
     
@@ -34,17 +34,18 @@ struct WordleApp: App {
                     .tabItem {
                         Label("The Phrase", systemImage: "character.square")
                     }
-                    .preferredColorScheme(appTheme == .system ? nil : (appTheme == .light ? .light : .dark))
+//                    .preferredColorScheme(appTheme == .system ? nil : (appTheme == .light ? .light : .dark))
                     .environmentObject(appManager)
                 
                 SettingsView()
-                    .tag(TabSelection.home)
+                    .tag(TabSelection.settings)
                     .tabItem {
                         Label("Settings", systemImage: "gear")
                     }
-                    .preferredColorScheme(appTheme == .system ? nil : (appTheme == .light ? .light : .dark))
                     .environmentObject(appManager)
+                
             }
+            .preferredColorScheme(appTheme == .system ? nil : (appTheme == .light ? .light : .dark))
             
             
             

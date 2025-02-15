@@ -9,6 +9,7 @@ import SwiftUI
 
 struct GameView: View {
     @EnvironmentObject var appManager: AppManager
+    @Environment(\.dismiss) var dismiss
     
     var body: some View {
         VStack {
@@ -284,22 +285,45 @@ struct GameView: View {
                         .font(.title2).bold()
                         .padding(.bottom, 50)
                     
-                    Button(action: {
-                        appManager.didTapNewGameButton.toggle()
-                        appManager.resetBoard()
-                    }, label: {
-                        Text("New Game")
-                            .font(.title)
-                            .frame(maxWidth: .infinity, minHeight: 40, idealHeight: 45, maxHeight: 50)
-                            .foregroundStyle(.white)
-                            .background {
-                                RoundedRectangle(cornerRadius: 10)
-                                    .foregroundStyle(.green)
-                            }
-                    })
-                    .padding(.horizontal, 20)
-                    .padding(.bottom, 50)
-                    .sensoryFeedback(.impact, trigger: appManager.didTapNewGameButton)
+                    if appManager.gameMode == .normal {
+                        Button(action: {
+                            appManager.didTapNewGameButton.toggle()
+                            appManager.resetBoard()
+                        }, label: {
+                            Text("New Game")
+                                .font(.title)
+                                .frame(maxWidth: .infinity, minHeight: 40, idealHeight: 45, maxHeight: 50)
+                                .foregroundStyle(.white)
+                                .background {
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .foregroundStyle(.green)
+                                }
+                        })
+                        .padding(.horizontal, 20)
+                        .padding(.bottom, 50)
+                        .sensoryFeedback(.impact, trigger: appManager.didTapNewGameButton)
+                        
+                    } else {
+                        Button(action: {
+                            appManager.didTapPlaySomethingElseButton.toggle()
+                            dismiss()
+                            
+                            
+                        }, label: {
+                            Text("Play Something Else")
+                                .font(.title)
+                                .frame(maxWidth: .infinity, minHeight: 40, idealHeight: 45, maxHeight: 50)
+                                .foregroundStyle(.white)
+                                .background {
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .foregroundStyle(.green)
+                                }
+                        })
+                        .padding(.horizontal, 20)
+                        .padding(.bottom, 50)
+                        .sensoryFeedback(.impact, trigger: appManager.didTapPlaySomethingElseButton)
+                    }
+                    
                     
                     NavigationLink(destination: WordDescriptionView(word: appManager.word).environmentObject(appManager), label: {
                         Text("Show Definition")
@@ -331,8 +355,8 @@ struct GameView: View {
         })
         .navigationTitle("Guess The Phrase")
         .navigationBarTitleDisplayMode(.inline)
-        .toolbarBackground(.background, for: .navigationBar)
-        .toolbarBackground(.visible, for: .navigationBar)
+//        .toolbarBackground(.background, for: .navigationBar)
+//        .toolbarBackground(.visible, for: .navigationBar)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 NavigationLink(destination: SearchView().environmentObject(appManager), label: {
@@ -352,14 +376,7 @@ struct GameView: View {
     }
 }
 
-struct AlertItem: Identifiable {
-    var id = UUID()
-    var title: Text
-    var message: Text?
-    var primaryButton: Alert.Button?
-    var secondaryButton: Alert.Button?
-    var dismissButton: Alert.Button?
-}
+
 
 
 

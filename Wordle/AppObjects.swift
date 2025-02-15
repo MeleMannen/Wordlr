@@ -22,6 +22,11 @@ enum ActiveAlert {
     case second
 }
 
+enum GameMode {
+    case dailyWord
+    case normal
+}
+
 enum LanguageSelection: String, CaseIterable, Identifiable {
     case norwegian
     case english
@@ -38,6 +43,15 @@ enum LanguageSelection: String, CaseIterable, Identifiable {
         NSLocalizedString(localizationKey, comment: "Name of the language for selection")
     }
     
+}
+
+struct AlertItem: Identifiable {
+    var id = UUID()
+    var title: Text
+    var message: Text?
+    var primaryButton: Alert.Button?
+    var secondaryButton: Alert.Button?
+    var dismissButton: Alert.Button?
 }
 
 struct Shorted: Codable {
@@ -338,13 +352,13 @@ struct ProcessedExample: Identifiable, Hashable {
 
 
 
-final class WordleDataStore {
-    static let shared = WordleDataStore()
+final class WordleDataManager {
+    static let shared = WordleDataManager()
    
 }
 
-extension WordleDataStore {
-    func loadWordsFromFile(selectedLanguage: LanguageSelection) -> Words? {
+extension WordleDataManager {
+    func loadWordsFromJSONFile(selectedLanguage: LanguageSelection) -> Words? {
         guard let filePath = Bundle.main.path(forResource: selectedLanguage == .norwegian ? "norwegianWords" : "englishWords", ofType: "json") else {
             print("File not found")
             return nil
@@ -361,7 +375,24 @@ extension WordleDataStore {
         }
     }
     
-    func loadShortedFromFile() -> Shorted? {
+    func loadDailyWordsFromJSONFile(selectedLanguage: LanguageSelection) -> Words? {
+        guard let filePath = Bundle.main.path(forResource: selectedLanguage == .norwegian ? "dailyNorwegianWords" : "dailyEnglishWords", ofType: "json") else {
+            print("File not found")
+            return nil
+        }
+        
+        do {
+            let data = try Data(contentsOf: URL(fileURLWithPath: filePath))
+            let decoder = JSONDecoder()
+            let words = try decoder.decode(Words.self, from: data)
+            return words
+        } catch {
+            print("Error decoding JSON: \(error)")
+            return nil
+        }
+    }
+    
+    func loadShortedFromJSONFile() -> Shorted? {
         guard let filePath = Bundle.main.path(forResource: "shortedNorwegainWords", ofType: "json") else {
             print("File not found2")
             return nil
@@ -583,7 +614,7 @@ extension WordleDataStore {
     
     func replacePlaceholders(in content: String, with items: [DefinitionItem]) -> String {
         var modifiedContent = content
-        if let shortedWords: Shorted = loadShortedFromFile() {
+        if let shortedWords: Shorted = loadShortedFromJSONFile() {
             for item in items {
                 if let id = item.id {
                     let idString = String(id)
@@ -635,7 +666,7 @@ extension WordleDataStore {
     
     func replaceEtymologyPlaceholders(in content: String, with items: [EtymologyItem]) -> String {
         var modifiedContent = content
-        if let shortedWords: Shorted = loadShortedFromFile() {
+        if let shortedWords: Shorted = loadShortedFromJSONFile() {
             for item in items {
                 if let id = item.id {
                     let idString = String(id)
@@ -698,7 +729,7 @@ extension WordleDataStore {
     
     func replaceQuotePlaceholders(in content: String, with items: [QuoteItem]) -> String {
         var modifiedContent = content
-        if let shortedWords: Shorted = loadShortedFromFile() {
+        if let shortedWords: Shorted = loadShortedFromJSONFile() {
             for item in items {
                  if item.type == "usage" {
                     var string = ""

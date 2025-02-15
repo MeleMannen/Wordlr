@@ -11,7 +11,7 @@ struct SettingsView: View {
     @AppStorage("appTheme") private var appTheme: AppTheme = .dark
     @EnvironmentObject var appManager: AppManager
     var body: some View {
-        NavigationStack {
+        NavigationView {
             List {
                 VStack {
                     HStack {
@@ -39,10 +39,10 @@ struct SettingsView: View {
                 
                 
             }
-            .padding(.top, 10)
+//            .padding(.top, 10)
             .navigationTitle("Settings")
-            .toolbarBackground(.background, for: .navigationBar)
-            .toolbarBackground(.visible, for: .navigationBar)
+//            .toolbarBackground(.background, for: .navigationBar)
+//            .toolbarBackground(.visible, for: .navigationBar)
                         
         }
     }

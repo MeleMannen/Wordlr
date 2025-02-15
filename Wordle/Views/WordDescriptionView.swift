@@ -144,12 +144,13 @@ struct WordDescriptionView: View {
             } else {
                 ProgressView()
                     .progressViewStyle(CircularProgressViewStyle())
+                    .font(.largeTitle)
                 
             }
         }
         .navigationTitle("\(self.word)")
-        .toolbarBackground(.background, for: .navigationBar)
-        .toolbarBackground(.visible, for: .navigationBar)
+//        .toolbarBackground(.background, for: .navigationBar)
+//        .toolbarBackground(.visible, for: .navigationBar)
         .onAppear {
             appManager.getDefinition(for: self.word) { processedWords in
                 self.processedWords = processedWords

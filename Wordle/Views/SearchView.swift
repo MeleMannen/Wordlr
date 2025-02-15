@@ -35,11 +35,8 @@ struct SearchView: View {
         }
         .searchable(text: $appManager.searchedWord, placement: .navigationBarDrawer(displayMode: .always), prompt: "Search for a Phrase")
         .navigationTitle("Search")
-        .toolbarBackground(.background, for: .navigationBar)
-        .toolbarBackground(.visible, for: .navigationBar)
-        .onAppear {
-            //            appManager.searchedWord = ""
-        }
+//        .toolbarBackground(.background, for: .navigationBar)
+//        .toolbarBackground(.visible, for: .navigationBar)
         
     }
     

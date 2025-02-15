@@ -8,9 +8,18 @@
 import SwiftUI
 
 final class AppManager: ObservableObject {
+    @AppStorage("dailyWord: 1") private var dailyWord1: Date?
+    @AppStorage("dailyWord: 2") private var dailyWord2: Date?
+    @AppStorage("dailyWord: 3") private var dailyWord3: Date?
+    @AppStorage("dailyWord: 4") private var dailyWord4: Date?
+    @AppStorage("dailyWord: 5") private var dailyWord5: Date?
+    @AppStorage("dailyWord: 6") private var dailyWord6: Date?
+    @AppStorage("dailyWord: 7") private var dailyWord7: Date?
+    @AppStorage("dailyWord: 8") private var dailyWord8: Date?
+    
     @Published var selectedLanguage: LanguageSelection = .norwegian
+    @Published var gameMode: GameMode = .normal
     @Published var numberOfLetters: Int = 5
-    @Published var numberOfLetters2: Float = 5.0
     @Published var word: String = ""
     @Published var words: Words?
     @Published var board: [[Letter]] = []
@@ -23,29 +32,45 @@ final class AppManager: ObservableObject {
     @Published var didTapBackButton: Bool = false
     @Published var didTapResetButton: Bool = false
     @Published var didTapNewGameButton: Bool = false
+    @Published var didTapPlaySomethingElseButton: Bool = false
+    @Published var didTapPlayDailyWordButton: Bool = false
+    @Published var didTapFakePlayDailyWordButton: Bool = false
+    @Published var didTapPlayNormalButton: Bool = false
+    @Published var isShowingAlreadyPlayedAlert: Bool = false
     @Published var alertItem: AlertItem?
     @Published var activeAlert: ActiveAlert = .none
     @Published var isShowingCurrentDefinition: Bool = false
     @Published var searchedWord: String = ""
     @Published var isAnimating: Bool = false
+    @Published var dailyWords: Words?
+    
     
     func getWords() {
-        if let words = WordleDataStore.shared.loadWordsFromFile(selectedLanguage: selectedLanguage) {
+        if let words = WordleDataManager.shared.loadWordsFromJSONFile(selectedLanguage: selectedLanguage) {
             self.words = words
             self.resetBoard()
             
         }
+        
+        if let dailyWords = WordleDataManager.shared.loadDailyWordsFromJSONFile(selectedLanguage: selectedLanguage) {
+            self.dailyWords = dailyWords
+            self.resetBoard()
+            
+        }
+        
+        
+        
     }
     
     func fixStartBoard() {
         self.board = []
         var listOfEmtpyStrings: [Letter] = []
-        for _ in 1...numberOfLetters {
+        for _ in 1...self.numberOfLetters {
             let letter = Letter()
             listOfEmtpyStrings.append(letter)
         }
-        if numberOfLetters > 5 {
-            for _ in 0...numberOfLetters {
+        if self.numberOfLetters > 5 {
+            for _ in 0...self.numberOfLetters {
                 self.board.append(listOfEmtpyStrings)
             }
         } else {
@@ -55,18 +80,117 @@ final class AppManager: ObservableObject {
         }
     }
     
+    func updatePlayedDailyWord() {
+        switch self.numberOfLetters {
+            case 1:
+                dailyWord1 = Date()
+            case 2:
+                dailyWord2 = Date()
+            case 3:
+                dailyWord3 = Date()
+            case 4:
+                dailyWord4 = Date()
+            case 5:
+                dailyWord5 = Date()
+            case 6:
+                dailyWord6 = Date()
+            case 7:
+                dailyWord7 = Date()
+            case 8:
+                dailyWord8 = Date()
+                
+            default:
+                print("This should never happen: \(self.numberOfLetters)")
+        }
+    }
+    
+    func checkIfDailyWordIsPlayed() -> Bool {
+        switch self.numberOfLetters {
+            case 1:
+                return checkDaysSinceDateIsLessThan1(dailyWord1)
+            case 2:
+                return checkDaysSinceDateIsLessThan1(dailyWord2)
+            case 3:
+                return checkDaysSinceDateIsLessThan1(dailyWord3)
+            case 4:
+                return checkDaysSinceDateIsLessThan1(dailyWord4)
+            case 5:
+                return checkDaysSinceDateIsLessThan1(dailyWord5)
+            case 6:
+                return checkDaysSinceDateIsLessThan1(dailyWord6)
+            case 7:
+                return checkDaysSinceDateIsLessThan1(dailyWord7)
+            case 8:
+                return checkDaysSinceDateIsLessThan1(dailyWord8)
+                
+            default:
+                print("This should never happen: \(self.numberOfLetters)")
+        }
+        return false
+    }
+    
+    func checkDaysSinceDateIsLessThan1(_ date: Date?) -> Bool {
+        let calendar = Calendar.current
+        let currentDate = Date()
+        if let date {
+            let daysSinceStart = calendar.dateComponents([.day], from: date, to: currentDate).day!
+            if daysSinceStart < 1 {
+                return true
+            }
+        }
+        return false
+    }
+    
     
     func getRandomWord() {
-        self.word = self.words?.wordGroups["\(numberOfLetters)"]?.randomElement() ?? ""
-//        self.word = "VEGEN"
-        print("Ordet er \(self.word)")
+        if gameMode == .normal {
+            self.word = self.words?.wordGroups["\(numberOfLetters)"]?.randomElement() ?? ""
+//            self.word = "VENNE"
+            print("Ordet er \(self.word)")
+        } else {
+            self.word = self.getDailyWord()
+            print("Ordet er \(self.word)")
+            
+        }
+        
+//        if let words = self.words?.wordGroups["\(numberOfLetters)"] {
+//            print("trust!")
+//            self.shuffeledWords = words.shuffled()
+//            for word in shuffeledWords {
+//                if word == shuffeledWords.last {
+//                    print("\"\(word)\"")
+//                } else {
+//                    print("\"\(word)\",")
+//                }
+//                
+//            }
+//        }
+        
+        
+        
+        
+        
+    }
+    
+    func getDailyWord() -> String {
+        let calendar = Calendar.current
+        let startDate = DateComponents(calendar: calendar, year: 2025, month: 2, day: 15).date!
+        let currentDate = Date()
+        let daysSinceStart = calendar.dateComponents([.day], from: startDate, to: currentDate).day!
+        
+        if let count = dailyWords?.wordGroups["\(numberOfLetters)"]?.count {
+            let dailyWordIndex = daysSinceStart % count
+            return self.dailyWords?.wordGroups["\(numberOfLetters)"]?[dailyWordIndex] ?? "PIANO"
+        } else {
+            return "PIANO"
+        }
         
         
     }
     
     func getDefinition(for word: String, completion: @escaping ([ProcessedWord]) -> Void) {
         var processedWords: [ProcessedWord] = []
-        WordleDataStore.shared.fetchArticleIDs(for: word) { articleIDs in
+        WordleDataManager.shared.fetchArticleIDs(for: word) { articleIDs in
             guard let articleIDs = articleIDs else {
                 DispatchQueue.main.async {
                     completion(processedWords)
@@ -78,7 +202,7 @@ final class AppManager: ObservableObject {
             
             for articleID in articleIDs {
                 dispatchGroup.enter()
-                WordleDataStore.shared.fetchArticleDetails(articleID: articleID) { fetchedProcessedWord in
+                WordleDataManager.shared.fetchArticleDetails(articleID: articleID) { fetchedProcessedWord in
                     if let fetchedProcessedWord {
                         DispatchQueue.main.async {
                             processedWords.append(fetchedProcessedWord)
@@ -180,7 +304,7 @@ final class AppManager: ObservableObject {
                 self.keyboard[keyBoardPosition.row][keyBoardPosition.col].isCorrectLetter = true
                 if let index = changableWord.firstIndex(of: Character(self.board[self.currentRow][i].letter)) {
 //                    print("changanbleWord66: \(changableWord), i: \(i), index: \(index)")
-                    let char = changableWord.remove(at: index)
+//                    let char = changableWord.remove(at: index)
                     
 //                    print("changanbleWord4: \(changableWord), i: \(i), index: \(index.utf16Offset(in: self.word)), char: \(char), letter: \(letter), letter2: \(self.board[self.currentRow][letterIndex.utf16Offset(in: self.word)].letter)")
                     
@@ -197,7 +321,7 @@ final class AppManager: ObservableObject {
                 
                 if let index = changableWord.firstIndex(of: Character(self.board[self.currentRow][i].letter)) {
 //                    print("changanbleWord77: \(changableWord), i: \(i), index: \(index)")
-                    let char = changableWord.remove(at: index)
+//                    let char = changableWord.remove(at: index)
                     
 //                    print("changanbleWord8: \(changableWord), i: \(i), index: \(index), char: \(char), letter: \(letter), letter2: \(self.board[self.currentRow][i].letter)")
                     
@@ -241,7 +365,6 @@ final class AppManager: ObservableObject {
             
         }
         
-//        dump(self.board)
         
     }
     
@@ -286,6 +409,10 @@ final class AppManager: ObservableObject {
                         if self.word == guessedWord {
                             print("Du vant!!")
                             self.isGameOver = true
+                            if self.gameMode == .dailyWord {
+                                print("updating daily word")
+                                self.updatePlayedDailyWord()
+                            }
                             self.message = String(format: NSLocalizedString("success_message", comment: "Success message with a word"), word)
                             return
                         } else {

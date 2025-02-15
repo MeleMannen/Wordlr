@@ -76,7 +76,20 @@
       }
     },
     "%lld letters" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld letters"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld bokstaver"
+          }
+        }
+      }
     },
     "%lld." : {
       "localizations" : {
@@ -106,40 +119,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "•"
-          }
-        }
-      }
-    },
-    "1" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "1"
-          }
-        },
-        "nb" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "1"
-          }
-        }
-      }
-    },
-    "8" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "8"
-          }
-        },
-        "nb" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "8"
           }
         }
       }
@@ -273,6 +252,22 @@
         }
       }
     },
+    "Got it!" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Got it!"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skjønner!"
+          }
+        }
+      }
+    },
     "Guess The Phrase" : {
       "localizations" : {
         "en" : {
@@ -371,23 +366,6 @@
         }
       }
     },
-    "Number of Letters" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Number of Letters"
-          }
-        },
-        "nb" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Antall Bokstaver"
-          }
-        }
-      }
-    },
     "ORIGIN   " : {
       "localizations" : {
         "en" : {
@@ -416,6 +394,38 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Spill"
+          }
+        }
+      }
+    },
+    "Play Daily Word" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Play Daily Word"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spill Daglig Ord"
+          }
+        }
+      }
+    },
+    "Play Something Else" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Play Something Else"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spill Noe Annet"
           }
         }
       }
@@ -500,24 +510,21 @@
         }
       }
     },
-    "Select The Phrase Length:" : {
+    "Select The Phrase Length: " : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Select The Phrase Length:"
+            "value" : "Select The Phrase Length: "
           }
         },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Velg Frase Lengde:"
+            "value" : "Velg Frase Lengde: "
           }
         }
       }
-    },
-    "Select The Phrase Length: " : {
-
     },
     "Settings" : {
       "localizations" : {
@@ -644,6 +651,38 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Vi fant ikke en definisjon for dette ordet."
+          }
+        }
+      }
+    },
+    "You can't play this" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You can't play this"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Du kan ikke spille dette"
+          }
+        }
+      }
+    },
+    "You have already played this exact Phrase today. Try again tomorrow or play with a different Phrase length." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You have already played this exact Phrase today. Try again tomorrow or play with a different Phrase length."
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Du har allerede spilt akkurat denne Frasen idag. Prøv igjen i morgen eller spil med en annen Frase lengde."
           }
         }
       }
