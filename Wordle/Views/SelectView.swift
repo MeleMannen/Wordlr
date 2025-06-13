@@ -6,11 +6,14 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct SelectView: View {
+    @Environment(\.modelContext) var modelContext
     @EnvironmentObject var appManager: AppManager
-//    @State var numberOfLetters = 5.0
-//    @State var selectedLanguage: LanguageSelection = .norwegian
+    @AppStorage("hasAddedStreaks") private var hasAddedStreaks: Bool = false
+    @Query private var streaks: [StreakEntity] = []
+    @Query private var gameRecords: [GameRecordEntity] = []
     
     var body: some View {
         NavigationStack {
@@ -19,79 +22,46 @@ struct SelectView: View {
                     Spacer()
                     VStack {
                         HStack {
-                            Text("Select The Phrase Length: ")
-                                .font(.title).bold()
+                            Text("The Phrase Length: ")
+                                .font(.title2).bold()
                             
                             Spacer()
                         }
                         HStack {
-                            
-                            
                             Spacer()
                             
-                            Picker("Select The Phrase Length: ", selection: $appManager.numberOfLetters) {
+                            Picker("The Phrase Length: ", selection: $appManager.numberOfLetters) {
                                 ForEach(1...8, id: \.self) { number in
                                     Text("\(number) letters")
                                         .font(.title2).bold()
                                 }
-                                
                             }
                             .pickerStyle(.menu)
-                            .foregroundStyle(Color(uiColor: .label))
-                            .accentColor(Color(uiColor: .label))
+                            .foregroundStyle(.primary)
+                            .accentColor(.primary)
                             .font(.title).bold()
-                            .background {
-                                RoundedRectangle(cornerRadius: 10)
-                                    .foregroundStyle(Color(uiColor: .tertiarySystemBackground))
-                            }
+//                            .background {
+//                                RoundedRectangle(cornerRadius: 10)
+//                                    .foregroundStyle(Color(uiColor: .tertiarySystemBackground))
+//                            }
                             .sensoryFeedback(.selection, trigger: appManager.numberOfLetters)
+//                            .glassEffect()
+                            .modifier(ConditionalGlassEffect())
                         }
-                        
-                        
-                        
-                        //                    Slider(value: $appManager.numberOfLetters2, in: 1...8, step: 1) {
-                        //                        Text("Number of Letters")
-                        //                    } minimumValueLabel: {
-                        //                        Text("1")
-                        //                            .onTapGesture {
-                        //                                if appManager.numberOfLetters2 > 1 {
-                        //                                    appManager.numberOfLetters2 -= 1
-                        //                                }
-                        //
-                        //                            }
-                        //                            .padding(.trailing, 3)
-                        //                    } maximumValueLabel: {
-                        //                        Text("8")
-                        //                            .onTapGesture {
-                        //                                if appManager.numberOfLetters2 < 8 {
-                        //                                    appManager.numberOfLetters2 += 1
-                        //                                }
-                        //
-                        //                            }
-                        //                            .padding(.leading, 3)
-                        //                    }
-                        //                    .sensoryFeedback(.selection, trigger: appManager.numberOfLetters2)
-                        //                    .onChange(of: appManager.numberOfLetters2) {
-                        //                        appManager.numberOfLetters = Int(appManager.numberOfLetters2)
-                        //                    }
-                        //
-                        //
-                        //                    Text("\(Int(appManager.numberOfLetters2))")
-                        //                        .font(.title2).bold()
                     }
-                    .padding(.bottom, 50)
+                    .padding(.bottom, 30)
                     
                     Spacer()
+                    
                     VStack {
                         HStack {
-                            Text("Select Language:")
-                                .font(.title).bold()
+                            Text("Language:")
+                                .font(.title2).bold()
                             
                             Spacer()
                         }
                         
                         HStack {
-                            
                             Spacer()
                             
                             Picker(selection: $appManager.selectedLanguage) {
@@ -102,23 +72,18 @@ struct SelectView: View {
                                 Text("Language")
                             }
                             .pickerStyle(.menu)
-                            .foregroundStyle(Color(uiColor: .label))
-                            .accentColor(Color(uiColor: .label))
-                            .onChange(of: appManager.selectedLanguage) {
-                                if appManager.selectedLanguage == .english {
-                                    appManager.selectedLanguage = .norwegian
-                                }
-                            }
-                            .background {
-                                RoundedRectangle(cornerRadius: 10)
-                                    .foregroundStyle(Color(uiColor: .tertiarySystemBackground))
-                            }
+                            .foregroundStyle(.primary)
+                            .accentColor(.primary)
+//                            .background {
+//                                RoundedRectangle(cornerRadius: 10)
+//                                    .foregroundStyle(Color(uiColor: .tertiarySystemBackground))
+//                            }
                             .sensoryFeedback(.impact, trigger: appManager.selectedLanguage)
+//                            .glassEffect()
+                            .modifier(ConditionalGlassEffect())
                         }
-                        
-                        
                     }
-                    .padding(.bottom, 50)
+                    .padding(.bottom, 30)
                     
                     Spacer()
                     Spacer()
@@ -126,38 +91,48 @@ struct SelectView: View {
                     VStack {
                         NavigationLink(destination: GameView().environmentObject(appManager)) {
                             Text("Play")
-                                .font(.title).bold()
+                                .font(.title2).bold()
                                 .padding()
-                                .padding(.horizontal, 40)
-                                .foregroundStyle(Color(uiColor: .label))
+                                
+                                .foregroundStyle(.white)
+                                .frame(maxWidth: .infinity)
                                 .background {
-                                    RoundedRectangle(cornerRadius: 50)
+                                    RoundedRectangle(cornerRadius: 15)
                                         .foregroundStyle(.green)
                                     
                                 }
+                            
+//                                .glassEffect(.regular.tint(.green).interactive(), in: .capsule)
+                                .padding(.horizontal, 30)
+                                
+                                
                         }
                         .simultaneousGesture(TapGesture().onEnded {
                             appManager.didTapPlayNormalButton.toggle()
                             appManager.gameMode = .normal
                         })
                         .sensoryFeedback(.impact, trigger: appManager.didTapPlayNormalButton)
+                        .buttonStyle(GrowingButton())
                         
-                        
+//                        .buttonStyle(.glass)
                     }
                     .padding(.bottom)
+                    
                     VStack {
-                        if appManager.checkIfDailyWordIsPlayed() {
+                        if appManager.checkIfDailyWordIsAlreadyPlayed() {
                             Text("Play Daily Word")
                                 .multilineTextAlignment(.center)
-                                .font(.title).bold()
+                                .font(.title2).bold()
                                 .padding()
-                                .padding(.horizontal, 50)
-                                .foregroundStyle(Color(uiColor: .label))
+                                .frame(maxWidth: .infinity)
+                                .foregroundStyle(.white)
                                 .background {
-                                    RoundedRectangle(cornerRadius: 50)
+                                    RoundedRectangle(cornerRadius: 15)
                                         .foregroundStyle(.green)
                                         .opacity(0.4)
                                 }
+//                                .glassEffect(.regular.tint(.green.opacity(0.4)).interactive(), in: .capsule)
+                                .padding(.horizontal, 30)
                                 .onTapGesture {
                                     appManager.didTapFakePlayDailyWordButton.toggle()
                                     appManager.isShowingAlreadyPlayedAlert = true
@@ -167,51 +142,112 @@ struct SelectView: View {
                                 .alert(isPresented: $appManager.isShowingAlreadyPlayedAlert) {
                                     Alert(title: Text("You can't play this"), message: Text("You have already played this exact Phrase today. Try again tomorrow or play with a different Phrase length."), dismissButton: .cancel(Text("Got it!")))
                                 }
+                                .buttonStyle(GrowingButton())
+//                                .buttonStyle(.glass)
+                            
                             
                         } else {
                             NavigationLink(destination: GameView().environmentObject(appManager)) {
                                 Text("Play Daily Word")
                                     .multilineTextAlignment(.center)
-                                    .font(.title).bold()
+                                    .font(.title2).bold()
                                     .padding()
-                                    .padding(.horizontal, 50)
-                                    .foregroundStyle(Color(uiColor: .label))
+                                    
+                                    .frame(maxWidth: .infinity)
+                                    .foregroundStyle(.white)
                                     .background {
-                                        RoundedRectangle(cornerRadius: 50)
+                                        RoundedRectangle(cornerRadius: 15)
                                             .foregroundStyle(.green)
                                     }
+//                                    .glassEffect(.regular.tint(.green).interactive(), in: .capsule)
+                                    .padding(.horizontal, 30)
                             }
                             .simultaneousGesture(TapGesture().onEnded {
                                 appManager.didTapPlayDailyWordButton.toggle()
                                 appManager.gameMode = .dailyWord
+                                if !appManager.word.isEmpty {
+                                    appManager.getWords()
+                                }
                             })
                             .sensoryFeedback(.impact, trigger: appManager.didTapPlayDailyWordButton)
-                            
-
-                            
+                            .buttonStyle(GrowingButton())
+//                            .buttonStyle(.glass)
                         }
-                        
-                        
                     }
                     .padding(.bottom)
+                    
+                    if let streakEntity = appManager.getStreakEntity(), streakEntity.streak.currentStreak >= 3, appManager.shouldAnimateStreak {
+                        VStack {
+                            Text("\(streakEntity.streak.currentStreak)🔥")
+                                .font(.title).bold()
+                            
+                            
+                        }
+                        .padding(.top)
+                        
+                    }
                 }
                 .padding(20)
                 .background {
-                    RoundedRectangle(cornerRadius: 10)
+                    RoundedRectangle(cornerRadius: 25)
                         .foregroundStyle(Color(uiColor: .secondarySystemBackground))
-                    
                 }
                 
+                .onChange(of: appManager.selectedLanguage) { oldValue, newValue in
+                    withAnimation {
+                        if let streakEntity = appManager.getStreakEntity(), streakEntity.streak.currentStreak >= 3 {
+                            appManager.shouldAnimateStreak = true
+                        } else {
+                            appManager.shouldAnimateStreak = false
+                        }
+                    }
+                }
+                .onChange(of: appManager.numberOfLetters) { oldValue, newValue in
+                    withAnimation {
+                        if let streakEntity = appManager.getStreakEntity(), streakEntity.streak.currentStreak >= 3 {
+                            appManager.shouldAnimateStreak = true
+                        } else {
+                            appManager.shouldAnimateStreak = false
+                        }
+                    }
+                }
+                
+//                .glassEffect(.regular.tint(.gray.opacity(0.08)).interactive(), in: .rect(cornerRadius: 10))
             }
             .padding(.horizontal)
             .navigationTitle("The Phrase")
-//            .toolbarBackground(.background, for: .navigationBar)
-//            .toolbarBackground(.visible, for: .navigationBar)
+            .animation(appManager.shouldAnimateStreak ? .bouncy(duration: 0.2) : nil, value: appManager.getStreakEntity())
+            
         }
-        
-        
+        .onAppear {
+            appManager.modelContext = modelContext
+            appManager.streakManager = StreakManager(context: modelContext)
+            appManager.gameRecordManager = GameRecordManager(context: modelContext)
+            if !self.hasAddedStreaks {
+                appManager.addStreaks()
+                self.hasAddedStreaks = true
+            }
+            appManager.fetchStreaks()
+            appManager.fetchGameRecords()
+        }
+    }
+    
+    
+}
+
+// Make an extention to add padding conditionally based on iOS version
+struct ConditionalGlassEffect: ViewModifier {
+    func body(content: Content) -> some View {
+        if #available(iOS 26.0, *) {
+            content
+                .glassEffect()
+        } else {
+            content
+        }
+            
     }
 }
+
 
 #Preview {
     SelectView()

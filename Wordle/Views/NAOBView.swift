@@ -6,13 +6,25 @@
 //
 
 import SwiftUI
+import WebKit
 
 struct NAOBView: View {
+    @EnvironmentObject var appManager: AppManager
+    @State var word: String = ""
+    @State var page: WebPage = WebPage()
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        if #available(iOS 26.0, *) {
+            WebView(page)
+                .navigationTitle("NAOB - \(self.word)")
+                .onAppear {
+                    page.load(URLRequest(url: URL(string: "https://naob.no/ordbok/\(self.word)")!))
+                }
+                .ignoresSafeArea(.all, edges: .bottom)
+        }
     }
 }
 
 #Preview {
-    NAOBView()
+    NAOBView(word: "Sessing")
+        .environmentObject(AppManager())
 }

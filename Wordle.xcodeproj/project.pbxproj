@@ -9,6 +9,14 @@
 /* Begin PBXBuildFile section */
 		6310860C2D4040F200AC2C4E /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 6310860B2D4040F200AC2C4E /* PrivacyInfo.xcprivacy */; };
 		631156FD2D5FFA910017D1F4 /* dailyNorwegianWords.json in Resources */ = {isa = PBXBuildFile; fileRef = 631156FC2D5FFA910017D1F4 /* dailyNorwegianWords.json */; };
+		631C9D802DFA043A00742B34 /* StatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631C9D7F2DFA043A00742B34 /* StatsView.swift */; };
+		631C9D822DFA1BD500742B34 /* StreakManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631C9D812DFA1BCE00742B34 /* StreakManager.swift */; };
+		6335967E2DFC5A2C004A55C4 /* GameRecordManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6335967D2DFC5A2C004A55C4 /* GameRecordManager.swift */; };
+		637330892DB9036C00AE18E6 /* englishWords.json in Resources */ = {isa = PBXBuildFile; fileRef = 637330882DB9036C00AE18E6 /* englishWords.json */; };
+		6373308B2DB9054400AE18E6 /* dailyEnglishWords.json in Resources */ = {isa = PBXBuildFile; fileRef = 6373308A2DB9053600AE18E6 /* dailyEnglishWords.json */; };
+		638274D52DFCC8BE00BD38DA /* NAOBView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638274D42DFCC8BE00BD38DA /* NAOBView.swift */; };
+		63B05B962D626DB90003B663 /* IndexedListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B05B952D626DB90003B663 /* IndexedListView.swift */; };
+		63BBE4A92DF3126E00FA4257 /* IndexedListViewTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63BBE4A82DF3126E00FA4257 /* IndexedListViewTest.swift */; };
 		63E081E32D3414DA00748133 /* GameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E081D82D3414DA00748133 /* GameView.swift */; };
 		63E081E42D3414DA00748133 /* SelectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E081D92D3414DA00748133 /* SelectView.swift */; };
 		63E081E52D3414DA00748133 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E081DA2D3414DA00748133 /* SettingsView.swift */; };
@@ -20,14 +28,25 @@
 		63E081EB2D3414DA00748133 /* norwegianWords.json in Resources */ = {isa = PBXBuildFile; fileRef = 63E081E02D3414DA00748133 /* norwegianWords.json */; };
 		63E081EF2D3415D400748133 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 63E081EE2D3415D400748133 /* Localizable.xcstrings */; };
 		63E081F12D34551A00748133 /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E081F02D34551A00748133 /* SearchView.swift */; };
-		63E081F32D346CB800748133 /* WordDescriptionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E081F22D346CB800748133 /* WordDescriptionView.swift */; };
+		63E081F32D346CB800748133 /* NorwegianWordDefinitionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E081F22D346CB800748133 /* NorwegianWordDefinitionView.swift */; };
+		63E6B3E32DF5D6B9007C66EB /* FilterOptionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E6B3E22DF5D6B6007C66EB /* FilterOptionsView.swift */; };
 		63F9D6042D3724E4004E9128 /* shortedNorwegainWords.json in Resources */ = {isa = PBXBuildFile; fileRef = 63F9D6032D3724E4004E9128 /* shortedNorwegainWords.json */; };
+		63FF1C742DF728F0003A19B3 /* EnglishWordDefinitionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63FF1C732DF728EF003A19B3 /* EnglishWordDefinitionView.swift */; };
+		63FF1C762DF72900003A19B3 /* WordDefinitionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63FF1C752DF72900003A19B3 /* WordDefinitionView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		6310860B2D4040F200AC2C4E /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		631156FC2D5FFA910017D1F4 /* dailyNorwegianWords.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = dailyNorwegianWords.json; sourceTree = "<group>"; };
+		631C9D7F2DFA043A00742B34 /* StatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsView.swift; sourceTree = "<group>"; };
+		631C9D812DFA1BCE00742B34 /* StreakManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreakManager.swift; sourceTree = "<group>"; };
+		6335967D2DFC5A2C004A55C4 /* GameRecordManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameRecordManager.swift; sourceTree = "<group>"; };
+		637330882DB9036C00AE18E6 /* englishWords.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = englishWords.json; sourceTree = "<group>"; };
+		6373308A2DB9053600AE18E6 /* dailyEnglishWords.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = dailyEnglishWords.json; sourceTree = "<group>"; };
+		638274D42DFCC8BE00BD38DA /* NAOBView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NAOBView.swift; sourceTree = "<group>"; };
 		6382E3BC2D12FE0500B61353 /* Wordle.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Wordle.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		63B05B952D626DB90003B663 /* IndexedListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IndexedListView.swift; sourceTree = "<group>"; };
+		63BBE4A82DF3126E00FA4257 /* IndexedListViewTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IndexedListViewTest.swift; sourceTree = "<group>"; };
 		63E081D62D3414DA00748133 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		63E081D82D3414DA00748133 /* GameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameView.swift; sourceTree = "<group>"; };
 		63E081D92D3414DA00748133 /* SelectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectView.swift; sourceTree = "<group>"; };
@@ -40,8 +59,11 @@
 		63E081E12D3414DA00748133 /* Wordle.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Wordle.entitlements; sourceTree = "<group>"; };
 		63E081EE2D3415D400748133 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		63E081F02D34551A00748133 /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
-		63E081F22D346CB800748133 /* WordDescriptionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordDescriptionView.swift; sourceTree = "<group>"; };
+		63E081F22D346CB800748133 /* NorwegianWordDefinitionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NorwegianWordDefinitionView.swift; sourceTree = "<group>"; };
+		63E6B3E22DF5D6B6007C66EB /* FilterOptionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterOptionsView.swift; sourceTree = "<group>"; };
 		63F9D6032D3724E4004E9128 /* shortedNorwegainWords.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = shortedNorwegainWords.json; sourceTree = "<group>"; };
+		63FF1C732DF728EF003A19B3 /* EnglishWordDefinitionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnglishWordDefinitionView.swift; sourceTree = "<group>"; };
+		63FF1C752DF72900003A19B3 /* WordDefinitionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordDefinitionView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -86,8 +108,15 @@
 				63E081D92D3414DA00748133 /* SelectView.swift */,
 				63E081D82D3414DA00748133 /* GameView.swift */,
 				63E081F02D34551A00748133 /* SearchView.swift */,
-				63E081F22D346CB800748133 /* WordDescriptionView.swift */,
+				63E6B3E22DF5D6B6007C66EB /* FilterOptionsView.swift */,
+				63FF1C752DF72900003A19B3 /* WordDefinitionView.swift */,
+				63E081F22D346CB800748133 /* NorwegianWordDefinitionView.swift */,
+				638274D42DFCC8BE00BD38DA /* NAOBView.swift */,
+				63FF1C732DF728EF003A19B3 /* EnglishWordDefinitionView.swift */,
+				631C9D7F2DFA043A00742B34 /* StatsView.swift */,
 				63E081DA2D3414DA00748133 /* SettingsView.swift */,
+				63B05B952D626DB90003B663 /* IndexedListView.swift */,
+				63BBE4A82DF3126E00FA4257 /* IndexedListViewTest.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -97,6 +126,8 @@
 			children = (
 				63E081DE2D3414DA00748133 /* AppObjects.swift */,
 				63E081DD2D3414DA00748133 /* AppManager.swift */,
+				631C9D812DFA1BCE00742B34 /* StreakManager.swift */,
+				6335967D2DFC5A2C004A55C4 /* GameRecordManager.swift */,
 				63E081DC2D3414DA00748133 /* Views */,
 				63E081ED2D34158100748133 /* Resources */,
 				63E081DF2D3414DA00748133 /* Assets.xcassets */,
@@ -114,6 +145,8 @@
 				63E081EE2D3415D400748133 /* Localizable.xcstrings */,
 				631156FC2D5FFA910017D1F4 /* dailyNorwegianWords.json */,
 				63E081E02D3414DA00748133 /* norwegianWords.json */,
+				6373308A2DB9053600AE18E6 /* dailyEnglishWords.json */,
+				637330882DB9036C00AE18E6 /* englishWords.json */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -182,10 +215,12 @@
 			files = (
 				6310860C2D4040F200AC2C4E /* PrivacyInfo.xcprivacy in Resources */,
 				63E081E92D3414DA00748133 /* Preview Assets.xcassets in Resources */,
+				637330892DB9036C00AE18E6 /* englishWords.json in Resources */,
 				63F9D6042D3724E4004E9128 /* shortedNorwegainWords.json in Resources */,
 				631156FD2D5FFA910017D1F4 /* dailyNorwegianWords.json in Resources */,
 				63E081EA2D3414DA00748133 /* Assets.xcassets in Resources */,
 				63E081EF2D3415D400748133 /* Localizable.xcstrings in Resources */,
+				6373308B2DB9054400AE18E6 /* dailyEnglishWords.json in Resources */,
 				63E081EB2D3414DA00748133 /* norwegianWords.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -198,13 +233,22 @@
 			buildActionMask = 2147483647;
 			files = (
 				63E081E32D3414DA00748133 /* GameView.swift in Sources */,
+				63B05B962D626DB90003B663 /* IndexedListView.swift in Sources */,
 				63E081E42D3414DA00748133 /* SelectView.swift in Sources */,
+				631C9D822DFA1BD500742B34 /* StreakManager.swift in Sources */,
 				63E081E52D3414DA00748133 /* SettingsView.swift in Sources */,
 				63E081F12D34551A00748133 /* SearchView.swift in Sources */,
+				6335967E2DFC5A2C004A55C4 /* GameRecordManager.swift in Sources */,
+				63FF1C762DF72900003A19B3 /* WordDefinitionView.swift in Sources */,
 				63E081E62D3414DA00748133 /* WordleApp.swift in Sources */,
+				638274D52DFCC8BE00BD38DA /* NAOBView.swift in Sources */,
+				63FF1C742DF728F0003A19B3 /* EnglishWordDefinitionView.swift in Sources */,
+				63E6B3E32DF5D6B9007C66EB /* FilterOptionsView.swift in Sources */,
 				63E081E72D3414DA00748133 /* AppManager.swift in Sources */,
 				63E081E82D3414DA00748133 /* AppObjects.swift in Sources */,
-				63E081F32D346CB800748133 /* WordDescriptionView.swift in Sources */,
+				631C9D802DFA043A00742B34 /* StatsView.swift in Sources */,
+				63BBE4A92DF3126E00FA4257 /* IndexedListViewTest.swift in Sources */,
+				63E081F32D346CB800748133 /* NorwegianWordDefinitionView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -353,11 +397,11 @@
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.4;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 15.2;
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = SwoshEB.ThePhrase;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
@@ -395,11 +439,11 @@
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.4;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 15.2;
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = SwoshEB.ThePhrase;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;

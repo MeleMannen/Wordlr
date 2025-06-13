@@ -39,10 +39,7 @@ struct SettingsView: View {
                 
                 
             }
-//            .padding(.top, 10)
             .navigationTitle("Settings")
-//            .toolbarBackground(.background, for: .navigationBar)
-//            .toolbarBackground(.visible, for: .navigationBar)
                         
         }
     }

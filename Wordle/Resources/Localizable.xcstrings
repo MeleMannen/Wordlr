@@ -2,20 +2,7 @@
   "sourceLanguage" : "en",
   "strings" : {
     "" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Hmmmm"
-          }
-        },
-        "nb" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Hmmm rarti rarti"
-          }
-        }
-      }
+
     },
     "  " : {
       "localizations" : {
@@ -107,6 +94,22 @@
         }
       }
     },
+    "%lld🔥" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld🔥"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld🔥"
+          }
+        }
+      }
+    },
     "•" : {
       "localizations" : {
         "en" : {
@@ -136,6 +139,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Nesten!! - %@"
+          }
+        }
+      }
+    },
+    "ANTONYMS" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ANTONYMS"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ANOTNYMER"
           }
         }
       }
@@ -220,6 +239,54 @@
         }
       }
     },
+    "Ends with:" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ends with:"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Slutter med:"
+          }
+        }
+      }
+    },
+    "Enter ending letters" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enter ending letters"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skriv inn endelige bokstaver"
+          }
+        }
+      }
+    },
+    "Enter starting letters" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enter starting letters"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skriv inn start bokstaver"
+          }
+        }
+      }
+    },
     "Example" : {
       "localizations" : {
         "en" : {
@@ -236,6 +303,22 @@
         }
       }
     },
+    "Exclude letters:" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Exclude letters:"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ekskluder bokstaver:"
+          }
+        }
+      }
+    },
     "EXPLANATION AND USAGE" : {
       "localizations" : {
         "en" : {
@@ -248,6 +331,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "BETYDNING OG BRUK"
+          }
+        }
+      }
+    },
+    "Filter Options" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Filter Options"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Filter Valg"
           }
         }
       }
@@ -334,6 +433,22 @@
         }
       }
     },
+    "Language:" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Language:"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Språk:"
+          }
+        }
+      }
+    },
     "Light" : {
       "localizations" : {
         "en" : {
@@ -349,6 +464,9 @@
           }
         }
       }
+    },
+    "NAOB - %@" : {
+
     },
     "New Game" : {
       "localizations" : {
@@ -446,6 +564,22 @@
         }
       }
     },
+    "Reset filter" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reset filter"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reset filter"
+          }
+        }
+      }
+    },
     "Restart" : {
       "localizations" : {
         "en" : {
@@ -478,6 +612,9 @@
         }
       }
     },
+    "Search %@" : {
+
+    },
     "Search for a Phrase" : {
       "localizations" : {
         "en" : {
@@ -494,34 +631,18 @@
         }
       }
     },
-    "Select Language:" : {
+    "Search:" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Select Language:"
+            "value" : "Search:"
           }
         },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Velg Språk:"
-          }
-        }
-      }
-    },
-    "Select The Phrase Length: " : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Select The Phrase Length: "
-          }
-        },
-        "nb" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Velg Frase Lengde: "
+            "value" : "Søk:"
           }
         }
       }
@@ -554,6 +675,48 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Vis definisjon"
+          }
+        }
+      }
+    },
+    "Starts with:" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Starts with:"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Starter med:"
+          }
+        }
+      }
+    },
+    "Statistics will be available soon!" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Statistics will be available soon!"
+          }
+        }
+      }
+    },
+    "Stats" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stats"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stats"
           }
         }
       }
@@ -591,6 +754,22 @@
         }
       }
     },
+    "SYNONYMS" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "SYNONYMS"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "SYNONYMER"
+          }
+        }
+      }
+    },
     "System" : {
       "localizations" : {
         "en" : {
@@ -623,6 +802,22 @@
         }
       }
     },
+    "The Phrase Length: " : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The Phrase Length:"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Frase Lengde:"
+          }
+        }
+      }
+    },
     "The Phrase Was: %@!" : {
       "localizations" : {
         "en" : {
@@ -639,18 +834,18 @@
         }
       }
     },
-    "We couldn't find a definition for this word." : {
+    "We couldn't find a definition for this Phrase. That might be because it is a name or a placename." : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "We couldn't find a definition for this word."
+            "value" : "We couldn't find a definition for this Phrase. That might be because it is a name or a placename."
           }
         },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Vi fant ikke en definisjon for dette ordet."
+            "value" : "Vi kunne ikke finne en definisjon for denne Frasen. Det kan være fordi det er et navn eller stedsnavn. "
           }
         }
       }
@@ -670,6 +865,9 @@
           }
         }
       }
+    },
+    "You could try to search in the Dictionary NAOB: " : {
+
     },
     "You have already played this exact Phrase today. Try again tomorrow or play with a different Phrase length." : {
       "localizations" : {

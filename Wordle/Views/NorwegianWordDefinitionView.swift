@@ -7,11 +7,12 @@
 
 import SwiftUI
 
-struct WordDescriptionView: View {
+struct NorwegianWordDefinitionView: View {
     @EnvironmentObject var appManager: AppManager
     @State var processedWords: [ProcessedWord] = []
     @State var word: String
     @State var isLoading: Bool = true
+    @State var didTap: Bool = false
     
     var body: some View {
         VStack {
@@ -22,11 +23,11 @@ struct WordDescriptionView: View {
                             VStack {
                                 VStack(alignment: .leading) {
                                     if let words = processedWord.words {
-                                        Text(words.joined(separator: ", "))
+                                        Text(words.joined(separator: ", ").uppercased())
                                             .font(.largeTitle)
                                             .bold()
                                     } else {
-                                        Text(self.word.lowercased())
+                                        Text(self.word.uppercased())
                                             .font(.largeTitle)
                                         
                                             .bold()
@@ -103,28 +104,50 @@ struct WordDescriptionView: View {
                             
                             
                         }
-                        
-                        
-                        
                     }
                     else {
                         VStack {
                             VStack(alignment: .leading) {
-                                Text(self.word.lowercased())
+                                Text(self.word.uppercased())
                                     .font(.largeTitle)
                                     .bold()
+                                    .padding(.bottom, 10)
+                                
                                 HStack {
-                                    Text("We couldn't find a definition for this Phrase.")
+                                    Text("We couldn't find a definition for this Phrase. That might be because it is a name or a placename.")
                                         .font(.title3)
                                     
                                     Spacer()
-                                    
                                 }
                                 
+                                if #available(iOS 26.0, *) {
+                                    Text("You could try to search in the Dictionary NAOB: ")
+                                        .font(.headline)
+                                        .padding(.top, 10)
+                                    
+                                    NavigationLink(destination: NAOBView(word: self.word).environmentObject(appManager)) {
+                                        Text("Search \(self.word.uppercased())")
+                                            .foregroundColor(.primary)
+                                            .font(.headline)
+                                            .padding(14)
+                                            .frame(maxWidth: .infinity)
+                                            .background {
+                                                RoundedRectangle(cornerRadius: 15)
+                                                    .fill(Color(uiColor: .green))
+                                            }
+                                            .padding(.horizontal, 40)
+                                        
+                                        
+                                    }
+                                    .simultaneousGesture(TapGesture().onEnded {
+                                        self.didTap.toggle()
+                                    })
+                                    .padding(.top, 10)
+                                    .sensoryFeedback(.impact, trigger: self.didTap)
+                                    .buttonStyle(GrowingButton())
+                                }
                             }
                             .padding(25)
-                            
-                            
                             
                         }
                         .background {
@@ -157,18 +180,11 @@ struct WordDescriptionView: View {
         }
         .navigationTitle("\(self.word)")
         .onAppear {
-            if appManager.selectedLanguage == .norwegian{
-                appManager.getDefinition(for: self.word) { processedWords in
-                    self.processedWords = processedWords
-                    self.isLoading = false
-                    print("ProcessedWord: \(String(describing: self.processedWords))")
-                    dump(self.processedWords)
-                }
-            } else if appManager.selectedLanguage == .english {
-                appManager.getEnglishDefinition(for: self.word) { result in
-                    print("result: \(result)")
-                    
-                }
+            appManager.getDefinition(for: self.word) { processedWords in
+                self.processedWords = processedWords
+                self.isLoading = false
+                print("ProcessedWord: \(String(describing: self.processedWords))")
+                dump(self.processedWords)
             }
         }
     }
@@ -228,15 +244,11 @@ struct DefinitionView: View {
                                                 .lineLimit(nil)
                                                 .fixedSize(horizontal: false, vertical: true)
                                         }
-                                        
                                     }
                                 }
                             }
-                            
                         }
                     }
-                    
-                        
                 }
                 .padding(.bottom, 20)
                 .padding(.leading, 2)
@@ -267,24 +279,9 @@ struct DefinitionView: View {
                 
             }
             
-                
-            
-            
-//            if !self.definition.examples.isEmpty {
-//                Text("Examples:")
-//                    .font(.headline)
-//                ForEach(self.definition.examples) { example in
-//                    Text("• \(example.text): \(example.explanation)")
-//                        .font(.body)
-//                }
-//            }
-            
             if !self.definition.nestedDefinitions.isEmpty {
-//                Text("Nested Definitions:")
-//                    .font(.headline)
                 ForEach(Array(self.definition.nestedDefinitions.enumerated()), id: \.offset) { i, nestedDefinition in
                     DefinitionView(definition: nestedDefinition, isNested: true, index: self.definition.explanations.isEmpty ? self.index + i : (self.index + i))
-//                        .padding(.leading, 10)
                 }
             }
         }
@@ -293,6 +290,6 @@ struct DefinitionView: View {
 
 
 #Preview {
-    WordDescriptionView(word: "Hei")
+    NorwegianWordDefinitionView(word: "Sessing")
         .environmentObject(AppManager())
 }

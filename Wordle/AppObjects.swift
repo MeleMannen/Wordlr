@@ -6,6 +6,8 @@
 //
 
 import SwiftUI
+import SwiftData
+
 
 enum AppTheme: String {
     case system, dark, light
@@ -13,7 +15,117 @@ enum AppTheme: String {
 
 enum TabSelection {
     case home
+    case stats
     case settings
+}
+
+@Model
+final class GameRecordEntity: Identifiable {
+    var id: UUID
+    var gameRecord: GameRecord
+    
+    init(id: UUID, gameRecord: GameRecord) {
+        self.id = id
+        self.gameRecord = gameRecord
+    }
+}
+
+@Model
+class GameRecord: Identifiable {
+    var id: UUID
+    var date: Date
+    var state: GameEndState
+    var mode: GameMode
+    var word: String
+    var language: LanguageSelection
+    var numberOfLetters: Int
+    var numberOfGuesses: Int
+    
+    init(date: Date = Date(), state: GameEndState, mode: GameMode, word: String, language: LanguageSelection, numberOfLetters: Int, numberOfGuesses: Int) {
+        self.id = UUID()
+        self.date = date
+        self.state = state
+        self.mode = mode
+        self.word = word
+        self.language = language
+        self.numberOfLetters = numberOfLetters
+        self.numberOfGuesses = numberOfGuesses
+    }
+    
+}
+
+
+@Model
+final class StreakEntity {
+    var id: String
+    var streak: Streak
+    var longestStreak: Int
+    
+    init(id: String, streak: Streak) {
+        self.id = id
+        self.streak = streak
+        self.longestStreak = streak.currentStreak
+    }
+}
+
+enum Streak: Codable {
+    case none
+    case dead(startDeadDate: Date, lastDiedAt: Date)
+    case alive(startDate: Date, lastWonDate: Date)
+    
+    var currentStreak: Int {
+        switch self {
+            case .none, .dead: return 0
+            case .alive(let startDate, let lastWonDate):
+                let lastWonDate = Calendar.current.startOfDay(for: lastWonDate)
+                let startDate = Calendar.current.startOfDay(for: startDate)
+                let daysSinceStart = Calendar.current.dateComponents([.day], from: startDate, to: lastWonDate).day ?? 0
+                return daysSinceStart
+        }
+    }
+    
+    var isAlive: Bool {
+        switch self {
+            case .none, .dead: return false
+            case .alive(_, let lastWonDate):
+                let today = Calendar.current.startOfDay(for: Date())
+                let lastWonDate = Calendar.current.startOfDay(for: lastWonDate)
+                let daysSinceLastWon = Calendar.current.dateComponents([.day], from: lastWonDate, to: today).day ?? 0
+                return daysSinceLastWon <= 1
+        }
+    }
+    
+    var hasPlayedDailyWord: Bool {
+        
+        switch self {
+            case .none: return false
+            case .dead(_, let lastDiedAt):
+                var utcCalendar = Calendar(identifier: .gregorian)
+                utcCalendar.timeZone = TimeZone(secondsFromGMT: 0)!
+                
+                let currentUTCDate = Date()
+                return utcCalendar.isDate(lastDiedAt, inSameDayAs: currentUTCDate)
+//                let today = Calendar.current.startOfDay(for: Date())
+//                let lastDiedAt = Calendar.current.startOfDay(for: lastDiedAt)
+//                return today == lastDiedAt
+            case .alive(_, let lastWonDate):
+                var utcCalendar = Calendar(identifier: .gregorian)
+                utcCalendar.timeZone = TimeZone(secondsFromGMT: 0)!
+                
+                let currentUTCDate = Date()
+                return utcCalendar.isDate(lastWonDate, inSameDayAs: currentUTCDate)
+//                let today = Calendar.current.startOfDay(for: Date())
+//                let lastWonDate = Calendar.current.startOfDay(for: lastWonDate)
+//                return today == lastWonDate
+        }
+    }
+    
+    
+}
+
+enum GameEndState: Codable {
+    case won
+    case lost
 }
 
 enum ActiveAlert {
@@ -22,12 +134,12 @@ enum ActiveAlert {
     case second
 }
 
-enum GameMode {
+enum GameMode: Codable {
     case dailyWord
     case normal
 }
 
-enum LanguageSelection: String, CaseIterable, Identifiable {
+enum LanguageSelection: String, Codable, CaseIterable, Identifiable {
     case norwegian
     case english
     var id: Self { self }
@@ -86,8 +198,8 @@ struct Letter: Hashable, Identifiable {
     var isCorrectPosition: Bool = false
     var isCorrectLetter: Bool = false
     var isUsedButNotCorrect: Bool = false
-    var frontDegree: Double = 0
-    var backDegree: Double = -90
+    var degreee: Double = 0
+    var scale: Double = 1.0
     var state: LetterState = .notUsed
 }
 
@@ -100,6 +212,9 @@ struct KeyBoardLetter: Hashable, Identifiable {
     var state: LetterState = .notUsed
     var didTapButton: Bool = false
 }
+
+
+
 
 struct ArticleSearchResult: Codable {
     let articles: Articles
@@ -352,6 +467,75 @@ struct ProcessedExample: Identifiable, Hashable {
 
 
 
+// MARK: - English Definition
+struct EnglishDefinition: Codable, Identifiable {
+    let id = UUID()
+    let word: String
+    let phonetic: String?
+    let phonetics: [Phonetic]
+    let meanings: [Meaning]
+    let license: License
+    let sourceUrls: [String]
+    
+    enum CodingKeys: String, CodingKey {
+        case word
+        case phonetic
+        case phonetics
+        case meanings
+        case license
+        case sourceUrls = "sourceUrls"
+    }
+}
+
+struct License: Codable {
+    let name: String
+    let url: String
+}
+
+struct Meaning: Codable, Identifiable {
+    let id = UUID()
+    let partOfSpeech: String
+    let definitions: [Definition]
+    let synonyms: [String]
+    let antonyms: [String]
+    
+    enum CodingKeys: String, CodingKey {
+        case partOfSpeech
+        case definitions
+        case synonyms
+        case antonyms
+    }
+}
+struct Definition: Codable, Identifiable {
+    let id = UUID()
+    let definition: String
+    let synonyms: [String]
+    let antonyms: [String]
+    let example: String?
+    
+    enum CodingKeys: String, CodingKey {
+        case definition
+        case synonyms
+        case antonyms
+        case example
+    }
+}
+struct Phonetic: Codable, Identifiable {
+    let id = UUID()
+    let audio: String
+    let sourceURL: String?
+    let license: License?
+    let text: String
+    
+    enum CodingKeys: String, CodingKey {
+        case audio
+        case sourceURL = "sourceUrl"
+        case license
+        case text
+    }
+}
+
+
 final class WordleDataManager {
     static let shared = WordleDataManager()
    
@@ -437,47 +621,6 @@ extension WordleDataManager {
         }.resume()
     }
     
-//    func processDefinitions(article: Article) -> [[String]] {
-//        return article.body.definitions.compactMap { defWrapper in
-//            defWrapper.elements?.compactMap { $0.elements?.compactMap { element in
-//                    guard let content = element.content, content.contains("$"), let items = element.items else {
-//                        return element.content
-//                    }
-//                    
-//                    // Del opp innholdet der `$` finnes
-//                    var processedContent = content
-//                    for (index, item) in items.enumerated() {
-//                        // Finn lemmeteksten fra items
-//                        guard let lemma = item.lemmas?.first?.lemma else { continue }
-//                        // Erstatt det første `$` med den tilsvarende lemma
-//                        processedContent = processedContent.replacingOccurrences(of: "$", with: lemma, options: [], range: processedContent.range(of: "$"))
-//                    }
-//                    return processedContent
-//                }
-//            }
-//            
-//        }
-//    }
-//    
-//    func processDefinitions2(article: Article) -> [[String]] {
-//        return article.body.definitions.compactMap { defWrapper in
-//            defWrapper.elements?.compactMap { element in
-//                guard let content = element.content, content.contains("$"), let items = element.items else {
-//                    return element.content
-//                }
-//                
-//                // Del opp innholdet der `$` finnes
-//                var processedContent = content
-//                for (index, item) in items.enumerated() {
-//                    // Finn lemmeteksten fra items
-//                    guard let lemma = item.lemmas?.first?.lemma else { continue }
-//                    // Erstatt det første `$` med den tilsvarende lemma
-//                    processedContent = processedContent.replacingOccurrences(of: "$", with: lemma, options: [], range: processedContent.range(of: "$"))
-//                }
-//                return processedContent
-//            }
-//        }
-//    }
     
     func processDefinitions(article: Article) -> [ProcessedDefinition] {
         var processedDefinitions: [ProcessedDefinition] = []
@@ -910,5 +1053,44 @@ extension WordleDataManager {
         dataTask.resume()
     }
     
+    func fetchEnglishDefinition(for word: String, completion: @escaping ([EnglishDefinition]?) -> Void) {
+        let urlString = "https://api.dictionaryapi.dev/api/v2/entries/en/\(word)"
+        print("urlString: \(urlString)")
+        guard let url = URL(string: urlString) else {
+            completion(nil)
+            return
+        }
+        
+        URLSession.shared.dataTask(with: url) { data, response, error in
+            guard let data = data, error == nil else {
+                completion(nil)
+                return
+            }
+            print("data: \(data)")
+            do {
+                let jsonObject = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers)
+                print("jsonObject: \(jsonObject)")
+                if let jsonDict = jsonObject as? [NSDictionary] {
+                    print("jsonDict: \(jsonDict)")
+                }
+                let result = try JSONDecoder().decode([EnglishDefinition].self, from: data)
+                dump(result)
+                completion(result)
+            } catch {
+                print("Error decoding English Definition: \(error)")
+                completion(nil)
+            }
+        }.resume()
+    }
+    
+    
+}
+
+
+extension Date {
+    func toUTC() -> Date {
+        let timezoneOffset = TimeInterval(TimeZone.current.secondsFromGMT(for: self))
+        return self.addingTimeInterval(-timezoneOffset)
+    }
 }
 

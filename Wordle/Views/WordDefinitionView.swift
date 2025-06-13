@@ -8,11 +8,19 @@
 import SwiftUI
 
 struct WordDefinitionView: View {
+    @EnvironmentObject var appManager: AppManager
+    @State var word: String = ""
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        if appManager.selectedLanguage == .english {
+            EnglishWordDefinitionView(word: self.word)
+        } else if appManager.selectedLanguage == .norwegian {
+            NorwegianWordDefinitionView(word: self.word)
+        }
     }
 }
 
 #Preview {
-    WordDefinitionView()
+    WordDefinitionView(word: "Hello")
+        .environmentObject(AppManager())
 }

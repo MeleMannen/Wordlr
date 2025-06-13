@@ -6,24 +6,25 @@
 //
 
 import SwiftUI
+import SwiftData
+import CoreData
 
 @main
 struct WordleApp: App {
     @ObservedObject var appManager = AppManager()
     @AppStorage("appTheme") private var appTheme: AppTheme = .dark
-    @State var selection: TabSelection = .home
     
-    init() {
-//        let tabBarAppearance = UITabBarAppearance()
-//        tabBarAppearance.configureWithOpaqueBackground()
-//        tabBarAppearance.backgroundColor = UIColor.systemBackground
+    @State var selection: TabSelection = .home
+//    let container: ModelContainer
+//    
+//    init() {
+//        do {
+//            container = try ModelContainer(for: StreakEntity.self)
 //        
-//        UITabBar.appearance().standardAppearance = tabBarAppearance
-//        if #available(iOS 15.0, *) {
-//            UITabBar.appearance().scrollEdgeAppearance = tabBarAppearance
+//        } catch {
+//            fatalError("Failed to create ModelContainer: \(error.localizedDescription)")
 //        }
-        
-    }
+//    }
     
     
     var body: some Scene {
@@ -34,7 +35,13 @@ struct WordleApp: App {
                     .tabItem {
                         Label("The Phrase", systemImage: "character.square")
                     }
-//                    .preferredColorScheme(appTheme == .system ? nil : (appTheme == .light ? .light : .dark))
+                    .environmentObject(appManager)                    
+                
+                StatsView()
+                    .tag(TabSelection.stats)
+                    .tabItem {
+                        Label("Stats", systemImage: "chart.line.uptrend.xyaxis")
+                    }
                     .environmentObject(appManager)
                 
                 SettingsView()
@@ -45,10 +52,17 @@ struct WordleApp: App {
                     .environmentObject(appManager)
                 
             }
+            .tint(.primary)
+            
             .preferredColorScheme(appTheme == .system ? nil : (appTheme == .light ? .light : .dark))
             
             
             
         }
+        .modelContainer(for: [StreakEntity.self, GameRecordEntity.self, GameRecord.self])
+//        .modelContainer(container)
+//        .modelContainer(for: StreakEntity.self)
+        
+        
     }
 }

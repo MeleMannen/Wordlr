@@ -6,18 +6,20 @@
 //
 
 import SwiftUI
+import AVFoundation
+import SwiftData
 
 final class AppManager: ObservableObject {
-    @AppStorage("dailyWord: 1") private var dailyWord1: Date?
-    @AppStorage("dailyWord: 2") private var dailyWord2: Date?
-    @AppStorage("dailyWord: 3") private var dailyWord3: Date?
-    @AppStorage("dailyWord: 4") private var dailyWord4: Date?
-    @AppStorage("dailyWord: 5") private var dailyWord5: Date?
-    @AppStorage("dailyWord: 6") private var dailyWord6: Date?
-    @AppStorage("dailyWord: 7") private var dailyWord7: Date?
-    @AppStorage("dailyWord: 8") private var dailyWord8: Date?
+    
+    @Published var streaks: [StreakEntity] = []
+    @Published var gameRecords: [GameRecordEntity] = []
+    @Published var modelContext: ModelContext?
+    @Published var streakManager: StreakManager?
+    @Published var gameRecordManager: GameRecordManager?
+    
     
     @Published var selectedLanguage: LanguageSelection = .norwegian
+    @Published var language: LanguageSelection = .norwegian
     @Published var gameMode: GameMode = .normal
     @Published var numberOfLetters: Int = 5
     @Published var word: String = ""
@@ -43,19 +45,35 @@ final class AppManager: ObservableObject {
     @Published var searchedWord: String = ""
     @Published var isAnimating: Bool = false
     @Published var dailyWords: Words?
+    @Published var isShaking: Bool = false
+    @Published var submitOpacity: Double = 0.5
+    @Published var shouldAnimateStreak: Bool = false
     
+    @Published var isShowingFilterOptions: Bool = false
+    @Published var isFilteringSearchWord: Bool = true
+    @Published var isFilteringStartWith: Bool = false
+    @Published var startsWithFilter: String = ""
+    @Published var isFilteringEndsWith: Bool = false
+    @Published var endsWithFilter: String = ""
+    @Published var isFilteringExcludeLetters: Bool = false
+    @Published var selectedExcludedLetters: [String] = []
+    let englishLetters: [String] = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
+    let norwegianLetters: [String] = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "Æ", "Ø", "Å"]
+    
+    private var audioPlayer: AVPlayer?
     
     func getWords() {
+        print("context: \(String(describing: self.modelContext))")
         if let words = WordleDataManager.shared.loadWordsFromJSONFile(selectedLanguage: selectedLanguage) {
             self.words = words
-            self.resetBoard()
             
-        }
-        
-        if let dailyWords = WordleDataManager.shared.loadDailyWordsFromJSONFile(selectedLanguage: selectedLanguage) {
-            self.dailyWords = dailyWords
-            self.resetBoard()
-            
+            if let dailyWords = WordleDataManager.shared.loadDailyWordsFromJSONFile(selectedLanguage: selectedLanguage) {
+                self.dailyWords = dailyWords
+                self.resetBoard()
+                
+            } else {
+                self.resetBoard()
+            }
         }
         
         
@@ -80,91 +98,34 @@ final class AppManager: ObservableObject {
         }
     }
     
-    func updatePlayedDailyWord() {
-        switch self.numberOfLetters {
-            case 1:
-                dailyWord1 = Date()
-            case 2:
-                dailyWord2 = Date()
-            case 3:
-                dailyWord3 = Date()
-            case 4:
-                dailyWord4 = Date()
-            case 5:
-                dailyWord5 = Date()
-            case 6:
-                dailyWord6 = Date()
-            case 7:
-                dailyWord7 = Date()
-            case 8:
-                dailyWord8 = Date()
-                
-            default:
-                print("This should never happen: \(self.numberOfLetters)")
-        }
-    }
     
-    func checkIfDailyWordIsPlayed() -> Bool {
-        switch self.numberOfLetters {
-            case 1:
-                return checkDaysSinceDateIsLessThan1(dailyWord1)
-            case 2:
-                return checkDaysSinceDateIsLessThan1(dailyWord2)
-            case 3:
-                return checkDaysSinceDateIsLessThan1(dailyWord3)
-            case 4:
-                return checkDaysSinceDateIsLessThan1(dailyWord4)
-            case 5:
-                return checkDaysSinceDateIsLessThan1(dailyWord5)
-            case 6:
-                return checkDaysSinceDateIsLessThan1(dailyWord6)
-            case 7:
-                return checkDaysSinceDateIsLessThan1(dailyWord7)
-            case 8:
-                return checkDaysSinceDateIsLessThan1(dailyWord8)
-                
-            default:
-                print("This should never happen: \(self.numberOfLetters)")
+
+    
+    func checkIfDailyWordIsAlreadyPlayed() -> Bool {
+        if let streakEntity = self.getStreakEntity() {
+            return streakEntity.streak.hasPlayedDailyWord
         }
         return false
     }
     
-    func checkDaysSinceDateIsLessThan1(_ date: Date?) -> Bool {
-        let calendar = Calendar.current
-        let currentDate = Date()
-        if let date {
-            let daysSinceStart = calendar.dateComponents([.day], from: date, to: currentDate).day!
-            if daysSinceStart < 1 {
-                return true
-            }
-        }
-        return false
+
+    
+    func getCurrentDateInUTCTimeSince1970() -> TimeInterval {
+        let utcDate = Date().toUTC()
+        return utcDate.timeIntervalSince1970
+        
     }
     
     
     func getRandomWord() {
         if gameMode == .normal {
             self.word = self.words?.wordGroups["\(numberOfLetters)"]?.randomElement() ?? ""
-//            self.word = "VENNE"
             print("Ordet er \(self.word)")
         } else {
             self.word = self.getDailyWord()
-            print("Ordet er \(self.word)")
+            print("Ordet2 er \(self.word)")
             
         }
-        
-//        if let words = self.words?.wordGroups["\(numberOfLetters)"] {
-//            print("trust!")
-//            self.shuffeledWords = words.shuffled()
-//            for word in shuffeledWords {
-//                if word == shuffeledWords.last {
-//                    print("\"\(word)\"")
-//                } else {
-//                    print("\"\(word)\",")
-//                }
-//                
-//            }
-//        }
         
         
         
@@ -187,6 +148,19 @@ final class AppManager: ObservableObject {
         
         
     }
+    
+    func getEnglishDefinition(for word: String, completion: @escaping ([EnglishDefinition]) -> Void) {
+        WordleDataManager.shared.fetchEnglishDefinition(for: word) { definition in
+            guard let definition = definition else {
+                completion([])
+                return
+            }
+            DispatchQueue.main.async {
+                completion(definition)
+            }
+        }
+    }
+        
     
     func getDefinition(for word: String, completion: @escaping ([ProcessedWord]) -> Void) {
         var processedWords: [ProcessedWord] = []
@@ -303,10 +277,11 @@ final class AppManager: ObservableObject {
                 self.board[self.currentRow][i].isCorrectLetter = true
                 self.keyboard[keyBoardPosition.row][keyBoardPosition.col].isCorrectLetter = true
                 if let index = changableWord.firstIndex(of: Character(self.board[self.currentRow][i].letter)) {
-//                    print("changanbleWord66: \(changableWord), i: \(i), index: \(index)")
-//                    let char = changableWord.remove(at: index)
+                    print("index1: \(index.utf16Offset(in: self.word)), letter: \(self.board[self.currentRow][i].letter)")
+                    print("changanbleWord66: \(changableWord), i: \(i), index: \(index)")
+                    let char = changableWord.remove(at: index)
                     
-//                    print("changanbleWord4: \(changableWord), i: \(i), index: \(index.utf16Offset(in: self.word)), char: \(char), letter: \(letter), letter2: \(self.board[self.currentRow][letterIndex.utf16Offset(in: self.word)].letter)")
+                    print("changanbleWord4: \(changableWord), i: \(i), index: \(index.utf16Offset(in: self.word)), char: \(char), letter: \(letter), letter2: \(self.board[self.currentRow][letterIndex.utf16Offset(in: self.word)].letter)")
                     
                 } else {
                     changableWord = changableWord.replacingOccurrences(of: self.board[self.currentRow][i].letter, with: "")
@@ -320,10 +295,11 @@ final class AppManager: ObservableObject {
 //                print("wrong letter: \(self.board[self.currentRow][i].letter), i: \(i), letterIndex: \(letterIndex.utf16Offset(in: self.word)), letter: \(letter), changeableWord: \(changableWord)")
                 
                 if let index = changableWord.firstIndex(of: Character(self.board[self.currentRow][i].letter)) {
-//                    print("changanbleWord77: \(changableWord), i: \(i), index: \(index)")
-//                    let char = changableWord.remove(at: index)
+                    print("index2: \(index.utf16Offset(in: self.word)), letter: \(self.board[self.currentRow][i].letter)")
+                    print("changanbleWord77: \(changableWord), i: \(i), index: \(index)")
+                    let char = changableWord.remove(at: index)
                     
-//                    print("changanbleWord8: \(changableWord), i: \(i), index: \(index), char: \(char), letter: \(letter), letter2: \(self.board[self.currentRow][i].letter)")
+                    print("changanbleWord8: \(changableWord), i: \(i), index: \(index), char: \(char), letter: \(letter), letter2: \(self.board[self.currentRow][i].letter)")
                     
                 } else {
                     changableWord = changableWord.replacingOccurrences(of: self.board[self.currentRow][i].letter, with: "")
@@ -392,58 +368,119 @@ final class AppManager: ObservableObject {
         withAnimation(.interpolatingSpring(mass: 0.7, stiffness: 100, damping: 8, initialVelocity: 1)
             .speed(1)
             .delay(0)) {
-            board[rowIndex][colIndex].frontDegree = 360
+                self.board[rowIndex][colIndex].degreee = 360
+            }
+    }
+    
+    func animateTappedLetter(rowIndex: Int, colIndex: Int) {
+        self.board[rowIndex][colIndex].scale = 1.1
+        withAnimation(.interpolatingSpring(mass: 0.7, stiffness: 100, damping: 8, initialVelocity: 1)
+            .speed(1)
+            .delay(0)) {
+                self.board[rowIndex][colIndex].scale = 1.0
+                
+            }
+        
+    }
+    
+    func setStreak(state: GameEndState) {
+        switch state {
+            case .won:
+                if let streakEntity = self.getStreakEntity(), let streakManager = self.streakManager {
+                    switch streakEntity.streak {
+                        case .none, .dead:
+                            streakManager.updateStreak(streakEntity, with: .alive(startDate: Date(), lastWonDate: Date()))
+                        case .alive(let startDate, _):
+                            streakManager.updateStreak(streakEntity, with: .alive(startDate: startDate, lastWonDate: Date()))
+                    }
+                    print("Du vant, oppdaterer streak: \( streakEntity.streak)")
+                    
+                }
+                
+            case .lost:
+                if let streakEntity = self.getStreakEntity(), let streakManager = self.streakManager {
+                    switch streakEntity.streak {
+                        case .none:
+                            streakManager.updateStreak(streakEntity, with: .none)
+                        case .dead(let startDate, _):
+                            streakManager.updateStreak(streakEntity, with: .dead(startDeadDate: startDate, lastDiedAt: Date()))
+                        case .alive:
+                            streakManager.updateStreak(streakEntity, with: .dead(startDeadDate: Date(), lastDiedAt: Date()))
+                    }
+                    print("Du tapte, ingen streak: \( streakEntity.streak)")
+                }
+                
         }
+    }
+    
+    
+    func getStreakEntity() -> StreakEntity? {
+        return self.streaks.first { $0.id == "streak: \(self.numberOfLetters), \(self.selectedLanguage.rawValue)" } ?? nil
+        
     }
     
     
     
     func didTapSubmit() {
         if !self.isGameOver {
-            if self.isReadyToSubmit() {
-                let guessedWord = self.getWordFromCurrentRow()
-                if self.words?.wordGroups["\(self.numberOfLetters)"]?.contains(guessedWord) ?? false {
-                    self.isAnimating = true
-                    let man = self.highlightBoardLetters()
-                    if man {
-                        if self.word == guessedWord {
-                            print("Du vant!!")
+            let guessedWord = self.getWordFromCurrentRow()
+            if wordIsValidForSubmitButton() {
+                self.isAnimating = true
+                let man = self.highlightBoardLetters()
+                if man {
+                    if self.word == guessedWord {
+                        print("Du vant!!")
+                        self.isGameOver = true
+                        self.addGameRecord(gameRecord: GameRecord(state: .won, mode: self.gameMode, word: self.word, language: self.selectedLanguage, numberOfLetters: self.numberOfLetters, numberOfGuesses: self.currentRow))
+                        if self.gameMode == .dailyWord {
+                            print("updating daily word")
+                            self.setStreak(state: .won)
+                        }
+                        self.message = String(format: NSLocalizedString("success_message", comment: "Success message with a word"), word)
+                        return
+                    } else {
+                        if self.currentRow == self.board.count - 1 {
+                            print("Du tapte: \(guessedWord), ordet var \(self.word)")
                             self.isGameOver = true
+                            self.addGameRecord(gameRecord: GameRecord(state: .lost, mode: self.gameMode, word: self.word, language: self.selectedLanguage, numberOfLetters: self.numberOfLetters, numberOfGuesses: self.currentRow))
                             if self.gameMode == .dailyWord {
                                 print("updating daily word")
-                                self.updatePlayedDailyWord()
+                                self.setStreak(state: .lost)
                             }
-                            self.message = String(format: NSLocalizedString("success_message", comment: "Success message with a word"), word)
-                            return
+                            self.message = String(format: NSLocalizedString("almost_message", comment: "Almost got the word message"), word)
                         } else {
-                            if self.currentRow == self.board.count - 1 {
-                                print("Du tapte: \(guessedWord), ordet var \(self.word)")
-                                self.isGameOver = true
-                                self.message = String(format: NSLocalizedString("almost_message", comment: "Almost got the word message"), word)
-                            } else {
-                                
-                                print("Feil ord: \(guessedWord)")
-                            }
-                            
-                            
-                            
+                            print("Feil ord: \(guessedWord)")
                         }
                     }
-                    
-                    
-                    
-                    
-                    
-                    
-                } else {
-                    print("Det du gjettet var ikke et ord: \(guessedWord)")
-                    
                 }
                 
+            } else {
+                if guessedWord.count == self.numberOfLetters {
+                    print("Det du gjettet var ikke et ord: \(guessedWord)")
+                    
+                } else {
+                    print("Ikke nok bokstaver: \(guessedWord)")
+                }
                 
+                self.isShaking = true
+                withAnimation(Animation.spring(response: 0.2, dampingFraction: 0.1, blendDuration: 0.1)) {
+                    self.isShaking = false
+                }
                 
             }
         }
+        
+    }
+    
+    func wordIsValidForSubmitButton() -> Bool {
+        if self.isGameOver {
+            return true
+        }
+        let wordIsValid = self.words?.wordGroups["\(self.numberOfLetters)"]?.contains(self.getWordFromCurrentRow()) ?? false
+        if wordIsValid {
+            return true
+        }
+        return false
         
     }
     
@@ -458,7 +495,76 @@ final class AppManager: ObservableObject {
         self.currentRow = 0
         self.currentIndex = 0
         self.isGameOver = false
+        self.language = self.selectedLanguage
     }
     
+    func resetFilters() {
+        self.isFilteringSearchWord = true
+        self.isFilteringStartWith = false
+        self.startsWithFilter = ""
+        self.isFilteringEndsWith = false
+        self.endsWithFilter = ""
+        self.isFilteringExcludeLetters = false
+        if !selectedExcludedLetters.isEmpty {
+            self.selectedExcludedLetters.removeAll()
+        }
+    }
+    
+    func playAudio(from source: String) {
+        print("Playing audio from: \(source)")
+        guard let url = URL(string: source) else {
+            print("Invalid URL")
+            return
+        }
+        
+        audioPlayer = AVPlayer(url: url)
+        audioPlayer?.play()
+    }
+    
+    func fetchStreaks() {
+        if let streakManager = self.streakManager {
+            self.streaks = streakManager.fetchStreaks()
+            print("Fetched streaks: \(self.streaks)")
+            for streak in self.streaks {
+                print("Streak ID: \(streak.id), Streak: \(streak.streak)")
+            }
+        } else {
+            print("StreakManager is not initialized")
+            
+        }
+    }
+    
+    func fetchGameRecords() {
+        if let gameRecordManager = self.gameRecordManager {
+            self.gameRecords = gameRecordManager.fetchGameRecords()
+            print("Fetched game records: \(self.gameRecords)")
+            for gameRecord in self.gameRecords {
+                print("Game Record ID: \(gameRecord.id), Game Record: \(gameRecord.gameRecord)")
+            }
+        } else {
+            print("GameRecordManager is not initialized")
+        }
+    }
+    
+    
+    func addStreaks() {
+        for i in 1...8 {
+            self.addStreak(id: "streak: \(i), norwegian", streak: .none)
+            self.addStreak(id: "streak: \(i), english", streak: .none)
+        }
+    }
+    
+    func addStreak(id: String, streak: Streak) {
+        if let streakManager = self.streakManager {
+            streakManager.addStreak(id: id, streak: streak)
+        }
+    }
+    
+    func addGameRecord(gameRecord: GameRecord) {
+        if let gameRecordManager = self.gameRecordManager {
+            gameRecordManager.addGameRecord(gameRecord: gameRecord)
+            self.gameRecords = gameRecordManager.fetchGameRecords()
+        }
+    }
     
 }

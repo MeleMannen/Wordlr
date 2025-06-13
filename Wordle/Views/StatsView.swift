@@ -8,11 +8,23 @@
 import SwiftUI
 
 struct StatsView: View {
+    @EnvironmentObject var appManager: AppManager
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        NavigationStack {
+            VStack {
+                List {
+                    Text("Statistics will be available soon!")
+                        .font(.title2)
+                        .padding(.vertical)
+                }
+            }
+            .navigationTitle("Stats")
+        }
+            
     }
 }
 
 #Preview {
     StatsView()
+        .environmentObject(AppManager())
 }
