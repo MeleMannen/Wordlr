@@ -110,14 +110,20 @@ struct WordDescriptionView: View {
                     else {
                         VStack {
                             VStack(alignment: .leading) {
-                                Text(self.word)
+                                Text(self.word.lowercased())
                                     .font(.largeTitle)
                                     .bold()
+                                HStack {
+                                    Text("We couldn't find a definition for this Phrase.")
+                                        .font(.title3)
+                                    
+                                    Spacer()
+                                    
+                                }
                                 
-                                Text("We couldn't find a definition for this word.")
-                                    .font(.title3)
                             }
                             .padding(25)
+                            
                             
                             
                         }
@@ -125,8 +131,9 @@ struct WordDescriptionView: View {
                             RoundedRectangle(cornerRadius: 10)
                                 .fill(Color(uiColor: .quaternarySystemFill))
                         }
-                        .padding(.horizontal, 5)
+                        .padding(.horizontal, 15)
                         .padding(.top, 20)
+                        
                     }
                     
                 }
@@ -149,14 +156,19 @@ struct WordDescriptionView: View {
             }
         }
         .navigationTitle("\(self.word)")
-//        .toolbarBackground(.background, for: .navigationBar)
-//        .toolbarBackground(.visible, for: .navigationBar)
         .onAppear {
-            appManager.getDefinition(for: self.word) { processedWords in
-                self.processedWords = processedWords
-                self.isLoading = false
-                print("ProcessedWord: \(String(describing: self.processedWords))")
-                dump(self.processedWords)
+            if appManager.selectedLanguage == .norwegian{
+                appManager.getDefinition(for: self.word) { processedWords in
+                    self.processedWords = processedWords
+                    self.isLoading = false
+                    print("ProcessedWord: \(String(describing: self.processedWords))")
+                    dump(self.processedWords)
+                }
+            } else if appManager.selectedLanguage == .english {
+                appManager.getEnglishDefinition(for: self.word) { result in
+                    print("result: \(result)")
+                    
+                }
             }
         }
     }
