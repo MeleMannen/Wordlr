@@ -58,7 +58,6 @@ struct EnglishWordDefinitionView: View {
                                                                 if let sourceURL = phonetic.sourceURL, !sourceURL.isEmpty {
                                                                     Link("\(phonetic.text.replacingOccurrences(of: "/", with: ""))", destination: URL(string: "\(sourceURL)")!)
                                                                         .foregroundColor(.blue)
-                                                                    //                                                                    .tint(Color.accentColor)
                                                                         .lineLimit(nil)
                                                                         .fixedSize(horizontal: false, vertical: true)
                                                                 } else {
@@ -73,7 +72,6 @@ struct EnglishWordDefinitionView: View {
                                                                         .onTapGesture {
                                                                             appManager.playAudio(from: phonetic.audio)
                                                                         }
-                                                                    
                                                                 }
                                                             }
                                                             .padding(.bottom, 5)

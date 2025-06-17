@@ -15,16 +15,6 @@ struct WordleApp: App {
     @AppStorage("appTheme") private var appTheme: AppTheme = .dark
     
     @State var selection: TabSelection = .home
-//    let container: ModelContainer
-//    
-//    init() {
-//        do {
-//            container = try ModelContainer(for: StreakEntity.self)
-//        
-//        } catch {
-//            fatalError("Failed to create ModelContainer: \(error.localizedDescription)")
-//        }
-//    }
     
     
     var body: some Scene {
@@ -44,6 +34,13 @@ struct WordleApp: App {
                     }
                     .environmentObject(appManager)
                 
+                HistoryView()
+                    .tag(TabSelection.stats)
+                    .tabItem {
+                        Label("History", systemImage: "clock.arrow.trianglehead.counterclockwise.rotate.90")
+                    }
+                    .environmentObject(appManager)
+                
                 SettingsView()
                     .tag(TabSelection.settings)
                     .tabItem {
@@ -60,8 +57,6 @@ struct WordleApp: App {
             
         }
         .modelContainer(for: [StreakEntity.self, GameRecordEntity.self, GameRecord.self])
-//        .modelContainer(container)
-//        .modelContainer(for: StreakEntity.self)
         
         
     }

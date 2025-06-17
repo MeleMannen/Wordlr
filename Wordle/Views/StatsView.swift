@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Charts
 
 struct StatsView: View {
     @EnvironmentObject var appManager: AppManager

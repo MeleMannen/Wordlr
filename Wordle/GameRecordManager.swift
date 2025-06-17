@@ -16,7 +16,7 @@ final class GameRecordManager {
     }
     
     func addGameRecord(gameRecord: GameRecord) {
-        let gameRecordEntity = GameRecordEntity(id: UUID(), gameRecord: gameRecord)
+        let gameRecordEntity = GameRecordEntity(gameRecord: gameRecord)
         context.insert(gameRecordEntity)
         print("GameRecord added: id: \(gameRecordEntity.id), gameRecord: \(gameRecordEntity.gameRecord)")
     }
@@ -31,7 +31,6 @@ final class GameRecordManager {
         do {
             let gameRecords = try context.fetch(FetchDescriptor<GameRecordEntity>())
             return gameRecords
-            return []
         } catch let error {
             print("Error fetching streaks: \(error.localizedDescription)")
         }

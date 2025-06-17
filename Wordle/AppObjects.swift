@@ -16,6 +16,7 @@ enum AppTheme: String {
 enum TabSelection {
     case home
     case stats
+    case history
     case settings
 }
 
@@ -24,8 +25,8 @@ final class GameRecordEntity: Identifiable {
     var id: UUID
     var gameRecord: GameRecord
     
-    init(id: UUID, gameRecord: GameRecord) {
-        self.id = id
+    init(gameRecord: GameRecord) {
+        self.id = UUID()
         self.gameRecord = gameRecord
     }
 }
@@ -134,9 +135,18 @@ enum ActiveAlert {
     case second
 }
 
-enum GameMode: Codable {
+enum GameMode: String, Codable {
     case dailyWord
     case normal
+    
+    var localizedName: String {
+        switch self {
+            case .dailyWord: return NSLocalizedString("game_mode_daily_word", comment: "Daily Word Mode")
+            case .normal: return NSLocalizedString("game_mode_normal", comment: "Normal Mode")
+        }
+    }
+    
+    
 }
 
 enum LanguageSelection: String, Codable, CaseIterable, Identifiable {

@@ -207,6 +207,9 @@
         }
       }
     },
+    "Date: " : {
+
+    },
     "Dismiss" : {
       "localizations" : {
         "en" : {
@@ -351,6 +354,15 @@
         }
       }
     },
+    "game_mode_daily_word" : {
+      "comment" : "Daily Word Mode"
+    },
+    "game_mode_normal" : {
+      "comment" : "Normal Mode"
+    },
+    "Get Definition" : {
+
+    },
     "Got it!" : {
       "localizations" : {
         "en" : {
@@ -382,6 +394,12 @@
           }
         }
       }
+    },
+    "History" : {
+
+    },
+    "History is not available yet!" : {
+
     },
     "Language" : {
       "localizations" : {
@@ -449,6 +467,9 @@
         }
       }
     },
+    "Language: " : {
+
+    },
     "Light" : {
       "localizations" : {
         "en" : {
@@ -464,6 +485,9 @@
           }
         }
       }
+    },
+    "Mode: " : {
+
     },
     "NAOB - %@" : {
 
@@ -483,6 +507,9 @@
           }
         }
       }
+    },
+    "Number of Guesses: " : {
+
     },
     "ORIGIN   " : {
       "localizations" : {
@@ -833,6 +860,9 @@
           }
         }
       }
+    },
+    "Try playing a game first." : {
+
     },
     "We couldn't find a definition for this Phrase. That might be because it is a name or a placename." : {
       "localizations" : {
