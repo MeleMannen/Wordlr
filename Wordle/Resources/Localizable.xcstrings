@@ -126,6 +126,22 @@
         }
       }
     },
+    "All letters" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "All letters"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alle bokstaver"
+          }
+        }
+      }
+    },
     "almost_message" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -191,6 +207,38 @@
         }
       }
     },
+    "Both" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Both"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Begge"
+          }
+        }
+      }
+    },
+    "Count" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Count"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Antall"
+          }
+        }
+      }
+    },
     "Dark" : {
       "localizations" : {
         "en" : {
@@ -207,8 +255,85 @@
         }
       }
     },
+    "Date" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Date"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dato"
+          }
+        }
+      }
+    },
     "Date: " : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Date:"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dato:"
+          }
+        }
+      }
+    },
+    "Default Gamemode:" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Default Gamemode:"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Standard Modus:"
+          }
+        }
+      }
+    },
+    "Default Language:" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Default Language:"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Standard Språk"
+          }
+        }
+      }
+    },
+    "Default Number of Letters:" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Default Number of Letters:"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Standard Antall Bokstaver"
+          }
+        }
+      }
     },
     "Dismiss" : {
       "localizations" : {
@@ -354,14 +479,88 @@
         }
       }
     },
+    "Game" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Game"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spill"
+          }
+        }
+      }
+    },
+    "game_mode_both" : {
+      "comment" : "Both Modes",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Both Modes"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Begge moduser"
+          }
+        }
+      }
+    },
     "game_mode_daily_word" : {
-      "comment" : "Daily Word Mode"
+      "comment" : "Daily Word Mode",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Daily Word"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Daglig Ord"
+          }
+        }
+      }
     },
     "game_mode_normal" : {
-      "comment" : "Normal Mode"
+      "comment" : "Normal Mode",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Normal"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Normal"
+          }
+        }
+      }
     },
     "Get Definition" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Get Definition"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Få definisjon"
+          }
+        }
+      }
     },
     "Got it!" : {
       "localizations" : {
@@ -396,23 +595,50 @@
       }
     },
     "History" : {
-
-    },
-    "History is not available yet!" : {
-
-    },
-    "Language" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Language"
+            "value" : "History"
           }
         },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Språk"
+            "value" : "Historikk"
+          }
+        }
+      }
+    },
+    "History is not available with this selction!" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "History is not available with this selction!"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Historikk er ikke tilgjengelig med disse valgene!"
+          }
+        }
+      }
+    },
+    "language_both" : {
+      "comment" : "Both Languages",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Both Languages"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Begge språk"
           }
         }
       }
@@ -467,9 +693,6 @@
         }
       }
     },
-    "Language: " : {
-
-    },
     "Light" : {
       "localizations" : {
         "en" : {
@@ -486,11 +709,37 @@
         }
       }
     },
-    "Mode: " : {
-
+    "Mode:" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mode:"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Modus:"
+          }
+        }
+      }
     },
     "NAOB - %@" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "NAOB - %@"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "NAOB - %@"
+          }
+        }
+      }
     },
     "New Game" : {
       "localizations" : {
@@ -508,8 +757,53 @@
         }
       }
     },
-    "Number of Guesses: " : {
-
+    "No stats available for this selection." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No stats available for this selection."
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ingen statistikk tilgjengelig for dette utvalget."
+          }
+        }
+      }
+    },
+    "Number of Guesses" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Number of Guesses"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Antall gjetninger"
+          }
+        }
+      }
+    },
+    "Number of Guesses:" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Number of Guesses:"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Antall gjetninger"
+          }
+        }
+      }
     },
     "ORIGIN   " : {
       "localizations" : {
@@ -571,6 +865,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Spill Noe Annet"
+          }
+        }
+      }
+    },
+    "Played:" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Played:"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spilt:"
           }
         }
       }
@@ -640,7 +950,20 @@
       }
     },
     "Search %@" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Search %@"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Søk %@"
+          }
+        }
+      }
     },
     "Search for a Phrase" : {
       "localizations" : {
@@ -722,12 +1045,18 @@
         }
       }
     },
-    "Statistics will be available soon!" : {
+    "State" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Statistics will be available soon!"
+            "value" : "State"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tilstand"
           }
         }
       }
@@ -744,6 +1073,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Stats"
+          }
+        }
+      }
+    },
+    "Stats and History" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stats and History"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stats og Historikk"
           }
         }
       }
@@ -861,8 +1206,53 @@
         }
       }
     },
+    "Theme" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Theme"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tema"
+          }
+        }
+      }
+    },
+    "Try playing a game first or changing the selction." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Try playing a game first or changing the selction."
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prøv å spille et spill først eller endre utvalget."
+          }
+        }
+      }
+    },
     "Try playing a game first." : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Try playing a game first."
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prøv å spille et spill først."
+          }
+        }
+      }
     },
     "We couldn't find a definition for this Phrase. That might be because it is a name or a placename." : {
       "localizations" : {
@@ -876,6 +1266,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Vi kunne ikke finne en definisjon for denne Frasen. Det kan være fordi det er et navn eller stedsnavn. "
+          }
+        }
+      }
+    },
+    "Win Rate:" : {
+      "localizations" : {
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vinnfrekvens"
           }
         }
       }
@@ -897,7 +1297,20 @@
       }
     },
     "You could try to search in the Dictionary NAOB: " : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You could try to search in the Dictionary NAOB: "
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Du kan prøve å søke i Ordboken NAOB:"
+          }
+        }
+      }
     },
     "You have already played this exact Phrase today. Try again tomorrow or play with a different Phrase length." : {
       "localizations" : {

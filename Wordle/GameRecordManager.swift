@@ -19,6 +19,7 @@ final class GameRecordManager {
         let gameRecordEntity = GameRecordEntity(gameRecord: gameRecord)
         context.insert(gameRecordEntity)
         print("GameRecord added: id: \(gameRecordEntity.id), gameRecord: \(gameRecordEntity.gameRecord)")
+        try? context.save()
     }
     
     func updateGameRecord(_ gameRecordEntity: GameRecordEntity, with newGameRecord: GameRecord) {
@@ -41,5 +42,6 @@ final class GameRecordManager {
     func deleteGameRecords(_ gameRecordEntity: GameRecordEntity) {
         context.delete(gameRecordEntity)
         print("GameRecordEntity deleted: \(gameRecordEntity.gameRecord)")
+        try? context.save()
     }
 }

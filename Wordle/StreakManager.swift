@@ -19,6 +19,7 @@ final class StreakManager {
         let streak = StreakEntity(id: id, streak: streak)
         context.insert(streak)
         print("Streak added with ID: \(id), streak: \(streak.streak)")
+        try? context.save()
     }
     
     func updateStreak(_ streak: StreakEntity, with newStreak: Streak) {
@@ -42,5 +43,6 @@ final class StreakManager {
     func deleteStreak(_ streak: StreakEntity) {
         context.delete(streak)
         print("Streak deleted with ID: \(streak.id), streak: \(streak.streak)")
+        try? context.save()
     }
 }

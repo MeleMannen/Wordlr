@@ -12,6 +12,7 @@ struct SelectView: View {
     @Environment(\.modelContext) var modelContext
     @EnvironmentObject var appManager: AppManager
     @AppStorage("hasAddedStreaks") private var hasAddedStreaks: Bool = false
+    @State var hasFixedDefualtValues: Bool = false
     @Query private var streaks: [StreakEntity] = []
     @Query private var gameRecords: [GameRecordEntity] = []
     
@@ -30,10 +31,10 @@ struct SelectView: View {
                         HStack {
                             Spacer()
                             
-                            Picker("The Phrase Length: ", selection: $appManager.numberOfLetters) {
+                            Picker("", selection: $appManager.numberOfLetters) {
                                 ForEach(1...8, id: \.self) { number in
                                     Text("\(number) letters")
-                                        .font(.title2).bold()
+//                                        .font(.title2).bold()
                                 }
                             }
                             .pickerStyle(.menu)
@@ -65,11 +66,11 @@ struct SelectView: View {
                             Spacer()
                             
                             Picker(selection: $appManager.selectedLanguage) {
-                                ForEach(LanguageSelection.allCases) { language in
+                                ForEach(LanguageSelection.languages) { language in
                                     Text(language.localizedName.capitalized)
                                 }
                             } label: {
-                                Text("Language")
+                                
                             }
                             .pickerStyle(.menu)
                             .foregroundStyle(.primary)
@@ -78,7 +79,7 @@ struct SelectView: View {
 //                                RoundedRectangle(cornerRadius: 10)
 //                                    .foregroundStyle(Color(uiColor: .tertiarySystemBackground))
 //                            }
-                            .sensoryFeedback(.impact, trigger: appManager.selectedLanguage)
+                            .sensoryFeedback(.selection, trigger: appManager.selectedLanguage)
 //                            .glassEffect()
                             .modifier(ConditionalGlassEffect())
                         }
@@ -211,10 +212,9 @@ struct SelectView: View {
                         }
                     }
                 }
-                
-//                .glassEffect(.regular.tint(.gray.opacity(0.08)).interactive(), in: .rect(cornerRadius: 10))
+                .padding(.horizontal, 22)
             }
-            .padding(.horizontal)
+            
             .navigationTitle("The Phrase")
             .animation(appManager.shouldAnimateStreak ? .bouncy(duration: 0.2) : nil, value: appManager.getStreakEntity())
             
@@ -229,10 +229,12 @@ struct SelectView: View {
             }
             appManager.fetchStreaks()
             appManager.fetchGameRecords()
+            if !self.hasFixedDefualtValues {
+                appManager.setDefaultValues()
+                self.hasFixedDefualtValues = true
+            }
         }
     }
-    
-    
 }
 
 // Make an extention to add padding conditionally based on iOS version

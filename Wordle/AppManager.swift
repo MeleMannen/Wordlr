@@ -10,6 +10,9 @@ import AVFoundation
 import SwiftData
 
 final class AppManager: ObservableObject {
+    @AppStorage("defaultLanguage") private var defaultLanguage: LanguageSelection = .norwegian
+    @AppStorage("defaultNumberOfLetters") private var defaultNumberOfLetters: Int = 5
+    
     
     @Published var streaks: [StreakEntity] = []
     @Published var gameRecords: [GameRecordEntity] = []
@@ -431,7 +434,7 @@ final class AppManager: ObservableObject {
                     if self.word == guessedWord {
                         print("Du vant!!")
                         self.isGameOver = true
-                        self.addGameRecord(gameRecord: GameRecord(state: .won, mode: self.gameMode, word: self.word, language: self.selectedLanguage, numberOfLetters: self.numberOfLetters, numberOfGuesses: self.currentRow))
+                        self.addGameRecord(gameRecord: GameRecord(state: .won, mode: self.gameMode, word: self.word, language: self.selectedLanguage, numberOfLetters: self.numberOfLetters, numberOfGuesses: self.currentRow+1))
                         if self.gameMode == .dailyWord {
                             print("updating daily word")
                             self.setStreak(state: .won)
@@ -442,7 +445,7 @@ final class AppManager: ObservableObject {
                         if self.currentRow == self.board.count - 1 {
                             print("Du tapte: \(guessedWord), ordet var \(self.word)")
                             self.isGameOver = true
-                            self.addGameRecord(gameRecord: GameRecord(state: .lost, mode: self.gameMode, word: self.word, language: self.selectedLanguage, numberOfLetters: self.numberOfLetters, numberOfGuesses: self.currentRow))
+                            self.addGameRecord(gameRecord: GameRecord(state: .lost, mode: self.gameMode, word: self.word, language: self.selectedLanguage, numberOfLetters: self.numberOfLetters, numberOfGuesses: self.currentRow+1))
                             if self.gameMode == .dailyWord {
                                 print("updating daily word")
                                 self.setStreak(state: .lost)
@@ -565,6 +568,18 @@ final class AppManager: ObservableObject {
             gameRecordManager.addGameRecord(gameRecord: gameRecord)
             self.gameRecords = gameRecordManager.fetchGameRecords()
         }
+    }
+    
+    func deleteGameRecord(_ gameRecordEntity: GameRecordEntity) {
+        if let gameRecordManager = self.gameRecordManager {
+            gameRecordManager.deleteGameRecords(gameRecordEntity)
+            self.fetchGameRecords()
+        }
+    }
+    
+    func setDefaultValues() {
+        self.selectedLanguage = self.defaultLanguage
+        self.numberOfLetters = self.defaultNumberOfLetters
     }
     
 }

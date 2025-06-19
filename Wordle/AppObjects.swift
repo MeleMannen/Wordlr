@@ -106,18 +106,12 @@ enum Streak: Codable {
                 
                 let currentUTCDate = Date()
                 return utcCalendar.isDate(lastDiedAt, inSameDayAs: currentUTCDate)
-//                let today = Calendar.current.startOfDay(for: Date())
-//                let lastDiedAt = Calendar.current.startOfDay(for: lastDiedAt)
-//                return today == lastDiedAt
             case .alive(_, let lastWonDate):
                 var utcCalendar = Calendar(identifier: .gregorian)
                 utcCalendar.timeZone = TimeZone(secondsFromGMT: 0)!
                 
                 let currentUTCDate = Date()
                 return utcCalendar.isDate(lastWonDate, inSameDayAs: currentUTCDate)
-//                let today = Calendar.current.startOfDay(for: Date())
-//                let lastWonDate = Calendar.current.startOfDay(for: lastWonDate)
-//                return today == lastWonDate
         }
     }
     
@@ -135,15 +129,22 @@ enum ActiveAlert {
     case second
 }
 
-enum GameMode: String, Codable {
+enum GameMode: String, Codable, CaseIterable, Identifiable {
     case dailyWord
     case normal
+    case both
+    var id: Self { self }
     
     var localizedName: String {
         switch self {
             case .dailyWord: return NSLocalizedString("game_mode_daily_word", comment: "Daily Word Mode")
             case .normal: return NSLocalizedString("game_mode_normal", comment: "Normal Mode")
+            case .both: return NSLocalizedString("game_mode_both", comment: "Both Modes")
         }
+    }
+    
+    static var modes: [GameMode] {
+        return [.dailyWord, .normal]
     }
     
     
@@ -152,17 +153,19 @@ enum GameMode: String, Codable {
 enum LanguageSelection: String, Codable, CaseIterable, Identifiable {
     case norwegian
     case english
+    case both
     var id: Self { self }
     
-    var localizationKey: String {
+    var localizedName: String {
         switch self {
-            case .norwegian: return "language_norwegian"
-            case .english: return "language_english"
+            case .norwegian: return NSLocalizedString("language_norwegian", comment: "Norwegian Language")
+            case .english: return NSLocalizedString("language_english", comment: "English Language")
+            case .both: return NSLocalizedString("language_both", comment: "Both Languages")
         }
     }
     
-    var localizedName: String {
-        NSLocalizedString(localizationKey, comment: "Name of the language for selection")
+    static var languages: [LanguageSelection] {
+        return [.norwegian, .english]
     }
     
 }

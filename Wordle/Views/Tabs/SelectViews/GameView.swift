@@ -10,7 +10,20 @@ import SwiftUI
 struct GameView: View {
     @EnvironmentObject var appManager: AppManager
     @Environment(\.dismiss) var dismiss
+    @Environment(\.colorScheme) private var colorScheme
+    @AppStorage("appTheme") private var appTheme: AppTheme = .dark
     private var device : UIUserInterfaceIdiom { UIDevice.current.userInterfaceIdiom }
+    
+    var colorForUnused: Color {
+        switch colorScheme {
+            case .light:
+                return Color(UIColor.lightGray)
+            case .dark:
+                return .primary
+            @unknown default:
+                return .primary
+        }
+    }
     
     var body: some View {
         GeometryReader { geometry in
@@ -24,11 +37,11 @@ struct GameView: View {
                                     if appManager.numberOfLetters < 5 {
                                         Text(letter.letter)
                                             .font(.largeTitle).bold()
-                                            .foregroundStyle(letter.state == .notUsed ? AnyShapeStyle(.background) : AnyShapeStyle(Color.white))
+                                            .foregroundStyle(letter.state == .notUsed ? AnyShapeStyle(.black) : AnyShapeStyle(Color.white))
                                             .frame(width: geometry2.size.height / CGFloat(6), height: geometry2.size.height / CGFloat(6))
                                             .background {
                                                 RoundedRectangle(cornerRadius: 5)
-                                                    .fill(letter.state == .correctPosition ? .green : (letter.state == .correctLetter ? .orange : (letter.state == .usedButNotCorrect ? Color(UIColor.darkGray) : Color(UIColor.label))))
+                                                    .fill(letter.state == .correctPosition ? .green : (letter.state == .correctLetter ? .orange : (letter.state == .usedButNotCorrect ? Color(UIColor.darkGray) : self.colorForUnused)))
                                             }
                                             .rotationEffect(.degrees(letter.degreee), anchor: .center)
                                         
@@ -45,11 +58,11 @@ struct GameView: View {
                                     } else {
                                         Text(letter.letter)
                                             .font(.largeTitle).bold()
-                                            .foregroundStyle(letter.state == .notUsed ? AnyShapeStyle(.background) : AnyShapeStyle(Color.white))
+                                            .foregroundStyle(letter.state == .notUsed ? AnyShapeStyle(.black) : AnyShapeStyle(Color.white))
                                             .frame(width: geometry2.size.height / CGFloat(appManager.numberOfLetters + 1), height: geometry2.size.height / CGFloat(appManager.numberOfLetters + 1))
                                             .background {
                                                 RoundedRectangle(cornerRadius: 5)
-                                                    .fill(letter.state == .correctPosition ? .green : (letter.state == .correctLetter ? .orange : (letter.state == .usedButNotCorrect ? Color(UIColor.darkGray) : Color(UIColor.label))))
+                                                    .fill(letter.state == .correctPosition ? .green : (letter.state == .correctLetter ? .orange : (letter.state == .usedButNotCorrect ? Color(UIColor.darkGray) : self.colorForUnused)))
                                             }
                                             .rotationEffect(.degrees(letter.degreee), anchor: .center)
                                             .animation(.interpolatingSpring(mass: 0.7, stiffness: 100, damping: 8, initialVelocity: 1)
@@ -106,11 +119,11 @@ struct GameView: View {
                                         }, label: {
                                             Text(keyBoardKey.letter)
                                                 .font(.title2).bold()
-                                                .foregroundStyle(keyBoardKey.state == .notUsed ? AnyShapeStyle(.background) : AnyShapeStyle(Color.white))
+                                                .foregroundStyle(keyBoardKey.state == .notUsed ? AnyShapeStyle(.black) : AnyShapeStyle(Color.white))
                                                 .frame(minWidth: geometry2.size.width / CGFloat(14), maxWidth: geometry2.size.width / CGFloat(12), minHeight: geometry2.size.height / CGFloat(10), idealHeight: geometry2.size.height / CGFloat(8), maxHeight: geometry2.size.height / CGFloat(6))
                                                 .background {
                                                     RoundedRectangle(cornerRadius: 5)
-                                                        .fill(keyBoardKey.state == .correctPosition ? .green : (keyBoardKey.state == .correctLetter ? .orange : (keyBoardKey.state == .usedButNotCorrect ? Color(UIColor.darkGray) : Color(UIColor.label))))
+                                                        .fill(keyBoardKey.state == .correctPosition ? .green : (keyBoardKey.state == .correctLetter ? .orange : (keyBoardKey.state == .usedButNotCorrect ? Color(UIColor.darkGray) : self.colorForUnused)))
                                                 }
                                         })
                                         .buttonStyle(ScalingButton())
@@ -158,7 +171,7 @@ struct GameView: View {
                                 }, label: {
                                     Image(systemName: "arrow.clockwise")
                                         .font(.title2).bold()
-                                        .foregroundStyle(.background)
+                                        .foregroundStyle(.black)
                                         .frame(minWidth: geometry2.size.width / CGFloat(9),
                                                maxWidth: geometry2.size.width / CGFloat(7),
                                                minHeight: geometry2.size.height / CGFloat(10),
@@ -166,7 +179,7 @@ struct GameView: View {
                                                maxHeight: geometry2.size.height / CGFloat(6))
                                         .background {
                                             RoundedRectangle(cornerRadius: 10)
-                                                .foregroundStyle(Color(UIColor.label))
+                                                .foregroundStyle(self.colorForUnused)
                                         }
                                 })
                                 .sensoryFeedback(.impact, trigger: appManager.didTapResetButton)
@@ -231,13 +244,13 @@ struct GameView: View {
                                     }
                                     
                                 }, label: {
-                                    Image(systemName: "delete.left.fill")
+                                    Image(systemName: "delete.left")
                                         .font(.title2).bold()
-                                        .foregroundStyle(.background)
+                                        .foregroundStyle(.black)
                                         .frame(minWidth: geometry2.size.width / CGFloat(9), maxWidth: geometry2.size.width / CGFloat(7), minHeight: geometry2.size.height / CGFloat(10), idealHeight: geometry2.size.height / CGFloat(8), maxHeight: geometry2.size.height / CGFloat(6))
                                         .background {
                                             RoundedRectangle(cornerRadius: 10)
-                                                .foregroundStyle(Color(UIColor.label))
+                                                .foregroundStyle(self.colorForUnused)
                                         }
                                     
                                 })

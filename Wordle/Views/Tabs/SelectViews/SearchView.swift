@@ -170,8 +170,6 @@ struct SearchView: View {
                     .padding()
                     .background(Color.green)
                     .clipShape(Circle())
-                    
-//                    .shadow(radius: 10)
                     .sensoryFeedback(.impact, trigger: appManager.isShowingFilterOptions)
                     .matchedTransitionSource(id: "filter", in: namespace)
 //                    .glassEffect(in: .circle)

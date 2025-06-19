@@ -127,13 +127,13 @@ struct NorwegianWordDefinitionView: View {
                                     
                                     NavigationLink(destination: NAOBView(word: self.word).environmentObject(appManager)) {
                                         Text("Search \(self.word.uppercased())")
-                                            .foregroundColor(.primary)
-                                            .font(.headline)
+                                            .foregroundColor(.white)
+                                            .font(.title2).bold()
                                             .padding(14)
                                             .frame(maxWidth: .infinity)
                                             .background {
                                                 RoundedRectangle(cornerRadius: 15)
-                                                    .fill(Color(uiColor: .green))
+                                                    .fill(Color.green)
                                             }
                                             .padding(.horizontal, 40)
                                         

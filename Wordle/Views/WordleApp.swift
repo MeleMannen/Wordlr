@@ -30,12 +30,12 @@ struct WordleApp: App {
                 StatsView()
                     .tag(TabSelection.stats)
                     .tabItem {
-                        Label("Stats", systemImage: "chart.line.uptrend.xyaxis")
+                        Label("Stats", systemImage: "chart.bar.yaxis")
                     }
                     .environmentObject(appManager)
                 
                 HistoryView()
-                    .tag(TabSelection.stats)
+                    .tag(TabSelection.history)
                     .tabItem {
                         Label("History", systemImage: "clock.arrow.trianglehead.counterclockwise.rotate.90")
                     }

@@ -12,6 +12,7 @@
 		631C9D802DFA043A00742B34 /* StatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631C9D7F2DFA043A00742B34 /* StatsView.swift */; };
 		631C9D822DFA1BD500742B34 /* StreakManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631C9D812DFA1BCE00742B34 /* StreakManager.swift */; };
 		6335967E2DFC5A2C004A55C4 /* GameRecordManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6335967D2DFC5A2C004A55C4 /* GameRecordManager.swift */; };
+		6365B8C12E04C58F00A3F4C1 /* FilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6365B8C02E04C58F00A3F4C1 /* FilterView.swift */; };
 		637330892DB9036C00AE18E6 /* englishWords.json in Resources */ = {isa = PBXBuildFile; fileRef = 637330882DB9036C00AE18E6 /* englishWords.json */; };
 		6373308B2DB9054400AE18E6 /* dailyEnglishWords.json in Resources */ = {isa = PBXBuildFile; fileRef = 6373308A2DB9053600AE18E6 /* dailyEnglishWords.json */; };
 		638274D52DFCC8BE00BD38DA /* NAOBView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638274D42DFCC8BE00BD38DA /* NAOBView.swift */; };
@@ -43,6 +44,7 @@
 		631C9D7F2DFA043A00742B34 /* StatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsView.swift; sourceTree = "<group>"; };
 		631C9D812DFA1BCE00742B34 /* StreakManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreakManager.swift; sourceTree = "<group>"; };
 		6335967D2DFC5A2C004A55C4 /* GameRecordManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameRecordManager.swift; sourceTree = "<group>"; };
+		6365B8C02E04C58F00A3F4C1 /* FilterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterView.swift; sourceTree = "<group>"; };
 		637330882DB9036C00AE18E6 /* englishWords.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = englishWords.json; sourceTree = "<group>"; };
 		6373308A2DB9053600AE18E6 /* dailyEnglishWords.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = dailyEnglishWords.json; sourceTree = "<group>"; };
 		638274D42DFCC8BE00BD38DA /* NAOBView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NAOBView.swift; sourceTree = "<group>"; };
@@ -81,6 +83,58 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		6365B8BB2E04C42E00A3F4C1 /* Tabs */ = {
+			isa = PBXGroup;
+			children = (
+				6365B8BC2E04C47100A3F4C1 /* SelectViews */,
+				631C9D7F2DFA043A00742B34 /* StatsView.swift */,
+				6365B8BF2E04C50800A3F4C1 /* HistoryViews */,
+				63E081DA2D3414DA00748133 /* SettingsView.swift */,
+			);
+			path = Tabs;
+			sourceTree = "<group>";
+		};
+		6365B8BC2E04C47100A3F4C1 /* SelectViews */ = {
+			isa = PBXGroup;
+			children = (
+				63E081D92D3414DA00748133 /* SelectView.swift */,
+				63E081D82D3414DA00748133 /* GameView.swift */,
+				63E081F02D34551A00748133 /* SearchView.swift */,
+				63E6B3E22DF5D6B6007C66EB /* FilterOptionsView.swift */,
+			);
+			path = SelectViews;
+			sourceTree = "<group>";
+		};
+		6365B8BD2E04C4A400A3F4C1 /* DefinitionViews */ = {
+			isa = PBXGroup;
+			children = (
+				63FF1C752DF72900003A19B3 /* WordDefinitionView.swift */,
+				63E081F22D346CB800748133 /* NorwegianWordDefinitionView.swift */,
+				638274D42DFCC8BE00BD38DA /* NAOBView.swift */,
+				63FF1C732DF728EF003A19B3 /* EnglishWordDefinitionView.swift */,
+			);
+			path = DefinitionViews;
+			sourceTree = "<group>";
+		};
+		6365B8BE2E04C4C600A3F4C1 /* Testing */ = {
+			isa = PBXGroup;
+			children = (
+				63B05B952D626DB90003B663 /* IndexedListView.swift */,
+				63BBE4A82DF3126E00FA4257 /* IndexedListViewTest.swift */,
+			);
+			path = Testing;
+			sourceTree = "<group>";
+		};
+		6365B8BF2E04C50800A3F4C1 /* HistoryViews */ = {
+			isa = PBXGroup;
+			children = (
+				63F987912E01F86400D1B9CB /* HistoryView.swift */,
+				63F987932E02001E00D1B9CB /* GameRecordView.swift */,
+				6365B8C02E04C58F00A3F4C1 /* FilterView.swift */,
+			);
+			path = HistoryViews;
+			sourceTree = "<group>";
+		};
 		6382E3B32D12FE0500B61353 = {
 			isa = PBXGroup;
 			children = (
@@ -109,20 +163,9 @@
 			isa = PBXGroup;
 			children = (
 				63E081DB2D3414DA00748133 /* WordleApp.swift */,
-				63E081D92D3414DA00748133 /* SelectView.swift */,
-				63E081D82D3414DA00748133 /* GameView.swift */,
-				63E081F02D34551A00748133 /* SearchView.swift */,
-				63E6B3E22DF5D6B6007C66EB /* FilterOptionsView.swift */,
-				63FF1C752DF72900003A19B3 /* WordDefinitionView.swift */,
-				63E081F22D346CB800748133 /* NorwegianWordDefinitionView.swift */,
-				638274D42DFCC8BE00BD38DA /* NAOBView.swift */,
-				63FF1C732DF728EF003A19B3 /* EnglishWordDefinitionView.swift */,
-				631C9D7F2DFA043A00742B34 /* StatsView.swift */,
-				63F987912E01F86400D1B9CB /* HistoryView.swift */,
-				63F987932E02001E00D1B9CB /* GameRecordView.swift */,
-				63E081DA2D3414DA00748133 /* SettingsView.swift */,
-				63B05B952D626DB90003B663 /* IndexedListView.swift */,
-				63BBE4A82DF3126E00FA4257 /* IndexedListViewTest.swift */,
+				6365B8BB2E04C42E00A3F4C1 /* Tabs */,
+				6365B8BD2E04C4A400A3F4C1 /* DefinitionViews */,
+				6365B8BE2E04C4C600A3F4C1 /* Testing */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -147,8 +190,8 @@
 		63E081ED2D34158100748133 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				63F9D6032D3724E4004E9128 /* shortedNorwegainWords.json */,
 				63E081EE2D3415D400748133 /* Localizable.xcstrings */,
+				63F9D6032D3724E4004E9128 /* shortedNorwegainWords.json */,
 				631156FC2D5FFA910017D1F4 /* dailyNorwegianWords.json */,
 				63E081E02D3414DA00748133 /* norwegianWords.json */,
 				6373308A2DB9053600AE18E6 /* dailyEnglishWords.json */,
@@ -246,6 +289,7 @@
 				63E081F12D34551A00748133 /* SearchView.swift in Sources */,
 				6335967E2DFC5A2C004A55C4 /* GameRecordManager.swift in Sources */,
 				63F987922E01F86400D1B9CB /* HistoryView.swift in Sources */,
+				6365B8C12E04C58F00A3F4C1 /* FilterView.swift in Sources */,
 				63FF1C762DF72900003A19B3 /* WordDefinitionView.swift in Sources */,
 				63E081E62D3414DA00748133 /* WordleApp.swift in Sources */,
 				638274D52DFCC8BE00BD38DA /* NAOBView.swift in Sources */,
@@ -409,7 +453,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 15.2;
-				MARKETING_VERSION = 1.2;
+				MARKETING_VERSION = 1.3;
 				PRODUCT_BUNDLE_IDENTIFIER = SwoshEB.ThePhrase;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
@@ -451,7 +495,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 15.2;
-				MARKETING_VERSION = 1.2;
+				MARKETING_VERSION = 1.3;
 				PRODUCT_BUNDLE_IDENTIFIER = SwoshEB.ThePhrase;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;

@@ -23,7 +23,7 @@ struct FilterOptionsView: View {
             VStack {
                 Toggle(isOn: $appManager.isFilteringSearchWord) {
                     Text("Search:")
-                        .font(.title3)
+                        .font(.title3).bold()
                 }
                 .tint(.green)
                 
@@ -47,7 +47,7 @@ struct FilterOptionsView: View {
             VStack {
                 Toggle(isOn: $appManager.isFilteringStartWith) {
                     Text("Starts with:")
-                        .font(.title3)
+                        .font(.title3).bold()
                 }
                 .tint(.green)
                 
@@ -72,7 +72,7 @@ struct FilterOptionsView: View {
             VStack {
                 Toggle(isOn: $appManager.isFilteringEndsWith) {
                     Text("Ends with:")
-                        .font(.title3)
+                        .font(.title3).bold()
                 }
                 .tint(.green)
                 
@@ -97,7 +97,7 @@ struct FilterOptionsView: View {
             VStack {
                 Toggle(isOn: $appManager.isFilteringExcludeLetters) {
                     Text("Exclude letters:")
-                        .font(.title3)
+                        .font(.title3).bold()
                 }
                 .tint(.green)
                 
@@ -164,6 +164,7 @@ struct FilterOptionsView: View {
                 .padding(.vertical, 10)
             }
         }
+        .scrollDisabled(true)
         .navigationTitle("Filter Options")
         .navigationBarTitleDisplayMode(.large)
         .onDisappear {

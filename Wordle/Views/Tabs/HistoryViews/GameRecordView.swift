@@ -30,6 +30,11 @@ struct GameRecordView: View {
                     
                     Image(systemName: gameRecord.state == .won ? "checkmark.circle.fill" : "xmark.circle.fill")
                         .foregroundColor(gameRecord.state == .won ? .green : .red)
+                        .background {
+                            Circle()
+                                .fill(.white)
+                                .padding(5)
+                        }
                         .font(.largeTitle)
                 }
                 .padding(.top)
@@ -50,29 +55,29 @@ struct GameRecordView: View {
                 
                 VStack(alignment: .leading) {
                     HStack(alignment: .bottom) {
-                        Text("Number of Guesses: ")
+                        Text("Number of Guesses:")
                             .foregroundStyle(.secondary)
                             .font(.title3)
                         Spacer()
-                        Text("\(gameRecord.numberOfLetters)")
+                        Text("\(gameRecord.numberOfGuesses)")
                             .font(.title2)
                     }
                     .padding(.bottom, 5)
                     HStack(alignment: .bottom) {
-                        Text("Language: ")
+                        Text("Language:")
                             .foregroundStyle(.secondary)
                             .font(.title3)
                         Spacer()
-                        Text("\(gameRecord.language.rawValue.capitalized)")
+                        Text("\(gameRecord.language.localizedName)")
                             .font(.title2)
                     }
                     .padding(.bottom, 5)
                     HStack(alignment: .bottom) {
-                        Text("Mode: ")
+                        Text("Mode:")
                             .foregroundStyle(.secondary)
                             .font(.title3)
                         Spacer()
-                        Text("\(gameRecord.mode.rawValue.capitalized)")
+                        Text("\(gameRecord.mode.localizedName)")
                             .font(.title2)
                     }
                     .padding(.bottom, 5)
@@ -84,13 +89,13 @@ struct GameRecordView: View {
                 
                 NavigationLink(destination: WordDefinitionView(word: gameRecord.word).environmentObject(appManager)) {
                     Text("Get Definition")
-                        .foregroundColor(.primary)
-                        .font(.title3)
+                        .foregroundColor(.white)
+                        .font(.title2).bold()
                         .padding(14)
                         .frame(maxWidth: .infinity)
                         .background {
                             RoundedRectangle(cornerRadius: 15)
-                                .fill(Color(uiColor: .green))
+                                .fill(Color.green)
                         }
                         .padding(.horizontal, 40)
                     
