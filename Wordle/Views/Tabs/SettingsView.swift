@@ -31,10 +31,16 @@ struct SettingsView: View {
                             } label: {
                                 
                             }
-                            .padding(3)
                             .padding(.trailing, 10)
                             .pickerStyle(.menu)
                             .tint(.primary)
+                            .background {
+                                if #unavailable(iOS 26.0, ) {
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .foregroundStyle(Color(uiColor: .tertiarySystemBackground))
+                                }
+                            }
+                            .padding(3)
                             .padding(.vertical, 5)
                             .modifier(ConditionalGlassEffect())
                         }
@@ -91,10 +97,16 @@ struct SettingsView: View {
                             } label: {
                                 
                             }
-                            .padding(3)
                             .padding(.trailing, 10)
                             .pickerStyle(.menu)
                             .tint(.primary)
+                            .background {
+                                if #unavailable(iOS 26.0, ) {
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .foregroundStyle(Color(uiColor: .tertiarySystemBackground))
+                                }
+                            }
+                            .padding(3)
                             .padding(.vertical, 5)
                             .modifier(ConditionalGlassEffect())
                         }

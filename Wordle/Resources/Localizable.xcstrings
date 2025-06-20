@@ -726,6 +726,7 @@
       }
     },
     "NAOB - %@" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1272,6 +1273,12 @@
     },
     "Win Rate:" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Win Rate:"
+          }
+        },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",

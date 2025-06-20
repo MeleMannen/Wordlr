@@ -41,10 +41,12 @@ struct SelectView: View {
                             .foregroundStyle(.primary)
                             .accentColor(.primary)
                             .font(.title).bold()
-//                            .background {
-//                                RoundedRectangle(cornerRadius: 10)
-//                                    .foregroundStyle(Color(uiColor: .tertiarySystemBackground))
-//                            }
+                            .background {
+                                if #unavailable(iOS 26.0, ) {
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .foregroundStyle(Color(uiColor: .tertiarySystemBackground))
+                                }
+                            }
                             .sensoryFeedback(.selection, trigger: appManager.numberOfLetters)
 //                            .glassEffect()
                             .modifier(ConditionalGlassEffect())
@@ -75,10 +77,12 @@ struct SelectView: View {
                             .pickerStyle(.menu)
                             .foregroundStyle(.primary)
                             .accentColor(.primary)
-//                            .background {
-//                                RoundedRectangle(cornerRadius: 10)
-//                                    .foregroundStyle(Color(uiColor: .tertiarySystemBackground))
-//                            }
+                            .background {
+                                if #unavailable(iOS 26.0, ) {
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .foregroundStyle(Color(uiColor: .tertiarySystemBackground))
+                                }
+                            }
                             .sensoryFeedback(.selection, trigger: appManager.selectedLanguage)
 //                            .glassEffect()
                             .modifier(ConditionalGlassEffect())

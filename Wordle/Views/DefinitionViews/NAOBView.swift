@@ -6,21 +6,29 @@
 //
 
 import SwiftUI
-import WebKit
+//#if canImport(WebKit)
+//import WebKit
+//#endif
 
 struct NAOBView: View {
     @EnvironmentObject var appManager: AppManager
     @State var word: String = ""
-    @State var page: WebPage = WebPage()
+//#if canImport(WebKit)
+//    @State var page: WebPage = WebPage()
+//#endif
     var body: some View {
-        if #available(iOS 26.0, *) {
-            WebView(page)
-                .navigationTitle("NAOB - \(self.word)")
-                .onAppear {
-                    page.load(URLRequest(url: URL(string: "https://naob.no/ordbok/\(self.word)")!))
-                }
-                .ignoresSafeArea(.all, edges: .bottom)
-        }
+        EmptyView()
+//#if canImport(WebKit)
+//        if #available(iOS 26.0, *) {
+//            WebView(page)
+//                .navigationTitle("NAOB - \(self.word)")
+//                .onAppear {
+//                    page.load(URLRequest(url: URL(string: "https://naob.no/ordbok/\(self.word)")!))
+//                }
+//                .ignoresSafeArea(.all, edges: .bottom)
+//        }
+//#endif
+        #warning("NAOBView is not implemented yet. Fix when WebKit is available for iOS 26.0 and later.")
     }
 }
 
