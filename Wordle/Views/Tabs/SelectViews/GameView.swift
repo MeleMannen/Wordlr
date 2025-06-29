@@ -14,6 +14,7 @@ struct GameView: View {
     @AppStorage("appTheme") private var appTheme: AppTheme = .dark
     private var device : UIUserInterfaceIdiom { UIDevice.current.userInterfaceIdiom }
     
+    
     var colorForUnused: Color {
         switch colorScheme {
             case .light:
@@ -340,11 +341,21 @@ struct GameView: View {
             .navigationTitle("Guess The Phrase")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
+                if appManager.isHintAvailable() {
+                    ToolbarItem(placement: .topBarTrailing) {
+                        AdButton()
+                            .environmentObject(appManager)
+                        
+                        
+                    }
+                }
+                
                 ToolbarItem(placement: .topBarTrailing) {
                     NavigationLink(destination: SearchView().environmentObject(appManager), label: {
                         Image(systemName: "magnifyingglass")
                             .contentShape(Rectangle())
                     })
+                    // MARK: - Fikse sensory feedback on the search button
                 }
             }
         }
@@ -356,6 +367,61 @@ struct GameView: View {
             }
             
         }
+    }
+}
+
+struct AdButton: View {
+    @EnvironmentObject var appManager: AppManager
+    @AppStorage("userWantsAds") var userWantAds: Bool = false
+    @State var isPresentingAdOption: Bool = false
+    @State var hasLoadedAd: Bool = false
+    @State private var didTap: Bool = false
+    
+    var body: some View {
+        Button(action: {
+            self.didTap.toggle()
+            if !appManager.isGameOver && !appManager.isAnimating {
+                if !userWantAds {
+                    self.isPresentingAdOption = true
+                } else {
+                    if hasLoadedAd {
+                        appManager.showAd()
+                        
+                    } else {
+                        Task {
+                            await appManager.loadAd()
+                            appManager.showAd()
+                        }
+                    }
+                }
+            }
+        }, label: {
+            Image(systemName: "lightbulb.max.fill")
+                .contentShape(Rectangle())
+        })
+        .alert("Hint", isPresented: $isPresentingAdOption, actions: {
+            Button("No", role: .cancel) {
+                self.userWantAds = false
+            }
+            Button("Sure") {
+                self.userWantAds = true
+                Task {
+                    await appManager.loadAd()
+                    appManager.showAd()
+                }
+            }
+        }, message: {
+            Text("Do you want to see an ad to get a hint and support the app? It helps us keep the app free and improve it further.")
+        })
+        .onAppear {
+            if userWantAds {
+                Task {
+                    await appManager.loadAd()
+                    self.hasLoadedAd = true
+                }
+            }
+        }
+        .sensoryFeedback(.impact, trigger: self.didTap)
     }
 }
 

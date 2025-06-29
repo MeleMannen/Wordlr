@@ -223,6 +223,22 @@
         }
       }
     },
+    "Both Hint Usage" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Both Hint Usage"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Begge Hint Valg"
+          }
+        }
+      }
+    },
     "Count" : {
       "localizations" : {
         "en" : {
@@ -335,6 +351,22 @@
         }
       }
     },
+    "Default Show When Hints Used:" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Default Show When Hints Used:"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Standard Vis Når Hint Brukt: "
+          }
+        }
+      }
+    },
     "Dismiss" : {
       "localizations" : {
         "en" : {
@@ -347,6 +379,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Fjern"
+          }
+        }
+      }
+    },
+    "Do you want to see an ad to get a hint and support the app? It helps us keep the app free and improve it further." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Do you want to see an ad to get a hint and support the app? It helps us keep the app free and improve it further."
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vil du se en annonse for å få et hint og støtte appen? Det hjelper oss å holde appen gratis og forbedre den ytterligere."
           }
         }
       }
@@ -594,6 +642,105 @@
         }
       }
     },
+    "Hint" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sure"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Hint"
+          }
+        }
+      }
+    },
+    "Hints Never Used" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hints Never Used"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hint Aldri Brukt"
+          }
+        }
+      }
+    },
+    "Hints used:" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hints used:"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hint Brukt"
+          }
+        }
+      }
+    },
+    "hints_used_both" : {
+      "comment" : "Both",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Both"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Begge"
+          }
+        }
+      }
+    },
+    "hints_used_neverUsed" : {
+      "comment" : "Never Used",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Never Used"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aldri Brukt"
+          }
+        }
+      }
+    },
+    "hints_used_onlyWhenUsed" : {
+      "comment" : "Only When Used",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Only When Used"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bare Når Brukt"
+          }
+        }
+      }
+    },
     "History" : {
       "localizations" : {
         "en" : {
@@ -758,6 +905,22 @@
         }
       }
     },
+    "No" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nei"
+          }
+        }
+      }
+    },
     "No stats available for this selection." : {
       "localizations" : {
         "en" : {
@@ -802,6 +965,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Antall gjetninger"
+          }
+        }
+      }
+    },
+    "Only When Hints Was Used" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Only When Hints Was Used"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bare Når Hint Var Brukt"
           }
         }
       }
@@ -1123,6 +1302,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Du klarte det!! - %@"
+          }
+        }
+      }
+    },
+    "Sure" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sure"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
           }
         }
       }

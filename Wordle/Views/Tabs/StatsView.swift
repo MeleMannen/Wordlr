@@ -13,10 +13,12 @@ struct StatsView: View {
     @AppStorage("defaultStatLanguage") private var defaultStatLanguage: LanguageSelection = .both
     @AppStorage("defaultStatNumberOfLetters") private var defaultStatNumberOfLetters: Int = 9
     @AppStorage("defaultStatGameMode") private var defaultStatGameMode: GameMode = .both
+    @AppStorage("defaultStatHintsUsed") private var defaultStatHintsUsed: ShowsWhenHintsUsed = .both
     @State var hasFixedDefualtValues: Bool = false
     @State var numberOfLetters: Int = 9
     @State var selectedLanguage: LanguageSelection = .both
     @State var gameMode: GameMode = .both
+    @State var showsWhenHintsUsed: ShowsWhenHintsUsed = .both
     
     var selectedGameRecords: [GameRecordEntity] {
         var gameRecords = appManager.gameRecords
@@ -32,14 +34,32 @@ struct StatsView: View {
         if self.gameMode != .both {
             gameRecords = gameRecords.filter { $0.gameRecord.mode == self.gameMode }
         }
+        
+        if self.showsWhenHintsUsed == .neverUsed {
+            gameRecords = gameRecords.filter { $0.gameRecord.hintsUsed ?? 0 == 0 }
+        } else if self.showsWhenHintsUsed == .onlyWhenUsed {
+            gameRecords = gameRecords.filter { $0.gameRecord.hintsUsed ?? 0 > 0 }
+        }
+        
         return gameRecords
+    }
+    
+    var maxNumberOfRows: Int {
+        if self.numberOfLetters > 7 {
+            return 8
+        } else if self.numberOfLetters == 6 {
+            return 7
+        } else {
+            return 6
+        }
     }
     
     var body: some View {
         NavigationStack {
             VStack {
-                FilterView(numberOfLetters: $numberOfLetters, selectedLanguage: $selectedLanguage, gameMode: $gameMode)
+                FilterView(numberOfLetters: $numberOfLetters, selectedLanguage: $selectedLanguage, gameMode: $gameMode, showsWhenHintsUsed: $showsWhenHintsUsed)
                     .environmentObject(appManager)
+                
                     
                 if selectedGameRecords.isEmpty {
                     ContentUnavailableView.init("No stats available for this selection.", systemImage: "exclamationmark.triangle.fill", description: Text("Try playing a game first or changing the selction."))
@@ -53,16 +73,9 @@ struct StatsView: View {
                                     .bold()
                                 
                                 Spacer()
-//                                if selectedGameRecords.count == 1 {
-//                                    Text("\(selectedGameRecords.count)")
-//                                        .font(.title3)
-//                                        .foregroundStyle(.secondary)
-//                                    
-//                                } else {
                                     Text("\(selectedGameRecords.count)")
                                         .font(.title3)
                                         .foregroundStyle(.secondary)
-//                                }
                             }
                             .padding(.bottom, 10)
                             
@@ -87,7 +100,7 @@ struct StatsView: View {
                                 
                                 BarMark(
                                     x: .value("Count", wonCount),
-                                    y: .value("State", "Won"),
+                                    y: .value("State", "✅"),
                                     width: .fixed(20.0)
                                 )
                                 .foregroundStyle(Color.green)
@@ -102,7 +115,7 @@ struct StatsView: View {
                                 
                                 BarMark(
                                     x: .value("Count", lostCount),
-                                    y: .value("State", "Lost"),
+                                    y: .value("State", "❌"),
                                     width: .fixed(20.0)
                                 )
                                 .foregroundStyle(Color.red)
@@ -130,12 +143,12 @@ struct StatsView: View {
                                 .bold()
                             
                             Chart {
-                                ForEach(1...6, id: \.self) { guess in
+                                ForEach(1...self.maxNumberOfRows, id: \.self) { guess in
                                     let count = selectedGameRecords.filter { $0.gameRecord.numberOfGuesses == guess && $0.gameRecord.state == .won }.count
                                     
                                     BarMark(
                                         x: .value("Count", count),
-                                        y: .value("Number of Guesses", "\(guess)"),
+                                        y: .value("Number of Guesses", " \(guess) "),
                                         width: .fixed(20.0)
                                     )
                                     .foregroundStyle(Color.green)
@@ -156,8 +169,6 @@ struct StatsView: View {
                             }
                             .frame(minHeight: 250)
                         }
-                        
-                        
                     }
                 }
             }
@@ -169,13 +180,13 @@ struct StatsView: View {
                 self.hasFixedDefualtValues = true
             }
         }
-        
     }
     
     func setDefaultValues() {
         self.selectedLanguage = self.defaultStatLanguage
         self.numberOfLetters = self.defaultStatNumberOfLetters
         self.gameMode = self.defaultStatGameMode
+        self.showsWhenHintsUsed = self.defaultStatHintsUsed
     }
 }
 

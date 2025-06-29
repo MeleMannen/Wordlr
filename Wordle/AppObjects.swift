@@ -41,8 +41,9 @@ class GameRecord: Identifiable {
     var language: LanguageSelection
     var numberOfLetters: Int
     var numberOfGuesses: Int
+    var hintsUsed: Int?
     
-    init(date: Date = Date(), state: GameEndState, mode: GameMode, word: String, language: LanguageSelection, numberOfLetters: Int, numberOfGuesses: Int) {
+    init(date: Date = Date(), state: GameEndState, mode: GameMode, word: String, language: LanguageSelection, numberOfLetters: Int, numberOfGuesses: Int, hintsUsed: Int = 0) {
         self.id = UUID()
         self.date = date
         self.state = state
@@ -51,6 +52,7 @@ class GameRecord: Identifiable {
         self.language = language
         self.numberOfLetters = numberOfLetters
         self.numberOfGuesses = numberOfGuesses
+        self.hintsUsed = hintsUsed
     }
     
 }
@@ -115,6 +117,22 @@ enum Streak: Codable {
         }
     }
     
+    
+}
+
+enum ShowsWhenHintsUsed: String, CaseIterable, Identifiable {
+    case neverUsed
+    case onlyWhenUsed
+    case both
+    var id: Self { self }
+    
+    var localizedName: String {
+        switch self {
+            case .neverUsed: return NSLocalizedString("hints_used_neverUsed", comment: "Never Used")
+            case .onlyWhenUsed: return NSLocalizedString("hints_used_onlyWhenUsed", comment: "Only When Used")
+            case .both: return NSLocalizedString("hints_used_both", comment: "Both")
+        }
+    }
     
 }
 

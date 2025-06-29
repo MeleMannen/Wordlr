@@ -7,6 +7,7 @@
 
 import SwiftUI
 import SwiftData
+import GoogleMobileAds
 
 struct SelectView: View {
     @Environment(\.modelContext) var modelContext
@@ -221,18 +222,26 @@ struct SelectView: View {
             
             .navigationTitle("The Phrase")
             .animation(appManager.shouldAnimateStreak ? .bouncy(duration: 0.2) : nil, value: appManager.getStreakEntity())
+//            Spacer()
+//            let adSize = currentOrientationAnchoredAdaptiveBanner(width: 375)
+//            BannerViewContainer(adSize)
+//                .frame(width: adSize.size.width, height: adSize.size.height)
+//                .padding(.bottom, 10)
             
         }
         .onAppear {
             appManager.modelContext = modelContext
             appManager.streakManager = StreakManager(context: modelContext)
             appManager.gameRecordManager = GameRecordManager(context: modelContext)
+            
             if !self.hasAddedStreaks {
                 appManager.addStreaks()
                 self.hasAddedStreaks = true
             }
+            
             appManager.fetchStreaks()
             appManager.fetchGameRecords()
+            
             if !self.hasFixedDefualtValues {
                 appManager.setDefaultValues()
                 self.hasFixedDefualtValues = true

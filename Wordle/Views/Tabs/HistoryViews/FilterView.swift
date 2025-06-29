@@ -12,6 +12,7 @@ struct FilterView: View {
     @Binding var numberOfLetters: Int
     @Binding var selectedLanguage: LanguageSelection
     @Binding var gameMode: GameMode
+    @Binding var showsWhenHintsUsed: ShowsWhenHintsUsed
     
     var body: some View {
         ScrollView(.horizontal) {
@@ -59,6 +60,29 @@ struct FilterView: View {
                 Picker("", selection: $gameMode) {
                     ForEach(GameMode.allCases) { mode in
                         Text(mode.localizedName.capitalized)
+                    }
+                }
+                .pickerStyle(.menu)
+                .foregroundStyle(.primary)
+                .accentColor(.primary)
+                .background {
+                    if #unavailable(iOS 26.0, ) {
+                        RoundedRectangle(cornerRadius: 10)
+                            .foregroundStyle(Color(uiColor: .tertiarySystemBackground))
+                    }
+                }
+                .sensoryFeedback(.selection, trigger: gameMode)
+                .modifier(ConditionalGlassEffect())
+                
+                Picker("", selection: $showsWhenHintsUsed) {
+                    ForEach(ShowsWhenHintsUsed.allCases) { mode in
+                        if mode == .both {
+                            Text("Both Hint Usage")
+                        } else if mode == .neverUsed {
+                            Text("Hints Never Used")
+                        } else if mode == .onlyWhenUsed {
+                            Text("Only When Hints Was Used")
+                        }
                     }
                 }
                 .pickerStyle(.menu)

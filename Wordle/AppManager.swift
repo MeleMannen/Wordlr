@@ -8,8 +8,9 @@
 import SwiftUI
 import AVFoundation
 import SwiftData
+import GoogleMobileAds
 
-final class AppManager: ObservableObject {
+final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
     @AppStorage("defaultLanguage") private var defaultLanguage: LanguageSelection = .norwegian
     @AppStorage("defaultNumberOfLetters") private var defaultNumberOfLetters: Int = 5
     
@@ -51,6 +52,9 @@ final class AppManager: ObservableObject {
     @Published var isShaking: Bool = false
     @Published var submitOpacity: Double = 0.5
     @Published var shouldAnimateStreak: Bool = false
+    @Published var startDate: Date = Date()
+    @Published var hintsUsed: Int = 0
+    
     
     @Published var isShowingFilterOptions: Bool = false
     @Published var isFilteringSearchWord: Bool = true
@@ -64,6 +68,7 @@ final class AppManager: ObservableObject {
     let norwegianLetters: [String] = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "Æ", "Ø", "Å"]
     
     private var audioPlayer: AVPlayer?
+    private var rewardedAd: RewardedAd?
     
     func getWords() {
         print("context: \(String(describing: self.modelContext))")
@@ -339,12 +344,7 @@ final class AppManager: ObservableObject {
                     }
                 }
             }
-            
-            
-            
         }
-        
-        
     }
     
     func goThroughKeyboard() {
@@ -392,9 +392,9 @@ final class AppManager: ObservableObject {
                 if let streakEntity = self.getStreakEntity(), let streakManager = self.streakManager {
                     switch streakEntity.streak {
                         case .none, .dead:
-                            streakManager.updateStreak(streakEntity, with: .alive(startDate: Date(), lastWonDate: Date()))
+                            streakManager.updateStreak(streakEntity, with: .alive(startDate: self.startDate, lastWonDate: self.startDate))
                         case .alive(let startDate, _):
-                            streakManager.updateStreak(streakEntity, with: .alive(startDate: startDate, lastWonDate: Date()))
+                            streakManager.updateStreak(streakEntity, with: .alive(startDate: startDate, lastWonDate: self.startDate))
                     }
                     print("Du vant, oppdaterer streak: \( streakEntity.streak)")
                     
@@ -406,9 +406,9 @@ final class AppManager: ObservableObject {
                         case .none:
                             streakManager.updateStreak(streakEntity, with: .none)
                         case .dead(let startDate, _):
-                            streakManager.updateStreak(streakEntity, with: .dead(startDeadDate: startDate, lastDiedAt: Date()))
+                            streakManager.updateStreak(streakEntity, with: .dead(startDeadDate: startDate, lastDiedAt: self.startDate))
                         case .alive:
-                            streakManager.updateStreak(streakEntity, with: .dead(startDeadDate: Date(), lastDiedAt: Date()))
+                            streakManager.updateStreak(streakEntity, with: .dead(startDeadDate: self.startDate, lastDiedAt: self.startDate))
                     }
                     print("Du tapte, ingen streak: \( streakEntity.streak)")
                 }
@@ -419,7 +419,6 @@ final class AppManager: ObservableObject {
     
     func getStreakEntity() -> StreakEntity? {
         return self.streaks.first { $0.id == "streak: \(self.numberOfLetters), \(self.selectedLanguage.rawValue)" } ?? nil
-        
     }
     
     
@@ -434,7 +433,7 @@ final class AppManager: ObservableObject {
                     if self.word == guessedWord {
                         print("Du vant!!")
                         self.isGameOver = true
-                        self.addGameRecord(gameRecord: GameRecord(state: .won, mode: self.gameMode, word: self.word, language: self.selectedLanguage, numberOfLetters: self.numberOfLetters, numberOfGuesses: self.currentRow+1))
+                        self.addGameRecord(gameRecord: GameRecord(state: .won, mode: self.gameMode, word: self.word, language: self.selectedLanguage, numberOfLetters: self.numberOfLetters, numberOfGuesses: self.currentRow+1, hintsUsed: self.hintsUsed))
                         if self.gameMode == .dailyWord {
                             print("updating daily word")
                             self.setStreak(state: .won)
@@ -445,7 +444,7 @@ final class AppManager: ObservableObject {
                         if self.currentRow == self.board.count - 1 {
                             print("Du tapte: \(guessedWord), ordet var \(self.word)")
                             self.isGameOver = true
-                            self.addGameRecord(gameRecord: GameRecord(state: .lost, mode: self.gameMode, word: self.word, language: self.selectedLanguage, numberOfLetters: self.numberOfLetters, numberOfGuesses: self.currentRow+1))
+                            self.addGameRecord(gameRecord: GameRecord(state: .lost, mode: self.gameMode, word: self.word, language: self.selectedLanguage, numberOfLetters: self.numberOfLetters, numberOfGuesses: self.currentRow+1, hintsUsed: self.hintsUsed))
                             if self.gameMode == .dailyWord {
                                 print("updating daily word")
                                 self.setStreak(state: .lost)
@@ -497,8 +496,10 @@ final class AppManager: ObservableObject {
         self.getRandomWord()
         self.currentRow = 0
         self.currentIndex = 0
+        self.hintsUsed = 0
         self.isGameOver = false
         self.language = self.selectedLanguage
+        self.startDate = Date()
     }
     
     func resetFilters() {
@@ -554,6 +555,7 @@ final class AppManager: ObservableObject {
         for i in 1...8 {
             self.addStreak(id: "streak: \(i), norwegian", streak: .none)
             self.addStreak(id: "streak: \(i), english", streak: .none)
+            
         }
     }
     
@@ -580,6 +582,106 @@ final class AppManager: ObservableObject {
     func setDefaultValues() {
         self.selectedLanguage = self.defaultLanguage
         self.numberOfLetters = self.defaultNumberOfLetters
+    }
+    
+    
+    // MARK: - Hints
+    func getHint() {
+        var foundKey: Bool = false
+        for (index, row) in self.keyboard.enumerated() {
+            for (index2, key) in row.enumerated() {
+                if key.state == .notUsed && self.word.contains(key.letter) {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
+                        withAnimation(.easeIn(duration: 0.4)) {
+                            self.keyboard[index][index2].state = .correctLetter
+                        }
+                    }
+                    self.hintsUsed += 1
+                    print("Hint: \(key.letter)")
+                    foundKey = true
+                    break
+                }
+            }
+            if foundKey {
+                break
+            }
+        }
+        if foundKey {
+            return
+        }
+    }
+    
+    func isHintAvailable() -> Bool {
+        if self.numberOfLetters == 1 {
+            return false
+        }
+        var keysWithCorrectState: [KeyBoardLetter] = []
+        for row in self.keyboard {
+            for key in row {
+                if key.state == .correctLetter || key.state == .correctPosition && self.word.contains(key.letter) {
+                    keysWithCorrectState.append(key)
+                }
+            }
+        }
+        print("Keys with correct state: \(keysWithCorrectState.count), number of letters: \(self.numberOfLetters)")
+        return keysWithCorrectState.count != self.numberOfLetters
+    }
+        
+    
+    
+    
+    
+    // MARK: - ADS
+    func loadAd() async {
+        do {
+            // ca-app-pub-7619403750703078/7682260846
+            self.rewardedAd = try await RewardedAd.load(
+                with: "ca-app-pub-3940256099942544/1712485313", request: Request())
+            self.rewardedAd?.fullScreenContentDelegate = self
+        } catch {
+            print("Failed to load rewarded ad with error: \(error.localizedDescription)")
+        }
+    }
+    
+    func showAd() {
+        guard let rewardedAd = rewardedAd else {
+            return print("Ad wasn't ready.")
+        }
+        
+        rewardedAd.present(from: nil) {
+            let reward = rewardedAd.adReward
+            print("Reward amount: \(reward.amount)")
+            self.getHint()
+            print("I got a Hint!!!!!!")
+        }
+    }
+    
+    func adDidRecordImpression(_ ad: FullScreenPresentingAd) {
+        print("\(#function) called")
+    }
+    
+    func adDidRecordClick(_ ad: FullScreenPresentingAd) {
+        print("\(#function) called")
+    }
+    
+    func ad(
+        _ ad: FullScreenPresentingAd,
+        didFailToPresentFullScreenContentWithError error: Error
+    ) {
+        print("\(#function) called")
+    }
+    
+    func adWillPresentFullScreenContent(_ ad: FullScreenPresentingAd) {
+        print("\(#function) called")
+    }
+    
+    func adWillDismissFullScreenContent(_ ad: FullScreenPresentingAd) {
+        print("\(#function) called")
+    }
+    
+    func adDidDismissFullScreenContent(_ ad: FullScreenPresentingAd) {
+        print("\(#function) called")
+        self.rewardedAd = nil
     }
     
 }

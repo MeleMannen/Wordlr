@@ -7,7 +7,8 @@
 
 import SwiftUI
 import SwiftData
-import CoreData
+//import CoreData
+import GoogleMobileAds
 
 @main
 struct WordleApp: App {
@@ -15,6 +16,10 @@ struct WordleApp: App {
     @AppStorage("appTheme") private var appTheme: AppTheme = .dark
     
     @State var selection: TabSelection = .home
+    
+    init() {
+        MobileAds.shared.start()
+    }
     
     
     var body: some Scene {

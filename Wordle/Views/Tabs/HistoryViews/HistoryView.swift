@@ -12,10 +12,12 @@ struct HistoryView: View {
     @AppStorage("defaultStatLanguage") private var defaultStatLanguage: LanguageSelection = .both
     @AppStorage("defaultStatNumberOfLetters") private var defaultStatNumberOfLetters: Int = 9
     @AppStorage("defaultStatGameMode") private var defaultStatGameMode: GameMode = .both
+    @AppStorage("defaultStatHintsUsed") private var defaultStatHintsUsed: ShowsWhenHintsUsed = .both
     @State var hasFixedDefualtValues: Bool = false
     @State private var numberOfLetters: Int = 9
     @State private var selectedLanguage: LanguageSelection = .both
     @State private var gameMode: GameMode = .both
+    @State var showsWhenHintsUsed: ShowsWhenHintsUsed = .both
     
     var searchResults: [GameRecordEntity] {
         var filteredRecords = appManager.gameRecords
@@ -32,6 +34,12 @@ struct HistoryView: View {
         
         if self.gameMode != .both {
             filteredRecords = filteredRecords.filter { $0.gameRecord.mode == self.gameMode }
+        }
+        
+        if self.showsWhenHintsUsed == .neverUsed {
+            filteredRecords = filteredRecords.filter { $0.gameRecord.hintsUsed ?? 0 == 0 }
+        } else if self.showsWhenHintsUsed == .onlyWhenUsed {
+            filteredRecords = filteredRecords.filter { $0.gameRecord.hintsUsed ?? 0 > 0 }
         }
         
         return filteredRecords
@@ -61,7 +69,7 @@ struct HistoryView: View {
     var body: some View {
         NavigationStack {
             VStack {
-                FilterView(numberOfLetters: $numberOfLetters, selectedLanguage: $selectedLanguage, gameMode: $gameMode)
+                FilterView(numberOfLetters: $numberOfLetters, selectedLanguage: $selectedLanguage, gameMode: $gameMode, showsWhenHintsUsed: $showsWhenHintsUsed)
                     .environmentObject(appManager)
                 if self.searchResults.isEmpty && !appManager.searchedWord.isEmpty {
                     ContentUnavailableView.search(text: appManager.searchedWord)
@@ -128,6 +136,7 @@ struct HistoryView: View {
         self.selectedLanguage = self.defaultStatLanguage
         self.numberOfLetters = self.defaultStatNumberOfLetters
         self.gameMode = self.defaultStatGameMode
+        self.showsWhenHintsUsed = self.defaultStatHintsUsed
     }
 }
 

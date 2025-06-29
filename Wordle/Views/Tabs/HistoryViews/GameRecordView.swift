@@ -82,6 +82,18 @@ struct GameRecordView: View {
                     }
                     .padding(.bottom, 5)
                     
+                    if let hintsUsed = gameRecord.hintsUsed, hintsUsed > 0 {
+                        HStack(alignment: .bottom) {
+                            Text("Hints used:")
+                                .foregroundStyle(.secondary)
+                                .font(.title3)
+                            Spacer()
+                            Text("\(hintsUsed)")
+                                .font(.title2)
+                        }
+                        .padding(.bottom, 5)
+                    }
+                    
                     
                 }
                 .padding()
