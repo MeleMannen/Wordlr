@@ -11,6 +11,7 @@ struct GameRecordView: View {
     @EnvironmentObject var appManager: AppManager
     @State var gameRecord: GameRecord
     @State private var didTap: Bool = false
+    @State private var hasSharedResult: Bool = false
     
     private let formatter1: DateFormatter = {
         let formatter = DateFormatter()
@@ -121,6 +122,28 @@ struct GameRecordView: View {
                 .padding(.vertical, 10)
                 .sensoryFeedback(.impact, trigger: self.didTap)
                 .buttonStyle(GrowingButton())
+                
+                if let shareResultString = gameRecord.shareResultString, gameRecord.mode == .dailyWord {
+                    HStack {
+                        Spacer()
+                        
+                        Button {
+                            withAnimation {
+                                UIPasteboard.general.string = shareResultString
+                                self.hasSharedResult = true
+                            }
+                        } label: {
+                            Label("Tap to Copy Result", systemImage: hasSharedResult ? "doc.on.doc.fill" : "doc.on.doc")
+                                .font(.title2).bold()
+                                .contentTransition(.symbolEffect(.replace))
+                        }
+                        .padding(.vertical, 15)
+                        .sensoryFeedback(.impact, trigger: self.didTap)
+                        
+                        Spacer()
+                        
+                    }
+                }
                 
             }
             .padding(10)

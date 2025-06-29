@@ -42,8 +42,9 @@ class GameRecord: Identifiable {
     var numberOfLetters: Int
     var numberOfGuesses: Int
     var hintsUsed: Int?
+    var shareResultString: String?
     
-    init(date: Date = Date(), state: GameEndState, mode: GameMode, word: String, language: LanguageSelection, numberOfLetters: Int, numberOfGuesses: Int, hintsUsed: Int = 0) {
+    init(date: Date = Date(), state: GameEndState, mode: GameMode, word: String, language: LanguageSelection, numberOfLetters: Int, numberOfGuesses: Int, hintsUsed: Int = 0, shareResultString: String? = nil) {
         self.id = UUID()
         self.date = date
         self.state = state
@@ -53,6 +54,7 @@ class GameRecord: Identifiable {
         self.numberOfLetters = numberOfLetters
         self.numberOfGuesses = numberOfGuesses
         self.hintsUsed = hintsUsed
+        self.shareResultString = shareResultString
     }
     
 }

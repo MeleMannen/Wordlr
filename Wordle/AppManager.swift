@@ -432,7 +432,7 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
                     if self.word == guessedWord {
                         print("Du vant!!")
                         self.isGameOver = true
-                        self.addGameRecord(gameRecord: GameRecord(state: .won, mode: self.selectedGameMode, word: self.word, language: self.selectedLanguage, numberOfLetters: self.numberOfLetters, numberOfGuesses: self.currentRow+1, hintsUsed: self.hintsUsed))
+                        self.addGameRecord(gameRecord: GameRecord(state: .won, mode: self.selectedGameMode, word: self.word, language: self.selectedLanguage, numberOfLetters: self.numberOfLetters, numberOfGuesses: self.currentRow+1, hintsUsed: self.hintsUsed, shareResultString: self.selectedGameMode == .dailyWord ? self.getShareResult(row: self.currentRow+1) : nil))
                         if self.selectedGameMode == .dailyWord {
                             print("updating daily word")
                             self.setStreak(state: .won)
@@ -443,7 +443,7 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
                         if self.currentRow == self.board.count - 1 {
                             print("Du tapte: \(guessedWord), ordet var \(self.word)")
                             self.isGameOver = true
-                            self.addGameRecord(gameRecord: GameRecord(state: .lost, mode: self.selectedGameMode, word: self.word, language: self.selectedLanguage, numberOfLetters: self.numberOfLetters, numberOfGuesses: self.currentRow+1, hintsUsed: self.hintsUsed))
+                            self.addGameRecord(gameRecord: GameRecord(state: .lost, mode: self.selectedGameMode, word: self.word, language: self.selectedLanguage, numberOfLetters: self.numberOfLetters, numberOfGuesses: self.currentRow+1, hintsUsed: self.hintsUsed, shareResultString: self.selectedGameMode == .dailyWord ? self.getShareResult(row: self.currentRow+1) : nil))
                             if self.selectedGameMode == .dailyWord {
                                 print("updating daily word")
                                 self.setStreak(state: .lost)
@@ -485,7 +485,7 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
         
     }
     
-    func shareResult() {
+    func getShareResult(row: Int) -> String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateStyle = .short
         dateFormatter.timeStyle = .none
@@ -502,10 +502,10 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
             letterString = String(format: NSLocalizedString("share_letters", comment: "Letters"), self.numberOfLetters)
         }
         
-        var rowString = String(format: NSLocalizedString("share_row", comment: "Row"))
+        let rowString = String(format: NSLocalizedString("share_row", comment: "Row"))
             
         
-        var shareText = "The Phrase \(dateFormatter.string(from: Date())), \(letterString), \(self.currentRow)/\(numberOfRows) \(rowString):\n"
+        var shareText = "The Phrase \(dateFormatter.string(from: self.startDate)), \(letterString), \(row)/\(numberOfRows) \(rowString):\n"
         
         var shouldBreak: Bool = false
         for row in self.board {
@@ -529,9 +529,7 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
             
         }
         
-        UIPasteboard.general.string = shareText
-        self.hasSharedResult = true
-        self.didTapSubmitButton.toggle()
+        return shareText
         
     }
     
