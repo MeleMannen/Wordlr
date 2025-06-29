@@ -115,7 +115,7 @@ struct SelectView: View {
                         }
                         .simultaneousGesture(TapGesture().onEnded {
                             appManager.didTapPlayNormalButton.toggle()
-                            appManager.gameMode = .normal
+                            appManager.selectedGameMode = .normal
                         })
                         .sensoryFeedback(.impact, trigger: appManager.didTapPlayNormalButton)
                         .buttonStyle(GrowingButton())
@@ -170,7 +170,7 @@ struct SelectView: View {
                             }
                             .simultaneousGesture(TapGesture().onEnded {
                                 appManager.didTapPlayDailyWordButton.toggle()
-                                appManager.gameMode = .dailyWord
+                                appManager.selectedGameMode = .dailyWord
                                 if !appManager.word.isEmpty {
                                     appManager.getWords()
                                 }

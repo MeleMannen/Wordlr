@@ -14,7 +14,6 @@ struct GameView: View {
     @AppStorage("appTheme") private var appTheme: AppTheme = .dark
     private var device : UIUserInterfaceIdiom { UIDevice.current.userInterfaceIdiom }
     
-    
     var colorForUnused: Color {
         switch colorScheme {
             case .light:
@@ -272,7 +271,8 @@ struct GameView: View {
                                 .font(.title2).bold()
                             
                             Spacer()
-                            if appManager.gameMode == .normal {
+                            
+                            if appManager.selectedGameMode == .normal {
                                 Button(action: {
                                     appManager.didTapNewGameButton.toggle()
                                     appManager.resetBoard()
@@ -325,6 +325,21 @@ struct GameView: View {
                             
                             Spacer()
                             
+                            if appManager.selectedGameMode == .dailyWord {
+                                Button {
+                                    withAnimation {
+                                        appManager.shareResult()
+                                    }
+                                } label: {
+                                    Label("Tap to Copy Result", systemImage: appManager.hasSharedResult ? "doc.on.doc.fill" : "doc.on.doc")
+                                        .font(.title2).bold()
+                                        .contentTransition(.symbolEffect(.replace))
+                                }
+                                Spacer()
+                            }
+                            
+                            
+                            
                         }
                         .opacity((appManager.isGameOver && !appManager.isAnimating) ? 1 : 0)
                         .sensoryFeedback(.success, trigger: (appManager.isGameOver && !appManager.isAnimating))
@@ -360,7 +375,7 @@ struct GameView: View {
             }
         }
         .onAppear {
-            if appManager.word.isEmpty || appManager.selectedLanguage != appManager.language {
+            if appManager.word.isEmpty || appManager.selectedLanguage != appManager.language || appManager.gameMode != appManager.selectedGameMode {
                 appManager.getWords()
             } else if appManager.word.count != appManager.numberOfLetters {
                 appManager.resetBoard()

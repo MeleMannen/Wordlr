@@ -25,6 +25,7 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
     @Published var selectedLanguage: LanguageSelection = .norwegian
     @Published var language: LanguageSelection = .norwegian
     @Published var gameMode: GameMode = .normal
+    @Published var selectedGameMode: GameMode = .normal
     @Published var numberOfLetters: Int = 5
     @Published var word: String = ""
     @Published var words: Words?
@@ -54,6 +55,7 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
     @Published var shouldAnimateStreak: Bool = false
     @Published var startDate: Date = Date()
     @Published var hintsUsed: Int = 0
+    @Published var hasSharedResult: Bool = false
     
     
     @Published var isShowingFilterOptions: Bool = false
@@ -83,9 +85,6 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
                 self.resetBoard()
             }
         }
-        
-        
-        
     }
     
     func fixStartBoard() {
@@ -126,7 +125,7 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
     
     
     func getRandomWord() {
-        if gameMode == .normal {
+        if selectedGameMode == .normal {
             self.word = self.words?.wordGroups["\(numberOfLetters)"]?.randomElement() ?? ""
             print("Ordet er \(self.word)")
         } else {
@@ -433,8 +432,8 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
                     if self.word == guessedWord {
                         print("Du vant!!")
                         self.isGameOver = true
-                        self.addGameRecord(gameRecord: GameRecord(state: .won, mode: self.gameMode, word: self.word, language: self.selectedLanguage, numberOfLetters: self.numberOfLetters, numberOfGuesses: self.currentRow+1, hintsUsed: self.hintsUsed))
-                        if self.gameMode == .dailyWord {
+                        self.addGameRecord(gameRecord: GameRecord(state: .won, mode: self.selectedGameMode, word: self.word, language: self.selectedLanguage, numberOfLetters: self.numberOfLetters, numberOfGuesses: self.currentRow+1, hintsUsed: self.hintsUsed))
+                        if self.selectedGameMode == .dailyWord {
                             print("updating daily word")
                             self.setStreak(state: .won)
                         }
@@ -444,8 +443,8 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
                         if self.currentRow == self.board.count - 1 {
                             print("Du tapte: \(guessedWord), ordet var \(self.word)")
                             self.isGameOver = true
-                            self.addGameRecord(gameRecord: GameRecord(state: .lost, mode: self.gameMode, word: self.word, language: self.selectedLanguage, numberOfLetters: self.numberOfLetters, numberOfGuesses: self.currentRow+1, hintsUsed: self.hintsUsed))
-                            if self.gameMode == .dailyWord {
+                            self.addGameRecord(gameRecord: GameRecord(state: .lost, mode: self.selectedGameMode, word: self.word, language: self.selectedLanguage, numberOfLetters: self.numberOfLetters, numberOfGuesses: self.currentRow+1, hintsUsed: self.hintsUsed))
+                            if self.selectedGameMode == .dailyWord {
                                 print("updating daily word")
                                 self.setStreak(state: .lost)
                             }
@@ -486,6 +485,56 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
         
     }
     
+    func shareResult() {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = .short
+        dateFormatter.timeStyle = .none
+        
+        var numberOfRows = 6
+        if self.numberOfLetters > 6 {
+            numberOfRows = 8
+        } else if self.numberOfLetters == 6 {
+            numberOfRows = 7
+        }
+        
+        var letterString = String(format: NSLocalizedString("share_letter", comment: "Letter"), self.numberOfLetters)
+        if self.numberOfLetters > 1 {
+            letterString = String(format: NSLocalizedString("share_letters", comment: "Letters"), self.numberOfLetters)
+        }
+        
+        var rowString = String(format: NSLocalizedString("share_row", comment: "Row"))
+            
+        
+        var shareText = "The Phrase \(dateFormatter.string(from: Date())), \(letterString), \(self.currentRow)/\(numberOfRows) \(rowString):\n"
+        
+        var shouldBreak: Bool = false
+        for row in self.board {
+            for letter in row {
+                switch letter.state {
+                    case .correctPosition:
+                        shareText += "🟩"
+                    case .correctLetter:
+                        shareText += "🟨"
+                    case .usedButNotCorrect:
+                        shareText += "⬜️"
+                    default:
+                        shouldBreak = true
+                        break
+                }
+            }
+            if shouldBreak {
+                break
+            }
+            shareText += "\n"
+            
+        }
+        
+        UIPasteboard.general.string = shareText
+        self.hasSharedResult = true
+        self.didTapSubmitButton.toggle()
+        
+    }
+    
     
     
     func resetBoard() {
@@ -498,7 +547,9 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
         self.currentIndex = 0
         self.hintsUsed = 0
         self.isGameOver = false
+        self.hasSharedResult = false
         self.language = self.selectedLanguage
+        self.gameMode = self.selectedGameMode
         self.startDate = Date()
     }
     
@@ -623,7 +674,7 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
                 }
             }
         }
-        print("Keys with correct state: \(keysWithCorrectState.count), number of letters: \(self.numberOfLetters)")
+//        print("Keys with correct state: \(keysWithCorrectState.count), number of letters: \(self.numberOfLetters)")
         return keysWithCorrectState.count != self.numberOfLetters
     }
         

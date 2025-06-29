@@ -1193,6 +1193,57 @@
         }
       }
     },
+    "share_letter" : {
+      "comment" : "Letter",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld Letter"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld Bokstav"
+          }
+        }
+      }
+    },
+    "share_letters" : {
+      "comment" : "Letters",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld Letters"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld Bokstaver"
+          }
+        }
+      }
+    },
+    "share_row" : {
+      "comment" : "Row",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rows"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Rader"
+          }
+        }
+      }
+    },
     "Show Definition" : {
       "localizations" : {
         "en" : {
@@ -1350,6 +1401,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "System"
+          }
+        }
+      }
+    },
+    "Tap to Copy Result" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tap to Copy Result"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trykk for å Kopiere Resultatet"
           }
         }
       }
