@@ -15,6 +15,7 @@
 		6365B8C12E04C58F00A3F4C1 /* FilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6365B8C02E04C58F00A3F4C1 /* FilterView.swift */; };
 		637330892DB9036C00AE18E6 /* englishWords.json in Resources */ = {isa = PBXBuildFile; fileRef = 637330882DB9036C00AE18E6 /* englishWords.json */; };
 		6373308B2DB9054400AE18E6 /* dailyEnglishWords.json in Resources */ = {isa = PBXBuildFile; fileRef = 6373308A2DB9053600AE18E6 /* dailyEnglishWords.json */; };
+		6378C1C12E12DCF4005B8FC6 /* BoardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6378C1C02E12DCF4005B8FC6 /* BoardView.swift */; };
 		638274D52DFCC8BE00BD38DA /* NAOBView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638274D42DFCC8BE00BD38DA /* NAOBView.swift */; };
 		63B05B962D626DB90003B663 /* IndexedListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B05B952D626DB90003B663 /* IndexedListView.swift */; };
 		63BBE4A92DF3126E00FA4257 /* IndexedListViewTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63BBE4A82DF3126E00FA4257 /* IndexedListViewTest.swift */; };
@@ -48,6 +49,7 @@
 		6365B8C02E04C58F00A3F4C1 /* FilterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterView.swift; sourceTree = "<group>"; };
 		637330882DB9036C00AE18E6 /* englishWords.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = englishWords.json; sourceTree = "<group>"; };
 		6373308A2DB9053600AE18E6 /* dailyEnglishWords.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = dailyEnglishWords.json; sourceTree = "<group>"; };
+		6378C1C02E12DCF4005B8FC6 /* BoardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardView.swift; sourceTree = "<group>"; };
 		638274D42DFCC8BE00BD38DA /* NAOBView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NAOBView.swift; sourceTree = "<group>"; };
 		6382E3BC2D12FE0500B61353 /* Wordle.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Wordle.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		63B05B952D626DB90003B663 /* IndexedListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IndexedListView.swift; sourceTree = "<group>"; };
@@ -134,6 +136,7 @@
 			children = (
 				63F987912E01F86400D1B9CB /* HistoryView.swift */,
 				63F987932E02001E00D1B9CB /* GameRecordView.swift */,
+				6378C1C02E12DCF4005B8FC6 /* BoardView.swift */,
 				6365B8C02E04C58F00A3F4C1 /* FilterView.swift */,
 			);
 			path = HistoryViews;
@@ -299,6 +302,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6378C1C12E12DCF4005B8FC6 /* BoardView.swift in Sources */,
 				63E081E32D3414DA00748133 /* GameView.swift in Sources */,
 				63B05B962D626DB90003B663 /* IndexedListView.swift in Sources */,
 				63E081E42D3414DA00748133 /* SelectView.swift in Sources */,
@@ -472,7 +476,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 15.2;
-				MARKETING_VERSION = 1.4.0;
+				MARKETING_VERSION = 1.4.1;
 				PRODUCT_BUNDLE_IDENTIFIER = SwoshEB.ThePhrase;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
@@ -515,7 +519,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 15.2;
-				MARKETING_VERSION = 1.4.0;
+				MARKETING_VERSION = 1.4.1;
 				PRODUCT_BUNDLE_IDENTIFIER = SwoshEB.ThePhrase;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;

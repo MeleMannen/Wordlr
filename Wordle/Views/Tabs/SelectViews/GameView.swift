@@ -328,12 +328,12 @@ struct GameView: View {
                             if appManager.selectedGameMode == .dailyWord {
                                 Button {
                                     withAnimation {
-                                        UIPasteboard.general.string = appManager.getShareResult(row: appManager.currentRow)
+                                        UIPasteboard.general.string = appManager.getShareResult(row: appManager.currentRow, numberOfLetters: appManager.numberOfLetters, date: appManager.startDate, board: appManager.board)
                                         appManager.hasSharedResult = true
-                                        appManager.didTapSubmitButton.toggle()
+                                        appManager.didTapBackButton.toggle()
                                     }
                                 } label: {
-                                    Label("Tap to Copy Result", systemImage: appManager.hasSharedResult ? "doc.on.doc.fill" : "doc.on.doc")
+                                    Label("Copy Result", systemImage: appManager.hasSharedResult ? "doc.on.doc.fill" : "doc.on.doc")
                                         .font(.title2).bold()
                                         .contentTransition(.symbolEffect(.replace))
                                 }

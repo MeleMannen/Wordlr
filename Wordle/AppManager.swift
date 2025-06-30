@@ -246,82 +246,76 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
     
     
     
-    func highlightBoardLetters() -> Bool {
+    func highlightBoardLetters(completion: @escaping (Bool) -> Void) {
+        let dispatchGroup = DispatchGroup()
         var changableWord = self.word
+        
         for i in 0..<self.board[self.currentRow].count {
             let letterIndex = self.word.index(self.word.startIndex, offsetBy: i)
             let letter = String(self.word[letterIndex])
             guard let keyBoardPosition = self.findKeyPosition(letter: self.board[self.currentRow][i].letter) else {
-                return false
+                completion(false)
+                return
             }
             if self.board[self.currentRow][i].letter == letter {
                 self.board[self.currentRow][i].isCorrectPosition = true
                 self.keyboard[keyBoardPosition.row][keyBoardPosition.col].isCorrectPosition = true
                 if let index = changableWord.firstIndex(of: Character(letter)) {
-//                    print("changanbleWord55: \(changableWord), i: \(i), index: \(index)")
                     changableWord.remove(at: index)
-//                    print("changanbleWord: \(changableWord), i: \(i), index: \(index)")
-                    
                 } else {
                     changableWord = changableWord.replacingOccurrences(of: self.board[self.currentRow][i].letter, with: "")
-//                    print("changanbleWord2: \(changableWord), i: \(i)")
                 }
             }
-            
         }
         
         for i in 0..<self.board[self.currentRow].count {
             let letterIndex = self.word.index(self.word.startIndex, offsetBy: i)
             let letter = String(self.word[letterIndex])
             guard let keyBoardPosition = self.findKeyPosition(letter: self.board[self.currentRow][i].letter) else {
-                return false
+                completion(false)
+                return
             }
             if self.board[self.currentRow][i].letter == letter {
                 print("Correct position: \(self.board[self.currentRow][i].letter), i: \(i), letterIndex: \(letterIndex.utf16Offset(in: self.word))")
-            
             } else if changableWord.contains(self.board[self.currentRow][i].letter) {
                 print("Correct letter but wrong position: \(self.board[self.currentRow][i].letter), i: \(i), letterIndex: \(letterIndex.utf16Offset(in: self.word))")
                 self.board[self.currentRow][i].isCorrectLetter = true
                 self.keyboard[keyBoardPosition.row][keyBoardPosition.col].isCorrectLetter = true
                 if let index = changableWord.firstIndex(of: Character(self.board[self.currentRow][i].letter)) {
-                    print("index1: \(index.utf16Offset(in: self.word)), letter: \(self.board[self.currentRow][i].letter)")
-                    print("changanbleWord66: \(changableWord), i: \(i), index: \(index)")
-                    let char = changableWord.remove(at: index)
-                    
-                    print("changanbleWord4: \(changableWord), i: \(i), index: \(index.utf16Offset(in: self.word)), char: \(char), letter: \(letter), letter2: \(self.board[self.currentRow][letterIndex.utf16Offset(in: self.word)].letter)")
-                    
+                    changableWord.remove(at: index)
                 } else {
                     changableWord = changableWord.replacingOccurrences(of: self.board[self.currentRow][i].letter, with: "")
-//                    print("changanbleWord3: \(changableWord), i: \(i)")
                 }
-                
-                
             } else {
                 self.board[self.currentRow][i].isUsedButNotCorrect = true
                 self.keyboard[keyBoardPosition.row][keyBoardPosition.col].isUsedButNotCorrect = true
-//                print("wrong letter: \(self.board[self.currentRow][i].letter), i: \(i), letterIndex: \(letterIndex.utf16Offset(in: self.word)), letter: \(letter), changeableWord: \(changableWord)")
-                
-                if let index = changableWord.firstIndex(of: Character(self.board[self.currentRow][i].letter)) {
-                    print("index2: \(index.utf16Offset(in: self.word)), letter: \(self.board[self.currentRow][i].letter)")
-                    print("changanbleWord77: \(changableWord), i: \(i), index: \(index)")
-                    let char = changableWord.remove(at: index)
-                    
-                    print("changanbleWord8: \(changableWord), i: \(i), index: \(index), char: \(char), letter: \(letter), letter2: \(self.board[self.currentRow][i].letter)")
-                    
+            }
+        }
+        
+        // Enter the dispatch group for `goThroughBoard`
+        dispatchGroup.enter()
+        DispatchQueue.global().async {
+            self.goThroughBoard() { success in
+                if success {
+                    print("goThroughBoard completed successfully.")
                 } else {
-                    changableWord = changableWord.replacingOccurrences(of: self.board[self.currentRow][i].letter, with: "")
-//                    print("changanbleWord9: \(changableWord), i: \(i)")
+                    print("goThroughBoard failed.")
                 }
+                dispatchGroup.leave()
+                
             }
             
         }
         
-        self.goThroughBoard()
-        return true
+        // Notify when both tasks are finished
+        dispatchGroup.notify(queue: .main) {
+            print("Both goThroughBoard and goThroughKeyboard are finished.")
+            completion(true)
+        }
     }
     
     
-    func goThroughBoard() {
+    func goThroughBoard(completion: @escaping (Bool) -> Void) {
         for i in 0...self.board[self.currentRow].count-1 {
             DispatchQueue.main.asyncAfter(deadline: .now() + Double(i) * 0.3) {
                 let letter = self.board[self.currentRow][i]
@@ -338,32 +332,47 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
                 
                 if i == self.board[self.currentRow].count-1 {
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                        self.goThroughKeyboard()
-                        self.isAnimating = false
+                        self.goThroughKeyboard() { success in
+                            if success {
+                                print("goThroughKeyboard completed successfully.")
+                            } else {
+                                print("goThroughKeyboard failed.")
+                            }
+                            self.isAnimating = false
+                            completion(true)
+                            
+                        }
+                        
                     }
                 }
             }
         }
     }
     
-    func goThroughKeyboard() {
+    func goThroughKeyboard(completion: @escaping (Bool) -> Void) {
         for i in 0...self.board[self.currentRow].count-1 {
             guard let keyBoardPosition = self.findKeyPosition(letter: self.board[self.currentRow][i].letter) else {
                 return
             }
-            if self.keyboard[keyBoardPosition.row][keyBoardPosition.col].isCorrectPosition {
-                self.keyboard[keyBoardPosition.row][keyBoardPosition.col].state = .correctPosition
-            } else if self.keyboard[keyBoardPosition.row][keyBoardPosition.col].isCorrectLetter {
-                self.keyboard[keyBoardPosition.row][keyBoardPosition.col].state = .correctLetter
-            } else {
-                self.keyboard[keyBoardPosition.row][keyBoardPosition.col].state = .usedButNotCorrect
+            DispatchQueue.main.async {
+                if self.keyboard[keyBoardPosition.row][keyBoardPosition.col].isCorrectPosition {
+                    self.keyboard[keyBoardPosition.row][keyBoardPosition.col].state = .correctPosition
+                } else if self.keyboard[keyBoardPosition.row][keyBoardPosition.col].isCorrectLetter {
+                    self.keyboard[keyBoardPosition.row][keyBoardPosition.col].state = .correctLetter
+                } else {
+                    self.keyboard[keyBoardPosition.row][keyBoardPosition.col].state = .usedButNotCorrect
+                }
+                
+                if i == self.board[self.currentRow].count-1 {
+                    self.currentRow += 1
+                    self.currentIndex = 0
+                    
+                }
             }
             
-            if i == self.board[self.currentRow].count-1 {
-                self.currentRow += 1
-                self.currentIndex = 0
-            }
+            
         }
+        completion(true)
     }
     
     func flipCard(rowIndex: Int, colIndex: Int) {
@@ -427,32 +436,38 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
             let guessedWord = self.getWordFromCurrentRow()
             if wordIsValidForSubmitButton() {
                 self.isAnimating = true
-                let man = self.highlightBoardLetters()
-                if man {
-                    if self.word == guessedWord {
-                        print("Du vant!!")
-                        self.isGameOver = true
-                        self.addGameRecord(gameRecord: GameRecord(state: .won, mode: self.selectedGameMode, word: self.word, language: self.selectedLanguage, numberOfLetters: self.numberOfLetters, numberOfGuesses: self.currentRow+1, hintsUsed: self.hintsUsed, shareResultString: self.selectedGameMode == .dailyWord ? self.getShareResult(row: self.currentRow+1) : nil))
-                        if self.selectedGameMode == .dailyWord {
-                            print("updating daily word")
-                            self.setStreak(state: .won)
-                        }
-                        self.message = String(format: NSLocalizedString("success_message", comment: "Success message with a word"), word)
-                        return
-                    } else {
-                        if self.currentRow == self.board.count - 1 {
-                            print("Du tapte: \(guessedWord), ordet var \(self.word)")
+                self.highlightBoardLetters() { success in
+                    if success {
+                        if self.word == guessedWord {
+                            print("Du vant!!")
                             self.isGameOver = true
-                            self.addGameRecord(gameRecord: GameRecord(state: .lost, mode: self.selectedGameMode, word: self.word, language: self.selectedLanguage, numberOfLetters: self.numberOfLetters, numberOfGuesses: self.currentRow+1, hintsUsed: self.hintsUsed, shareResultString: self.selectedGameMode == .dailyWord ? self.getShareResult(row: self.currentRow+1) : nil))
+//                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                                self.addGameRecord(gameRecord: GameRecord(state: .won, mode: self.selectedGameMode, word: self.word, language: self.selectedLanguage, numberOfLetters: self.numberOfLetters, numberOfGuesses: self.currentRow+1, hintsUsed: self.hintsUsed, board: self.board))
+//                            }
                             if self.selectedGameMode == .dailyWord {
                                 print("updating daily word")
-                                self.setStreak(state: .lost)
+                                self.setStreak(state: .won)
                             }
-                            self.message = String(format: NSLocalizedString("almost_message", comment: "Almost got the word message"), word)
+                            self.message = String(format: NSLocalizedString("success_message", comment: "Success message with a word"), self.word)
+                            return
                         } else {
-                            print("Feil ord: \(guessedWord)")
+                            if self.currentRow == self.board.count - 1 {
+                                print("Du tapte: \(guessedWord), ordet var \(self.word)")
+                                self.isGameOver = true
+//                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                                    self.addGameRecord(gameRecord: GameRecord(state: .lost, mode: self.selectedGameMode, word: self.word, language: self.selectedLanguage, numberOfLetters: self.numberOfLetters, numberOfGuesses: self.currentRow+1, hintsUsed: self.hintsUsed, board: self.board))
+//                                }
+                                if self.selectedGameMode == .dailyWord {
+                                    print("updating daily word")
+                                    self.setStreak(state: .lost)
+                                }
+                                self.message = String(format: NSLocalizedString("almost_message", comment: "Almost got the word message"), self.word)
+                            } else {
+                                print("Feil ord: \(guessedWord)")
+                            }
                         }
                     }
+                    
                 }
                 
             } else {
@@ -485,30 +500,31 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
         
     }
     
-    func getShareResult(row: Int) -> String {
+    func getShareResult(row: Int, numberOfLetters: Int, date: Date, board: [[Letter]]) -> String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateStyle = .short
         dateFormatter.timeStyle = .none
+        dateFormatter.timeZone = TimeZone(identifier: "CET")
         
         var numberOfRows = 6
-        if self.numberOfLetters > 6 {
+        if numberOfLetters > 6 {
             numberOfRows = 8
-        } else if self.numberOfLetters == 6 {
+        } else if numberOfLetters == 6 {
             numberOfRows = 7
         }
         
-        var letterString = String(format: NSLocalizedString("share_letter", comment: "Letter"), self.numberOfLetters)
-        if self.numberOfLetters > 1 {
-            letterString = String(format: NSLocalizedString("share_letters", comment: "Letters"), self.numberOfLetters)
+        var letterString = String(format: NSLocalizedString("share_letter", comment: "Letter"), numberOfLetters)
+        if numberOfLetters > 1 {
+            letterString = String(format: NSLocalizedString("share_letters", comment: "Letters"), numberOfLetters)
         }
         
         let rowString = String(format: NSLocalizedString("share_row", comment: "Row"))
             
         
-        var shareText = "The Phrase \(dateFormatter.string(from: self.startDate)), \(letterString), \(row)/\(numberOfRows) \(rowString):\n"
+        var shareText = "The Phrase \(dateFormatter.string(from: date)), \(letterString), \(row)/\(numberOfRows) \(rowString):\n"
         
         var shouldBreak: Bool = false
-        for row in self.board {
+        for row in board {
             for letter in row {
                 switch letter.state {
                     case .correctPosition:

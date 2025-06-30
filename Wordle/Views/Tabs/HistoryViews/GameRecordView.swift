@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct GameRecordView: View {
+    @Environment(\.colorScheme) private var colorScheme
     @EnvironmentObject var appManager: AppManager
     @State var gameRecord: GameRecord
     @State private var didTap: Bool = false
@@ -16,150 +17,193 @@ struct GameRecordView: View {
     private let formatter1: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateStyle = .short
+        formatter.timeZone = TimeZone(identifier: "CET")
         return formatter
     }()
     
+    var colorForUnused: Color {
+        switch colorScheme {
+            case .light:
+                return Color(UIColor.lightGray)
+            case .dark:
+                return .primary
+            @unknown default:
+                return .primary
+        }
+    }
+    
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading) {
-                HStack(alignment: .center) {
-                    Text("\(gameRecord.word)")
-                        .font(.largeTitle)
-                        .bold()
+        GeometryReader { geometry in
+            ScrollView {
+                VStack(alignment: .leading) {
+                    HStack(alignment: .center) {
+                        Text("\(gameRecord.word)")
+                            .font(.largeTitle)
+                            .bold()
+                        
+                        Spacer()
+                        
+                        Image(systemName: gameRecord.state == .won ? "checkmark.circle.fill" : "xmark.circle.fill")
+                            .foregroundColor(gameRecord.state == .won ? .green : .red)
+                            .background {
+                                Circle()
+                                    .fill(.white)
+                                    .padding(5)
+                            }
+                            .font(.largeTitle)
+                    }
+                    .padding(.top)
+                    .padding(.horizontal)
                     
-                    Spacer()
+                    HStack(alignment: .bottom) {
+                        Text("Date: ")
+                            .foregroundStyle(.secondary)
+                            .font(.title3)
+                        Spacer()
+                        Text("\(String(formatter1.string(from: gameRecord.date)))")
+                            .font(.title2)
+                    }
                     
-                    Image(systemName: gameRecord.state == .won ? "checkmark.circle.fill" : "xmark.circle.fill")
-                        .foregroundColor(gameRecord.state == .won ? .green : .red)
-                        .background {
-                            Circle()
-                                .fill(.white)
-                                .padding(5)
-                        }
-                        .font(.largeTitle)
-                }
-                .padding(.top)
-                .padding(.horizontal)
-                
-                HStack(alignment: .bottom) {
-                    Text("Date: ")
-                        .foregroundStyle(.secondary)
-                        .font(.title3)
-                    Spacer()
-                    Text("\(String(formatter1.string(from: gameRecord.date)))")
-                        .font(.title2)
-                }
-                
                     .padding(.horizontal)
                     .padding(.vertical, 10)
                     
-                
-                VStack(alignment: .leading) {
-                    HStack(alignment: .bottom) {
-                        Text("Number of Guesses:")
-                            .foregroundStyle(.secondary)
-                            .font(.title3)
-                        Spacer()
-                        Text("\(gameRecord.numberOfGuesses)")
-                            .font(.title2)
-                    }
-                    .padding(.bottom, 5)
-                    HStack(alignment: .bottom) {
-                        Text("Language:")
-                            .foregroundStyle(.secondary)
-                            .font(.title3)
-                        Spacer()
-                        Text("\(gameRecord.language.localizedName)")
-                            .font(.title2)
-                    }
-                    .padding(.bottom, 5)
-                    HStack(alignment: .bottom) {
-                        Text("Mode:")
-                            .foregroundStyle(.secondary)
-                            .font(.title3)
-                        Spacer()
-                        Text("\(gameRecord.mode.localizedName)")
-                            .font(.title2)
-                    }
-                    .padding(.bottom, 5)
                     
-                    if let hintsUsed = gameRecord.hintsUsed, hintsUsed > 0 {
+                    VStack(alignment: .leading) {
                         HStack(alignment: .bottom) {
-                            Text("Hints used:")
+                            Text("Number of Guesses:")
                                 .foregroundStyle(.secondary)
                                 .font(.title3)
                             Spacer()
-                            Text("\(hintsUsed)")
+                            Text("\(gameRecord.numberOfGuesses)")
                                 .font(.title2)
                         }
                         .padding(.bottom, 5)
-                    }
-                    
-                    
-                }
-                .padding()
-//                .padding(.horizontal, 10)
-                
-                NavigationLink(destination: WordDefinitionView(word: gameRecord.word).environmentObject(appManager)) {
-                    Text("Get Definition")
-                        .foregroundColor(.white)
-                        .font(.title2).bold()
-                        .padding(14)
-                        .frame(maxWidth: .infinity)
-                        .background {
-                            RoundedRectangle(cornerRadius: 15)
-                                .fill(Color.green)
+                        HStack(alignment: .bottom) {
+                            Text("Language:")
+                                .foregroundStyle(.secondary)
+                                .font(.title3)
+                            Spacer()
+                            Text("\(gameRecord.language.localizedName)")
+                                .font(.title2)
                         }
-                        .padding(.horizontal, 40)
-                    
-                    
-                }
-
-                .simultaneousGesture(TapGesture().onEnded {
-                    self.didTap.toggle()
-                })
-                
-                .padding(.vertical, 10)
-                .sensoryFeedback(.impact, trigger: self.didTap)
-                .buttonStyle(GrowingButton())
-                
-                if let shareResultString = gameRecord.shareResultString, gameRecord.mode == .dailyWord {
-                    HStack {
-                        Spacer()
+                        .padding(.bottom, 5)
+                        HStack(alignment: .bottom) {
+                            Text("Mode:")
+                                .foregroundStyle(.secondary)
+                                .font(.title3)
+                            Spacer()
+                            Text("\(gameRecord.mode.localizedName)")
+                                .font(.title2)
+                        }
+                        .padding(.bottom, 5)
                         
-                        Button {
-                            withAnimation {
-                                UIPasteboard.general.string = shareResultString
-                                self.hasSharedResult = true
+                        if let hintsUsed = gameRecord.hintsUsed, hintsUsed > 0 {
+                            HStack(alignment: .bottom) {
+                                Text("Hints used:")
+                                    .foregroundStyle(.secondary)
+                                    .font(.title3)
+                                Spacer()
+                                Text("\(hintsUsed)")
+                                    .font(.title2)
                             }
-                        } label: {
-                            Label("Tap to Copy Result", systemImage: hasSharedResult ? "doc.on.doc.fill" : "doc.on.doc")
-                                .font(.title2).bold()
-                                .contentTransition(.symbolEffect(.replace))
+                            .padding(.bottom, 5)
                         }
-                        .padding(.vertical, 15)
-                        .sensoryFeedback(.impact, trigger: self.didTap)
                         
-                        Spacer()
                         
                     }
+                    .padding()
+                    //                .padding(.horizontal, 10)
+                    
+                    NavigationLink(destination: WordDefinitionView(word: gameRecord.word).environmentObject(appManager)) {
+                        Text("Get Definition")
+                            .foregroundColor(.white)
+                            .font(.title2).bold()
+                            .padding(14)
+                            .frame(maxWidth: .infinity)
+                            .background {
+                                RoundedRectangle(cornerRadius: 15)
+                                    .fill(Color.green)
+                            }
+                            .padding(.horizontal, 40)
+                        
+                        
+                    }
+                    
+                    .simultaneousGesture(TapGesture().onEnded {
+                        self.didTap.toggle()
+                    })
+                    
+                    .padding(.vertical, 10)
+                    .sensoryFeedback(.impact, trigger: self.didTap)
+                    .buttonStyle(GrowingButton())
+                    
+                    
+                    
+                    if let board = gameRecord.board {
+                        NavigationLink(destination: BoardView(gameRecord: self.gameRecord, board: board).environmentObject(appManager)) {
+                            Text("View The Board")
+                                .foregroundColor(.white)
+                                .font(.title2).bold()
+                                .padding(14)
+                                .frame(maxWidth: .infinity)
+                                .background {
+                                    RoundedRectangle(cornerRadius: 15)
+                                        .fill(Color.green)
+                                }
+                                .padding(.horizontal, 40)
+                            
+                            
+                        }
+                        .simultaneousGesture(TapGesture().onEnded {
+                            self.didTap.toggle()
+                        })
+                        .padding(.vertical, 10)
+                        .sensoryFeedback(.impact, trigger: self.didTap)
+                        .buttonStyle(GrowingButton())
+                    }
+                    
+                    if let board = gameRecord.board, gameRecord.mode == .dailyWord {
+                        HStack {
+                            Spacer()
+                            
+                            Button {
+                                withAnimation {
+                                    UIPasteboard.general.string = appManager.getShareResult(row: gameRecord.numberOfGuesses - 1, numberOfLetters: gameRecord.numberOfLetters, date: gameRecord.date, board: board)
+                                    self.hasSharedResult = true
+                                    self.didTap.toggle()
+                                }
+                            } label: {
+                                Label("Copy Result", systemImage: hasSharedResult ? "doc.on.doc.fill" : "doc.on.doc")
+                                    .font(.title2).bold()
+                                    .contentTransition(.symbolEffect(.replace))
+                            }
+                            .padding(.vertical, 15)
+                            .sensoryFeedback(.impact, trigger: self.didTap)
+                            
+                            Spacer()
+                            
+                        }
+                    }
+                    
                 }
+                .padding(10)
+                .background {
+                    RoundedRectangle(cornerRadius: 20)
+                        .fill(Color(uiColor: .quaternarySystemFill))
+                }
+                .padding(.horizontal, 15)
+                .padding(.top, 20)
+                
                 
             }
-            .padding(10)
-            .background {
-                RoundedRectangle(cornerRadius: 20)
-                    .fill(Color(uiColor: .quaternarySystemFill))
-            }
-            .padding(.horizontal, 15)
-            .padding(.top, 20)
+            .navigationTitle(gameRecord.word)
+            .navigationBarTitleDisplayMode(.inline)
         }
-        .navigationTitle(gameRecord.word)
-        .navigationBarTitleDisplayMode(.inline)
     }
 }
 
+
 #Preview {
-    GameRecordView(gameRecord: GameRecord(state: .won, mode: .dailyWord, word: "Word", language: .english, numberOfLetters: 4, numberOfGuesses: 2))
+    GameRecordView(gameRecord: GameRecord(date: Date(), state: .won, mode: .dailyWord, word: "Word", language: .english, numberOfLetters: 4, numberOfGuesses: 2, hintsUsed: 0, board: [[Letter(letter: "W", state: .correctPosition), Letter(letter: "O", state: .correctPosition), Letter(letter: "R", state: .correctPosition), Letter(letter: "D", state: .correctPosition)], [Letter(letter: "W", state: .correctPosition), Letter(letter: "O", state: .correctPosition), Letter(letter: "R", state: .correctPosition), Letter(letter: "D", state: .correctPosition)]]))
         .environmentObject(AppManager())
 }

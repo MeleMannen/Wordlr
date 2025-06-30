@@ -42,9 +42,9 @@ class GameRecord: Identifiable {
     var numberOfLetters: Int
     var numberOfGuesses: Int
     var hintsUsed: Int?
-    var shareResultString: String?
+    var board: [[Letter]]?
     
-    init(date: Date = Date(), state: GameEndState, mode: GameMode, word: String, language: LanguageSelection, numberOfLetters: Int, numberOfGuesses: Int, hintsUsed: Int = 0, shareResultString: String? = nil) {
+    init(date: Date = Date(), state: GameEndState, mode: GameMode, word: String, language: LanguageSelection, numberOfLetters: Int, numberOfGuesses: Int, hintsUsed: Int = 0, board: [[Letter]]? = nil) {
         self.id = UUID()
         self.date = date
         self.state = state
@@ -54,7 +54,7 @@ class GameRecord: Identifiable {
         self.numberOfLetters = numberOfLetters
         self.numberOfGuesses = numberOfGuesses
         self.hintsUsed = hintsUsed
-        self.shareResultString = shareResultString
+        self.board = board
     }
     
 }
@@ -82,9 +82,12 @@ enum Streak: Codable {
         switch self {
             case .none, .dead: return 0
             case .alive(let startDate, let lastWonDate):
-                let lastWonDate = Calendar.current.startOfDay(for: lastWonDate)
-                let startDate = Calendar.current.startOfDay(for: startDate)
-                let daysSinceStart = Calendar.current.dateComponents([.day], from: startDate, to: lastWonDate).day ?? 0
+                var cetCalendar = Calendar(identifier: .gregorian)
+                cetCalendar.timeZone = TimeZone(identifier: "CET")!
+                
+                let lastWonDate = cetCalendar.startOfDay(for: lastWonDate)
+                let startDate = cetCalendar.startOfDay(for: startDate)
+                let daysSinceStart = cetCalendar.dateComponents([.day], from: startDate, to: lastWonDate).day ?? 0
                 return daysSinceStart
         }
     }
@@ -93,9 +96,12 @@ enum Streak: Codable {
         switch self {
             case .none, .dead: return false
             case .alive(_, let lastWonDate):
-                let today = Calendar.current.startOfDay(for: Date())
-                let lastWonDate = Calendar.current.startOfDay(for: lastWonDate)
-                let daysSinceLastWon = Calendar.current.dateComponents([.day], from: lastWonDate, to: today).day ?? 0
+                var cetCalendar = Calendar(identifier: .gregorian)
+                cetCalendar.timeZone = TimeZone(identifier: "CET")!
+                
+                let today = cetCalendar.startOfDay(for: Date())
+                let lastWonDate = cetCalendar.startOfDay(for: lastWonDate)
+                let daysSinceLastWon = cetCalendar.dateComponents([.day], from: lastWonDate, to: today).day ?? 0
                 return daysSinceLastWon <= 1
         }
     }
@@ -105,17 +111,17 @@ enum Streak: Codable {
         switch self {
             case .none: return false
             case .dead(_, let lastDiedAt):
-                var utcCalendar = Calendar(identifier: .gregorian)
-                utcCalendar.timeZone = TimeZone(secondsFromGMT: 0)!
+                var cetCalendar = Calendar(identifier: .gregorian)
+                cetCalendar.timeZone = TimeZone(identifier: "CET")!
                 
-                let currentUTCDate = Date()
-                return utcCalendar.isDate(lastDiedAt, inSameDayAs: currentUTCDate)
+                let currentDate = Date()
+                return cetCalendar.isDate(lastDiedAt, inSameDayAs: currentDate)
             case .alive(_, let lastWonDate):
-                var utcCalendar = Calendar(identifier: .gregorian)
-                utcCalendar.timeZone = TimeZone(secondsFromGMT: 0)!
+                var cetCalendar = Calendar(identifier: .gregorian)
+                cetCalendar.timeZone = TimeZone(identifier: "CET")!
                 
-                let currentUTCDate = Date()
-                return utcCalendar.isDate(lastWonDate, inSameDayAs: currentUTCDate)
+                let currentDate = Date()
+                return cetCalendar.isDate(lastWonDate, inSameDayAs: currentDate)
         }
     }
     
@@ -218,15 +224,15 @@ struct Words: Decodable {
     let wordGroups: [String: [String]]
 }
 
-enum LetterState {
+enum LetterState: Codable {
     case correctPosition
     case correctLetter
     case usedButNotCorrect
     case notUsed
 }
 
-struct Letter: Hashable, Identifiable {
-    let id = UUID()
+struct Letter: Hashable, Codable, Identifiable {
+    var id = UUID()
     var letter: String = ""
     var isCorrectPosition: Bool = false
     var isCorrectLetter: Bool = false
@@ -234,6 +240,16 @@ struct Letter: Hashable, Identifiable {
     var degreee: Double = 0
     var scale: Double = 1.0
     var state: LetterState = .notUsed
+    
+    init(letter: String = "", isCorrectPosition: Bool = false, isCorrectLetter: Bool = false, isUsedButNotCorrect: Bool = false, degreee: Double = 0, scale: Double = 1.0, state: LetterState = .notUsed) {
+        self.letter = letter
+        self.isCorrectPosition = isCorrectPosition
+        self.isCorrectLetter = isCorrectLetter
+        self.isUsedButNotCorrect = isUsedButNotCorrect
+        self.degreee = degreee
+        self.scale = scale
+        self.state = state
+    }
 }
 
 struct KeyBoardLetter: Hashable, Identifiable {

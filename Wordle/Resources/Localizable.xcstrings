@@ -239,6 +239,22 @@
         }
       }
     },
+    "Copy Result" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copy Result"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kopier Resultatet"
+          }
+        }
+      }
+    },
     "Count" : {
       "localizations" : {
         "en" : {
@@ -652,7 +668,7 @@
         },
         "nb" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Hint"
           }
         }
@@ -1238,7 +1254,7 @@
         },
         "nb" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Rader"
           }
         }
@@ -1405,22 +1421,6 @@
         }
       }
     },
-    "Tap to Copy Result" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tap to Copy Result"
-          }
-        },
-        "nb" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Trykk for å Kopiere Resultatet"
-          }
-        }
-      }
-    },
     "The Phrase" : {
       "localizations" : {
         "en" : {
@@ -1513,6 +1513,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Prøv å spille et spill først."
+          }
+        }
+      }
+    },
+    "View The Board" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "View The Board"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Se Brettet"
           }
         }
       }
