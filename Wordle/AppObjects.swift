@@ -43,8 +43,9 @@ class GameRecord: Identifiable {
     var numberOfGuesses: Int
     var hintsUsed: Int?
     var board: [[Letter]]?
+    var endDate: Date?
     
-    init(date: Date = Date(), state: GameEndState, mode: GameMode, word: String, language: LanguageSelection, numberOfLetters: Int, numberOfGuesses: Int, hintsUsed: Int = 0, board: [[Letter]]? = nil) {
+    init(date: Date = Date(), state: GameEndState, mode: GameMode, word: String, language: LanguageSelection, numberOfLetters: Int, numberOfGuesses: Int, hintsUsed: Int = 0, board: [[Letter]]? = nil, endDate: Date? = nil) {
         self.id = UUID()
         self.date = date
         self.state = state
@@ -55,6 +56,7 @@ class GameRecord: Identifiable {
         self.numberOfGuesses = numberOfGuesses
         self.hintsUsed = hintsUsed
         self.board = board
+        self.endDate = endDate
     }
     
 }
@@ -107,7 +109,6 @@ enum Streak: Codable {
     }
     
     var hasPlayedDailyWord: Bool {
-        
         switch self {
             case .none: return false
             case .dead(_, let lastDiedAt):
@@ -124,8 +125,41 @@ enum Streak: Codable {
                 return cetCalendar.isDate(lastWonDate, inSameDayAs: currentDate)
         }
     }
+}
+
+@Model
+final class NormalStreakEntity {
+    var id: String
+    var streak: NormalStreak
+    var longestStreak: Int
     
+    init(id: String, streak: NormalStreak) {
+        self.id = id
+        self.streak = streak
+        self.longestStreak = streak.currentStreak
+    }
+}
+
+enum NormalStreak: Codable {
+    case none
+    case dead
+    case alive(currentStreak: Int)
     
+    var currentStreak: Int {
+        switch self {
+            case .none, .dead: return 0
+            case .alive(let currentStreak):
+                return currentStreak
+        }
+    }
+    
+    var isAlive: Bool {
+        switch self {
+            case .none, .dead: return false
+            case .alive:
+                return true
+        }
+    }
 }
 
 enum ShowsWhenHintsUsed: String, CaseIterable, Identifiable {

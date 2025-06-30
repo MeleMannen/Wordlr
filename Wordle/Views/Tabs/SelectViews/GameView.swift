@@ -328,7 +328,8 @@ struct GameView: View {
                             if appManager.selectedGameMode == .dailyWord {
                                 Button {
                                     withAnimation {
-                                        UIPasteboard.general.string = appManager.getShareResult(row: appManager.currentRow, numberOfLetters: appManager.numberOfLetters, date: appManager.startDate, board: appManager.board)
+                                        UIPasteboard.general.string = appManager.getShareResult(row: appManager.currentRow, numberOfLetters: appManager.numberOfLetters, date: appManager.startDate, board: appManager.board, timeUsedString: appManager.getTimeUsedString(startDate: appManager.startDate, endDate: appManager.endDate))
+                                        
                                         appManager.hasSharedResult = true
                                         appManager.didTapBackButton.toggle()
                                     }

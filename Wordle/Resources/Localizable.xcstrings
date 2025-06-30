@@ -94,22 +94,6 @@
         }
       }
     },
-    "%lld🔥" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%lld🔥"
-          }
-        },
-        "nb" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%lld🔥"
-          }
-        }
-      }
-    },
     "•" : {
       "localizations" : {
         "en" : {
@@ -1033,6 +1017,22 @@
         }
       }
     },
+    "Play  -  %lld🔥" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Play  -  %lld🔥"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spill  -  %lld🔥"
+          }
+        }
+      }
+    },
     "Play Daily Word" : {
       "localizations" : {
         "en" : {
@@ -1045,6 +1045,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Spill Daglig Ord"
+          }
+        }
+      }
+    },
+    "Play Daily Word\n%lld🔥" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Play Daily Word\n%lld🔥"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spill Daglig Ord\n%lld🔥"
           }
         }
       }
@@ -1256,6 +1272,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Rader"
+          }
+        }
+      }
+    },
+    "share_used" : {
+      "comment" : "Used",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Used"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Brukt"
           }
         }
       }
@@ -1485,6 +1518,22 @@
         }
       }
     },
+    "Time Used: " : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Time Used: "
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tid Brukt: "
+          }
+        }
+      }
+    },
     "Try playing a game first or changing the selction." : {
       "localizations" : {
         "en" : {
@@ -1560,7 +1609,7 @@
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Vinnfrekvens"
+            "value" : "Seiersrate:"
           }
         }
       }

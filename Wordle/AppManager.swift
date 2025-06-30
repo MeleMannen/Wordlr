@@ -16,9 +16,11 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
     
     
     @Published var streaks: [StreakEntity] = []
+    @Published var normalStreaks: [NormalStreakEntity] = []
     @Published var gameRecords: [GameRecordEntity] = []
     @Published var modelContext: ModelContext?
     @Published var streakManager: StreakManager?
+    @Published var normalStreakManager: NormalStreakManager?
     @Published var gameRecordManager: GameRecordManager?
     
     
@@ -54,6 +56,7 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
     @Published var submitOpacity: Double = 0.5
     @Published var shouldAnimateStreak: Bool = false
     @Published var startDate: Date = Date()
+    @Published var endDate: Date = Date()
     @Published var hintsUsed: Int = 0
     @Published var hasSharedResult: Bool = false
     
@@ -249,7 +252,6 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
     func highlightBoardLetters(completion: @escaping (Bool) -> Void) {
         let dispatchGroup = DispatchGroup()
         var changableWord = self.word
-        
         for i in 0..<self.board[self.currentRow].count {
             let letterIndex = self.word.index(self.word.startIndex, offsetBy: i)
             let letter = String(self.word[letterIndex])
@@ -261,11 +263,16 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
                 self.board[self.currentRow][i].isCorrectPosition = true
                 self.keyboard[keyBoardPosition.row][keyBoardPosition.col].isCorrectPosition = true
                 if let index = changableWord.firstIndex(of: Character(letter)) {
+                    //                    print("changanbleWord55: \(changableWord), i: \(i), index: \(index)")
                     changableWord.remove(at: index)
+                    //                    print("changanbleWord: \(changableWord), i: \(i), index: \(index)")
+                    
                 } else {
                     changableWord = changableWord.replacingOccurrences(of: self.board[self.currentRow][i].letter, with: "")
+                    //                    print("changanbleWord2: \(changableWord), i: \(i)")
                 }
             }
+            
         }
         
         for i in 0..<self.board[self.currentRow].count {
@@ -277,19 +284,42 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
             }
             if self.board[self.currentRow][i].letter == letter {
                 print("Correct position: \(self.board[self.currentRow][i].letter), i: \(i), letterIndex: \(letterIndex.utf16Offset(in: self.word))")
+                
             } else if changableWord.contains(self.board[self.currentRow][i].letter) {
                 print("Correct letter but wrong position: \(self.board[self.currentRow][i].letter), i: \(i), letterIndex: \(letterIndex.utf16Offset(in: self.word))")
                 self.board[self.currentRow][i].isCorrectLetter = true
                 self.keyboard[keyBoardPosition.row][keyBoardPosition.col].isCorrectLetter = true
                 if let index = changableWord.firstIndex(of: Character(self.board[self.currentRow][i].letter)) {
-                    changableWord.remove(at: index)
+                    print("index1: \(index.utf16Offset(in: self.word)), letter: \(self.board[self.currentRow][i].letter)")
+                    print("changanbleWord66: \(changableWord), i: \(i), index: \(index)")
+                    let char = changableWord.remove(at: index)
+                    
+                    print("changanbleWord4: \(changableWord), i: \(i), index: \(index.utf16Offset(in: self.word)), char: \(char), letter: \(letter), letter2: \(self.board[self.currentRow][letterIndex.utf16Offset(in: self.word)].letter)")
+                    
                 } else {
                     changableWord = changableWord.replacingOccurrences(of: self.board[self.currentRow][i].letter, with: "")
+                    //                    print("changanbleWord3: \(changableWord), i: \(i)")
                 }
+                
+                
             } else {
                 self.board[self.currentRow][i].isUsedButNotCorrect = true
                 self.keyboard[keyBoardPosition.row][keyBoardPosition.col].isUsedButNotCorrect = true
+                //                print("wrong letter: \(self.board[self.currentRow][i].letter), i: \(i), letterIndex: \(letterIndex.utf16Offset(in: self.word)), letter: \(letter), changeableWord: \(changableWord)")
+                
+                if let index = changableWord.firstIndex(of: Character(self.board[self.currentRow][i].letter)) {
+                    print("index2: \(index.utf16Offset(in: self.word)), letter: \(self.board[self.currentRow][i].letter)")
+                    print("changanbleWord77: \(changableWord), i: \(i), index: \(index)")
+                    let char = changableWord.remove(at: index)
+                    
+                    print("changanbleWord8: \(changableWord), i: \(i), index: \(index), char: \(char), letter: \(letter), letter2: \(self.board[self.currentRow][i].letter)")
+                    
+                } else {
+                    changableWord = changableWord.replacingOccurrences(of: self.board[self.currentRow][i].letter, with: "")
+                    //                    print("changanbleWord9: \(changableWord), i: \(i)")
+                }
             }
+            
         }
         
         // Enter the dispatch group for `goThroughBoard`
@@ -424,9 +454,41 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
         }
     }
     
+    func setNormalStreak(state: GameEndState) {
+        switch state {
+            case .won:
+                if let streakEntity = self.getNormalStreakEntity(), let normalStreakManager = self.normalStreakManager {
+                    switch streakEntity.streak {
+                        case .none, .dead:
+                            normalStreakManager.updateStreak(streakEntity, with: .alive(currentStreak: 1))
+                        case .alive(let currentStreak):
+                            normalStreakManager.updateStreak(streakEntity, with: .alive(currentStreak: currentStreak + 1))
+                    }
+                    print("Du vant, oppdaterer normal streak: \( streakEntity.streak)")
+                    
+                }
+                
+            case .lost:
+                if let streakEntity = self.getNormalStreakEntity(), let normalStreakManager = self.normalStreakManager {
+                    switch streakEntity.streak {
+                        case .none:
+                            normalStreakManager.updateStreak(streakEntity, with: .none)
+                        case .dead, .alive:
+                            normalStreakManager.updateStreak(streakEntity, with: .dead)
+                    }
+                    print("Du tapte, ingen normal streak: \( streakEntity.streak)")
+                }
+                
+        }
+    }
+    
     
     func getStreakEntity() -> StreakEntity? {
         return self.streaks.first { $0.id == "streak: \(self.numberOfLetters), \(self.selectedLanguage.rawValue)" } ?? nil
+    }
+    
+    func getNormalStreakEntity() -> NormalStreakEntity? {
+        return self.normalStreaks.first { $0.id == "streak: \(self.numberOfLetters), \(self.selectedLanguage.rawValue)" } ?? nil
     }
     
     
@@ -441,25 +503,29 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
                         if self.word == guessedWord {
                             print("Du vant!!")
                             self.isGameOver = true
-//                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                                self.addGameRecord(gameRecord: GameRecord(state: .won, mode: self.selectedGameMode, word: self.word, language: self.selectedLanguage, numberOfLetters: self.numberOfLetters, numberOfGuesses: self.currentRow+1, hintsUsed: self.hintsUsed, board: self.board))
-//                            }
+                            self.endDate = Date()
+                            self.addGameRecord(gameRecord: GameRecord(date: self.startDate, state: .won, mode: self.selectedGameMode, word: self.word, language: self.selectedLanguage, numberOfLetters: self.numberOfLetters, numberOfGuesses: self.currentRow+1, hintsUsed: self.hintsUsed, board: self.board, endDate: self.endDate))
                             if self.selectedGameMode == .dailyWord {
-                                print("updating daily word")
+                                print("updating daily word streak")
                                 self.setStreak(state: .won)
+                            } else {
+                                print("updating normal streak")
+                                self.setNormalStreak(state: .won)
                             }
                             self.message = String(format: NSLocalizedString("success_message", comment: "Success message with a word"), self.word)
                             return
                         } else {
-                            if self.currentRow == self.board.count - 1 {
+                            if self.currentRow == self.board.count {
                                 print("Du tapte: \(guessedWord), ordet var \(self.word)")
                                 self.isGameOver = true
-//                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                                    self.addGameRecord(gameRecord: GameRecord(state: .lost, mode: self.selectedGameMode, word: self.word, language: self.selectedLanguage, numberOfLetters: self.numberOfLetters, numberOfGuesses: self.currentRow+1, hintsUsed: self.hintsUsed, board: self.board))
-//                                }
+                                self.endDate = Date()
+                                self.addGameRecord(gameRecord: GameRecord(date: self.startDate, state: .lost, mode: self.selectedGameMode, word: self.word, language: self.selectedLanguage, numberOfLetters: self.numberOfLetters, numberOfGuesses: self.currentRow+1, hintsUsed: self.hintsUsed, board: self.board, endDate: self.endDate))
                                 if self.selectedGameMode == .dailyWord {
-                                    print("updating daily word")
+                                    print("updating daily word streak")
                                     self.setStreak(state: .lost)
+                                } else {
+                                    print("updating normal streak")
+                                    self.setNormalStreak(state: .lost)
                                 }
                                 self.message = String(format: NSLocalizedString("almost_message", comment: "Almost got the word message"), self.word)
                             } else {
@@ -500,7 +566,7 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
         
     }
     
-    func getShareResult(row: Int, numberOfLetters: Int, date: Date, board: [[Letter]]) -> String {
+    func getShareResult(row: Int, numberOfLetters: Int, date: Date, board: [[Letter]], timeUsedString: String = "") -> String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateStyle = .short
         dateFormatter.timeStyle = .none
@@ -519,9 +585,10 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
         }
         
         let rowString = String(format: NSLocalizedString("share_row", comment: "Row"))
+        let usedString = String(format: NSLocalizedString("share_used", comment: "Used"))
             
         
-        var shareText = "The Phrase \(dateFormatter.string(from: date)), \(letterString), \(row)/\(numberOfRows) \(rowString):\n"
+        var shareText = "The Phrase \(dateFormatter.string(from: date)), \(letterString), \(row)/\(numberOfRows) \(rowString)\(timeUsedString != "" ? ", \(timeUsedString) \(usedString)" : ""):\n"
         
         var shouldBreak: Bool = false
         for row in board {
@@ -547,6 +614,29 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
         
         return shareText
         
+    }
+    
+    func getTimeUsedString(startDate: Date, endDate: Date) -> String {
+        print("End date: \(endDate)")
+        print("startDate: \(startDate)")
+        let timeInterval = endDate.timeIntervalSince(startDate)
+        print("Time interval: \(timeInterval)")
+        let hours = Int(timeInterval) / 3600
+        let minutes = (Int(timeInterval) % 3600) / 60
+        let seconds = Int(timeInterval) % 60
+        
+        var timeUsedString = ""
+        if hours > 0 {
+            timeUsedString += "\(hours)h "
+        }
+        if minutes > 0 {
+            timeUsedString += "\(minutes)m "
+        }
+        if seconds > 0 {
+            timeUsedString += "\(seconds)s"
+        }
+        print("Time used string: \(timeUsedString)")
+        return timeUsedString
     }
     
     
@@ -603,6 +693,19 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
         }
     }
     
+    func fetchNormalStreaks() {
+        if let normalStreakManager = self.normalStreakManager {
+            self.normalStreaks = normalStreakManager.fetchStreaks()
+            print("Fetched normal streaks: \(self.streaks)")
+            for streak in self.streaks {
+                print("NormalStreak ID: \(streak.id), Streak: \(streak.streak)")
+            }
+        } else {
+            print("NormalStreakManager is not initialized")
+            
+        }
+    }
+    
     func fetchGameRecords() {
         if let gameRecordManager = self.gameRecordManager {
             self.gameRecords = gameRecordManager.fetchGameRecords()
@@ -624,9 +727,30 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
         }
     }
     
+    func addNormalStreaks() {
+        for i in 1...8 {
+            self.addNormalStreak(id: "streak: \(i), norwegian", streak: .none)
+            self.addNormalStreak(id: "streak: \(i), english", streak: .none)
+            
+        }
+    }
+    
     func addStreak(id: String, streak: Streak) {
         if let streakManager = self.streakManager {
             streakManager.addStreak(id: id, streak: streak)
+        }
+    }
+    
+    func updateStreak(_ streakEntity: StreakEntity, with newStreak: Streak) {
+        if let streakManager = self.streakManager {
+            streakManager.updateStreak(streakEntity, with: newStreak)
+            self.fetchStreaks()
+        }
+    }
+    
+    func addNormalStreak(id: String, streak: NormalStreak) {
+        if let normalStreakManager = self.normalStreakManager {
+            normalStreakManager.addStreak(id: id, streak: streak)
         }
     }
     

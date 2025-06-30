@@ -109,10 +109,21 @@ struct GameRecordView: View {
                             .padding(.bottom, 5)
                         }
                         
+                        if let endDate = gameRecord.endDate {
+                            HStack(alignment: .bottom) {
+                                Text("Time Used: ")
+                                    .foregroundStyle(.secondary)
+                                    .font(.title3)
+                                Spacer()
+                                Text(appManager.getTimeUsedString(startDate: self.gameRecord.date, endDate: endDate).trimmingCharacters(in: .whitespaces))
+                                    .font(.title2)
+                            }
+                            .padding(.bottom, 5)
+                        }
+                        
                         
                     }
                     .padding()
-                    //                .padding(.horizontal, 10)
                     
                     NavigationLink(destination: WordDefinitionView(word: gameRecord.word).environmentObject(appManager)) {
                         Text("Get Definition")
@@ -168,7 +179,11 @@ struct GameRecordView: View {
                             
                             Button {
                                 withAnimation {
-                                    UIPasteboard.general.string = appManager.getShareResult(row: gameRecord.numberOfGuesses - 1, numberOfLetters: gameRecord.numberOfLetters, date: gameRecord.date, board: board)
+                                    if let endDate = gameRecord.endDate {
+                                        UIPasteboard.general.string = appManager.getShareResult(row: gameRecord.numberOfGuesses - 1, numberOfLetters: gameRecord.numberOfLetters, date: gameRecord.date, board: board, timeUsedString: appManager.getTimeUsedString(startDate: self.gameRecord.date, endDate: endDate))
+                                    } else {
+                                        UIPasteboard.general.string = appManager.getShareResult(row: gameRecord.numberOfGuesses - 1, numberOfLetters: gameRecord.numberOfLetters, date: gameRecord.date, board: board)
+                                    }
                                     self.hasSharedResult = true
                                     self.didTap.toggle()
                                 }
@@ -200,6 +215,8 @@ struct GameRecordView: View {
             .navigationBarTitleDisplayMode(.inline)
         }
     }
+    
+    
 }
 
 

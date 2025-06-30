@@ -61,7 +61,7 @@ struct WordleApp: App {
             
             
         }
-        .modelContainer(for: [StreakEntity.self, GameRecordEntity.self, GameRecord.self])
+        .modelContainer(for: [StreakEntity.self, NormalStreakEntity.self, GameRecordEntity.self, GameRecord.self])
         
         
     }
