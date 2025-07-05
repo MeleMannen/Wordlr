@@ -45,6 +45,7 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
     @Published var didTapPlayDailyWordButton: Bool = false
     @Published var didTapFakePlayDailyWordButton: Bool = false
     @Published var didTapPlayNormalButton: Bool = false
+    @Published var didTapSearchButton: Bool = false
     @Published var isShowingAlreadyPlayedAlert: Bool = false
     @Published var alertItem: AlertItem?
     @Published var activeAlert: ActiveAlert = .none
@@ -491,6 +492,20 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
         return self.normalStreaks.first { $0.id == "streak: \(self.numberOfLetters), \(self.selectedLanguage.rawValue)" } ?? nil
     }
     
+    func fixLanguageBasedOnLocale() {
+        let pre = Locale.preferredLanguages[0]
+        print("Preferred language: \(pre)")
+        if pre == "no" || pre == "nb" || pre == "nn" || pre == "nb-NO" || pre == "nn-NO" {
+            self.selectedLanguage = .norwegian
+            self.language = .norwegian
+            self.defaultLanguage = .norwegian
+        } else {
+            self.selectedLanguage = .english
+            self.language = .english
+            self.defaultLanguage = .english
+        }
+    }
+    
     
     
     func didTapSubmit() {
@@ -504,7 +519,7 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
                             print("Du vant!!")
                             self.isGameOver = true
                             self.endDate = Date()
-                            self.addGameRecord(gameRecord: GameRecord(date: self.startDate, state: .won, mode: self.selectedGameMode, word: self.word, language: self.selectedLanguage, numberOfLetters: self.numberOfLetters, numberOfGuesses: self.currentRow+1, hintsUsed: self.hintsUsed, board: self.board, endDate: self.endDate))
+                            self.addGameRecord(gameRecord: GameRecord(date: self.startDate, state: .won, mode: self.selectedGameMode, word: self.word, language: self.selectedLanguage, numberOfLetters: self.numberOfLetters, numberOfGuesses: self.currentRow, hintsUsed: self.hintsUsed, board: self.board, endDate: self.endDate))
                             if self.selectedGameMode == .dailyWord {
                                 print("updating daily word streak")
                                 self.setStreak(state: .won)
@@ -519,7 +534,7 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
                                 print("Du tapte: \(guessedWord), ordet var \(self.word)")
                                 self.isGameOver = true
                                 self.endDate = Date()
-                                self.addGameRecord(gameRecord: GameRecord(date: self.startDate, state: .lost, mode: self.selectedGameMode, word: self.word, language: self.selectedLanguage, numberOfLetters: self.numberOfLetters, numberOfGuesses: self.currentRow+1, hintsUsed: self.hintsUsed, board: self.board, endDate: self.endDate))
+                                self.addGameRecord(gameRecord: GameRecord(date: self.startDate, state: .lost, mode: self.selectedGameMode, word: self.word, language: self.selectedLanguage, numberOfLetters: self.numberOfLetters, numberOfGuesses: self.currentRow, hintsUsed: self.hintsUsed, board: self.board, endDate: self.endDate))
                                 if self.selectedGameMode == .dailyWord {
                                     print("updating daily word streak")
                                     self.setStreak(state: .lost)
@@ -738,13 +753,6 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
     func addStreak(id: String, streak: Streak) {
         if let streakManager = self.streakManager {
             streakManager.addStreak(id: id, streak: streak)
-        }
-    }
-    
-    func updateStreak(_ streakEntity: StreakEntity, with newStreak: Streak) {
-        if let streakManager = self.streakManager {
-            streakManager.updateStreak(streakEntity, with: newStreak)
-            self.fetchStreaks()
         }
     }
     

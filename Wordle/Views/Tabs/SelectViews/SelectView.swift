@@ -14,6 +14,7 @@ struct SelectView: View {
     @EnvironmentObject var appManager: AppManager
     @AppStorage("hasAddedStreaks") private var hasAddedStreaks: Bool = false
     @AppStorage("hasAddedNormalStreaks") private var hasAddedNormalStreaks: Bool = false
+    @AppStorage("hasFixedLanguage") private var hasFixedLanguage: Bool = false
     @State var hasFixedDefualtValues: Bool = false
     @Query private var streaks: [StreakEntity] = []
     @Query private var normalStreaks: [NormalStreakEntity] = []
@@ -246,6 +247,15 @@ struct SelectView: View {
             }
             
             .navigationTitle("The Phrase")
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    NavigationLink(destination: Info().environmentObject(appManager)) {
+                        Image(systemName: "info.circle")
+                            .font(.title2)
+                            .foregroundStyle(.primary)
+                    }
+                }
+            }
 //            .transition(.blurReplace)
 //            .animation(appManager.shouldAnimateStreak ? .bouncy(duration: 0.2) : nil, value: appManager.getStreakEntity())
 //            .onChange(of: appManager.selectedLanguage) { oldValue, newValue in
@@ -292,11 +302,16 @@ struct SelectView: View {
             appManager.fetchStreaks()
             appManager.fetchNormalStreaks()
             appManager.fetchGameRecords()
-            appManager.updateStreak(appManager.getStreakEntity()!, with: .alive(startDate: Date(timeIntervalSince1970: TimeInterval(1748818196)), lastWonDate: Date()))
+//            appManager.updateStreak(appManager.getStreakEntity()!, with: .alive(startDate: Date(timeIntervalSince1970: TimeInterval(1748818196)), lastWonDate: Date()))
             
             if !self.hasFixedDefualtValues {
                 appManager.setDefaultValues()
                 self.hasFixedDefualtValues = true
+            }
+            
+            if !self.hasFixedLanguage {
+                appManager.fixLanguageBasedOnLocale()
+                self.hasFixedLanguage = true
             }
         }
     }

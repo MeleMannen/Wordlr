@@ -311,7 +311,7 @@ struct GameView: View {
                             
                             Spacer()
                             
-                            NavigationLink(destination: NorwegianWordDefinitionView(word: appManager.word).environmentObject(appManager), label: {
+                            NavigationLink(destination: WordDefinitionView(word: appManager.word).environmentObject(appManager), label: {
                                 Text("Show Definition")
                                     .font(.title)
                                     .frame(maxWidth: .infinity, minHeight: 40, idealHeight: 45, maxHeight: 50)
@@ -373,7 +373,10 @@ struct GameView: View {
                         Image(systemName: "magnifyingglass")
                             .contentShape(Rectangle())
                     })
-                    // MARK: - Fikse sensory feedback on the search button
+                    .simultaneousGesture(TapGesture().onEnded {
+                        appManager.didTapSearchButton.toggle()
+                    })
+                    .sensoryFeedback(.impact, trigger: appManager.didTapSearchButton)
                 }
             }
         }

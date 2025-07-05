@@ -7,7 +7,6 @@
 
 import SwiftUI
 import SwiftData
-//import CoreData
 import GoogleMobileAds
 
 @main
@@ -28,7 +27,7 @@ struct WordleApp: App {
                 SelectView()
                     .tag(TabSelection.home)
                     .tabItem {
-                        Label("The Phrase", systemImage: "character.square")
+                        Label("The Phrase", systemImage: "p.square.fill")
                     }
                     .environmentObject(appManager)                    
                 

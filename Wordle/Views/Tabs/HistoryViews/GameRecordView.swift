@@ -126,7 +126,7 @@ struct GameRecordView: View {
                     .padding()
                     
                     NavigationLink(destination: WordDefinitionView(word: gameRecord.word).environmentObject(appManager)) {
-                        Text("Get Definition")
+                        Text("Show Definition")
                             .foregroundColor(.white)
                             .font(.title2).bold()
                             .padding(14)
@@ -159,7 +159,7 @@ struct GameRecordView: View {
                                 .frame(maxWidth: .infinity)
                                 .background {
                                     RoundedRectangle(cornerRadius: 15)
-                                        .fill(Color.green)
+                                        .fill(Color.orange)
                                 }
                                 .padding(.horizontal, 40)
                             
