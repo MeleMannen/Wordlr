@@ -66,18 +66,20 @@ struct SearchView: View {
                             ForEach(sectionKeys, id: \.self) { letter in
                                 Section {
                                     ForEach(Array((groupedWords[letter] ?? []).enumerated()), id: \.offset) { index, word in
-                                        NavigationLink(destination: {
-                                            WordDefinitionView(word: word)
-                                                .environmentObject(appManager)
-                                        }, label: {
-                                            HStack {
-                                                Text(word)
-                                                    .font(.title3)
-                                                    .foregroundStyle(.primary)
-                                                Spacer()
-                                            }
-                                        })
-                                        
+                                        LazyVStack(spacing: 0) {
+                                            NavigationLink(destination: {
+                                                WordDefinitionView(word: word)
+                                                    .environmentObject(appManager)
+                                            }, label: {
+                                                HStack {
+                                                    Text(word)
+                                                        .font(.title3)
+                                                        .foregroundStyle(.primary)
+                                                    Spacer()
+                                                }
+                                            })
+                                            
+                                        }
                                     }
                                 } header: {
                                     SectionHeaderView(letter: letter)
@@ -170,7 +172,7 @@ struct SearchView: View {
                     .padding()
                     .background(Color.green)
                     .clipShape(Circle())
-                    .sensoryFeedback(.impact, trigger: appManager.isShowingFilterOptions)
+                    .sensoryFeedback(.selection, trigger: appManager.isShowingFilterOptions)
                     .matchedTransitionSource(id: "filter", in: namespace)
 //                    .glassEffect(in: .circle)
 //                    .glassEffectID("filter", in: namespace)

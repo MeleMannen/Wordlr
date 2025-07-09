@@ -13,11 +13,13 @@ import GoogleMobileAds
 struct WordleApp: App {
     @ObservedObject var appManager = AppManager()
     @AppStorage("appTheme") private var appTheme: AppTheme = .dark
-    
+    @AppStorage("userWantsAds") var userWantAds: Bool = false
     @State var selection: TabSelection = .home
     
     init() {
-        MobileAds.shared.start()
+        if userWantAds {
+            MobileAds.shared.start()
+        }
     }
     
     

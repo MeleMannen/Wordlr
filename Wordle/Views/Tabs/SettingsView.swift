@@ -17,6 +17,8 @@ struct SettingsView: View {
     @AppStorage("defaultStatNumberOfLetters") private var defaultStatNumberOfLetters: Int = 9
     @AppStorage("defaultStatGameMode") private var defaultStatGameMode: GameMode = .both
     @AppStorage("defaultStatHintsUsed") private var defaultStatHintsUsed: ShowsWhenHintsUsed = .both
+    
+    @AppStorage("userWantsAds") var userWantAds: Bool = false
     @EnvironmentObject var appManager: AppManager
     var body: some View {
         GeometryReader { geometry in
@@ -52,7 +54,7 @@ struct SettingsView: View {
                         } label: {
                             HStack {
                                 Text("Default Number of Letters:")
-                                    .font(.title3).bold()
+                                    .font(.headline)
                             }
                             .padding(.vertical, 5)
                         }
@@ -74,7 +76,7 @@ struct SettingsView: View {
                         } label: {
                             HStack {
                                 Text("Default Language:")
-                                    .font(.title3).bold()
+                                    .font(.headline)
                             }
                             .padding(.vertical, 5)
                         }
@@ -118,7 +120,7 @@ struct SettingsView: View {
                         } label: {
                             HStack {
                                 Text("Default Number of Letters:")
-                                    .font(.title3).bold()
+                                    .font(.headline)
                             }
                             .padding(.vertical, 5)
                         }
@@ -145,7 +147,7 @@ struct SettingsView: View {
                         } label: {
                             HStack {
                                 Text("Default Language:")
-                                    .font(.title3).bold()
+                                    .font(.headline)
                             }
                             .padding(.vertical, 5)
                         }
@@ -171,7 +173,7 @@ struct SettingsView: View {
                         } label: {
                             HStack {
                                 Text("Default Gamemode:")
-                                    .font(.title3).bold()
+                                    .font(.headline)
                             }
                             .padding(.vertical, 5)
                         }
@@ -192,7 +194,7 @@ struct SettingsView: View {
                         } label: {
                             HStack {
                                 Text("Default Show When Hints Used:")
-                                    .font(.title3).bold()
+                                    .font(.headline)
                             }
                             .padding(.vertical, 5)
                         }
@@ -217,12 +219,31 @@ struct SettingsView: View {
                         } label: {
                             HStack {
                                 Text("App Theme:")
-                                    .font(.title3).bold()
+                                    .font(.headline)
+                            }
+                            .padding(.vertical, 5)
+                        }
+                        
+                        DisclosureGroup {
+                            Picker("", selection: $userWantAds) {
+                                Text("Allow Ads")
+                                    .tag(true)
+                                Text("Don't Allow Ads")
+                                    .tag(false)
+                                
+                            }
+                            .pickerStyle(SegmentedPickerStyle())
+                            .padding(.vertical, 5)
+                            
+                        } label: {
+                            HStack {
+                                Text("Ads:")
+                                    .font(.headline)
                             }
                             .padding(.vertical, 5)
                         }
                     } header: {
-                        Text("Theme")
+                        Text("App")
                     }
                     
                     

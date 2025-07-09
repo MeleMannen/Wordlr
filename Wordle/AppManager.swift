@@ -46,6 +46,8 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
     @Published var didTapFakePlayDailyWordButton: Bool = false
     @Published var didTapPlayNormalButton: Bool = false
     @Published var didTapSearchButton: Bool = false
+    @Published var didTapInfoButton: Bool = false
+    @Published var didTapShowDefinitionButton: Bool = false
     @Published var isShowingAlreadyPlayedAlert: Bool = false
     @Published var alertItem: AlertItem?
     @Published var activeAlert: ActiveAlert = .none
@@ -815,12 +817,11 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
         var keysWithCorrectState: [KeyBoardLetter] = []
         for row in self.keyboard {
             for key in row {
-                if key.state == .correctLetter || key.state == .correctPosition && self.word.contains(key.letter) {
+                if key.state == .correctLetter || key.state == .correctPosition {
                     keysWithCorrectState.append(key)
                 }
             }
         }
-//        print("Keys with correct state: \(keysWithCorrectState.count), number of letters: \(self.numberOfLetters)")
         return keysWithCorrectState.count != self.numberOfLetters
     }
         

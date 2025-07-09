@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import GoogleMobileAds
 
 struct GameView: View {
     @EnvironmentObject var appManager: AppManager
@@ -147,27 +148,29 @@ struct GameView: View {
                             HStack {
                                 Button(action: {
                                     appManager.didTapResetButton.toggle()
-                                    appManager.alertItem = AlertItem(
-                                        title: Text("Are you sure you want to Restart?"),
-                                        message: Text("You will lose your word and you cannot undo this action!"),
-                                        primaryButton: .destructive(Text("Restart")) {
-                                            appManager.alertItem = AlertItem(
-                                                title: Text("The Phrase Was: \(appManager.word)!"),
-                                                message: Text("Do you want to see the definition?"),
-                                                primaryButton: .default(Text("Show Definition")) {
-                                                    appManager.isShowingCurrentDefinition = true
-                                                    
-                                                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
+                                    if appManager.selectedGameMode == .normal {
+                                        appManager.alertItem = AlertItem(
+                                            title: Text("Are you sure you want to Restart?"),
+                                            message: Text("You will lose your word and you cannot undo this action!"),
+                                            primaryButton: .destructive(Text("Restart")) {
+                                                appManager.alertItem = AlertItem(
+                                                    title: Text("The Phrase Was: \(appManager.word)!"),
+                                                    message: Text("Do you want to see the definition?"),
+                                                    primaryButton: .default(Text("Show Definition")) {
+                                                        appManager.isShowingCurrentDefinition = true
+                                                        
+                                                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
+                                                            print("reseting...")
+                                                            appManager.resetBoard()
+                                                        }
+                                                    },
+                                                    secondaryButton: .cancel(Text("Dismiss")) {
                                                         print("reseting...")
                                                         appManager.resetBoard()
-                                                    }
-                                                },
-                                                secondaryButton: .cancel(Text("Dismiss")) {
-                                                    print("reseting...")
-                                                    appManager.resetBoard()
-                                                })
-                                        }, secondaryButton: .cancel())
-                                    print("wtf!!")
+                                                    })
+                                            }, secondaryButton: .cancel())
+                                    }
+                                    
                                 }, label: {
                                     Image(systemName: "arrow.clockwise")
                                         .font(.title2).bold()
@@ -194,7 +197,9 @@ struct GameView: View {
                                     
                                 }
                                 .sensoryFeedback(.warning, trigger: appManager.alertItem?.title)
+                                .sensoryFeedback(.warning, trigger: appManager.didTapResetButton)
                                 .buttonStyle(ScalingButton())
+                                .opacity(appManager.selectedGameMode == .dailyWord ? 0.7 : 1.0)
                                 
                                 Spacer()
                                 
@@ -214,7 +219,7 @@ struct GameView: View {
                                                 .opacity(appManager.submitOpacity)
                                                 .animation(.easeInOut(duration: 0.1), value: appManager.submitOpacity)
                                                 .sensoryFeedback(.alignment, trigger: appManager.submitOpacity)
-                                                .onChange(of: appManager.wordIsValidForSubmitButton()) { oldValue, newValue in
+                                                .onChange(of: appManager.wordIsValidForSubmitButton()) { _, newValue in
                                                     if newValue {
                                                         appManager.submitOpacity = 1.0
                                                     } else {
@@ -225,7 +230,7 @@ struct GameView: View {
                                         }
                                 })
                                 
-                                .sensoryFeedback(trigger: appManager.didTapSubmitButton) { old, new in
+                                .sensoryFeedback(trigger: appManager.didTapSubmitButton) { _, _ in
                                     if appManager.isAnimating {
                                         return .impact
                                     } else {
@@ -269,6 +274,7 @@ struct GameView: View {
                             
                             Text(appManager.message)
                                 .font(.title2).bold()
+                                .padding(.top, 5)
                             
                             Spacer()
                             
@@ -288,6 +294,7 @@ struct GameView: View {
                                 })
                                 .padding(.horizontal, 20)
                                 .sensoryFeedback(.impact, trigger: appManager.didTapNewGameButton)
+                                .buttonStyle(GrowingButton())
                                 
                             } else {
                                 Button(action: {
@@ -307,6 +314,7 @@ struct GameView: View {
                                 })
                                 .padding(.horizontal, 20)
                                 .sensoryFeedback(.impact, trigger: appManager.didTapPlaySomethingElseButton)
+                                .buttonStyle(GrowingButton())
                             }
                             
                             Spacer()
@@ -321,6 +329,11 @@ struct GameView: View {
                                             .foregroundStyle(Color.orange)
                                     }
                             })
+                            .simultaneousGesture(TapGesture().onEnded {
+                                appManager.didTapShowDefinitionButton.toggle()
+                            })
+                            .buttonStyle(GrowingButton())
+                            .sensoryFeedback(.impact, trigger: appManager.didTapShowDefinitionButton)
                             .padding(.horizontal, 20)
                             
                             Spacer()
@@ -328,10 +341,11 @@ struct GameView: View {
                             if appManager.selectedGameMode == .dailyWord {
                                 Button {
                                     withAnimation {
-                                        UIPasteboard.general.string = appManager.getShareResult(row: appManager.currentRow, numberOfLetters: appManager.numberOfLetters, date: appManager.startDate, board: appManager.board, timeUsedString: appManager.getTimeUsedString(startDate: appManager.startDate, endDate: appManager.endDate))
-                                        
                                         appManager.hasSharedResult = true
                                         appManager.didTapBackButton.toggle()
+                                        UIPasteboard.general.string = appManager.getShareResult(row: appManager.currentRow, numberOfLetters: appManager.numberOfLetters, date: appManager.startDate, board: appManager.board, timeUsedString: appManager.getTimeUsedString(startDate: appManager.startDate, endDate: appManager.endDate))
+                                        
+                                        
                                     }
                                 } label: {
                                     Label("Copy Result", systemImage: appManager.hasSharedResult ? "doc.on.doc.fill" : "doc.on.doc")
@@ -376,14 +390,16 @@ struct GameView: View {
                     .simultaneousGesture(TapGesture().onEnded {
                         appManager.didTapSearchButton.toggle()
                     })
-                    .sensoryFeedback(.impact, trigger: appManager.didTapSearchButton)
+                    .sensoryFeedback(.selection, trigger: appManager.didTapSearchButton)
                 }
             }
         }
         .onAppear {
             if appManager.word.isEmpty || appManager.selectedLanguage != appManager.language || appManager.gameMode != appManager.selectedGameMode {
+                print("GameMode: \(appManager.selectedGameMode), \(appManager.gameMode)")
                 appManager.getWords()
             } else if appManager.word.count != appManager.numberOfLetters {
+                print("GameMode2: \(appManager.selectedGameMode), \(appManager.gameMode)")
                 appManager.resetBoard()
             }
             
@@ -426,7 +442,9 @@ struct AdButton: View {
             }
             Button("Sure") {
                 self.userWantAds = true
+                
                 Task {
+                    await MobileAds.shared.start()
                     await appManager.loadAd()
                     appManager.showAd()
                 }
@@ -442,7 +460,7 @@ struct AdButton: View {
                 }
             }
         }
-        .sensoryFeedback(.impact, trigger: self.didTap)
+        .sensoryFeedback(.selection, trigger: self.didTap)
     }
 }
 

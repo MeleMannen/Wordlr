@@ -227,9 +227,6 @@ struct SelectView: View {
                             .simultaneousGesture(TapGesture().onEnded {
                                 appManager.didTapPlayDailyWordButton.toggle()
                                 appManager.selectedGameMode = .dailyWord
-                                if !appManager.word.isEmpty {
-                                    appManager.getWords()
-                                }
                             })
                             .sensoryFeedback(.impact, trigger: appManager.didTapPlayDailyWordButton)
                             .buttonStyle(GrowingButton())
@@ -250,10 +247,14 @@ struct SelectView: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     NavigationLink(destination: Info().environmentObject(appManager)) {
-                        Image(systemName: "info.circle")
+                        Image(systemName: "info")
                             .font(.title2)
                             .foregroundStyle(.primary)
                     }
+                    .simultaneousGesture(TapGesture().onEnded {
+                        appManager.didTapInfoButton.toggle()
+                    })
+                    .sensoryFeedback(.selection, trigger: appManager.didTapInfoButton)
                 }
             }
 //            .transition(.blurReplace)

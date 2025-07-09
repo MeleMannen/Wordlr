@@ -15,7 +15,6 @@
 		6335967E2DFC5A2C004A55C4 /* GameRecordManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6335967D2DFC5A2C004A55C4 /* GameRecordManager.swift */; };
 		6365B8C12E04C58F00A3F4C1 /* FilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6365B8C02E04C58F00A3F4C1 /* FilterView.swift */; };
 		636A16532E19608B00515809 /* Info.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636A16522E19608B00515809 /* Info.swift */; };
-		636A16572E198B2300515809 /* ThePhrase.icon in Resources */ = {isa = PBXBuildFile; fileRef = 636A16562E198B2300515809 /* ThePhrase.icon */; };
 		637330892DB9036C00AE18E6 /* englishWords.json in Resources */ = {isa = PBXBuildFile; fileRef = 637330882DB9036C00AE18E6 /* englishWords.json */; };
 		6373308B2DB9054400AE18E6 /* dailyEnglishWords.json in Resources */ = {isa = PBXBuildFile; fileRef = 6373308A2DB9053600AE18E6 /* dailyEnglishWords.json */; };
 		6378C1C12E12DCF4005B8FC6 /* BoardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6378C1C02E12DCF4005B8FC6 /* BoardView.swift */; };
@@ -52,7 +51,6 @@
 		6335967D2DFC5A2C004A55C4 /* GameRecordManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameRecordManager.swift; sourceTree = "<group>"; };
 		6365B8C02E04C58F00A3F4C1 /* FilterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterView.swift; sourceTree = "<group>"; };
 		636A16522E19608B00515809 /* Info.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Info.swift; sourceTree = "<group>"; };
-		636A16562E198B2300515809 /* ThePhrase.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = ThePhrase.icon; sourceTree = "<group>"; };
 		637330882DB9036C00AE18E6 /* englishWords.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = englishWords.json; sourceTree = "<group>"; };
 		6373308A2DB9053600AE18E6 /* dailyEnglishWords.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = dailyEnglishWords.json; sourceTree = "<group>"; };
 		6378C1C02E12DCF4005B8FC6 /* BoardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardView.swift; sourceTree = "<group>"; };
@@ -221,7 +219,6 @@
 				6373308A2DB9053600AE18E6 /* dailyEnglishWords.json */,
 				637330882DB9036C00AE18E6 /* englishWords.json */,
 				63E081DF2D3414DA00748133 /* Assets.xcassets */,
-				636A16562E198B2300515809 /* ThePhrase.icon */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -293,7 +290,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				6310860C2D4040F200AC2C4E /* PrivacyInfo.xcprivacy in Resources */,
-				636A16572E198B2300515809 /* ThePhrase.icon in Resources */,
 				63E081E92D3414DA00748133 /* Preview Assets.xcassets in Resources */,
 				637330892DB9036C00AE18E6 /* englishWords.json in Resources */,
 				63F9D6042D3724E4004E9128 /* shortedNorwegainWords.json in Resources */,
@@ -460,12 +456,12 @@
 		6382E3CC2D12FE0700B61353 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = ThePhrase;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CODE_SIGN_ENTITLEMENTS = Wordle/Wordle.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Wordle/Preview Content\"";
 				DEVELOPMENT_TEAM = B3ZSP6T559;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -489,7 +485,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 15.2;
-				MARKETING_VERSION = 1.5.0;
+				MARKETING_VERSION = 1.5.3;
 				PRODUCT_BUNDLE_IDENTIFIER = SwoshEB.ThePhrase;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
@@ -504,12 +500,12 @@
 		6382E3CD2D12FE0700B61353 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = ThePhrase;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CODE_SIGN_ENTITLEMENTS = Wordle/Wordle.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Wordle/Preview Content\"";
 				DEVELOPMENT_TEAM = B3ZSP6T559;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -533,7 +529,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 15.2;
-				MARKETING_VERSION = 1.5.0;
+				MARKETING_VERSION = 1.5.3;
 				PRODUCT_BUNDLE_IDENTIFIER = SwoshEB.ThePhrase;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
