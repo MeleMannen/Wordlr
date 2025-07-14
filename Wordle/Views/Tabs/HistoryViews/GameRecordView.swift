@@ -10,7 +10,7 @@ import SwiftUI
 struct GameRecordView: View {
     @Environment(\.colorScheme) private var colorScheme
     @EnvironmentObject var appManager: AppManager
-    @State var gameRecord: GameRecord
+    var gameRecord: GameRecord
     @State private var didTap: Bool = false
     @State private var hasSharedResult: Bool = false
     
@@ -180,9 +180,9 @@ struct GameRecordView: View {
                             Button {
                                 withAnimation {
                                     if let endDate = gameRecord.endDate {
-                                        UIPasteboard.general.string = appManager.getShareResult(row: gameRecord.numberOfGuesses - 1, numberOfLetters: gameRecord.numberOfLetters, date: gameRecord.date, board: board, timeUsedString: appManager.getTimeUsedString(startDate: self.gameRecord.date, endDate: endDate))
+                                        UIPasteboard.general.string = appManager.getShareResult(row: gameRecord.numberOfGuesses, numberOfLetters: gameRecord.numberOfLetters, date: gameRecord.date, board: board, timeUsedString: appManager.getTimeUsedString(startDate: self.gameRecord.date, endDate: endDate))
                                     } else {
-                                        UIPasteboard.general.string = appManager.getShareResult(row: gameRecord.numberOfGuesses - 1, numberOfLetters: gameRecord.numberOfLetters, date: gameRecord.date, board: board)
+                                        UIPasteboard.general.string = appManager.getShareResult(row: gameRecord.numberOfGuesses, numberOfLetters: gameRecord.numberOfLetters, date: gameRecord.date, board: board)
                                     }
                                     self.hasSharedResult = true
                                     self.didTap.toggle()

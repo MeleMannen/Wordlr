@@ -7,12 +7,14 @@
 
 import SwiftUI
 import GoogleMobileAds
+import AppTrackingTransparency
 
 struct GameView: View {
     @EnvironmentObject var appManager: AppManager
     @Environment(\.dismiss) var dismiss
     @Environment(\.colorScheme) private var colorScheme
     @AppStorage("appTheme") private var appTheme: AppTheme = .dark
+    @AppStorage("userWantsAds") var userWantAds: Bool = false
     private var device : UIUserInterfaceIdiom { UIDevice.current.userInterfaceIdiom }
     
     var colorForUnused: Color {
@@ -458,6 +460,11 @@ struct AdButton: View {
                     await appManager.loadAd()
                     self.hasLoadedAd = true
                 }
+            }
+        }
+        .onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)) { _ in
+            if self.userWantAds {
+                ATTrackingManager.requestTrackingAuthorization(completionHandler: { status in })
             }
         }
         .sensoryFeedback(.selection, trigger: self.didTap)

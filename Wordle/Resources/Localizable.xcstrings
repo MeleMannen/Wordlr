@@ -309,6 +309,7 @@
       }
     },
     "Date" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -367,7 +368,7 @@
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Standard Språk"
+            "value" : "Standard Språk:"
           }
         }
       }
@@ -383,7 +384,7 @@
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Standard Antall Bokstaver"
+            "value" : "Standard Antall Bokstaver:"
           }
         }
       }
@@ -538,6 +539,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ekskluder bokstaver:"
+          }
+        }
+      }
+    },
+    "Excluded letters" : {
+      "comment" : "Label for excluded letters in filter options",
+      "localizations" : {
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ekskluderte bokstaver"
           }
         }
       }
@@ -848,6 +860,27 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Hvordan starte et spill?"
+          }
+        }
+      }
+    },
+    "Included letters" : {
+      "comment" : "Label for included letters in filter options",
+      "localizations" : {
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Inkluderte bokstaver"
+          }
+        }
+      }
+    },
+    "Included letters:" : {
+      "localizations" : {
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Inkluder bokstaver:"
           }
         }
       }

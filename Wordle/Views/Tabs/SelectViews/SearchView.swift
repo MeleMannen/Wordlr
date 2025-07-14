@@ -10,9 +10,6 @@ import SwiftUI
 struct SearchView: View {
     @EnvironmentObject var appManager: AppManager
     @Namespace private var namespace
-//    @State private var selectedLetter: String = ""
-//    @State private var lastScrolledLetter: String = ""
-//    @State private var lastScrollTime: Date = Date()
     
     var searchResults: [String] {
         var filteredWords = appManager.words?.wordGroups["\(appManager.numberOfLetters)"] ?? []
@@ -34,6 +31,13 @@ struct SearchView: View {
         }
         if appManager.isFilteringEndsWith && !appManager.endsWithFilter.isEmpty {
             filteredWords = filteredWords.filter { $0.hasSuffix(appManager.endsWithFilter.uppercased()) }
+        }
+        
+        if appManager.isFilteringIncludedLetters && !appManager.selectedIncludedLetters.isEmpty {
+            let excludedCharacters = Set(appManager.selectedIncludedLetters.joined())
+            filteredWords = filteredWords.filter { word in
+                excludedCharacters.isDisjoint(with: word.uppercased())
+            }
         }
         
         if appManager.isFilteringExcludeLetters && !appManager.selectedExcludedLetters.isEmpty {
@@ -60,104 +64,34 @@ struct SearchView: View {
             if self.searchResults.isEmpty && !appManager.searchedWord.isEmpty {
                 ContentUnavailableView.search(text: appManager.searchedWord)
             } else {
-                ScrollViewReader { proxy in
-                    HStack(spacing: 0) {
-                        List {
-                            ForEach(sectionKeys, id: \.self) { letter in
-                                Section {
-                                    ForEach(Array((groupedWords[letter] ?? []).enumerated()), id: \.offset) { index, word in
-                                        LazyVStack(spacing: 0) {
-                                            NavigationLink(destination: {
-                                                WordDefinitionView(word: word)
-                                                    .environmentObject(appManager)
-                                            }, label: {
-                                                HStack {
-                                                    Text(word)
-                                                        .font(.title3)
-                                                        .foregroundStyle(.primary)
-                                                    Spacer()
-                                                }
-                                            })
-                                            
-                                        }
+                HStack(spacing: 0) {
+                    List {
+                        ForEach(sectionKeys, id: \.self) { letter in
+                            Section {
+                                ForEach(Array((groupedWords[letter] ?? []).enumerated()), id: \.offset) { index, word in
+                                    LazyVStack(spacing: 0) {
+                                        NavigationLink(destination: {
+                                            WordDefinitionView(word: word)
+                                                .environmentObject(appManager)
+                                        }, label: {
+                                            HStack {
+                                                Text(word)
+                                                    .font(.title3)
+                                                    .foregroundStyle(.primary)
+                                                Spacer()
+                                            }
+                                        })
+                                        
                                     }
-                                } header: {
-                                    SectionHeaderView(letter: letter)
                                 }
-                                .listSectionSeparator(.hidden)
-                                .id(letter)
+                            } header: {
+                                SectionHeaderView(letter: letter)
                             }
+                            .listSectionSeparator(.hidden)
+                            .id(letter)
                         }
-                        
-//                        if searchResults.count < 200 {
-//                            VStack {
-//                                Spacer()
-//                                GeometryReader { geometry in
-//                                    let letterHeight: CGFloat = 15
-//                                    let totalLetterHeight = CGFloat(sectionKeys.count) * letterHeight
-//                                    let startY = (geometry.size.height - totalLetterHeight) / 2
-//                                    
-//                                    VStack(spacing: 1) {
-//                                        ForEach(Array(sectionKeys.enumerated()), id: \.offset) { index, letter in
-//                                            Text(letter)
-//                                                .font(.system(size: 12, weight: .bold))
-//                                                .foregroundColor(.blue)
-//                                                .frame(width: 15, height: letterHeight)
-//                                                .contentShape(Rectangle())
-//                                                .onTapGesture {
-//                                                    withAnimation(.easeInOut(duration: 0.3)) {
-//                                                        proxy.scrollTo(letter, anchor: .top)
-//                                                    }
-//                                                }
-//                                        }
-//                                    }
-//                                    .frame(maxWidth: .infinity)
-//                                    .position(x: geometry.size.width / 2, y: geometry.size.height / 2)
-//                                    .gesture(
-//                                        DragGesture(minimumDistance: 0)
-//                                            .onChanged { value in
-//                                                let adjustedY = value.location.y - startY
-//                                                let index = Int(adjustedY / letterHeight)
-//                                                let clampedIndex = min(max(index, 0), sectionKeys.count - 1)
-//                                                
-//                                                if clampedIndex >= 0 && clampedIndex < sectionKeys.count {
-//                                                    let newSelectedLetter = sectionKeys[clampedIndex]
-//                                                    
-//                                                    // Only scroll and trigger feedback if letter changed
-//                                                    if lastScrolledLetter != newSelectedLetter {
-//                                                        let now = Date()
-//                                                        
-//                                                        // Throttle scrolling to max 60fps (16ms intervals)
-//                                                        if now.timeIntervalSince(lastScrollTime) >= 0.016 {
-//                                                            selectedLetter = newSelectedLetter
-//                                                            lastScrolledLetter = newSelectedLetter
-//                                                            lastScrollTime = now
-//                                                            
-//                                                            // Provide haptic feedback
-//                                                            let impactFeedback = UIImpactFeedbackGenerator(style: .light)
-//                                                            impactFeedback.impactOccurred()
-//                                                            
-//                                                            // Immediate scroll with very subtle animation
-////                                                            withAnimation(.linear(duration: 0.05)) {
-//                                                                proxy.scrollTo(newSelectedLetter, anchor: .top)
-////                                                            }
-//                                                        }
-//                                                    }
-//                                                }
-//                                            }
-//                                            .onEnded { _ in
-//                                                // Reset tracking when drag ends
-//                                                lastScrolledLetter = ""
-//                                                lastScrollTime = Date()
-//                                            }
-//                                    )
-//                                }
-//                                Spacer()
-//                            }
-//                            .frame(width: 15)
-//                        }
-                        
                     }
+                    
                 }
             }
         }
@@ -177,11 +111,13 @@ struct SearchView: View {
 //                    .glassEffect(in: .circle)
 //                    .glassEffectID("filter", in: namespace)
                     
+                    
                 
             })
             .padding(.trailing, 25)
             .padding(.bottom, 25)
             .transition(.scale)
+            .buttonStyle(GrowingButton())
 //            .buttonStyle(.glass)
             
         }

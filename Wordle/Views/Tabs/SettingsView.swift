@@ -7,6 +7,7 @@
 
 import SwiftUI
 import GoogleMobileAds
+import AppTrackingTransparency
 
 struct SettingsView: View {
     @AppStorage("appTheme") private var appTheme: AppTheme = .dark
@@ -20,10 +21,61 @@ struct SettingsView: View {
     
     @AppStorage("userWantsAds") var userWantAds: Bool = false
     @EnvironmentObject var appManager: AppManager
+    @State var adIsLoaded: Bool = false
+    @State var isShowingAds: Bool = true
     var body: some View {
         GeometryReader { geometry in
             NavigationStack {
                 List {
+                    Section {
+                        DisclosureGroup {
+                            Picker("", selection: $appTheme) {
+                                Text("System")
+                                    .tag(AppTheme.system)
+                                Text("Dark")
+                                    .tag(AppTheme.dark)
+                                Text("Light")
+                                    .tag(AppTheme.light)
+                                
+                            }
+                            .pickerStyle(SegmentedPickerStyle())
+                            .padding(.vertical, 5)
+                            
+                        } label: {
+                            HStack {
+                                Text("App Theme:")
+                                    .font(.headline)
+                            }
+                            .padding(.vertical, 5)
+                        }
+                        
+                        
+                        DisclosureGroup {
+                            Picker("", selection: $userWantAds) {
+                                Text("Allow Ads")
+                                    .tag(true)
+                                Text("Don't Allow Ads")
+                                    .tag(false)
+                                
+                            }
+                            .pickerStyle(SegmentedPickerStyle())
+                            .padding(.vertical, 5)
+                            
+                        } label: {
+                            HStack {
+                                Text("Ads:")
+                                    .font(.headline)
+                            }
+                            .padding(.vertical, 5)
+                        }
+                        .onChange(of: userWantAds) {
+                            if userWantAds {
+                                MobileAds.shared.start()
+                            }
+                        }
+                    } header: {
+                        Text("App")
+                    }
                     Section {
                         DisclosureGroup {
                             HStack {
@@ -202,112 +254,96 @@ struct SettingsView: View {
                         Text("Stats and History")
                     }
                     
-                    Section {
-                        DisclosureGroup {
-                            Picker("", selection: $appTheme) {
-                                Text("System")
-                                    .tag(AppTheme.system)
-                                Text("Dark")
-                                    .tag(AppTheme.dark)
-                                Text("Light")
-                                    .tag(AppTheme.light)
-                                
-                            }
-                            .pickerStyle(SegmentedPickerStyle())
-                            .padding(.vertical, 5)
-                            
-                        } label: {
-                            HStack {
-                                Text("App Theme:")
-                                    .font(.headline)
-                            }
-                            .padding(.vertical, 5)
-                        }
-                        
-                        DisclosureGroup {
-                            Picker("", selection: $userWantAds) {
-                                Text("Allow Ads")
-                                    .tag(true)
-                                Text("Don't Allow Ads")
-                                    .tag(false)
-                                
-                            }
-                            .pickerStyle(SegmentedPickerStyle())
-                            .padding(.vertical, 5)
-                            
-                        } label: {
-                            HStack {
-                                Text("Ads:")
-                                    .font(.headline)
-                            }
-                            .padding(.vertical, 5)
-                        }
-                    } header: {
-                        Text("App")
-                    }
+                    
                     
                     
                     
                 }
                 .navigationTitle("Settings")
+                .onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)) { _ in
+                    if self.userWantAds {
+                        ATTrackingManager.requestTrackingAuthorization(completionHandler: { status in })
+                    }
+                }
                 
-                Spacer()
-//                let adSize = currentOrientationAnchoredAdaptiveBanner(width: geometry.size.width - 40)
-//                BannerViewContainer(adSize)
-//                    .frame(width: adSize.size.width, height: adSize.size.height)
-//                    .padding(.bottom, 7)
+                
+                if self.userWantAds && self.isShowingAds {
+                    if self.adIsLoaded {
+                        Spacer()
+                    }
+                    let adSize = currentOrientationAnchoredAdaptiveBanner(width: geometry.size.width - 40)
+                    BannerViewContainer(adSize, adIsLoaded: self.$adIsLoaded, isShowingAds: self.$isShowingAds)
+                        .frame(width: adSize.size.width, height: adSize.size.height)
+                        .padding(.bottom, 7)
+                        .opacity(self.adIsLoaded ? 1 : 0)
+                    
+                }
                 
             }
         }
     }
 }
 
-//struct BannerViewContainer: UIViewRepresentable {
-//    typealias UIViewType = BannerView
-//    let adSize: AdSize
-//    
-//    init(_ adSize: AdSize) {
-//        self.adSize = adSize
-//    }
-//    
-//    func makeUIView(context: Context) -> BannerView {
-//        let banner = BannerView(adSize: adSize)
-//        banner.adUnitID = "ca-app-pub-3940256099942544/2435281174" // ca-app-pub-7619403750703078/6852604335
-//        banner.load(Request())
-//        banner.delegate = context.coordinator
-//        return banner
-//    }
-//    
-//    func updateUIView(_ uiView: BannerView, context: Context) {}
-//    
-//    func makeCoordinator() -> BannerCoordinator {
-//        return BannerCoordinator(self)
-//    }
-//    
-//    class BannerCoordinator: NSObject, BannerViewDelegate {
-//        
-//        let parent: BannerViewContainer
-//        
-//        init(_ parent: BannerViewContainer) {
-//            self.parent = parent
-//        }
-//        
-//        // MARK: - GADBannerViewDelegate methods
-//        
-//        func bannerViewDidReceiveAd(_ bannerView: BannerView) {
-//            print("DID RECEIVE AD.")
-//            bannerView.alpha = 0
-//            UIView.animate(withDuration: 1, animations: {
-//                bannerView.alpha = 1
-//            })
-//        }
-//
-//        
-//        func bannerView(_ bannerView: BannerView, didFailToReceiveAdWithError error: Error) {
-//            print("FAILED TO RECEIVE AD: \(error.localizedDescription)")
-//        }
-//    }
-//}
+struct BannerViewContainer: UIViewRepresentable {
+    typealias UIViewType = BannerView
+    let adSize: AdSize
+    @Binding var adIsLoaded: Bool
+    @Binding var isShowingAds: Bool
+    
+    init(_ adSize: AdSize, adIsLoaded: Binding<Bool>, isShowingAds: Binding<Bool>) {
+        self.adSize = adSize
+        self._adIsLoaded = adIsLoaded
+        self._isShowingAds = isShowingAds
+    }
+    
+    func makeUIView(context: Context) -> BannerView {
+        let banner = BannerView(adSize: adSize)
+        banner.adUnitID = "ca-app-pub-3940256099942544/2435281174" // ca-app-pub-7619403750703078/6852604335
+        banner.load(Request())
+        banner.delegate = context.coordinator
+        banner.isHidden = true
+        return banner
+    }
+    
+    func updateUIView(_ uiView: BannerView, context: Context) {}
+    
+    func makeCoordinator() -> BannerCoordinator {
+        return BannerCoordinator(self, adIsLoaded: self.$adIsLoaded, isShowingAds: self.$isShowingAds)
+    }
+    
+    class BannerCoordinator: NSObject, BannerViewDelegate {
+        let parent: BannerViewContainer
+        @Binding var adIsLoaded: Bool
+        @Binding var isShowingAds: Bool
+        
+        init(_ parent: BannerViewContainer, adIsLoaded: Binding<Bool>, isShowingAds: Binding<Bool>) {
+            self.parent = parent
+            self._adIsLoaded = adIsLoaded
+            self._isShowingAds = isShowingAds
+        }
+        
+        // MARK: - GADBannerViewDelegate methods
+        
+        func bannerViewDidReceiveAd(_ bannerView: BannerView) {
+            print("DID RECEIVE AD.")
+            self.adIsLoaded = true
+            self.isShowingAds = true
+            bannerView.alpha = 0
+            bannerView.isHidden = false
+            UIView.animate(withDuration: 1, animations: {
+                bannerView.alpha = 1
+            })
+        }
+
+        
+        func bannerView(_ bannerView: BannerView, didFailToReceiveAdWithError error: Error) {
+            print("FAILED TO RECEIVE AD: \(error.localizedDescription)")
+            self.adIsLoaded = false
+            self.isShowingAds = false
+            bannerView.isHidden = true
+        }
+    }
+}
 
 #Preview {
     SettingsView()

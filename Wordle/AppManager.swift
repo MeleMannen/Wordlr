@@ -71,7 +71,9 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
     @Published var isFilteringEndsWith: Bool = false
     @Published var endsWithFilter: String = ""
     @Published var isFilteringExcludeLetters: Bool = false
+    @Published var isFilteringIncludedLetters: Bool = false
     @Published var selectedExcludedLetters: [String] = []
+    @Published var selectedIncludedLetters: [String] = []
     let englishLetters: [String] = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
     let norwegianLetters: [String] = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "Æ", "Ø", "Å"]
     
@@ -680,7 +682,11 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
         self.startsWithFilter = ""
         self.isFilteringEndsWith = false
         self.endsWithFilter = ""
+        self.isFilteringIncludedLetters = false
         self.isFilteringExcludeLetters = false
+        if !selectedIncludedLetters.isEmpty {
+            self.selectedIncludedLetters.removeAll()
+        }
         if !selectedExcludedLetters.isEmpty {
             self.selectedExcludedLetters.removeAll()
         }

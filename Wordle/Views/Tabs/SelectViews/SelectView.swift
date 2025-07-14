@@ -8,6 +8,7 @@
 import SwiftUI
 import SwiftData
 import GoogleMobileAds
+import AppTrackingTransparency
 
 struct SelectView: View {
     @Environment(\.modelContext) var modelContext
@@ -15,6 +16,7 @@ struct SelectView: View {
     @AppStorage("hasAddedStreaks") private var hasAddedStreaks: Bool = false
     @AppStorage("hasAddedNormalStreaks") private var hasAddedNormalStreaks: Bool = false
     @AppStorage("hasFixedLanguage") private var hasFixedLanguage: Bool = false
+    @AppStorage("userWantsAds") var userWantAds: Bool = false
     @State var hasFixedDefualtValues: Bool = false
     @Query private var streaks: [StreakEntity] = []
     @Query private var normalStreaks: [NormalStreakEntity] = []
@@ -284,6 +286,11 @@ struct SelectView: View {
 //                .padding(.bottom, 10)
             
         }
+        .onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)) { _ in
+            if self.userWantAds {
+                ATTrackingManager.requestTrackingAuthorization(completionHandler: { status in })
+            }
+        }
         .onAppear {
             appManager.modelContext = modelContext
             appManager.streakManager = StreakManager(context: modelContext)
@@ -323,7 +330,7 @@ struct ConditionalGlassEffect: ViewModifier {
     func body(content: Content) -> some View {
         if #available(iOS 26.0, *) {
             content
-                .glassEffect()
+                .glassEffect(.regular.interactive())
         } else {
             content
         }
