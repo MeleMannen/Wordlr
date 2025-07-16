@@ -15,6 +15,17 @@ struct GameView: View {
     @Environment(\.colorScheme) private var colorScheme
     @AppStorage("appTheme") private var appTheme: AppTheme = .dark
     @AppStorage("userWantsAds") var userWantAds: Bool = false
+    
+    @State var didTapSubmitButton: Bool = false
+    @State var didTapBackButton: Bool = false
+    @State var didTapResetButton: Bool = false
+    @State var didTapNewGameButton: Bool = false
+    @State var didTapPlaySomethingElseButton: Bool = false
+    @State var didTapSearchButton: Bool = false
+    @State var didTapShowDefinitionButton: Bool = false
+    @State var isShowingCurrentDefinition: Bool = false
+    @State var alertItem: AlertItem?
+    
     private var device : UIUserInterfaceIdiom { UIDevice.current.userInterfaceIdiom }
     
     var colorForUnused: Color {
@@ -43,31 +54,17 @@ struct GameView: View {
                                             .foregroundStyle(letter.state == .notUsed ? AnyShapeStyle(.black) : AnyShapeStyle(Color.white))
                                             .frame(width: geometry2.size.height / CGFloat(6), height: geometry2.size.height / CGFloat(6))
                                             .background {
-                                                RoundedRectangle(cornerRadius: 5)
-                                                    .fill(letter.state == .correctPosition ? .green : (letter.state == .correctLetter ? .orange : (letter.state == .usedButNotCorrect ? Color(UIColor.darkGray) : self.colorForUnused)))
-                                            }
-                                            .rotationEffect(.degrees(letter.degreee), anchor: .center)
-                                        
-                                            .animation(.interpolatingSpring(mass: 0.7, stiffness: 100, damping: 8, initialVelocity: 1)
-                                                .speed(1)
-                                                .delay(0), value: letter.degreee)
-                                            .offset(x: rowIndex == appManager.currentRow ? (appManager.isShaking ? -15 : 0) : 0)
-                                            .onChange(of: letter.state) {
-                                                if letter.state != .notUsed {
-                                                    appManager.flipCard(rowIndex: rowIndex, colIndex: colIndex)
+                                                if appManager.selectedGameMode == .dailyWord && appManager.didWinGame == .won && appManager.isGameOver && (rowIndex == appManager.currentRow - 1 || rowIndex == appManager.board.count) {
+                                                    RoundedRectangle(cornerRadius: 5)
+                                                        .foregroundStyle(appManager.gradient)
+                                                        .gradientShadow(gradient: appManager.shadowGradient, radius: 3, x: 0, y: 0)
+                                                } else {
+                                                    RoundedRectangle(cornerRadius: 5)
+                                                        .fill(letter.state == .correctPosition ? .green : (letter.state == .correctLetter ? .orange : (letter.state == .usedButNotCorrect ? Color(UIColor.darkGray) : self.colorForUnused)))
                                                 }
                                             }
-                                        
-                                    } else {
-                                        Text(letter.letter)
-                                            .font(.largeTitle).bold()
-                                            .foregroundStyle(letter.state == .notUsed ? AnyShapeStyle(.black) : AnyShapeStyle(Color.white))
-                                            .frame(width: geometry2.size.height / CGFloat(appManager.numberOfLetters + 1), height: geometry2.size.height / CGFloat(appManager.numberOfLetters + 1))
-                                            .background {
-                                                RoundedRectangle(cornerRadius: 5)
-                                                    .fill(letter.state == .correctPosition ? .green : (letter.state == .correctLetter ? .orange : (letter.state == .usedButNotCorrect ? Color(UIColor.darkGray) : self.colorForUnused)))
-                                            }
                                             .rotationEffect(.degrees(letter.degreee), anchor: .center)
+                                            .animation(.easeInOut(duration: 0.5), value: appManager.didWinGame)
                                             .animation(.interpolatingSpring(mass: 0.7, stiffness: 100, damping: 8, initialVelocity: 1)
                                                 .speed(1)
                                                 .delay(0), value: letter.degreee)
@@ -81,6 +78,43 @@ struct GameView: View {
                                             .onChange(of: letter.letter) {
                                                 if !letter.letter.isEmpty {
                                                     appManager.animateTappedLetter(rowIndex: rowIndex, colIndex: colIndex)
+                                                } else {
+                                                    appManager.animateRemovingLetter(rowIndex: rowIndex, colIndex: colIndex)
+                                                }
+                                            }
+                                        
+                                    } else {
+                                        Text(letter.letter)
+                                            .font(.largeTitle).bold()
+                                            .foregroundStyle(letter.state == .notUsed ? AnyShapeStyle(.black) : AnyShapeStyle(Color.white))
+                                            .frame(width: geometry2.size.height / CGFloat(appManager.numberOfLetters + 1), height: geometry2.size.height / CGFloat(appManager.numberOfLetters + 1))
+                                            .background {
+                                                if appManager.selectedGameMode == .dailyWord && appManager.didWinGame == .won && appManager.isGameOver && (rowIndex == appManager.currentRow - 1 || rowIndex == appManager.board.count) {
+                                                    RoundedRectangle(cornerRadius: 5)
+                                                        .foregroundStyle(appManager.gradient)
+                                                        .gradientShadow(gradient: appManager.shadowGradient, radius: 3, x: 0, y: 0)
+                                                } else {
+                                                    RoundedRectangle(cornerRadius: 5)
+                                                        .fill(letter.state == .correctPosition ? .green : (letter.state == .correctLetter ? .orange : (letter.state == .usedButNotCorrect ? Color(UIColor.darkGray) : self.colorForUnused)))
+                                                }
+                                            }
+                                            .rotationEffect(.degrees(letter.degreee), anchor: .center)
+                                            .animation(.easeInOut(duration: 0.5), value: appManager.didWinGame)
+                                            .animation(.interpolatingSpring(mass: 0.7, stiffness: 100, damping: 8, initialVelocity: 1)
+                                                .speed(1)
+                                                .delay(0), value: letter.degreee)
+                                            .scaleEffect(letter.scale, anchor: .center)
+                                            .offset(x: rowIndex == appManager.currentRow ? (appManager.isShaking ? -15 : 0) : 0)
+                                            .onChange(of: letter.state) {
+                                                if letter.state != .notUsed {
+                                                    appManager.flipCard(rowIndex: rowIndex, colIndex: colIndex)
+                                                }
+                                            }
+                                            .onChange(of: letter.letter) {
+                                                if !letter.letter.isEmpty {
+                                                    appManager.animateTappedLetter(rowIndex: rowIndex, colIndex: colIndex)
+                                                } else {
+                                                    appManager.animateRemovingLetter(rowIndex: rowIndex, colIndex: colIndex)
                                                 }
                                             }
                                     }
@@ -149,17 +183,17 @@ struct GameView: View {
                             }
                             HStack {
                                 Button(action: {
-                                    appManager.didTapResetButton.toggle()
+                                    self.didTapResetButton.toggle()
                                     if appManager.selectedGameMode == .normal {
-                                        appManager.alertItem = AlertItem(
+                                        self.alertItem = AlertItem(
                                             title: Text("Are you sure you want to Restart?"),
                                             message: Text("You will lose your word and you cannot undo this action!"),
                                             primaryButton: .destructive(Text("Restart")) {
-                                                appManager.alertItem = AlertItem(
+                                                self.alertItem = AlertItem(
                                                     title: Text("The Phrase Was: \(appManager.word)!"),
                                                     message: Text("Do you want to see the definition?"),
                                                     primaryButton: .default(Text("Show Definition")) {
-                                                        appManager.isShowingCurrentDefinition = true
+                                                        self.isShowingCurrentDefinition = true
                                                         
                                                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
                                                             print("reseting...")
@@ -187,8 +221,8 @@ struct GameView: View {
                                                 .foregroundStyle(self.colorForUnused)
                                         }
                                 })
-                                .sensoryFeedback(.impact, trigger: appManager.didTapResetButton)
-                                .alert(item: $appManager.alertItem) { item in
+                                .sensoryFeedback(.impact, trigger: self.didTapResetButton)
+                                .alert(item: self.$alertItem) { item in
                                     if let dismissButton = item.dismissButton {
                                         Alert(title: item.title, message: item.message, dismissButton: dismissButton)
                                     } else if let primaryButton = item.primaryButton, let secondaryButton = item.secondaryButton {
@@ -198,41 +232,58 @@ struct GameView: View {
                                     }
                                     
                                 }
-                                .sensoryFeedback(.warning, trigger: appManager.alertItem?.title)
-                                .sensoryFeedback(.warning, trigger: appManager.didTapResetButton)
+                                .sensoryFeedback(.warning, trigger: self.alertItem?.title)
+                                .sensoryFeedback(.warning, trigger: self.didTapResetButton)
                                 .buttonStyle(ScalingButton())
                                 .opacity(appManager.selectedGameMode == .dailyWord ? 0.7 : 1.0)
                                 
                                 Spacer()
                                 
                                 Button(action: {
-                                    appManager.didTapSubmitButton.toggle()
+                                    self.didTapSubmitButton.toggle()
                                     appManager.didTapSubmit()
                                     
                                     
                                 }, label: {
                                     Text("SUBMIT WORD")
-                                        .font(.title)
+                                        .conditionalShadow(color: .black.opacity(0.2), radius: 2, x: 3, y: 3)
+                                        .font(.title).bold()
                                         .frame(minWidth: (geometry2.size.width*7) / CGFloat(14) + CGFloat(self.device == .pad ? 60 : 30), maxWidth: (geometry2.size.width*7) / CGFloat(12) + CGFloat(self.device == .pad ? 60 : 30), minHeight: geometry2.size.height / CGFloat(10), idealHeight: geometry2.size.height / CGFloat(8), maxHeight: geometry2.size.height / CGFloat(6))
                                         .foregroundStyle(.white)
                                         .background {
-                                            RoundedRectangle(cornerRadius: 10)
-                                                .foregroundStyle(.green)
-                                                .opacity(appManager.submitOpacity)
-                                                .animation(.easeInOut(duration: 0.1), value: appManager.submitOpacity)
-                                                .sensoryFeedback(.alignment, trigger: appManager.submitOpacity)
-                                                .onChange(of: appManager.wordIsValidForSubmitButton()) { _, newValue in
-                                                    if newValue {
-                                                        appManager.submitOpacity = 1.0
-                                                    } else {
-                                                        appManager.submitOpacity = 0.5
+                                            if appManager.selectedGameMode == .dailyWord {
+                                                RoundedRectangle(cornerRadius: 10)
+                                                    .foregroundStyle(appManager.gradient)
+                                                    .gradientShadow(gradient: appManager.shadowGradient, radius: 3, x: 0, y: 0)
+                                                    .opacity(appManager.submitOpacity)
+                                                    .animation(.easeInOut(duration: 0.1), value: appManager.submitOpacity)
+                                                    .sensoryFeedback(.alignment, trigger: appManager.submitOpacity)
+                                                    .onChange(of: appManager.wordIsValidForSubmitButton()) { _, newValue in
+                                                        if newValue {
+                                                            appManager.submitOpacity = 1.0
+                                                        } else {
+                                                            appManager.submitOpacity = 0.5
+                                                        }
                                                     }
-                                                }
+                                            } else {
+                                                RoundedRectangle(cornerRadius: 10)
+                                                    .foregroundStyle(.green)
+                                                    .opacity(appManager.submitOpacity)
+                                                    .animation(.easeInOut(duration: 0.1), value: appManager.submitOpacity)
+                                                    .sensoryFeedback(.alignment, trigger: appManager.submitOpacity)
+                                                    .onChange(of: appManager.wordIsValidForSubmitButton()) { _, newValue in
+                                                        if newValue {
+                                                            appManager.submitOpacity = 1.0
+                                                        } else {
+                                                            appManager.submitOpacity = 0.5
+                                                        }
+                                                    }
+                                            }
                                             
                                         }
                                 })
                                 
-                                .sensoryFeedback(trigger: appManager.didTapSubmitButton) { _, _ in
+                                .sensoryFeedback(trigger: self.didTapSubmitButton) { _, _ in
                                     if appManager.isAnimating {
                                         return .impact
                                     } else {
@@ -244,7 +295,7 @@ struct GameView: View {
                                 Spacer()
                                 
                                 Button(action: {
-                                    appManager.didTapBackButton.toggle()
+                                    self.didTapBackButton.toggle()
                                     if !appManager.isAnimating && appManager.currentIndex > 0 {
                                         appManager.currentIndex -= 1
                                         appManager.board[appManager.currentRow][appManager.currentIndex].letter = ""
@@ -262,7 +313,7 @@ struct GameView: View {
                                     
                                 })
                                 .buttonRepeatBehavior(.enabled)
-                                .sensoryFeedback(.impact, trigger: appManager.didTapBackButton)
+                                .sensoryFeedback(.impact, trigger: self.didTapBackButton)
                                 .buttonStyle(ScalingButton())
                             }
                             .padding(.top, 5)
@@ -282,11 +333,12 @@ struct GameView: View {
                             
                             if appManager.selectedGameMode == .normal {
                                 Button(action: {
-                                    appManager.didTapNewGameButton.toggle()
+                                    self.didTapNewGameButton.toggle()
                                     appManager.resetBoard()
                                 }, label: {
                                     Text("New Game")
-                                        .font(.title)
+                                        .conditionalShadow(color: .black.opacity(0.3), radius: 2, x: 4, y: 4)
+                                        .font(.title).bold()
                                         .frame(maxWidth: .infinity, minHeight: 40, idealHeight: 45, maxHeight: 50)
                                         .foregroundStyle(.white)
                                         .background {
@@ -295,18 +347,20 @@ struct GameView: View {
                                         }
                                 })
                                 .padding(.horizontal, 20)
-                                .sensoryFeedback(.impact, trigger: appManager.didTapNewGameButton)
+                                .sensoryFeedback(.impact, trigger: self.didTapNewGameButton)
                                 .buttonStyle(GrowingButton())
+                                .conditionalShadow(color: .black.opacity(0.1), radius: 0.5, x: 1, y: 1)
                                 
                             } else {
                                 Button(action: {
-                                    appManager.didTapPlaySomethingElseButton.toggle()
+                                    self.didTapPlaySomethingElseButton.toggle()
                                     dismiss()
-                                    
                                     
                                 }, label: {
                                     Text("Play Something Else")
-                                        .font(.title)
+                                        .conditionalShadow(color: .black.opacity(0.3), radius: 2, x: 4, y: 4)
+                                        
+                                        .font(.title).bold()
                                         .frame(maxWidth: .infinity, minHeight: 40, idealHeight: 45, maxHeight: 50)
                                         .foregroundStyle(.white)
                                         .background {
@@ -315,15 +369,17 @@ struct GameView: View {
                                         }
                                 })
                                 .padding(.horizontal, 20)
-                                .sensoryFeedback(.impact, trigger: appManager.didTapPlaySomethingElseButton)
+                                .sensoryFeedback(.impact, trigger: self.didTapPlaySomethingElseButton)
                                 .buttonStyle(GrowingButton())
+                                .conditionalShadow(color: .black.opacity(0.1), radius: 0.5, x: 1, y: 1)
                             }
                             
                             Spacer()
                             
                             NavigationLink(destination: WordDefinitionView(word: appManager.word).environmentObject(appManager), label: {
                                 Text("Show Definition")
-                                    .font(.title)
+                                    .conditionalShadow(color: .black.opacity(0.5), radius: 4, x: 4, y: 4)
+                                    .font(.title).bold()
                                     .frame(maxWidth: .infinity, minHeight: 40, idealHeight: 45, maxHeight: 50)
                                     .foregroundStyle(.white)
                                     .background {
@@ -332,10 +388,11 @@ struct GameView: View {
                                     }
                             })
                             .simultaneousGesture(TapGesture().onEnded {
-                                appManager.didTapShowDefinitionButton.toggle()
+                                self.didTapShowDefinitionButton.toggle()
                             })
                             .buttonStyle(GrowingButton())
-                            .sensoryFeedback(.impact, trigger: appManager.didTapShowDefinitionButton)
+                            .conditionalShadow(color: .black.opacity(0.1), radius: 0.5, x: 1, y: 1)
+                            .sensoryFeedback(.impact, trigger: self.didTapShowDefinitionButton)
                             .padding(.horizontal, 20)
                             
                             Spacer()
@@ -344,15 +401,25 @@ struct GameView: View {
                                 Button {
                                     withAnimation {
                                         appManager.hasSharedResult = true
-                                        appManager.didTapBackButton.toggle()
+                                        self.didTapBackButton.toggle()
                                         UIPasteboard.general.string = appManager.getShareResult(row: appManager.currentRow, numberOfLetters: appManager.numberOfLetters, date: appManager.startDate, board: appManager.board, timeUsedString: appManager.getTimeUsedString(startDate: appManager.startDate, endDate: appManager.endDate))
                                         
                                         
                                     }
                                 } label: {
-                                    Label("Copy Result", systemImage: appManager.hasSharedResult ? "doc.on.doc.fill" : "doc.on.doc")
-                                        .font(.title2).bold()
-                                        .contentTransition(.symbolEffect(.replace))
+                                    if appManager.didWinGame == .won {
+                                        Label("Copy Result", systemImage: appManager.hasSharedResult ? "doc.on.doc.fill" : "doc.on.doc")
+                                            .font(.title2).bold()
+                                            .contentTransition(.symbolEffect(.replace))
+                                            .foregroundStyle(appManager.gradient)
+//                                            .gradientShadow(gradient: appManager.shadowGradient, radius: 1, x: 0, y: 0)
+                                            .conditionalShadow(color: .black.opacity(0.5), radius: 4, x: 4, y: 4)
+                                    } else {
+                                        Label("Copy Result", systemImage: appManager.hasSharedResult ? "doc.on.doc.fill" : "doc.on.doc")
+                                            .font(.title2).bold()
+                                            .contentTransition(.symbolEffect(.replace))
+                                            .conditionalShadow(color: .black.opacity(0.5), radius: 4, x: 4, y: 4)
+                                    }
                                 }
                                 Spacer()
                             }
@@ -368,7 +435,7 @@ struct GameView: View {
                 }
                 .frame(maxWidth: .infinity, maxHeight: (geometry.size.height*3) / 5)
             }
-            .navigationDestination(isPresented: $appManager.isShowingCurrentDefinition, destination: {
+            .navigationDestination(isPresented: self.$isShowingCurrentDefinition, destination: {
                 WordDefinitionView(word: appManager.word)
                     .environmentObject(appManager)
             })
@@ -390,9 +457,9 @@ struct GameView: View {
                             .contentShape(Rectangle())
                     })
                     .simultaneousGesture(TapGesture().onEnded {
-                        appManager.didTapSearchButton.toggle()
+                        self.didTapSearchButton.toggle()
                     })
-                    .sensoryFeedback(.selection, trigger: appManager.didTapSearchButton)
+                    .sensoryFeedback(.selection, trigger: self.didTapSearchButton)
                 }
             }
         }
@@ -454,14 +521,22 @@ struct AdButton: View {
         }, message: {
             Text("Do you want to see an ad to get a hint and support the app? It helps us keep the app free and improve it further.")
         })
-        .onAppear {
+        .task {
             if userWantAds {
-                Task {
+//                Task {
                     await appManager.loadAd()
                     self.hasLoadedAd = true
-                }
+//                }
             }
         }
+//        .onAppear {
+//            if userWantAds {
+//                Task {
+//                    await appManager.loadAd()
+//                    self.hasLoadedAd = true
+//                }
+//            }
+//        }
         .onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)) { _ in
             if self.userWantAds {
                 ATTrackingManager.requestTrackingAuthorization(completionHandler: { status in })

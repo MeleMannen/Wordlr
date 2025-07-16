@@ -17,18 +17,31 @@ struct FilterOptionsView: View {
     @EnvironmentObject var appManager: AppManager
     @Environment(\.dismiss) var dismiss
     @FocusState var focusedField: FilterOptionsFields?
+    @Binding var searchedWord: String
+    @Binding var isFilteringSearchWord: Bool
+    @Binding var isFilteringStartWith: Bool
+    @Binding var startsWithFilter: String
+    @Binding var isFilteringEndsWith: Bool
+    @Binding var endsWithFilter: String
+    @Binding var isFilteringExcludeLetters: Bool
+    @Binding var isFilteringIncludedLetters: Bool
+    @Binding var selectedExcludedLetters: [String]
+    @Binding var selectedIncludedLetters: [String]
+    
+    let englishLetters: [String] = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
+    let norwegianLetters: [String] = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "Æ", "Ø", "Å"]
     
     var body: some View {
         List {
             VStack {
-                Toggle(isOn: $appManager.isFilteringSearchWord) {
+                Toggle(isOn: self.$isFilteringSearchWord) {
                     Text("Search:")
                         .font(.headline)
                 }
                 .tint(.green)
                 
                 
-                TextField("Search for a Phrase", text: $appManager.searchedWord)
+                TextField("Search for a Phrase", text: self.$searchedWord)
                     .textFieldStyle(ThePhraseTextFieldStyle())
                     .focused($focusedField, equals: .search)
                     .onTapGesture {
@@ -37,21 +50,21 @@ struct FilterOptionsView: View {
                     .onSubmit {
                         self.focusNextField()
                     }
-                    .onChange(of: appManager.searchedWord) { oldValue, newValue in
-                        if newValue.count > 0 && !appManager.isFilteringSearchWord {
-                            appManager.isFilteringSearchWord = true
+                    .onChange(of: self.searchedWord) { oldValue, newValue in
+                        if newValue.count > 0 && !self.isFilteringSearchWord {
+                            self.isFilteringSearchWord = true
                         }
                     }
             }
             
             VStack {
-                Toggle(isOn: $appManager.isFilteringStartWith) {
+                Toggle(isOn: self.$isFilteringStartWith) {
                     Text("Starts with:")
                         .font(.headline)
                 }
                 .tint(.green)
                 
-                TextField("Enter starting letters", text: $appManager.startsWithFilter)
+                TextField("Enter starting letters", text: self.$startsWithFilter)
                     .textFieldStyle(ThePhraseTextFieldStyle())
                     .focused($focusedField, equals: .startsWith)
                     .onTapGesture {
@@ -60,23 +73,23 @@ struct FilterOptionsView: View {
                     .onSubmit {
                         self.focusNextField()
                     }
-                    .onChange(of: appManager.startsWithFilter) { oldValue, newValue in
+                    .onChange(of: self.startsWithFilter) { oldValue, newValue in
                         if newValue.count == 0 {
-                            appManager.isFilteringStartWith = false
+                            self.isFilteringStartWith = false
                         } else {
-                            appManager.isFilteringStartWith = true
+                            self.isFilteringStartWith = true
                         }
                     }
             }
             
             VStack {
-                Toggle(isOn: $appManager.isFilteringEndsWith) {
+                Toggle(isOn: self.$isFilteringEndsWith) {
                     Text("Ends with:")
                         .font(.headline)
                 }
                 .tint(.green)
                 
-                TextField("Enter ending letters", text: $appManager.endsWithFilter)
+                TextField("Enter ending letters", text: self.$endsWithFilter)
                     .textFieldStyle(ThePhraseTextFieldStyle())
                     .focused($focusedField, equals: .endsWith)
                     .onTapGesture {
@@ -85,17 +98,17 @@ struct FilterOptionsView: View {
                     .onSubmit {
                         self.focusNextField()
                     }
-                    .onChange(of: appManager.endsWithFilter) { oldValue, newValue in
+                    .onChange(of: self.endsWithFilter) { oldValue, newValue in
                         if newValue.count == 0 {
-                            appManager.isFilteringEndsWith = false
+                            self.isFilteringEndsWith = false
                         } else {
-                            appManager.isFilteringEndsWith = true
+                            self.isFilteringEndsWith = true
                         }
                     }
             }
             
             VStack {
-                Toggle(isOn: $appManager.isFilteringIncludedLetters) {
+                Toggle(isOn: self.$isFilteringIncludedLetters) {
                     Text("Included letters:")
                         .font(.headline)
                 }
@@ -105,15 +118,15 @@ struct FilterOptionsView: View {
                     Spacer()
                     
                     Menu {
-                        ForEach(appManager.selectedLanguage == .english ? appManager.englishLetters : appManager.norwegianLetters, id: \.self) { letter in
+                        ForEach(appManager.selectedLanguage == .english ? self.englishLetters : self.norwegianLetters, id: \.self) { letter in
                             Toggle(
                                 isOn: Binding(
-                                    get: { appManager.selectedIncludedLetters.contains(letter) },
+                                    get: { self.selectedIncludedLetters.contains(letter) },
                                     set: { isSelected in
                                         if isSelected {
-                                            appManager.selectedIncludedLetters.append(letter)
+                                            self.selectedIncludedLetters.append(letter)
                                         } else {
-                                            appManager.selectedIncludedLetters.removeAll { $0 == letter }
+                                            self.selectedIncludedLetters.removeAll { $0 == letter }
                                         }
                                     }
                                 )
@@ -125,7 +138,7 @@ struct FilterOptionsView: View {
                     } label: {
                         HStack {
                             let includedLettersText = NSLocalizedString("Included letters", comment: "Label for included letters in filter options")
-                            Text(appManager.selectedIncludedLetters.isEmpty ? includedLettersText : appManager.selectedIncludedLetters.joined(separator: ", "))
+                            Text(self.selectedIncludedLetters.isEmpty ? includedLettersText : self.selectedIncludedLetters.joined(separator: ", "))
                                 .font(.callout)
                             
                             Image(systemName: "chevron.up.chevron.down")
@@ -143,21 +156,21 @@ struct FilterOptionsView: View {
                         }
                         
                     }
-                    .onChange(of: appManager.selectedIncludedLetters) { oldValue, newValue in
+                    .onChange(of: self.selectedIncludedLetters) { oldValue, newValue in
                         if newValue.count == 0 {
-                            appManager.isFilteringIncludedLetters = false
+                            self.isFilteringIncludedLetters = false
                         } else {
-                            appManager.selectedIncludedLetters = appManager.selectedIncludedLetters.sorted(by: {
+                            self.selectedIncludedLetters = self.selectedIncludedLetters.sorted(by: {
                                 $0.caseInsensitiveCompare($1) == .orderedAscending
                             })
-                            appManager.isFilteringIncludedLetters = true
+                            self.isFilteringIncludedLetters = true
                         }
                     }
                 }
             }
             
             VStack {
-                Toggle(isOn: $appManager.isFilteringExcludeLetters) {
+                Toggle(isOn: self.$isFilteringExcludeLetters) {
                     Text("Exclude letters:")
                         .font(.headline)
                 }
@@ -167,15 +180,15 @@ struct FilterOptionsView: View {
                     Spacer()
                     
                     Menu {
-                        ForEach(appManager.selectedLanguage == .english ? appManager.englishLetters : appManager.norwegianLetters, id: \.self) { letter in
+                        ForEach(appManager.selectedLanguage == .english ? self.englishLetters : self.norwegianLetters, id: \.self) { letter in
                             Toggle(
                                 isOn: Binding(
-                                    get: { appManager.selectedExcludedLetters.contains(letter) },
+                                    get: { self.selectedExcludedLetters.contains(letter) },
                                     set: { isSelected in
                                         if isSelected {
-                                            appManager.selectedExcludedLetters.append(letter)
+                                            self.selectedExcludedLetters.append(letter)
                                         } else {
-                                            appManager.selectedExcludedLetters.removeAll { $0 == letter }
+                                            self.selectedExcludedLetters.removeAll { $0 == letter }
                                         }
                                     }
                                 )
@@ -187,7 +200,7 @@ struct FilterOptionsView: View {
                     } label: {
                         HStack {
                             let excludedLettersText = NSLocalizedString("Excluded letters", comment: "Label for excluded letters in filter options")
-                            Text(appManager.selectedExcludedLetters.isEmpty ? excludedLettersText : appManager.selectedExcludedLetters.joined(separator: ", "))
+                            Text(self.selectedExcludedLetters.isEmpty ? excludedLettersText : self.selectedExcludedLetters.joined(separator: ", "))
                                 .font(.callout)
                             
                             Image(systemName: "chevron.up.chevron.down")
@@ -204,12 +217,12 @@ struct FilterOptionsView: View {
                                 .foregroundStyle(Color(uiColor: .tertiarySystemBackground))
                         }
                     }
-                    .onChange(of: appManager.selectedExcludedLetters) { oldValue, newValue in
+                    .onChange(of: self.selectedExcludedLetters) { oldValue, newValue in
                         if newValue.count == 0 {
-                            appManager.isFilteringExcludeLetters = false
+                            self.isFilteringExcludeLetters = false
                         } else {
-                            appManager.selectedExcludedLetters.sort()
-                            appManager.isFilteringExcludeLetters = true
+                            self.selectedExcludedLetters.sort()
+                            self.isFilteringExcludeLetters = true
                         }
                     }
                 }
@@ -219,7 +232,7 @@ struct FilterOptionsView: View {
                 HStack {
                     Spacer()
                     Button {
-                        appManager.resetFilters()
+                        self.resetFilters()
                     } label: {
                         Text("Reset filter")
                             .font(.headline)
@@ -232,16 +245,14 @@ struct FilterOptionsView: View {
         }
         .padding(.top, -20)
         .onTapGesture {
-            focusedField = nil
+            self.focusedField = nil
         }
         .scrollDisabled(true)
         .navigationTitle("Filter Options")
         .navigationBarTitleDisplayMode(.inline)
         .onDisappear {
             withAnimation {
-                DispatchQueue.main.async {
-                    self.focusedField = nil
-                }
+                self.focusedField = nil
             }
         }
     }
@@ -255,6 +266,22 @@ struct FilterOptionsView: View {
                 focusedField = .endsWith
             case .endsWith:
                 focusedField = nil
+        }
+    }
+    
+    func resetFilters() {
+        self.isFilteringSearchWord = true
+        self.isFilteringStartWith = false
+        self.startsWithFilter = ""
+        self.isFilteringEndsWith = false
+        self.endsWithFilter = ""
+        self.isFilteringIncludedLetters = false
+        self.isFilteringExcludeLetters = false
+        if !selectedIncludedLetters.isEmpty {
+            self.selectedIncludedLetters.removeAll()
+        }
+        if !selectedExcludedLetters.isEmpty {
+            self.selectedExcludedLetters.removeAll()
         }
     }
 }
@@ -272,7 +299,7 @@ struct ThePhraseTextFieldStyle: TextFieldStyle {
     }
 }
 
-#Preview {
-    FilterOptionsView()
-        .environmentObject(AppManager())
-}
+//#Preview {
+//    FilterOptionsView()
+//        .environmentObject(AppManager())
+//}

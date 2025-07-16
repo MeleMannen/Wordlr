@@ -17,11 +17,11 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
     
     @Published var streaks: [StreakEntity] = []
     @Published var normalStreaks: [NormalStreakEntity] = []
-    @Published var gameRecords: [GameRecordEntity] = []
-    @Published var modelContext: ModelContext?
-    @Published var streakManager: StreakManager?
-    @Published var normalStreakManager: NormalStreakManager?
-    @Published var gameRecordManager: GameRecordManager?
+    var gameRecords: [GameRecordEntity] = []
+    var modelContext: ModelContext?
+    var streakManager: StreakManager?
+    var normalStreakManager: NormalStreakManager?
+    var gameRecordManager: GameRecordManager?
     
     
     @Published var selectedLanguage: LanguageSelection = .norwegian
@@ -31,52 +31,38 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
     @Published var numberOfLetters: Int = 5
     @Published var word: String = ""
     @Published var words: Words?
+    @Published var dailyWords: Words?
     @Published var board: [[Letter]] = []
     @Published var keyboard: [[KeyBoardLetter]] = []
     @Published var currentRow = 0
     @Published var currentIndex = 0
     @Published var isGameOver: Bool = false
-    @Published var message: String = ""
-    @Published var didTapSubmitButton: Bool = false
-    @Published var didTapBackButton: Bool = false
-    @Published var didTapResetButton: Bool = false
-    @Published var didTapNewGameButton: Bool = false
-    @Published var didTapPlaySomethingElseButton: Bool = false
-    @Published var didTapPlayDailyWordButton: Bool = false
-    @Published var didTapFakePlayDailyWordButton: Bool = false
-    @Published var didTapPlayNormalButton: Bool = false
-    @Published var didTapSearchButton: Bool = false
-    @Published var didTapInfoButton: Bool = false
-    @Published var didTapShowDefinitionButton: Bool = false
-    @Published var isShowingAlreadyPlayedAlert: Bool = false
-    @Published var alertItem: AlertItem?
-    @Published var activeAlert: ActiveAlert = .none
-    @Published var isShowingCurrentDefinition: Bool = false
-    @Published var searchedWord: String = ""
+    var message: String = ""
     @Published var isAnimating: Bool = false
-    @Published var dailyWords: Words?
     @Published var isShaking: Bool = false
     @Published var submitOpacity: Double = 0.5
-    @Published var shouldAnimateStreak: Bool = false
-    @Published var startDate: Date = Date()
-    @Published var endDate: Date = Date()
-    @Published var hintsUsed: Int = 0
+    var startDate: Date = Date()
+    var endDate: Date = Date()
     @Published var hasSharedResult: Bool = false
     
     
-    @Published var isShowingFilterOptions: Bool = false
-    @Published var isFilteringSearchWord: Bool = true
-    @Published var isFilteringStartWith: Bool = false
-    @Published var startsWithFilter: String = ""
-    @Published var isFilteringEndsWith: Bool = false
-    @Published var endsWithFilter: String = ""
-    @Published var isFilteringExcludeLetters: Bool = false
-    @Published var isFilteringIncludedLetters: Bool = false
-    @Published var selectedExcludedLetters: [String] = []
-    @Published var selectedIncludedLetters: [String] = []
-    let englishLetters: [String] = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
-    let norwegianLetters: [String] = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "Æ", "Ø", "Å"]
+//    @Published var isFilteringSearchWord: Bool = true
+//    @Published var isFilteringStartWith: Bool = false
+//    @Published var startsWithFilter: String = ""
+//    @Published var isFilteringEndsWith: Bool = false
+//    @Published var endsWithFilter: String = ""
+//    @Published var isFilteringExcludeLetters: Bool = false
+//    @Published var isFilteringIncludedLetters: Bool = false
+//    @Published var selectedExcludedLetters: [String] = []
+//    @Published var selectedIncludedLetters: [String] = []
+    @Published var didWinGame: GameEndState = .lost
     
+//    let englishLetters: [String] = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
+//    let norwegianLetters: [String] = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "Æ", "Ø", "Å"]
+    let gradient = LinearGradient(colors: [.orange, .yellow, .yellow, .yellow, .yellow, .white], startPoint: .bottomLeading, endPoint: .topTrailing)
+    let shadowGradient = LinearGradient(colors: [.orange, .yellow, .yellow, .yellow, .yellow], startPoint: .bottomLeading, endPoint: .topTrailing)
+    
+    private var hintsUsed: Int = 0
     private var audioPlayer: AVPlayer?
     private var rewardedAd: RewardedAd?
     
@@ -429,6 +415,17 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
         
     }
     
+    func animateRemovingLetter(rowIndex: Int, colIndex: Int) {
+        self.board[rowIndex][colIndex].scale = 0.85
+        withAnimation(.interpolatingSpring(mass: 0.7, stiffness: 100, damping: 8, initialVelocity: 1)
+            .speed(1)
+            .delay(0)) {
+                self.board[rowIndex][colIndex].scale = 1.0
+                
+            }
+        
+    }
+    
     func setStreak(state: GameEndState) {
         switch state {
             case .won:
@@ -522,6 +519,7 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
                         if self.word == guessedWord {
                             print("Du vant!!")
                             self.isGameOver = true
+                            self.didWinGame = .won
                             self.endDate = Date()
                             self.addGameRecord(gameRecord: GameRecord(date: self.startDate, state: .won, mode: self.selectedGameMode, word: self.word, language: self.selectedLanguage, numberOfLetters: self.numberOfLetters, numberOfGuesses: self.currentRow, hintsUsed: self.hintsUsed, board: self.board, endDate: self.endDate))
                             if self.selectedGameMode == .dailyWord {
@@ -537,6 +535,7 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
                             if self.currentRow == self.board.count {
                                 print("Du tapte: \(guessedWord), ordet var \(self.word)")
                                 self.isGameOver = true
+                                self.didWinGame = .lost
                                 self.endDate = Date()
                                 self.addGameRecord(gameRecord: GameRecord(date: self.startDate, state: .lost, mode: self.selectedGameMode, word: self.word, language: self.selectedLanguage, numberOfLetters: self.numberOfLetters, numberOfGuesses: self.currentRow, hintsUsed: self.hintsUsed, board: self.board, endDate: self.endDate))
                                 if self.selectedGameMode == .dailyWord {
@@ -563,10 +562,12 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
                     print("Ikke nok bokstaver: \(guessedWord)")
                 }
                 
-                self.isShaking = true
-                withAnimation(Animation.spring(response: 0.2, dampingFraction: 0.1, blendDuration: 0.1)) {
-                    self.isShaking = false
-                }
+//                DispatchQueue.main.async {
+                    self.isShaking = true
+                    withAnimation(Animation.spring(response: 0.2, dampingFraction: 0.1, blendDuration: 0.1)) {
+                        self.isShaking = false
+                    }
+//                }
                 
             }
         }
@@ -616,7 +617,7 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
                     case .correctPosition:
                         shareText += "🟩"
                     case .correctLetter:
-                        shareText += "🟨"
+                        shareText += "🟧"
                     case .usedButNotCorrect:
                         shareText += "⬜️"
                     default:
@@ -671,36 +672,26 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
         self.hintsUsed = 0
         self.isGameOver = false
         self.hasSharedResult = false
+        self.didWinGame = .lost
         self.language = self.selectedLanguage
         self.gameMode = self.selectedGameMode
         self.startDate = Date()
     }
     
-    func resetFilters() {
-        self.isFilteringSearchWord = true
-        self.isFilteringStartWith = false
-        self.startsWithFilter = ""
-        self.isFilteringEndsWith = false
-        self.endsWithFilter = ""
-        self.isFilteringIncludedLetters = false
-        self.isFilteringExcludeLetters = false
-        if !selectedIncludedLetters.isEmpty {
-            self.selectedIncludedLetters.removeAll()
-        }
-        if !selectedExcludedLetters.isEmpty {
-            self.selectedExcludedLetters.removeAll()
-        }
-    }
+    
     
     func playAudio(from source: String) {
-        print("Playing audio from: \(source)")
-        guard let url = URL(string: source) else {
-            print("Invalid URL")
-            return
-        }
+        audioPlayer?.pause()
+        audioPlayer = nil // Release previous player
         
+        guard let url = URL(string: source) else { return }
         audioPlayer = AVPlayer(url: url)
         audioPlayer?.play()
+    }
+    
+    deinit {
+        audioPlayer?.pause()
+        audioPlayer = nil
     }
     
     func fetchStreaks() {

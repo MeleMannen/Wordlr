@@ -21,8 +21,7 @@ struct SettingsView: View {
     
     @AppStorage("userWantsAds") var userWantAds: Bool = false
     @EnvironmentObject var appManager: AppManager
-    @State var adIsLoaded: Bool = false
-    @State var isShowingAds: Bool = true
+    
     var body: some View {
         GeometryReader { geometry in
             NavigationStack {
@@ -254,10 +253,6 @@ struct SettingsView: View {
                         Text("Stats and History")
                     }
                     
-                    
-                    
-                    
-                    
                 }
                 .navigationTitle("Settings")
                 .onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)) { _ in
@@ -265,20 +260,20 @@ struct SettingsView: View {
                         ATTrackingManager.requestTrackingAuthorization(completionHandler: { status in })
                     }
                 }
-                
-                
-                if self.userWantAds && self.isShowingAds {
-                    if self.adIsLoaded {
-                        Spacer()
+                .safeAreaInset(edge: .bottom) {
+                    if self.userWantAds {
+                        if #available(iOS 26.0, *) {
+                            let adSize = currentOrientationAnchoredAdaptiveBanner(width: geometry.size.width - 40)
+                            BannerViewContainer(adSize)
+                                .frame(width: adSize.size.width, height: adSize.size.height)
+                                .padding(.bottom, 5)
+                        } else {
+                            let adSize = currentOrientationAnchoredAdaptiveBanner(width: geometry.size.width)
+                            BannerViewContainer(adSize)
+                                .frame(width: adSize.size.width, height: adSize.size.height)
+                        }
                     }
-                    let adSize = currentOrientationAnchoredAdaptiveBanner(width: geometry.size.width - 40)
-                    BannerViewContainer(adSize, adIsLoaded: self.$adIsLoaded, isShowingAds: self.$isShowingAds)
-                        .frame(width: adSize.size.width, height: adSize.size.height)
-                        .padding(.bottom, 7)
-                        .opacity(self.adIsLoaded ? 1 : 0)
-                    
                 }
-                
             }
         }
     }
@@ -287,13 +282,9 @@ struct SettingsView: View {
 struct BannerViewContainer: UIViewRepresentable {
     typealias UIViewType = BannerView
     let adSize: AdSize
-    @Binding var adIsLoaded: Bool
-    @Binding var isShowingAds: Bool
     
-    init(_ adSize: AdSize, adIsLoaded: Binding<Bool>, isShowingAds: Binding<Bool>) {
+    init(_ adSize: AdSize) {
         self.adSize = adSize
-        self._adIsLoaded = adIsLoaded
-        self._isShowingAds = isShowingAds
     }
     
     func makeUIView(context: Context) -> BannerView {
@@ -301,46 +292,34 @@ struct BannerViewContainer: UIViewRepresentable {
         banner.adUnitID = "ca-app-pub-3940256099942544/2435281174" // ca-app-pub-7619403750703078/6852604335
         banner.load(Request())
         banner.delegate = context.coordinator
-        banner.isHidden = true
         return banner
     }
     
     func updateUIView(_ uiView: BannerView, context: Context) {}
     
     func makeCoordinator() -> BannerCoordinator {
-        return BannerCoordinator(self, adIsLoaded: self.$adIsLoaded, isShowingAds: self.$isShowingAds)
+        return BannerCoordinator(self)
     }
     
     class BannerCoordinator: NSObject, BannerViewDelegate {
         let parent: BannerViewContainer
-        @Binding var adIsLoaded: Bool
-        @Binding var isShowingAds: Bool
         
-        init(_ parent: BannerViewContainer, adIsLoaded: Binding<Bool>, isShowingAds: Binding<Bool>) {
+        init(_ parent: BannerViewContainer) {
             self.parent = parent
-            self._adIsLoaded = adIsLoaded
-            self._isShowingAds = isShowingAds
         }
         
         // MARK: - GADBannerViewDelegate methods
         
         func bannerViewDidReceiveAd(_ bannerView: BannerView) {
             print("DID RECEIVE AD.")
-            self.adIsLoaded = true
-            self.isShowingAds = true
             bannerView.alpha = 0
-            bannerView.isHidden = false
             UIView.animate(withDuration: 1, animations: {
                 bannerView.alpha = 1
             })
         }
 
-        
         func bannerView(_ bannerView: BannerView, didFailToReceiveAdWithError error: Error) {
             print("FAILED TO RECEIVE AD: \(error.localizedDescription)")
-            self.adIsLoaded = false
-            self.isShowingAds = false
-            bannerView.isHidden = true
         }
     }
 }

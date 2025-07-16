@@ -38,7 +38,7 @@ struct WordleApp: App {
                     .tabItem {
                         Label("Stats", systemImage: "chart.bar.yaxis")
                     }
-                    .environmentObject(appManager)
+//                    .environmentObject(appManager)
                 
                 HistoryView()
                     .tag(TabSelection.history)

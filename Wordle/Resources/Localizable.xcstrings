@@ -308,23 +308,6 @@
         }
       }
     },
-    "Date" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Date"
-          }
-        },
-        "nb" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Dato"
-          }
-        }
-      }
-    },
     "Date: " : {
       "localizations" : {
         "en" : {
@@ -1092,7 +1075,34 @@
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Antall Gjetninger"
+            "value" : "Antall Gjetninger:"
+          }
+        }
+      }
+    },
+    "Number of Letters:" : {
+      "localizations" : {
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Antall Bokstaver:"
+          }
+        }
+      }
+    },
+    "number_letters" : {
+      "comment" : "Daily Word Mode with number of letters",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld Letters"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld Bokstaver"
           }
         }
       }
@@ -1594,6 +1604,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "System"
+          }
+        }
+      }
+    },
+    "The Board" : {
+      "localizations" : {
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Brettet"
           }
         }
       }

@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct FilterView: View {
-    @EnvironmentObject var appManager: AppManager
+//    @EnvironmentObject var appManager: AppManager
     @Binding var numberOfLetters: Int
     @Binding var selectedLanguage: LanguageSelection
     @Binding var gameMode: GameMode

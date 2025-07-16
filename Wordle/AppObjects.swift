@@ -183,12 +183,6 @@ enum GameEndState: Codable {
     case lost
 }
 
-enum ActiveAlert {
-    case none
-    case first
-    case second
-}
-
 enum GameMode: String, Codable, CaseIterable, Identifiable {
     case dailyWord
     case normal

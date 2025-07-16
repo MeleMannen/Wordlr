@@ -39,8 +39,15 @@ struct BoardView: View {
                                             .foregroundStyle(letter.state == .notUsed ? AnyShapeStyle(.black) : AnyShapeStyle(Color.white))
                                             .frame(width: geometry2.size.height / CGFloat(6), height: geometry2.size.height / CGFloat(6))
                                             .background {
-                                                RoundedRectangle(cornerRadius: 5)
-                                                    .fill(letter.state == .correctPosition ? .green : (letter.state == .correctLetter ? .orange : (letter.state == .usedButNotCorrect ? Color(UIColor.darkGray) : self.colorForUnused)))
+                                                if self.gameRecord.mode == .dailyWord && self.gameRecord.state == .won && (rowIndex == self.gameRecord.numberOfGuesses - 1 || rowIndex == self.board.count) {
+                                                    
+                                                    RoundedRectangle(cornerRadius: 5)
+                                                        .foregroundStyle(appManager.gradient)
+                                                        .gradientShadow(gradient: appManager.shadowGradient, radius: 3, x: 0, y: 0)
+                                                } else {
+                                                    RoundedRectangle(cornerRadius: 5)
+                                                        .fill(letter.state == .correctPosition ? .green : (letter.state == .correctLetter ? .orange : (letter.state == .usedButNotCorrect ? Color(UIColor.darkGray) : self.colorForUnused)))
+                                                }
                                             }
                                         
                                     } else {
@@ -49,8 +56,15 @@ struct BoardView: View {
                                             .foregroundStyle(letter.state == .notUsed ? AnyShapeStyle(.black) : AnyShapeStyle(Color.white))
                                             .frame(width: geometry2.size.height / CGFloat(appManager.numberOfLetters + 1), height: geometry2.size.height / CGFloat(self.gameRecord.numberOfLetters + 1))
                                             .background {
-                                                RoundedRectangle(cornerRadius: 5)
-                                                    .fill(letter.state == .correctPosition ? .green : (letter.state == .correctLetter ? .orange : (letter.state == .usedButNotCorrect ? Color(UIColor.darkGray) : self.colorForUnused)))
+                                                if self.gameRecord.mode == .dailyWord && self.gameRecord.state == .won && (rowIndex == self.gameRecord.numberOfGuesses - 1 || rowIndex == self.board.count) {
+                                                    
+                                                    RoundedRectangle(cornerRadius: 5)
+                                                        .foregroundStyle(appManager.gradient)
+                                                        .gradientShadow(gradient: appManager.shadowGradient, radius: 3, x: 0, y: 0)
+                                                } else {
+                                                    RoundedRectangle(cornerRadius: 5)
+                                                        .fill(letter.state == .correctPosition ? .green : (letter.state == .correctLetter ? .orange : (letter.state == .usedButNotCorrect ? Color(UIColor.darkGray) : self.colorForUnused)))
+                                                }
                                             }
                                     }
                                 }
@@ -67,7 +81,7 @@ struct BoardView: View {
             
             
         }
-        .navigationTitle("Guess The Phrase")
+        .navigationTitle("The Board")
         .navigationBarTitleDisplayMode(.inline)
     }
 }
