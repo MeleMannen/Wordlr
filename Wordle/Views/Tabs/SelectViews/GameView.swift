@@ -64,10 +64,10 @@ struct GameView: View {
                                                 }
                                             }
                                             .rotationEffect(.degrees(letter.degreee), anchor: .center)
-                                            .animation(.easeInOut(duration: 0.5), value: appManager.didWinGame)
                                             .animation(.interpolatingSpring(mass: 0.7, stiffness: 100, damping: 8, initialVelocity: 1)
                                                 .speed(1)
                                                 .delay(0), value: letter.degreee)
+                                            .animation(.easeInOut(duration: 0.5), value: appManager.didWinGame)
                                             .scaleEffect(letter.scale, anchor: .center)
                                             .offset(x: rowIndex == appManager.currentRow ? (appManager.isShaking ? -15 : 0) : 0)
                                             .onChange(of: letter.state) {
@@ -99,10 +99,10 @@ struct GameView: View {
                                                 }
                                             }
                                             .rotationEffect(.degrees(letter.degreee), anchor: .center)
-                                            .animation(.easeInOut(duration: 0.5), value: appManager.didWinGame)
                                             .animation(.interpolatingSpring(mass: 0.7, stiffness: 100, damping: 8, initialVelocity: 1)
                                                 .speed(1)
                                                 .delay(0), value: letter.degreee)
+                                            .animation(.easeInOut(duration: 0.5), value: appManager.didWinGame)
                                             .scaleEffect(letter.scale, anchor: .center)
                                             .offset(x: rowIndex == appManager.currentRow ? (appManager.isShaking ? -15 : 0) : 0)
                                             .onChange(of: letter.state) {
@@ -376,7 +376,7 @@ struct GameView: View {
                             
                             Spacer()
                             
-                            NavigationLink(destination: WordDefinitionView(word: appManager.word).environmentObject(appManager), label: {
+                            NavigationLink(destination: WordDefinitionView(word: appManager.word, language: appManager.selectedLanguage), label: {
                                 Text("Show Definition")
                                     .conditionalShadow(color: .black.opacity(0.5), radius: 4, x: 4, y: 4)
                                     .font(.title).bold()
@@ -550,7 +550,7 @@ struct GrowingButton: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .scaleEffect(configuration.isPressed ? 1.05 : 1)
-            .animation(.easeOut(duration: 0.2), value: configuration.isPressed)
+            .animation(.easeInOut(duration: 0.15), value: configuration.isPressed)
     }
 }
 
@@ -558,7 +558,7 @@ struct ScalingButton: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .scaleEffect(configuration.isPressed ? 1.1 : 1)
-            .animation(.easeOut(duration: 0.2), value: configuration.isPressed)
+            .animation(.easeInOut(duration: 0.15), value: configuration.isPressed)
     }
 }
 

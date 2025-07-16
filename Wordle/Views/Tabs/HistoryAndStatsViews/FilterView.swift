@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct FilterView: View {
-//    @EnvironmentObject var appManager: AppManager
     @Binding var numberOfLetters: Int
     @Binding var selectedLanguage: LanguageSelection
     @Binding var gameMode: GameMode
@@ -94,7 +93,7 @@ struct FilterView: View {
                             .foregroundStyle(Color(uiColor: .tertiarySystemBackground))
                     }
                 }
-                .sensoryFeedback(.selection, trigger: gameMode)
+                .sensoryFeedback(.selection, trigger: showsWhenHintsUsed)
                 .modifier(ConditionalGlassEffect())
             }
             .padding(.leading)
@@ -105,5 +104,4 @@ struct FilterView: View {
 
 //#Preview {
 //    FilterView(numberOfLetters: 9, selectedLanguage: .both, gameMode: .both)
-//        .environmentObject(AppManager())
 //}

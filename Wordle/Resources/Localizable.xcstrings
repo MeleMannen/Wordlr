@@ -1059,7 +1059,7 @@
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Antall Gjetninger"
+            "value" : "Antall Gjett"
           }
         }
       }
@@ -1075,7 +1075,7 @@
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Antall Gjetninger:"
+            "value" : "Antall Gjett:"
           }
         }
       }
@@ -1442,7 +1442,7 @@
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Vis definisjon"
+            "value" : "Vis Definisjon"
           }
         }
       }
@@ -1917,7 +1917,7 @@
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Du kan se historikken din ved å trykke på Historikk. Dette vil vise deg historikken din, inkludert frasene du har gjettet, antall gjetninger du trengte, antall hint som ble brukt og datoen for spillet. Du kan også filtrere historien din etter språk, spillmodus og antall bokstaver i frasen."
+            "value" : "Du kan se historikken din ved å trykke på Historikk. Dette vil vise deg historikken din, inkludert frasene du har gjettet, antall gjett du trengte, antall hint som ble brukt og datoen for spillet. Du kan også filtrere historien din etter språk, spillmodus og antall bokstaver i frasen."
           }
         }
       }

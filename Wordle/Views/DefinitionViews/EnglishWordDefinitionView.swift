@@ -6,12 +6,14 @@
 //
 
 import SwiftUI
+import AVFoundation
 
 struct EnglishWordDefinitionView: View {
-    @EnvironmentObject var appManager: AppManager
+    @EnvironmentObject private var definitionManager: DefinitionManager
     @State var englishDefinition: [EnglishDefinition] = []
     @State var word: String = ""
     @State var isLoading: Bool = true
+    @State private var audioPlayer: AVPlayer?
     
     var body: some View {
         VStack {
@@ -70,7 +72,7 @@ struct EnglishWordDefinitionView: View {
                                                                     Image(systemName: "play.fill")
                                                                         .foregroundColor(.blue)
                                                                         .onTapGesture {
-                                                                            appManager.playAudio(from: phonetic.audio)
+                                                                            definitionManager.playAudio(from: phonetic.audio)
                                                                         }
                                                                 }
                                                             }
@@ -255,7 +257,7 @@ struct EnglishWordDefinitionView: View {
                     }
                 }
                 .refreshable {
-                    appManager.getEnglishDefinition(for: self.word) { englishDefinition in
+                    definitionManager.getEnglishDefinition(for: self.word) { englishDefinition in
                         self.englishDefinition = englishDefinition
                         print("EnglishDefinition: \(String(describing: self.englishDefinition))")
                         dump(self.englishDefinition)
@@ -270,18 +272,21 @@ struct EnglishWordDefinitionView: View {
         }
         .navigationTitle("\(self.word)")
         .onAppear {
-            appManager.getEnglishDefinition(for: self.word) { englishDefinition in
+            definitionManager.getEnglishDefinition(for: self.word) { englishDefinition in
                 self.englishDefinition = englishDefinition
                 self.isLoading = false
                 print("EnglishDefinition: \(String(describing: self.englishDefinition))")
                 dump(self.englishDefinition)
             }
         }
+        
     }
+    
+    
 }
 
 #Preview {
     EnglishWordDefinitionView(word: "World")
-        .environmentObject(AppManager())
+        .environmentObject(DefinitionManager())
         
 }

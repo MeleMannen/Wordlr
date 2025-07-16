@@ -11,7 +11,6 @@ import SwiftUI
 //#endif
 
 struct NAOBView: View {
-    @EnvironmentObject var appManager: AppManager
     @State var word: String = ""
 //#if canImport(WebKit)
 //    @State var page: WebPage = WebPage()
@@ -34,5 +33,4 @@ struct NAOBView: View {
 
 #Preview {
     NAOBView(word: "Sessing")
-        .environmentObject(AppManager())
 }

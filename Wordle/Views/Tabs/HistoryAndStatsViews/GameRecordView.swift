@@ -9,11 +9,13 @@ import SwiftUI
 
 struct GameRecordView: View {
     @Environment(\.colorScheme) private var colorScheme
-    @EnvironmentObject var appManager: AppManager
     var gameRecord: GameRecord
     @State private var didTap: Bool = false
     @State private var hasSharedResult: Bool = false
     @State private var timeUsedString: String = ""
+    
+    let gradient = LinearGradient(colors: [.orange, .yellow, .yellow, .yellow, .yellow, .white], startPoint: .bottomLeading, endPoint: .topTrailing)
+    let shadowGradient = LinearGradient(colors: [.orange, .yellow, .yellow, .yellow, .yellow], startPoint: .bottomLeading, endPoint: .topTrailing)
     
     private let formatter1: DateFormatter = {
         let formatter = DateFormatter()
@@ -40,7 +42,7 @@ struct GameRecordView: View {
                     HStack(alignment: .center) {
                         Text("\(gameRecord.word)")
                             .font(.largeTitle).bold()
-                            .conditionalShadow(color: .black.opacity(0.5), radius: 10, x: 6, y: 6)
+                            .conditionalShadow(color: .black.opacity(0.5), radius: 3, x: 6, y: 6)
                         
                         Spacer()
                         if gameRecord.mode == .dailyWord && gameRecord.state == .won {
@@ -51,10 +53,10 @@ struct GameRecordView: View {
                                     Circle()
                                         .foregroundStyle(LinearGradient(colors: [.orange, .yellow, .white], startPoint: .bottomLeading, endPoint: .topTrailing))
 //                                        .padding(5)
-                                        .gradientShadow(gradient: appManager.shadowGradient, radius: 3, x: 0, y: 0)
+                                        .gradientShadow(gradient: self.shadowGradient, radius: 3, x: 0, y: 0)
                                         .conditionalShadow(color: .black.opacity(0.5), radius: 3, x: 4, y: 4)
                                 }
-                                .font(.system(size: 40))
+                                .font(.largeTitle).bold()
                                 
                                 
                             
@@ -64,11 +66,10 @@ struct GameRecordView: View {
                                 .padding(12)
                                 .background {
                                     Circle()
-                                        .foregroundColor(gameRecord.state == .won ? .green : .red)
+                                        .foregroundStyle(gameRecord.state == .won ? .green : .red)
                                         .conditionalShadow(color: .black.opacity(0.3), radius: 3, x: 4, y: 4)
-//                                        .conditionalShadow(color: .black.opacity(0.5), radius: 5, x: 4, y: 4)
                                 }
-                                .font(.system(size: 40))
+                                .font(.largeTitle).bold()
                         }
                     }
                     .padding(.top)
@@ -85,9 +86,9 @@ struct GameRecordView: View {
 //                                GradientShadowView(text: "\(String(formatter1.string(from: gameRecord.date)))", gradient: appManager.gradient, alignment: .trailing, blurRadius: 1)
                                 Text("\(String(formatter1.string(from: gameRecord.date)))")
                                     .font(.title2)
-                                    .foregroundStyle(appManager.gradient)
+//                                    .foregroundStyle(self.gradient)
 //                                    .gradientShadow(gradient: appManager.shadowGradient, radius: 1, x: 0, y: 0)
-                                    .conditionalShadow(color: .black.opacity(0.5), radius: 4, x: 4, y: 4)
+                                    .conditionalShadow(color: .black.opacity(0.6), radius: 4, x: 8, y: 8)
                             } else {
                                 Text("\(String(formatter1.string(from: gameRecord.date)))")
                                     .font(.title2)
@@ -104,9 +105,9 @@ struct GameRecordView: View {
                             if gameRecord.mode == .dailyWord && gameRecord.state == .won {
                                 Text("\(gameRecord.numberOfLetters)")
                                     .font(.title2)
-                                    .foregroundStyle(appManager.gradient)
+//                                    .foregroundStyle(self.gradient)
 //                                    .gradientShadow(gradient: appManager.shadowGradient, radius: 1, x: 0, y: 0)
-                                    .conditionalShadow(color: .black.opacity(0.5), radius: 4, x: 4, y: 4)
+                                    .conditionalShadow(color: .black.opacity(0.6), radius: 4, x: 8, y: 8)
                             } else {
                                 Text("\(gameRecord.numberOfLetters)")
                                     .font(.title2)
@@ -125,9 +126,9 @@ struct GameRecordView: View {
                             if gameRecord.mode == .dailyWord && gameRecord.state == .won {
                                 Text("\(gameRecord.language.localizedName)")
                                     .font(.title2)
-                                    .foregroundStyle(appManager.gradient)
+//                                    .foregroundStyle(self.gradient)
 //                                    .gradientShadow(gradient: appManager.shadowGradient, radius: 1, x: 0, y: 0)
-                                    .conditionalShadow(color: .black.opacity(0.5), radius: 4, x: 4, y: 4)
+                                    .conditionalShadow(color: .black.opacity(0.6), radius: 4, x: 8, y: 8)
                             } else {
                                 Text("\(gameRecord.language.localizedName)")
                                     .font(.title2)
@@ -143,10 +144,12 @@ struct GameRecordView: View {
                             Spacer()
                             if gameRecord.mode == .dailyWord && gameRecord.state == .won {
                                 Text("\(gameRecord.mode.localizedName)")
-                                    .font(.title2)
-                                    .foregroundStyle(appManager.gradient)
+                                    
+//                                    .foregroundStyle(.primary)
+//                                    .foregroundStyle(self.gradient)
 //                                    .gradientShadow(gradient: appManager.shadowGradient, radius: 1, x: 0, y: 0)
-                                    .conditionalShadow(color: .black.opacity(0.5), radius: 4, x: 4, y: 4)
+                                    .conditionalShadow(color: .black.opacity(0.6), radius: 4, x: 8, y: 8)
+                                    .font(.title2)
                             } else {
                                 Text("\(gameRecord.mode.localizedName)")
                                     .font(.title2)
@@ -161,10 +164,12 @@ struct GameRecordView: View {
                             Spacer()
                             if gameRecord.mode == .dailyWord && gameRecord.state == .won {
                                 Text("\(gameRecord.numberOfGuesses)")
-                                    .font(.title2)
-                                    .foregroundStyle(appManager.gradient)
+                                    
+//                                    .foregroundStyle(.green)
+//                                    .foregroundStyle(self.gradient)
 //                                    .gradientShadow(gradient: appManager.shadowGradient, radius: 1, x: 0, y: 0)
-                                    .conditionalShadow(color: .black.opacity(0.5), radius: 4, x: 4, y: 4)
+                                    .conditionalShadow(color: .black.opacity(1.0), radius: 8, x: 8, y: 8)
+                                    .font(.title2)
                             } else {
                                 Text("\(gameRecord.numberOfGuesses)")
                                     .font(.title2)
@@ -183,9 +188,9 @@ struct GameRecordView: View {
                                 if gameRecord.mode == .dailyWord && gameRecord.state == .won {
                                     Text("\(hintsUsed)")
                                         .font(.title2)
-                                        .foregroundStyle(appManager.gradient)
+//                                        .foregroundStyle(self.gradient)
 //                                        .gradientShadow(gradient: appManager.shadowGradient, radius: 1, x: 0, y: 0)
-                                        .conditionalShadow(color: .black.opacity(0.5), radius: 4, x: 4, y: 4)
+                                        .conditionalShadow(color: .black.opacity(0.6), radius: 4, x: 8, y: 8)
                                         
                                 } else {
                                     Text("\(hintsUsed)")
@@ -204,9 +209,9 @@ struct GameRecordView: View {
                                 if gameRecord.mode == .dailyWord && gameRecord.state == .won {
                                     Text(self.timeUsedString)
                                         .font(.title2)
-                                        .foregroundStyle(appManager.gradient)
+//                                        .foregroundStyle(self.gradient)
 //                                        .gradientShadow(gradient: appManager.shadowGradient, radius: 1, x: 0, y: 0)
-                                        .conditionalShadow(color: .black.opacity(0.5), radius: 4, x: 4, y: 4)
+                                        .conditionalShadow(color: .black.opacity(0.6), radius: 4, x: 8, y: 8)
                                 } else {
                                     Text(self.timeUsedString)
                                         .font(.title2)
@@ -217,10 +222,10 @@ struct GameRecordView: View {
                     }
                     .padding()
                     
-                    NavigationLink(destination: WordDefinitionView(word: gameRecord.word).environmentObject(appManager)) {
+                    NavigationLink(destination: WordDefinitionView(word: gameRecord.word, language: gameRecord.language)) {
                         Text("Show Definition")
                             .foregroundColor(.white)
-                            .conditionalShadow(color: .black.opacity(0.1), radius: 0.5, x: 1, y: 1)
+                            .conditionalShadow(color: .black.opacity(0.05), radius: 2, x: 1, y: 1)
                             .font(.title2).bold()
                             .padding(14)
                             .frame(maxWidth: .infinity)
@@ -240,21 +245,22 @@ struct GameRecordView: View {
                     
                     
                     if let board = gameRecord.board {
-                        NavigationLink(destination: BoardView(gameRecord: self.gameRecord, board: board).environmentObject(appManager)) {
+                        NavigationLink(destination: BoardView(gameRecord: self.gameRecord, board: board)) {
                             Text("View The Board")
                                 .foregroundColor(.white)
-                                .conditionalShadow(color: .black.opacity(0.1), radius: 1.5, x: 1, y: 1)
+                                .conditionalShadow(color: .black.opacity(0.05), radius: 1.5, x: 1, y: 1)
                                 .font(.title2).bold()
                                 .padding(14)
                                 .frame(maxWidth: .infinity)
                                 .background {
                                     if gameRecord.mode == .dailyWord && gameRecord.state == .won {
                                         RoundedRectangle(cornerRadius: 15)
-                                            .foregroundStyle(appManager.gradient)
-                                            .gradientShadow(gradient: appManager.shadowGradient, radius: 3, x: 0, y: 0)
+                                            .foregroundStyle(self.gradient)
+                                            .gradientShadow(gradient: self.shadowGradient, radius: 3, x: 0, y: 0)
                                     } else {
                                         RoundedRectangle(cornerRadius: 15)
                                             .fill(Color.orange)
+                                            .conditionalShadow(color: .black.opacity(0.05), radius: 2, x: 1, y: 1)
                                     }
                                 }
                                 .padding(.horizontal, 40)
@@ -275,9 +281,9 @@ struct GameRecordView: View {
                             Button {
                                 withAnimation {
                                     if let endDate = gameRecord.endDate {
-                                        UIPasteboard.general.string = appManager.getShareResult(row: gameRecord.numberOfGuesses, numberOfLetters: gameRecord.numberOfLetters, date: gameRecord.date, board: board, timeUsedString: appManager.getTimeUsedString(startDate: self.gameRecord.date, endDate: endDate))
+                                        UIPasteboard.general.string = self.getShareResult(row: gameRecord.numberOfGuesses, numberOfLetters: gameRecord.numberOfLetters, date: gameRecord.date, board: board, timeUsedString: self.getTimeUsedString(startDate: self.gameRecord.date, endDate: endDate))
                                     } else {
-                                        UIPasteboard.general.string = appManager.getShareResult(row: gameRecord.numberOfGuesses, numberOfLetters: gameRecord.numberOfLetters, date: gameRecord.date, board: board)
+                                        UIPasteboard.general.string = self.getShareResult(row: gameRecord.numberOfGuesses, numberOfLetters: gameRecord.numberOfLetters, date: gameRecord.date, board: board)
                                     }
                                     self.hasSharedResult = true
                                     self.didTap.toggle()
@@ -287,15 +293,16 @@ struct GameRecordView: View {
                                     Label("Copy Result", systemImage: hasSharedResult ? "doc.on.doc.fill" : "doc.on.doc")
                                         .font(.title2).bold()
                                         .contentTransition(.symbolEffect(.replace))
-                                        .foregroundStyle(appManager.gradient)
+                                        .foregroundStyle(self.gradient)
 //                                        .gradientShadow(gradient: appManager.shadowGradient, radius: 2, x: 0, y: 0)
 //                                        .shadow(color: .black.opacity(0.5), radius: 4, x: 4, y: 4)
-                                        .conditionalShadow(color: .black.opacity(0.5), radius: 4, x: 4, y: 4)
+                                        .conditionalShadow(color: .black.opacity(0.6), radius: 4, x: 8, y: 8)
                                         
                                 } else {
-                                    Label("Copy Result", systemImage: hasSharedResult ? "doc.on.doc.fill" : "doc.on.doc")
+                                    Label("Copy Result", systemImage: self.hasSharedResult ? "doc.on.doc.fill" : "doc.on.doc")
                                         .font(.title2).bold()
                                         .contentTransition(.symbolEffect(.replace))
+                                        .conditionalShadow(color: .black.opacity(0.6), radius: 4, x: 8, y: 8)
                                 }
                                 
                             }
@@ -322,16 +329,81 @@ struct GameRecordView: View {
             .navigationBarTitleDisplayMode(.inline)
             .onAppear {
                 if let endDate = gameRecord.endDate {
-                    self.timeUsedString = appManager.getTimeUsedString(startDate: self.gameRecord.date, endDate: endDate).trimmingCharacters(in: .whitespaces)
+                    self.timeUsedString = self.getTimeUsedString(startDate: self.gameRecord.date, endDate: endDate).trimmingCharacters(in: .whitespaces)
                 }
             }
             
         }
+    }
+    
+    func getShareResult(row: Int, numberOfLetters: Int, date: Date, board: [[Letter]], timeUsedString: String = "") -> String {
+        var numberOfRows = 6
+        if numberOfLetters > 6 {
+            numberOfRows = 8
+        } else if numberOfLetters == 6 {
+            numberOfRows = 7
+        }
+        
+        var letterString = String(format: NSLocalizedString("share_letter", comment: "Letter"), numberOfLetters)
+        if numberOfLetters > 1 {
+            letterString = String(format: NSLocalizedString("share_letters", comment: "Letters"), numberOfLetters)
+        }
+        
+        let rowString = String(format: NSLocalizedString("share_row", comment: "Row"))
+        let usedString = String(format: NSLocalizedString("share_used", comment: "Used"))
+        
+        
+        var shareText = "The Phrase \(formatter1.string(from: date)), \(letterString), \(row)/\(numberOfRows) \(rowString)\(timeUsedString != "" ? ", \(timeUsedString) \(usedString)" : ""):\n"
+        
+        var shouldBreak: Bool = false
+        for row in board {
+            for letter in row {
+                switch letter.state {
+                    case .correctPosition:
+                        shareText += "🟩"
+                    case .correctLetter:
+                        shareText += "🟧"
+                    case .usedButNotCorrect:
+                        shareText += "⬜️"
+                    default:
+                        shouldBreak = true
+                        break
+                }
+            }
+            if shouldBreak {
+                break
+            }
+            shareText += "\n"
+            
+        }
+        return shareText
+    }
+    
+    func getTimeUsedString(startDate: Date, endDate: Date) -> String {
+        print("End date: \(endDate)")
+        print("startDate: \(startDate)")
+        let timeInterval = endDate.timeIntervalSince(startDate)
+        print("Time interval: \(timeInterval)")
+        let hours = Int(timeInterval) / 3600
+        let minutes = (Int(timeInterval) % 3600) / 60
+        let seconds = Int(timeInterval) % 60
+        
+        var timeUsedString = ""
+        if hours > 0 {
+            timeUsedString += "\(hours)h "
+        }
+        if minutes > 0 {
+            timeUsedString += "\(minutes)m "
+        }
+        if seconds > 0 {
+            timeUsedString += "\(seconds)s"
+        }
+        print("Time used string: \(timeUsedString)")
+        return timeUsedString
     }
 }
 
 
 #Preview {
     GameRecordView(gameRecord: GameRecord(date: Date(), state: .won, mode: .dailyWord, word: "Word", language: .english, numberOfLetters: 4, numberOfGuesses: 2, hintsUsed: 0, board: [[Letter(letter: "W", state: .correctPosition), Letter(letter: "O", state: .correctPosition), Letter(letter: "R", state: .correctPosition), Letter(letter: "D", state: .correctPosition)], [Letter(letter: "W", state: .correctPosition), Letter(letter: "O", state: .correctPosition), Letter(letter: "R", state: .correctPosition), Letter(letter: "D", state: .correctPosition)]]))
-        .environmentObject(AppManager())
 }

@@ -10,11 +10,11 @@ import Charts
 import SwiftData
 
 struct StatsView: View {
-//    @EnvironmentObject var appManager: AppManager
     @AppStorage("defaultStatLanguage") private var defaultStatLanguage: LanguageSelection = .both
     @AppStorage("defaultStatNumberOfLetters") private var defaultStatNumberOfLetters: Int = 9
     @AppStorage("defaultStatGameMode") private var defaultStatGameMode: GameMode = .both
     @AppStorage("defaultStatHintsUsed") private var defaultStatHintsUsed: ShowsWhenHintsUsed = .both
+    @Binding var tabSelection: TabSelection
     @State private var hasFixedDefualtValues: Bool = false
     @State private var numberOfLetters: Int = 9
     @State private var selectedLanguage: LanguageSelection = .both
@@ -27,14 +27,13 @@ struct StatsView: View {
     @State private var totalCount: Int = 0
     @State private var winRate: Double = 0.0
     @State private var counts: [Int] = []
-    @Query private var gameRecords: [GameRecordEntity] = []
+    
+    @Query private var gameRecords: [GameRecordEntity]
     
     var body: some View {
         NavigationStack {
             VStack {
                 FilterView(numberOfLetters: $numberOfLetters, selectedLanguage: $selectedLanguage, gameMode: $gameMode, showsWhenHintsUsed: $showsWhenHintsUsed)
-//                    .environmentObject(appManager)
-                
                     
                 if self.filteredGameRecords.isEmpty {
                     ContentUnavailableView.init("No stats available for this selection.", systemImage: "exclamationmark.triangle.fill", description: Text("Try playing a game first or changing the selction."))
@@ -54,6 +53,7 @@ struct StatsView: View {
                             }
                         }
                         
+                        
                         VStack(alignment: .leading) {
                             HStack {
                                 Text("Win Rate:")
@@ -65,7 +65,6 @@ struct StatsView: View {
                             }
                             
                             Chart {
-                                
                                 BarMark(
                                     x: .value("Count", self.wonCount),
                                     y: .value("State", "✅"),
@@ -111,6 +110,7 @@ struct StatsView: View {
                             Chart {
                                 ForEach(Array(self.counts.enumerated()), id: \.offset) { index, count in
 //                                    let count = self.filteredGameRecords.filter { $0.gameRecord.numberOfGuesses == guess && $0.gameRecord.state == .won }.count
+//                                    let _ = print("hei")
                                     BarMark(
                                         x: .value("Count", count),
                                         y: .value("Number of Guesses", " \(index+1) "),
@@ -209,7 +209,6 @@ struct StatsView: View {
     }
 }
 
-#Preview {
-    StatsView()
-//        .environmentObject(AppManager())
-}
+//#Preview {
+//    StatsView()
+//}

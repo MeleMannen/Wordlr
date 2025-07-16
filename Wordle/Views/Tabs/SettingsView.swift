@@ -10,6 +10,7 @@ import GoogleMobileAds
 import AppTrackingTransparency
 
 struct SettingsView: View {
+    @Environment(\.scenePhase) private var scenePhase
     @AppStorage("appTheme") private var appTheme: AppTheme = .dark
     @AppStorage("defaultLanguage") private var defaultLanguage: LanguageSelection = .norwegian
     @AppStorage("defaultNumberOfLetters") private var defaultNumberOfLetters: Int = 5
@@ -20,7 +21,7 @@ struct SettingsView: View {
     @AppStorage("defaultStatHintsUsed") private var defaultStatHintsUsed: ShowsWhenHintsUsed = .both
     
     @AppStorage("userWantsAds") var userWantAds: Bool = false
-    @EnvironmentObject var appManager: AppManager
+    @State private var bannerReloadID = UUID()
     
     var body: some View {
         GeometryReader { geometry in
@@ -257,7 +258,12 @@ struct SettingsView: View {
                 .navigationTitle("Settings")
                 .onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)) { _ in
                     if self.userWantAds {
-                        ATTrackingManager.requestTrackingAuthorization(completionHandler: { status in })
+                        ATTrackingManager.requestTrackingAuthorization(completionHandler: { _ in })
+                    }
+                }
+                .onChange(of: self.scenePhase) { _, newPhase in
+                    if newPhase == .active, userWantAds {
+                        self.bannerReloadID = UUID()
                     }
                 }
                 .safeAreaInset(edge: .bottom) {
@@ -267,10 +273,12 @@ struct SettingsView: View {
                             BannerViewContainer(adSize)
                                 .frame(width: adSize.size.width, height: adSize.size.height)
                                 .padding(.bottom, 5)
+                                .id(bannerReloadID)
                         } else {
                             let adSize = currentOrientationAnchoredAdaptiveBanner(width: geometry.size.width)
                             BannerViewContainer(adSize)
                                 .frame(width: adSize.size.width, height: adSize.size.height)
+                                .id(bannerReloadID)
                         }
                     }
                 }
@@ -326,5 +334,4 @@ struct BannerViewContainer: UIViewRepresentable {
 
 #Preview {
     SettingsView()
-        .environmentObject(AppManager())
 }

@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct Info: View {
-    @EnvironmentObject var appManager: AppManager
     var body: some View {
         List {
             VStack(alignment: .leading) {
@@ -101,5 +100,4 @@ struct Info: View {
 
 #Preview {
     Info()
-        .environmentObject(AppManager())
 }

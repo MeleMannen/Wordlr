@@ -10,83 +10,24 @@ import SwiftUI
 struct SearchView: View {
     @EnvironmentObject var appManager: AppManager
     @Namespace private var namespace
-    @State var searchedWord: String = ""
-    @State var isShowingFilterOptions: Bool = false
-    @State var isFilteringSearchWord: Bool = true
-    @State var isFilteringStartWith: Bool = false
-    @State var startsWithFilter: String = ""
-    @State var isFilteringEndsWith: Bool = false
-    @State var endsWithFilter: String = ""
-    @State var isFilteringExcludeLetters: Bool = false
-    @State var isFilteringIncludedLetters: Bool = false
-    @State var selectedExcludedLetters: [String] = []
-    @State var selectedIncludedLetters: [String] = []
+    @State private var isShowingFilterOptions: Bool = false
     @State private var searchResults: [String] = []
     @State private var groupedWords: [String: [String]] = [:]
     @State private var sectionKeys: [String] = []
     
-//    var searchResults: [String] {
-//        var filteredWords = appManager.words?.wordGroups["\(appManager.numberOfLetters)"] ?? []
-////        let shuffledWords = filteredWords.shuffled()
-////        for word in shuffledWords {
-////            if word == shuffledWords.last {
-////                print("\"\(word)\"")
-////                print("fini")
-////            } else {
-////                print("\"\(word)\",")
-////            }
-////            
-////        }
-//        if self.isFilteringSearchWord && !self.searchedWord.isEmpty {
-//            filteredWords = filteredWords.filter { $0.contains(self.searchedWord.uppercased()) }
-//        }
-//        if self.isFilteringStartWith && !self.startsWithFilter.isEmpty {
-//            filteredWords = filteredWords.filter { $0.hasPrefix(self.startsWithFilter.uppercased()) }
-//        }
-//        if self.isFilteringEndsWith && !self.endsWithFilter.isEmpty {
-//            filteredWords = filteredWords.filter { $0.hasSuffix(self.endsWithFilter.uppercased()) }
-//        }
-//        
-//        if self.isFilteringIncludedLetters && !self.selectedIncludedLetters.isEmpty {
-//            let excludedCharacters = Set(self.selectedIncludedLetters.joined())
-//            filteredWords = filteredWords.filter { word in
-//                excludedCharacters.isDisjoint(with: word.uppercased())
-//            }
-//        }
-//        
-//        if self.isFilteringExcludeLetters && !self.selectedExcludedLetters.isEmpty {
-//            let excludedCharacters = Set(self.selectedExcludedLetters.joined())
-//            filteredWords = filteredWords.filter { word in
-//                excludedCharacters.isDisjoint(with: word.uppercased())
-//            }
-//        }
-//        
-//        return filteredWords
-//        
-//    }
-//    
-//    private var groupedWords: [String: [String]] {
-//        Dictionary(grouping: searchResults.sorted()) { String($0.prefix(1)).uppercased() }
-//    }
-//    
-//    private var sectionKeys: [String] {
-//        groupedWords.keys.sorted()
-//    }
-    
     var body: some View {
         VStack {
-            if self.searchResults.isEmpty && !self.searchedWord.isEmpty {
-                ContentUnavailableView.search(text: self.searchedWord)
+            if self.searchResults.isEmpty && !appManager.searchedWord.isEmpty {
+                ContentUnavailableView.search(text: appManager.searchedWord)
             } else {
                 HStack(spacing: 0) {
                     List {
-                        ForEach(sectionKeys, id: \.self) { letter in
+                        ForEach(self.sectionKeys, id: \.self) { letter in
                             Section {
-                                ForEach(Array((groupedWords[letter] ?? []).enumerated()), id: \.offset) { index, word in
+                                ForEach(Array((self.groupedWords[letter] ?? []).enumerated()), id: \.offset) { index, word in
                                     LazyVStack(spacing: 0) {
                                         NavigationLink(destination: {
-                                            WordDefinitionView(word: word)
-                                                .environmentObject(appManager)
+                                            WordDefinitionView(word: word, language: appManager.selectedLanguage)
                                         }, label: {
                                             HStack {
                                                 Text(word)
@@ -95,7 +36,6 @@ struct SearchView: View {
                                                 Spacer()
                                             }
                                         })
-                                        
                                     }
                                 }
                             } header: {
@@ -105,44 +45,43 @@ struct SearchView: View {
                             .id(letter)
                         }
                     }
-                    
                 }
             }
         }
-        .searchable(text: self.$searchedWord, placement: .navigationBarDrawer(displayMode: .always), prompt: "Search for a Phrase")
+        .searchable(text: $appManager.searchedWord, placement: .navigationBarDrawer(displayMode: .always), prompt: "Search for a Phrase")
         .navigationTitle("Search")
-        .onChange(of: self.searchedWord) {
+        .onChange(of: appManager.searchedWord) {
             self.filterGameRecords()
         }
-        .onChange(of: self.isFilteringSearchWord) {
+        .onChange(of: appManager.isFilteringSearchWord) {
             self.filterGameRecords()
         }
-        .onChange(of: self.startsWithFilter) {
+        .onChange(of: appManager.startsWithFilter) {
             self.filterGameRecords()
         }
-        .onChange(of: self.isFilteringStartWith) {
+        .onChange(of: appManager.isFilteringStartWith) {
             self.filterGameRecords()
         }
-        .onChange(of: self.endsWithFilter) {
+        .onChange(of: appManager.endsWithFilter) {
             self.filterGameRecords()
         }
-        .onChange(of: self.isFilteringEndsWith) {
+        .onChange(of: appManager.isFilteringEndsWith) {
             self.filterGameRecords()
         }
-        .onChange(of: self.selectedIncludedLetters) {
+        .onChange(of: appManager.selectedIncludedLetters) {
             self.filterGameRecords()
         }
-        .onChange(of: self.isFilteringIncludedLetters) {
+        .onChange(of: appManager.isFilteringIncludedLetters) {
             self.filterGameRecords()
         }
-        .onChange(of: self.selectedExcludedLetters) {
+        .onChange(of: appManager.selectedExcludedLetters) {
             self.filterGameRecords()
         }
-        .onChange(of: self.isFilteringExcludeLetters) {
+        .onChange(of: appManager.isFilteringExcludeLetters) {
             self.filterGameRecords()
         }
         .overlay(alignment: .bottomTrailing) {
-            NavigationLink(destination: FilterOptionsView(searchedWord: self.$searchedWord, isFilteringSearchWord: self.$isFilteringSearchWord, isFilteringStartWith: self.$isFilteringStartWith, startsWithFilter: self.$startsWithFilter, isFilteringEndsWith: self.$isFilteringEndsWith, endsWithFilter: self.$endsWithFilter, isFilteringExcludeLetters: self.$isFilteringExcludeLetters, isFilteringIncludedLetters: self.$isFilteringIncludedLetters, selectedExcludedLetters: self.$selectedExcludedLetters, selectedIncludedLetters: self.$selectedIncludedLetters).environmentObject(appManager).navigationTransition(.zoom(sourceID: "filter", in: namespace)), label: {
+            NavigationLink(destination: FilterOptionsView().environmentObject(appManager).navigationTransition(.zoom(sourceID: "filter", in: namespace)), label: {
                 Image(systemName: "slider.horizontal.3")
                     .font(.title)
                     .foregroundColor(.white)
@@ -153,14 +92,21 @@ struct SearchView: View {
                     .matchedTransitionSource(id: "filter", in: namespace)
 //                    .glassEffect(in: .circle)
 //                    .glassEffectID("filter", in: namespace)
-                    
+                    .simultaneousGesture(
+                        LongPressGesture(minimumDuration: 1.2)
+                            .onEnded { _ in
+                                appManager.resetFilters()
+                                self.isShowingFilterOptions.toggle()
+                            }
+                    )
                     
                 
             })
             .padding(.trailing, 25)
             .padding(.bottom, 25)
             .transition(.scale)
-            .buttonStyle(GrowingButton())
+//            .buttonStyle(GrowingButton())
+            
             .simultaneousGesture(TapGesture().onEnded {
                 self.isShowingFilterOptions.toggle()
             })
@@ -184,61 +130,32 @@ struct SearchView: View {
         //            }
         //
         //        }
-        if self.isFilteringSearchWord && !self.searchedWord.isEmpty {
-            filteredWords = filteredWords.filter { $0.contains(self.searchedWord.uppercased()) }
+        if appManager.isFilteringSearchWord && !appManager.searchedWord.isEmpty {
+            filteredWords = filteredWords.filter { $0.contains(appManager.searchedWord.uppercased()) }
         }
-        if self.isFilteringStartWith && !self.startsWithFilter.isEmpty {
-            filteredWords = filteredWords.filter { $0.hasPrefix(self.startsWithFilter.uppercased()) }
+        if appManager.isFilteringStartWith && !appManager.startsWithFilter.isEmpty {
+            filteredWords = filteredWords.filter { $0.hasPrefix(appManager.startsWithFilter.uppercased()) }
         }
-        if self.isFilteringEndsWith && !self.endsWithFilter.isEmpty {
-            filteredWords = filteredWords.filter { $0.hasSuffix(self.endsWithFilter.uppercased()) }
+        if appManager.isFilteringEndsWith && !appManager.endsWithFilter.isEmpty {
+            filteredWords = filteredWords.filter { $0.hasSuffix(appManager.endsWithFilter.uppercased()) }
         }
         
-        if self.isFilteringIncludedLetters && !self.selectedIncludedLetters.isEmpty {
-            let excludedCharacters = Set(self.selectedIncludedLetters.joined())
+        if appManager.isFilteringIncludedLetters && !appManager.selectedIncludedLetters.isEmpty {
+            let excludedCharacters = Set(appManager.selectedIncludedLetters.joined())
             filteredWords = filteredWords.filter { word in
                 excludedCharacters.isDisjoint(with: word.uppercased())
             }
         }
         
-        if self.isFilteringExcludeLetters && !self.selectedExcludedLetters.isEmpty {
-            let excludedCharacters = Set(self.selectedExcludedLetters.joined())
+        if appManager.isFilteringExcludeLetters && !appManager.selectedExcludedLetters.isEmpty {
+            let excludedCharacters = Set(appManager.selectedExcludedLetters.joined())
             filteredWords = filteredWords.filter { word in
                 excludedCharacters.isDisjoint(with: word.uppercased())
             }
         }
         self.searchResults = filteredWords
         self.groupedWords = Dictionary(grouping: self.searchResults.sorted(), by: { String($0.prefix(1)).uppercased() })
-        self.sectionKeys = groupedWords.keys.sorted()
-//        self.searchResults = appManager.gameRecords
-//        if !self.searchedWord.isEmpty {
-//            self.searchResults = self.searchResults.filter { $0.gameRecord.word.contains(self.searchedWord.uppercased()) }
-//        }
-//        if self.numberOfLetters != 9 {
-//            self.searchResults = self.searchResults.filter { $0.gameRecord.numberOfLetters == self.numberOfLetters }
-//        }
-//        
-//        if self.selectedLanguage != .both {
-//            self.searchResults = self.searchResults.filter { $0.gameRecord.language == self.selectedLanguage }
-//        }
-//        
-//        if self.gameMode != .both {
-//            self.searchResults = self.searchResults.filter { $0.gameRecord.mode == self.gameMode }
-//        }
-//        
-//        if self.showsWhenHintsUsed == .neverUsed {
-//            self.searchResults = self.searchResults.filter { $0.gameRecord.hintsUsed ?? 0 == 0 }
-//        } else if self.showsWhenHintsUsed == .onlyWhenUsed {
-//            self.searchResults = self.searchResults.filter { $0.gameRecord.hintsUsed ?? 0 > 0 }
-//        }
-//        print("Filtered Results: \(self.searchResults.count)")
-//        self.groupedWords = Dictionary(grouping: searchResults.sorted { $0.gameRecord.date > $1.gameRecord.date }, by: { String(formatter1.string(from: $0.gameRecord.date)) })
-//        self.sectionKeys = groupedWords.keys.sorted { date1, date2 in
-//            guard let date1 = formatter1.date(from: date1), let date2 = formatter1.date(from: date2) else {
-//                return false
-//            }
-//            return date1 > date2
-//        }
+        self.sectionKeys = self.groupedWords.keys.sorted()
     }
 }
 

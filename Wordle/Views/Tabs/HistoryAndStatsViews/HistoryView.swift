@@ -9,7 +9,7 @@ import SwiftUI
 import SwiftData
 
 struct HistoryView: View {
-    @EnvironmentObject var appManager: AppManager
+    @Environment(\.modelContext) private var modelContext
     @AppStorage("defaultStatLanguage") private var defaultStatLanguage: LanguageSelection = .both
     @AppStorage("defaultStatNumberOfLetters") private var defaultStatNumberOfLetters: Int = 9
     @AppStorage("defaultStatGameMode") private var defaultStatGameMode: GameMode = .both
@@ -23,6 +23,10 @@ struct HistoryView: View {
     @State private var searchResults: [GameRecordEntity] = []
     @State private var groupedWords: [String: [GameRecordEntity]] = [:]
     @State private var sectionKeys: [String] = []
+    @Query private var gameRecords: [GameRecordEntity]
+    
+    let gradient = LinearGradient(colors: [.orange, .yellow, .yellow, .yellow, .yellow, .white], startPoint: .bottomLeading, endPoint: .topTrailing)
+    let shadowGradient = LinearGradient(colors: [.orange, .yellow, .yellow, .yellow, .yellow], startPoint: .bottomLeading, endPoint: .topTrailing)
     
     private let formatter1: DateFormatter = {
         let formatter = DateFormatter()
@@ -34,7 +38,6 @@ struct HistoryView: View {
         NavigationStack {
             VStack {
                 FilterView(numberOfLetters: $numberOfLetters, selectedLanguage: $selectedLanguage, gameMode: $gameMode, showsWhenHintsUsed: $showsWhenHintsUsed)
-//                    .environmentObject(appManager)
                 if self.searchResults.isEmpty && !self.searchedWord.isEmpty {
                     ContentUnavailableView.search(text: self.searchedWord)
                 } else if self.searchResults.isEmpty {
@@ -46,7 +49,6 @@ struct HistoryView: View {
                                 ForEach(groupedWords[date] ?? [], id: \.id) { gameRecordEntity in
                                     NavigationLink(destination: {
                                         GameRecordView(gameRecord: gameRecordEntity.gameRecord)
-                                            .environmentObject(appManager)
                                         
                                     }, label: {
                                         HStack {
@@ -58,10 +60,10 @@ struct HistoryView: View {
                                                         Circle()
                                                             .foregroundStyle(LinearGradient(colors: [.orange, .yellow, .white], startPoint: .bottomLeading, endPoint: .topTrailing))
                                                         //                                        .padding(5)
-                                                            .gradientShadow(gradient: appManager.shadowGradient, radius: 3, x: 0, y: 0)
+                                                            .gradientShadow(gradient: self.shadowGradient, radius: 3, x: 0, y: 0)
                                                             .conditionalShadow(color: .black.opacity(0.5), radius: 3, x: 4, y: 4)
                                                     }
-                                                    .font(.title2)
+                                                    .font(.title2).bold()
                                                     
                                             } else {
                                                 Image(systemName: gameRecordEntity.gameRecord.state == .won ? "checkmark" : "xmark")
@@ -71,9 +73,8 @@ struct HistoryView: View {
                                                         Circle()
                                                             .foregroundColor(gameRecordEntity.gameRecord.state == .won ? .green : .red)
                                                             .conditionalShadow(color: .black.opacity(0.3), radius: 3, x: 4, y: 4)
-                                                        //                                        .conditionalShadow(color: .black.opacity(0.5), radius: 5, x: 4, y: 4)
                                                     }
-                                                    .font(.title2)
+                                                    .font(.title2).bold()
                                             }
                                             
                                             VStack(alignment: .leading) {
@@ -82,16 +83,14 @@ struct HistoryView: View {
                                                     .foregroundStyle(.primary)
                                                     .conditionalShadow(color: .black.opacity(0.3), radius: 1.5, x: 4, y: 4)
                                                 if gameRecordEntity.gameRecord.mode == .dailyWord && gameRecordEntity.gameRecord.state == .won {
-//                                                    GradientShadowView(text: gameRecordEntity.gameRecord.mode.localizedName + " - \(gameRecordEntity.gameRecord.numberOfLetters) letters", gradient: appManager.gradient, alignment: .leading, blurRadius: 5)
+//                                                    GradientShadowView(text: gameRecordEntity.gameRecord.mode.localizedName + " - \(gameRecordEntity.gameRecord.numberOfLetters) letters", gradient: self.gradient, alignment: .leading, blurRadius: 5)
 //                                                        .font(.caption)
 //                                                        .padding(.top, -5)
-                                                    let localizedString = String(format: NSLocalizedString("number_letters", comment: "Daily Word Mode with number of letters"))
-                                                    Text(gameRecordEntity.gameRecord.mode.localizedName + " - " + localizedString)
+                                                    Text(gameRecordEntity.gameRecord.mode.localizedName + " - " + String(format: NSLocalizedString("number_letters", comment: "Daily Word Mode with number of letters"), gameRecordEntity.gameRecord.numberOfLetters))
                                                         .font(.caption)
-                                                        .foregroundStyle(appManager.gradient)
-                                                        .gradientShadow(gradient: appManager.shadowGradient, radius: 3, x: 0, y: 0)
+                                                        .foregroundStyle(self.gradient)
+                                                        .gradientShadow(gradient: self.shadowGradient, radius: 3, x: 0, y: 0)
                                                         .conditionalShadow(color: .black.opacity(0.5), radius: 4, x: 4, y: 4)
-//                                                        .spreadGradientShadow(appManager.shadowGradient, spread: 3)
 //
                                                 } else if gameRecordEntity.gameRecord.mode == .dailyWord {
                                                     Text(gameRecordEntity.gameRecord.mode.localizedName + " - \(gameRecordEntity.gameRecord.numberOfLetters) letters")
@@ -106,11 +105,8 @@ struct HistoryView: View {
                                 }
                                 .onDelete { indexSet in
                                     withAnimation {
-                                        indexSet.forEach { index in
-                                            if let gameRecordEntity2 = groupedWords[date]?[index] {
-                                                appManager.deleteGameRecord(gameRecordEntity2)
-                                            }
-                                        }
+                                        let toDelete = indexSet.map { groupedWords[date]![$0] }
+                                        toDelete.forEach { modelContext.delete($0) }
                                     }
                                 }
                             } header: {
@@ -149,7 +145,7 @@ struct HistoryView: View {
     }
     
     func filterGameRecords() {
-        var filteredRecords = appManager.gameRecords
+        var filteredRecords = self.gameRecords
         if !self.searchedWord.isEmpty {
             filteredRecords = filteredRecords.filter { $0.gameRecord.word.contains(self.searchedWord.uppercased()) }
         }
@@ -247,41 +243,9 @@ struct GradientShadowView: View {
 ////        }
 //    }
 //}
-//
-//struct SpreadGradientShadow: ViewModifier {
-//    let gradient: LinearGradient
-//    let spread: CGFloat
-//    
-//    func body(content: Content) -> some View {
-//        ZStack {
-//            ForEach(
-//                [CGPoint(x: -spread, y: -spread),
-//                 CGPoint(x:  spread, y: -spread),
-//                 CGPoint(x: -spread, y:  spread),
-//                 CGPoint(x:  spread, y:  spread)],
-//                id: \.self
-//            ) { point in
-//                gradient
-//                    .mask(content)
-//                    .offset(x: point.x, y: point.y)
-//            }
-//            
-//            content
-//        }
-//    }
-//}
-//
-//extension View {
-//    func spreadGradientShadow(
-//        _ gradient: LinearGradient,
-//        spread: CGFloat = 2
-//    ) -> some View {
-//        modifier(SpreadGradientShadow(gradient: gradient, spread: spread))
-//    }
-//}
 
-#Preview {
-    HistoryView()
-        .environmentObject(AppManager())
-}
+
+//#Preview {
+//    HistoryView()
+//}
 

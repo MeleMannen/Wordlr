@@ -18,12 +18,13 @@ struct SelectView: View {
     @AppStorage("hasFixedLanguage") private var hasFixedLanguage: Bool = false
     @AppStorage("userWantsAds") var userWantAds: Bool = false
     @State var hasFixedDefualtValues: Bool = false
+    @State var hasFixedContextAndFetched: Bool = false
     @State var didTapPlayDailyWordButton: Bool = false
     @State var didTapFakePlayDailyWordButton: Bool = false
     @State var didTapPlayNormalButton: Bool = false
     @State var didTapInfoButton: Bool = false
     @State var isShowingAlreadyPlayedAlert: Bool = false
-    @State var hasFixedContextAndFetched: Bool = false
+    
     
     var body: some View {
         NavigationStack {
@@ -162,6 +163,7 @@ struct SelectView: View {
                                                 .gradientShadow(gradient: appManager.shadowGradient, radius: 3, x: 0, y: 0)
                                                 .conditionalShadow(color: .black.opacity(0.5), radius: 4, x: 4, y: 4)
                                                 .opacity(0.3)
+                                                .buttonStyle(GrowingButton())
                                         }
                                         .padding(.horizontal, 30)
                                         .onTapGesture {
@@ -194,6 +196,7 @@ struct SelectView: View {
                                                 .gradientShadow(gradient: appManager.shadowGradient, radius: 3, x: 0, y: 0)
                                                 .conditionalShadow(color: .black.opacity(0.5), radius: 4, x: 4, y: 4)
                                                 .opacity(0.3)
+                                                .buttonStyle(GrowingButton())
                                                 
                                                 
                                             
@@ -378,6 +381,7 @@ struct ConditionalGlassEffect: ViewModifier {
 }
 
 struct ConditionalShadow: ViewModifier {
+    @Environment(\.colorScheme) var colorScheme: ColorScheme
     @AppStorage("appTheme") private var appTheme: AppTheme = .dark
     let color: Color
     let radius: CGFloat
@@ -386,7 +390,7 @@ struct ConditionalShadow: ViewModifier {
     
     func body(content: Content) -> some View {
         Group {
-            if appTheme == .dark {
+            if appTheme == .dark || colorScheme == .dark {
                 content
                     .shadow(color: color, radius: radius, x: x, y: y)
             } else {

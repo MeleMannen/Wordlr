@@ -111,12 +111,12 @@ enum Streak: Codable {
     var hasPlayedDailyWord: Bool {
         switch self {
             case .none: return false
-            case .dead(_, let lastDiedAt):
+            case .dead(let startDeadDate, _):
                 var cetCalendar = Calendar(identifier: .gregorian)
                 cetCalendar.timeZone = TimeZone(identifier: "CET")!
                 
                 let currentDate = Date()
-                return cetCalendar.isDate(lastDiedAt, inSameDayAs: currentDate)
+                return cetCalendar.isDate(startDeadDate, inSameDayAs: currentDate)
             case .alive(_, let lastWonDate):
                 var cetCalendar = Calendar(identifier: .gregorian)
                 cetCalendar.timeZone = TimeZone(identifier: "CET")!

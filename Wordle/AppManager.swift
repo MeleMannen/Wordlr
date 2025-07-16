@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import AVFoundation
 import SwiftData
 import GoogleMobileAds
 
@@ -44,30 +43,28 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
     var startDate: Date = Date()
     var endDate: Date = Date()
     @Published var hasSharedResult: Bool = false
-    
-    
-//    @Published var isFilteringSearchWord: Bool = true
-//    @Published var isFilteringStartWith: Bool = false
-//    @Published var startsWithFilter: String = ""
-//    @Published var isFilteringEndsWith: Bool = false
-//    @Published var endsWithFilter: String = ""
-//    @Published var isFilteringExcludeLetters: Bool = false
-//    @Published var isFilteringIncludedLetters: Bool = false
-//    @Published var selectedExcludedLetters: [String] = []
-//    @Published var selectedIncludedLetters: [String] = []
     @Published var didWinGame: GameEndState = .lost
     
-//    let englishLetters: [String] = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
-//    let norwegianLetters: [String] = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "Æ", "Ø", "Å"]
+    @Published var searchedWord: String = ""
+    
+    @Published var isFilteringSearchWord: Bool = true
+    @Published var isFilteringStartWith: Bool = false
+    @Published var startsWithFilter: String = ""
+    @Published var isFilteringEndsWith: Bool = false
+    @Published var endsWithFilter: String = ""
+    @Published var isFilteringExcludeLetters: Bool = false
+    @Published var isFilteringIncludedLetters: Bool = false
+    @Published var selectedExcludedLetters: [String] = []
+    @Published var selectedIncludedLetters: [String] = []
+    
     let gradient = LinearGradient(colors: [.orange, .yellow, .yellow, .yellow, .yellow, .white], startPoint: .bottomLeading, endPoint: .topTrailing)
     let shadowGradient = LinearGradient(colors: [.orange, .yellow, .yellow, .yellow, .yellow], startPoint: .bottomLeading, endPoint: .topTrailing)
     
     private var hintsUsed: Int = 0
-    private var audioPlayer: AVPlayer?
+    
     private var rewardedAd: RewardedAd?
     
     func getWords() {
-        print("context: \(String(describing: self.modelContext))")
         if let words = WordleDataManager.shared.loadWordsFromJSONFile(selectedLanguage: selectedLanguage) {
             self.words = words
             
@@ -127,11 +124,6 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
             print("Ordet2 er \(self.word)")
             
         }
-        
-        
-        
-        
-        
     }
     
     func getDailyWord() -> String {
@@ -150,17 +142,7 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
         
     }
     
-    func getEnglishDefinition(for word: String, completion: @escaping ([EnglishDefinition]) -> Void) {
-        WordleDataManager.shared.fetchEnglishDefinition(for: word) { definition in
-            guard let definition = definition else {
-                completion([])
-                return
-            }
-            DispatchQueue.main.async {
-                completion(definition)
-            }
-        }
-    }
+    
         
     
     func getDefinition(for word: String, completion: @escaping ([ProcessedWord]) -> Void) {
@@ -416,7 +398,7 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
     }
     
     func animateRemovingLetter(rowIndex: Int, colIndex: Int) {
-        self.board[rowIndex][colIndex].scale = 0.85
+        self.board[rowIndex][colIndex].scale = 0.87
         withAnimation(.interpolatingSpring(mass: 0.7, stiffness: 100, damping: 8, initialVelocity: 1)
             .speed(1)
             .delay(0)) {
@@ -631,9 +613,7 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
             shareText += "\n"
             
         }
-        
         return shareText
-        
     }
     
     func getTimeUsedString(startDate: Date, endDate: Date) -> String {
@@ -678,20 +658,21 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
         self.startDate = Date()
     }
     
-    
-    
-    func playAudio(from source: String) {
-        audioPlayer?.pause()
-        audioPlayer = nil // Release previous player
-        
-        guard let url = URL(string: source) else { return }
-        audioPlayer = AVPlayer(url: url)
-        audioPlayer?.play()
-    }
-    
-    deinit {
-        audioPlayer?.pause()
-        audioPlayer = nil
+    func resetFilters() {
+        self.isFilteringSearchWord = true
+        self.searchedWord = ""
+        self.isFilteringStartWith = false
+        self.startsWithFilter = ""
+        self.isFilteringEndsWith = false
+        self.endsWithFilter = ""
+        self.isFilteringIncludedLetters = false
+        self.isFilteringExcludeLetters = false
+        if !selectedIncludedLetters.isEmpty {
+            self.selectedIncludedLetters.removeAll()
+        }
+        if !selectedExcludedLetters.isEmpty {
+            self.selectedExcludedLetters.removeAll()
+        }
     }
     
     func fetchStreaks() {

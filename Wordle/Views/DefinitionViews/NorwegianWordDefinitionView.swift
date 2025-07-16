@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct NorwegianWordDefinitionView: View {
-    @EnvironmentObject var appManager: AppManager
+    @EnvironmentObject private var definitionManager: DefinitionManager
     @State var processedWords: [ProcessedWord] = []
     @State var word: String
     @State var isLoading: Bool = true
@@ -125,7 +125,7 @@ struct NorwegianWordDefinitionView: View {
 //                                        .font(.headline)
 //                                        .padding(.top, 10)
 //                                    
-//                                    NavigationLink(destination: NAOBView(word: self.word).environmentObject(appManager)) {
+//                                    NavigationLink(destination: NAOBView(word: self.word)) {
 //                                        Text("Search \(self.word.uppercased())")
 //                                            .foregroundColor(.white)
 //                                            .font(.title2).bold()
@@ -161,7 +161,7 @@ struct NorwegianWordDefinitionView: View {
                     
                 }
                 .refreshable {
-                    appManager.getDefinition(for: self.word) { processedWords in
+                    definitionManager.getDefinition(for: self.word) { processedWords in
                         if !processedWords.isEmpty {
                             self.processedWords = processedWords
                             //                        self.isLoading = false
@@ -180,7 +180,7 @@ struct NorwegianWordDefinitionView: View {
         }
         .navigationTitle("\(self.word)")
         .onAppear {
-            appManager.getDefinition(for: self.word) { processedWords in
+            definitionManager.getDefinition(for: self.word) { processedWords in
                 self.processedWords = processedWords
                 self.isLoading = false
                 print("ProcessedWord: \(String(describing: self.processedWords))")
@@ -188,10 +188,9 @@ struct NorwegianWordDefinitionView: View {
             }
         }
     }
+    
+    
 }
-
-
-
 
 
 struct DefinitionView: View {
@@ -291,5 +290,5 @@ struct DefinitionView: View {
 
 #Preview {
     NorwegianWordDefinitionView(word: "Sessing")
-        .environmentObject(AppManager())
+        .environmentObject(DefinitionManager())
 }

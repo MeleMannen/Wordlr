@@ -11,7 +11,6 @@ import GoogleMobileAds
 
 @main
 struct WordleApp: App {
-    @ObservedObject var appManager = AppManager()
     @AppStorage("appTheme") private var appTheme: AppTheme = .dark
     @AppStorage("userWantsAds") var userWantAds: Bool = false
     @State var selection: TabSelection = .home
@@ -31,28 +30,25 @@ struct WordleApp: App {
                     .tabItem {
                         Label("The Phrase", systemImage: "p.square.fill")
                     }
-                    .environmentObject(appManager)                    
+                    .environmentObject(AppManager())
                 
-                StatsView()
+                StatsView(tabSelection: $selection)
                     .tag(TabSelection.stats)
                     .tabItem {
                         Label("Stats", systemImage: "chart.bar.yaxis")
                     }
-//                    .environmentObject(appManager)
                 
                 HistoryView()
                     .tag(TabSelection.history)
                     .tabItem {
                         Label("History", systemImage: "clock.arrow.trianglehead.counterclockwise.rotate.90")
                     }
-                    .environmentObject(appManager)
                 
                 SettingsView()
                     .tag(TabSelection.settings)
                     .tabItem {
                         Label("Settings", systemImage: "gear")
                     }
-                    .environmentObject(appManager)
                 
             }
             .tint(.primary)
