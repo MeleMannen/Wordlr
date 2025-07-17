@@ -14,7 +14,6 @@ struct StatsView: View {
     @AppStorage("defaultStatNumberOfLetters") private var defaultStatNumberOfLetters: Int = 9
     @AppStorage("defaultStatGameMode") private var defaultStatGameMode: GameMode = .both
     @AppStorage("defaultStatHintsUsed") private var defaultStatHintsUsed: ShowsWhenHintsUsed = .both
-    @Binding var tabSelection: TabSelection
     @State private var hasFixedDefualtValues: Bool = false
     @State private var numberOfLetters: Int = 9
     @State private var selectedLanguage: LanguageSelection = .both
@@ -27,6 +26,7 @@ struct StatsView: View {
     @State private var totalCount: Int = 0
     @State private var winRate: Double = 0.0
     @State private var counts: [Int] = []
+    @State private var maxGuessesPerCount: Int = 0
     
     @Query private var gameRecords: [GameRecordEntity]
     
@@ -95,12 +95,14 @@ struct StatsView: View {
                                     
                                 }
                             }
+                            .chartXScale(domain: 0...Double(self.totalCount))
                             .chartYAxis {
                                 AxisMarks(preset: .extended, position: .leading) { _ in
                                     AxisValueLabel(horizontalSpacing: 15)
                                         .font(.footnote)
                                 }
                             }
+                            .animation(.easeInOut(duration: 0.5), value: self.filteredGameRecords.count)
                         }
                         
                         VStack(alignment: .leading) {
@@ -109,8 +111,6 @@ struct StatsView: View {
                             
                             Chart {
                                 ForEach(Array(self.counts.enumerated()), id: \.offset) { index, count in
-//                                    let count = self.filteredGameRecords.filter { $0.gameRecord.numberOfGuesses == guess && $0.gameRecord.state == .won }.count
-//                                    let _ = print("hei")
                                     BarMark(
                                         x: .value("Count", count),
                                         y: .value("Number of Guesses", " \(index+1) "),
@@ -126,12 +126,14 @@ struct StatsView: View {
                                     }
                                 }
                             }
+                            .chartXScale(domain: 0...Double(self.maxGuessesPerCount))
                             .chartYAxis {
                                 AxisMarks(preset: .extended, position: .leading) { _ in
                                     AxisValueLabel(horizontalSpacing: 15)
                                         .font(.footnote)
                                 }
                             }
+                            .animation(.easeInOut(duration: 0.5), value: self.filteredGameRecords.count)
                             .frame(minHeight: 250)
                         }
                     }
@@ -139,7 +141,6 @@ struct StatsView: View {
             }
             .navigationTitle("Stats")
             .onChange(of: self.numberOfLetters) {
-                self.filterGameRecords()
                 if self.numberOfLetters > 7 {
                     self.maxNumberOfRows = 8
                 } else if self.numberOfLetters == 6 {
@@ -147,6 +148,7 @@ struct StatsView: View {
                 } else {
                     self.maxNumberOfRows = 6
                 }
+                self.filterGameRecords()
             }
             .onChange(of: self.selectedLanguage) {
                 self.filterGameRecords()
@@ -162,8 +164,16 @@ struct StatsView: View {
         .onAppear {
             if !self.hasFixedDefualtValues {
                 self.setDefaultValues()
+                if self.numberOfLetters > 7 {
+                    self.maxNumberOfRows = 8
+                } else if self.numberOfLetters == 6 {
+                    self.maxNumberOfRows = 7
+                } else {
+                    self.maxNumberOfRows = 6
+                }
                 self.hasFixedDefualtValues = true
             }
+            
             self.filterGameRecords()
         }
     }
@@ -199,6 +209,7 @@ struct StatsView: View {
         for i in 1...self.maxNumberOfRows {
             self.counts.append(self.filteredGameRecords.filter { $0.gameRecord.numberOfGuesses == i && $0.gameRecord.state == .won }.count)
         }
+        self.maxGuessesPerCount = self.counts.max() ?? 0
     }
     
     func setDefaultValues() {
@@ -209,6 +220,6 @@ struct StatsView: View {
     }
 }
 
-//#Preview {
-//    StatsView()
-//}
+#Preview {
+    StatsView()
+}

@@ -32,7 +32,7 @@ struct WordleApp: App {
                     }
                     .environmentObject(AppManager())
                 
-                StatsView(tabSelection: $selection)
+                StatsView()
                     .tag(TabSelection.stats)
                     .tabItem {
                         Label("Stats", systemImage: "chart.bar.yaxis")

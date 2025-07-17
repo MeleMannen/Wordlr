@@ -106,6 +106,21 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
         return false
     }
     
+    func checkIfDailyWordIsAlreadyPlayed2() -> Bool {
+        var cetCalendar = Calendar(identifier: .gregorian)
+        cetCalendar.timeZone = TimeZone(identifier: "CET")!
+        let currentDate = Date()
+        for gameRecord in self.gameRecords {
+            if gameRecord.gameRecord.mode == .dailyWord && gameRecord.gameRecord.language == self.selectedLanguage && gameRecord.gameRecord.numberOfLetters == self.numberOfLetters {
+                if cetCalendar.isDate(gameRecord.gameRecord.date, inSameDayAs: currentDate) {
+                    return true
+                }
+                
+            }
+        }
+        return false
+    }
+    
 
     
     func getCurrentDateInUTCTimeSince1970() -> TimeInterval {
@@ -416,7 +431,11 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
                         case .none, .dead:
                             streakManager.updateStreak(streakEntity, with: .alive(startDate: self.startDate, lastWonDate: self.startDate))
                         case .alive(let startDate, _):
-                            streakManager.updateStreak(streakEntity, with: .alive(startDate: startDate, lastWonDate: self.startDate))
+                            if streakEntity.streak.isAlive {
+                                streakManager.updateStreak(streakEntity, with: .alive(startDate: startDate, lastWonDate: self.startDate))
+                            } else {
+                                streakManager.updateStreak(streakEntity, with: .alive(startDate: self.startDate, lastWonDate: self.startDate))
+                            }
                     }
                     print("Du vant, oppdaterer streak: \( streakEntity.streak)")
                     

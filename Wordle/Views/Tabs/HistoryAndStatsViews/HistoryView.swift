@@ -55,6 +55,7 @@ struct HistoryView: View {
                                             if gameRecordEntity.gameRecord.mode == .dailyWord && gameRecordEntity.gameRecord.state == .won {
                                                 Image(systemName: "checkmark")
                                                     .foregroundStyle(.white)
+                                                    .conditionalShadow(color: .black.opacity(0.3), radius: 2, x: 2, y: 2)
                                                     .padding(10)
                                                     .background {
                                                         Circle()
@@ -68,6 +69,7 @@ struct HistoryView: View {
                                             } else {
                                                 Image(systemName: gameRecordEntity.gameRecord.state == .won ? "checkmark" : "xmark")
                                                     .foregroundStyle(.white)
+                                                    .conditionalShadow(color: .black.opacity(0.4), radius: 2, x: 2, y: 2)
                                                     .padding(10)
                                                     .background {
                                                         Circle()
@@ -103,12 +105,12 @@ struct HistoryView: View {
                                     })
                                     
                                 }
-                                .onDelete { indexSet in
-                                    withAnimation {
-                                        let toDelete = indexSet.map { groupedWords[date]![$0] }
-                                        toDelete.forEach { modelContext.delete($0) }
-                                    }
-                                }
+//                                .onDelete { indexSet in
+//                                    withAnimation {
+//                                        let toDelete = indexSet.map { groupedWords[date]![$0] }
+//                                        toDelete.forEach { modelContext.delete($0) }
+//                                    }
+//                                }
                             } header: {
                                 SectionHeaderView(letter: date)
                             }
@@ -245,7 +247,7 @@ struct GradientShadowView: View {
 //}
 
 
-//#Preview {
-//    HistoryView()
-//}
+#Preview {
+    HistoryView()
+}
 

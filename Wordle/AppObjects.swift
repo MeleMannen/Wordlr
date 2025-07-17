@@ -152,14 +152,6 @@ enum NormalStreak: Codable {
                 return currentStreak
         }
     }
-    
-    var isAlive: Bool {
-        switch self {
-            case .none, .dead: return false
-            case .alive:
-                return true
-        }
-    }
 }
 
 enum ShowsWhenHintsUsed: String, CaseIterable, Identifiable {

@@ -337,7 +337,7 @@ struct GameView: View {
                                     appManager.resetBoard()
                                 }, label: {
                                     Text("New Game")
-                                        .conditionalShadow(color: .black.opacity(0.3), radius: 2, x: 4, y: 4)
+                                        .conditionalShadow(color: .black.opacity(0.2), radius: 2, x: 4, y: 4)
                                         .font(.title).bold()
                                         .frame(maxWidth: .infinity, minHeight: 40, idealHeight: 45, maxHeight: 50)
                                         .foregroundStyle(.white)
@@ -358,8 +358,7 @@ struct GameView: View {
                                     
                                 }, label: {
                                     Text("Play Something Else")
-                                        .conditionalShadow(color: .black.opacity(0.3), radius: 2, x: 4, y: 4)
-                                        
+                                        .conditionalShadow(color: .black.opacity(0.2), radius: 2, x: 4, y: 4)
                                         .font(.title).bold()
                                         .frame(maxWidth: .infinity, minHeight: 40, idealHeight: 45, maxHeight: 50)
                                         .foregroundStyle(.white)
@@ -378,7 +377,7 @@ struct GameView: View {
                             
                             NavigationLink(destination: WordDefinitionView(word: appManager.word, language: appManager.selectedLanguage), label: {
                                 Text("Show Definition")
-                                    .conditionalShadow(color: .black.opacity(0.5), radius: 4, x: 4, y: 4)
+                                    .conditionalShadow(color: .black.opacity(0.2), radius: 2, x: 4, y: 4)
                                     .font(.title).bold()
                                     .frame(maxWidth: .infinity, minHeight: 40, idealHeight: 45, maxHeight: 50)
                                     .foregroundStyle(.white)
@@ -413,12 +412,12 @@ struct GameView: View {
                                             .contentTransition(.symbolEffect(.replace))
                                             .foregroundStyle(appManager.gradient)
 //                                            .gradientShadow(gradient: appManager.shadowGradient, radius: 1, x: 0, y: 0)
-                                            .conditionalShadow(color: .black.opacity(0.5), radius: 4, x: 4, y: 4)
+                                            .conditionalShadow(color: .black.opacity(0.6), radius: 4, x: 8, y: 8)
                                     } else {
                                         Label("Copy Result", systemImage: appManager.hasSharedResult ? "doc.on.doc.fill" : "doc.on.doc")
                                             .font(.title2).bold()
                                             .contentTransition(.symbolEffect(.replace))
-                                            .conditionalShadow(color: .black.opacity(0.5), radius: 4, x: 4, y: 4)
+                                            .conditionalShadow(color: .black.opacity(0.6), radius: 4, x: 8, y: 8)
                                     }
                                 }
                                 Spacer()

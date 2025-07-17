@@ -48,6 +48,7 @@ struct GameRecordView: View {
                         if gameRecord.mode == .dailyWord && gameRecord.state == .won {
                             Image(systemName: "checkmark")
                                 .foregroundStyle(.white)
+                                .conditionalShadow(color: .black.opacity(0.4), radius: 2, x: 2, y: 2)
                                 .padding(12)
                                 .background {
                                     Circle()
@@ -63,6 +64,8 @@ struct GameRecordView: View {
                         } else {
                             Image(systemName: gameRecord.state == .won ? "checkmark" : "xmark")
                                 .foregroundStyle(.white)
+//                                .conditionalShadow(color: .black.opacity(0.2), radius: 3, x: 2, y: 2)
+                                .conditionalShadow(color: .black.opacity(0.4), radius: 2, x: 2, y: 2)
                                 .padding(12)
                                 .background {
                                     Circle()

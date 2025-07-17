@@ -145,8 +145,8 @@ struct SelectView: View {
                     
                     
                     VStack {
-                        if appManager.checkIfDailyWordIsAlreadyPlayed() {
-                            if let streakEntity = appManager.getStreakEntity(), streakEntity.streak.currentStreak >= 3 {
+                        if appManager.checkIfDailyWordIsAlreadyPlayed2() {
+                            if let streakEntity = appManager.getStreakEntity(), streakEntity.streak.currentStreak >= 3, streakEntity.streak.isAlive {
                                 VStack {
                                     Text("Play Daily Word\n\(streakEntity.streak.currentStreak)🔥")
                                         .contentTransition(.numericText(value: Double(streakEntity.streak.currentStreak)))
@@ -161,9 +161,9 @@ struct SelectView: View {
                                             RoundedRectangle(cornerRadius: 15)
                                                 .foregroundStyle(appManager.gradient)
                                                 .gradientShadow(gradient: appManager.shadowGradient, radius: 3, x: 0, y: 0)
-                                                .conditionalShadow(color: .black.opacity(0.5), radius: 4, x: 4, y: 4)
+//                                                .conditionalShadow(color: .black.opacity(0.5), radius: 4, x: 4, y: 4)
                                                 .opacity(0.3)
-                                                .buttonStyle(GrowingButton())
+//                                                .buttonStyle(GrowingButton())
                                         }
                                         .padding(.horizontal, 30)
                                         .onTapGesture {
@@ -175,10 +175,10 @@ struct SelectView: View {
                                         .alert(isPresented: self.$isShowingAlreadyPlayedAlert) {
                                             Alert(title: Text("You can't play this"), message: Text("You have already played this exact Phrase today. Try again tomorrow or play with a different Phrase length."), dismissButton: .cancel(Text("Got it!")))
                                         }
-                                        .buttonStyle(GrowingButton())
+//                                        .buttonStyle(GrowingButton())
                                     
                                 }
-                                .conditionalShadow(color: .black.opacity(0.1), radius: 1.5, x: 1, y: 1)
+//                                .conditionalShadow(color: .black.opacity(0.1), radius: 1.5, x: 1, y: 1)
                             } else {
                                 VStack {
                                     
@@ -194,9 +194,9 @@ struct SelectView: View {
                                             RoundedRectangle(cornerRadius: 15)
                                                 .foregroundStyle(appManager.gradient)
                                                 .gradientShadow(gradient: appManager.shadowGradient, radius: 3, x: 0, y: 0)
-                                                .conditionalShadow(color: .black.opacity(0.5), radius: 4, x: 4, y: 4)
+//                                                .conditionalShadow(color: .black.opacity(0.5), radius: 4, x: 4, y: 4)
                                                 .opacity(0.3)
-                                                .buttonStyle(GrowingButton())
+//                                                .buttonStyle(GrowingButton())
                                                 
                                                 
                                             
@@ -218,7 +218,7 @@ struct SelectView: View {
                                         }
                                     //                                    .buttonStyle(GrowingButton())
                                 }
-                                .conditionalShadow(color: .black.opacity(0.1), radius: 1.5, x: 1, y: 1)
+//                                .conditionalShadow(color: .black.opacity(0.1), radius: 1.5, x: 1, y: 1)
                                 
                                 
                                     
@@ -227,7 +227,7 @@ struct SelectView: View {
                             
                         } else {
                             NavigationLink(destination: GameView().environmentObject(appManager)) {
-                                if let streakEntity = appManager.getStreakEntity(), streakEntity.streak.currentStreak >= 3 {
+                                if let streakEntity = appManager.getStreakEntity(), streakEntity.streak.currentStreak >= 3, streakEntity.streak.isAlive {
                                     Text("Play Daily Word\n\(streakEntity.streak.currentStreak)🔥")
                                         .contentTransition(.numericText(value: Double(streakEntity.streak.currentStreak)))
                                         .multilineTextAlignment(.center)
