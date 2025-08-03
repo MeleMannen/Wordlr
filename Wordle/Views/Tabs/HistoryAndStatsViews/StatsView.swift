@@ -8,6 +8,7 @@
 import SwiftUI
 import Charts
 import SwiftData
+import GoogleMobileAds
 
 struct StatsView: View {
     @AppStorage("defaultStatLanguage") private var defaultStatLanguage: LanguageSelection = .both
@@ -32,132 +33,133 @@ struct StatsView: View {
     
     var body: some View {
         NavigationStack {
-            VStack {
-                FilterView(numberOfLetters: $numberOfLetters, selectedLanguage: $selectedLanguage, gameMode: $gameMode, showsWhenHintsUsed: $showsWhenHintsUsed)
+            GeometryReader { geometry in
+                VStack {
+                    FilterView(numberOfLetters: $numberOfLetters, selectedLanguage: $selectedLanguage, gameMode: $gameMode, showsWhenHintsUsed: $showsWhenHintsUsed)
                     
-                if self.filteredGameRecords.isEmpty {
-                    ContentUnavailableView.init("No stats available for this selection.", systemImage: "exclamationmark.triangle.fill", description: Text("Try playing a game first or changing the selction."))
-                        .padding(.bottom, 20)
-                } else {
-                    List {
-                        VStack(alignment: .leading) {
-                            HStack {
-                                Text("Played:")
-                                    .font(.title3).bold()
-                                
-                                Spacer()
-                                
-                                Text("\(self.filteredGameRecords.count)")
-                                    .font(.title3)
-                                    .foregroundStyle(.secondary)
-                            }
-                        }
-                        
-                        
-                        VStack(alignment: .leading) {
-                            HStack {
-                                Text("Win Rate:")
-                                    .font(.title3).bold()
-                                Spacer()
-                                Text("\(String(format: "%.0f%%", self.winRate * 100))")
-                                    .font(.title3)
-                                    .foregroundStyle(.secondary)
+                    if self.filteredGameRecords.isEmpty {
+                        ContentUnavailableView.init("No stats available for this selection.", systemImage: "exclamationmark.triangle.fill", description: Text("Try playing a game first or changing the selction."))
+                            .padding(.bottom, 20)
+                    } else {
+                        List {
+                            VStack(alignment: .leading) {
+                                HStack {
+                                    Text("Played:")
+                                        .font(.title3).bold()
+                                    
+                                    Spacer()
+                                    
+                                    Text("\(self.filteredGameRecords.count)")
+                                        .font(.title3)
+                                        .foregroundStyle(.secondary)
+                                }
                             }
                             
-                            Chart {
-                                BarMark(
-                                    x: .value("Count", self.wonCount),
-                                    y: .value("State", "✅"),
-                                    width: .fixed(20.0)
-                                )
-                                .foregroundStyle(Color.green)
-                                .annotation(position: .overlay) {
-                                    if self.wonCount > 0 {
-                                        Text("\(self.wonCount)")
-                                            .foregroundColor(.white)
-                                            .font(.headline)
-                                    }
-                                    
+                            
+                            VStack(alignment: .leading) {
+                                HStack {
+                                    Text("Win Rate:")
+                                        .font(.title3).bold()
+                                    Spacer()
+                                    Text("\(String(format: "%.0f%%", self.winRate * 100))")
+                                        .font(.title3)
+                                        .foregroundStyle(.secondary)
                                 }
                                 
-                                BarMark(
-                                    x: .value("Count", self.lostCount),
-                                    y: .value("State", "❌"),
-                                    width: .fixed(20.0)
-                                )
-                                .foregroundStyle(Color.red)
-                                .annotation(position: .overlay) {
-                                    if self.lostCount > 0 {
-                                        Text("\(self.lostCount)")
-                                            .foregroundColor(.white)
-                                            .font(.headline)
-                                    }
-                                    
-                                }
-                            }
-                            .chartXScale(domain: 0...Double(self.totalCount))
-                            .chartYAxis {
-                                AxisMarks(preset: .extended, position: .leading) { _ in
-                                    AxisValueLabel(horizontalSpacing: 15)
-                                        .font(.footnote)
-                                }
-                            }
-                            .animation(.easeInOut(duration: 0.5), value: self.filteredGameRecords.count)
-                        }
-                        
-                        VStack(alignment: .leading) {
-                            Text("Number of Guesses:")
-                                .font(.title3).bold()
-                            
-                            Chart {
-                                ForEach(Array(self.counts.enumerated()), id: \.offset) { index, count in
+                                Chart {
                                     BarMark(
-                                        x: .value("Count", count),
-                                        y: .value("Number of Guesses", " \(index+1) "),
+                                        x: .value("Count", self.wonCount),
+                                        y: .value("State", "✅"),
                                         width: .fixed(20.0)
                                     )
                                     .foregroundStyle(Color.green)
-                                    .annotation(position: .overlay) {
-                                        if count > 0 {
-                                            Text("\(count)")
-                                                .foregroundColor(.white)
+                                    .annotation(position: self.wonCount < (self.lostCount / 6) ? .trailing : .overlay) {
+                                        if self.wonCount > 0 {
+                                            Text("\(self.wonCount)")
+                                                .foregroundColor(self.wonCount < (self.lostCount / 6) ? .primary : .white)
+                                                .font(.headline)
+                                        }
+                                    }
+                                    
+                                    BarMark(
+                                        x: .value("Count", self.lostCount),
+                                        y: .value("State", "❌"),
+                                        width: .fixed(20.0)
+                                    )
+                                    .foregroundStyle(Color.red)
+                                    .annotation(position: self.lostCount < (self.wonCount / 6) ? .trailing : .overlay) {
+                                        if self.lostCount > 0 {
+                                            Text("\(self.lostCount)")
+                                                .foregroundColor(self.lostCount < (self.wonCount / 6) ? .primary : .white)
                                                 .font(.headline)
                                         }
                                     }
                                 }
-                            }
-                            .chartXScale(domain: 0...Double(self.maxGuessesPerCount))
-                            .chartYAxis {
-                                AxisMarks(preset: .extended, position: .leading) { _ in
-                                    AxisValueLabel(horizontalSpacing: 15)
-                                        .font(.footnote)
+                                .chartXScale(domain: 0...Double(self.totalCount))
+                                .chartYAxis {
+                                    AxisMarks(preset: .extended, position: .leading) { _ in
+                                        AxisValueLabel(horizontalSpacing: 15)
+                                            .font(.footnote)
+                                    }
                                 }
+                                .animation(.easeInOut(duration: 0.5), value: self.filteredGameRecords.count)
                             }
-                            .animation(.easeInOut(duration: 0.5), value: self.filteredGameRecords.count)
-                            .frame(minHeight: 250)
+                            
+                            VStack(alignment: .leading) {
+                                Text("Number of Guesses:")
+                                    .font(.title3).bold()
+                                
+                                Chart {
+                                    ForEach(Array(self.counts.enumerated()), id: \.offset) { index, count in
+                                        BarMark(
+                                            x: .value("Count", count),
+                                            y: .value("Number of Guesses", " \(index+1) "),
+                                            width: .fixed(20.0)
+                                        )
+                                        .foregroundStyle(Color.green)
+                                        .annotation(position: count < (self.maxGuessesPerCount / 6) ? .trailing : .overlay) {
+                                            if count > 0 {
+                                                Text("\(count)")
+                                                    .foregroundColor(count < (self.maxGuessesPerCount / 6) ? .primary : .white)
+                                                    .font(.headline)
+                                            }
+                                        }
+                                    }
+                                }
+                                .chartXScale(domain: 0...Double(self.maxGuessesPerCount))
+                                .chartYAxis {
+                                    AxisMarks(preset: .extended, position: .leading) { _ in
+                                        AxisValueLabel(horizontalSpacing: 15)
+                                            .font(.footnote)
+                                    }
+                                }
+                                .animation(.easeInOut(duration: 0.5), value: self.filteredGameRecords.count)
+                                .frame(minHeight: 250)
+                            }
                         }
+                        .safeAreaPadding(.bottom, 54)
                     }
                 }
-            }
-            .navigationTitle("Stats")
-            .onChange(of: self.numberOfLetters) {
-                if self.numberOfLetters > 7 {
-                    self.maxNumberOfRows = 8
-                } else if self.numberOfLetters == 6 {
-                    self.maxNumberOfRows = 7
-                } else {
-                    self.maxNumberOfRows = 6
+                .navigationTitle("Stats")
+                .onChange(of: self.numberOfLetters) {
+                    if self.numberOfLetters > 7 {
+                        self.maxNumberOfRows = 8
+                    } else if self.numberOfLetters == 6 {
+                        self.maxNumberOfRows = 7
+                    } else {
+                        self.maxNumberOfRows = 6
+                    }
+                    self.filterGameRecords()
                 }
-                self.filterGameRecords()
-            }
-            .onChange(of: self.selectedLanguage) {
-                self.filterGameRecords()
-            }
-            .onChange(of: self.gameMode) {
-                self.filterGameRecords()
-            }
-            .onChange(of: self.showsWhenHintsUsed) {
-                self.filterGameRecords()
+                .onChange(of: self.selectedLanguage) {
+                    self.filterGameRecords()
+                }
+                .onChange(of: self.gameMode) {
+                    self.filterGameRecords()
+                }
+                .onChange(of: self.showsWhenHintsUsed) {
+                    self.filterGameRecords()
+                }
             }
                 
         }

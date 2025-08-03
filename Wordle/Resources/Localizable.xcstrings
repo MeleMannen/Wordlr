@@ -196,6 +196,16 @@
         }
       }
     },
+    "App Info" : {
+      "localizations" : {
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "App Info"
+          }
+        }
+      }
+    },
     "App Theme:" : {
       "localizations" : {
         "en" : {
@@ -260,6 +270,26 @@
         }
       }
     },
+    "Build:" : {
+      "localizations" : {
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bygg:"
+          }
+        }
+      }
+    },
+    "Copy" : {
+      "localizations" : {
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kopier"
+          }
+        }
+      }
+    },
     "Copy Result" : {
       "localizations" : {
         "en" : {
@@ -288,6 +318,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Antall"
+          }
+        }
+      }
+    },
+    "Daily Word Theme:" : {
+      "localizations" : {
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Daglig Ord Tema:"
           }
         }
       }
@@ -636,6 +676,16 @@
         }
       }
     },
+    "Gold" : {
+      "localizations" : {
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gull"
+          }
+        }
+      }
+    },
     "Got it!" : {
       "localizations" : {
         "en" : {
@@ -811,6 +861,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Historikk er ikke tilgjengelig med disse valgene!"
+          }
+        }
+      }
+    },
+    "hour_string" : {
+      "comment" : "String for the hours",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@h "
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@t "
           }
         }
       }
@@ -1447,6 +1514,16 @@
         }
       }
     },
+    "Standard" : {
+      "localizations" : {
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Standard"
+          }
+        }
+      }
+    },
     "Starts with:" : {
       "localizations" : {
         "en" : {
@@ -1790,6 +1867,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Prøv å spille et spill først."
+          }
+        }
+      }
+    },
+    "Version:" : {
+      "localizations" : {
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Versjon:"
           }
         }
       }

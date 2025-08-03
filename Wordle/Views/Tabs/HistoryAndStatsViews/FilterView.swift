@@ -102,6 +102,6 @@ struct FilterView: View {
     }
 }
 
-//#Preview {
-//    FilterView(numberOfLetters: 9, selectedLanguage: .both, gameMode: .both)
-//}
+#Preview {
+    FilterView(numberOfLetters: .constant(9), selectedLanguage: .constant(.both), gameMode: .constant(.both), showsWhenHintsUsed: .constant(.both))
+}

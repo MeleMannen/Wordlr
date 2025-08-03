@@ -13,7 +13,7 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
     @AppStorage("defaultLanguage") private var defaultLanguage: LanguageSelection = .norwegian
     @AppStorage("defaultNumberOfLetters") private var defaultNumberOfLetters: Int = 5
     
-    
+//    @Published var selectViewIsActive: Bool = true
     @Published var streaks: [StreakEntity] = []
     @Published var normalStreaks: [NormalStreakEntity] = []
     var gameRecords: [GameRecordEntity] = []
@@ -646,7 +646,8 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
         
         var timeUsedString = ""
         if hours > 0 {
-            timeUsedString += "\(hours)h "
+            let hourString = String(format: NSLocalizedString("hour_string", comment: "String for the hours"), hours)
+            timeUsedString += hourString
         }
         if minutes > 0 {
             timeUsedString += "\(minutes)m "

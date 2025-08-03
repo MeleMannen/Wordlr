@@ -24,5 +24,4 @@ struct WordDefinitionView: View {
 
 #Preview {
     WordDefinitionView(word: "Hello")
-        .environmentObject(AppManager())
 }

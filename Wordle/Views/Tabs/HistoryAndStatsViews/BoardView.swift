@@ -9,6 +9,7 @@ import SwiftUI
 
 struct BoardView: View {
     @Environment(\.colorScheme) private var colorScheme
+    @AppStorage("userWantsNormalTheme") private var userWantsNormalTheme: Bool = true
     @State var gameRecord: GameRecord
     @State var board: [[Letter]]
     let gradient = LinearGradient(colors: [.orange, .yellow, .yellow, .yellow, .yellow, .white], startPoint: .bottomLeading, endPoint: .topTrailing)
@@ -40,8 +41,7 @@ struct BoardView: View {
                                             .foregroundStyle(letter.state == .notUsed ? AnyShapeStyle(.black) : AnyShapeStyle(Color.white))
                                             .frame(width: geometry2.size.height / CGFloat(6), height: geometry2.size.height / CGFloat(6))
                                             .background {
-                                                if self.gameRecord.mode == .dailyWord && self.gameRecord.state == .won && (rowIndex == self.gameRecord.numberOfGuesses - 1 || rowIndex == self.board.count) {
-                                                    
+                                                if !self.userWantsNormalTheme && self.colorScheme == .dark && self.gameRecord.mode == .dailyWord && self.gameRecord.state == .won && (rowIndex == self.gameRecord.numberOfGuesses - 1 || rowIndex == self.board.count) {
                                                     RoundedRectangle(cornerRadius: 5)
                                                         .foregroundStyle(self.gradient)
                                                         .gradientShadow(gradient: self.shadowGradient, radius: 3, x: 0, y: 0)
@@ -57,8 +57,7 @@ struct BoardView: View {
                                             .foregroundStyle(letter.state == .notUsed ? AnyShapeStyle(.black) : AnyShapeStyle(Color.white))
                                             .frame(width: geometry2.size.height / CGFloat(self.gameRecord.numberOfLetters + 1), height: geometry2.size.height / CGFloat(self.gameRecord.numberOfLetters + 1))
                                             .background {
-                                                if self.gameRecord.mode == .dailyWord && self.gameRecord.state == .won && (rowIndex == self.gameRecord.numberOfGuesses - 1 || rowIndex == self.board.count) {
-                                                    
+                                                if !self.userWantsNormalTheme && self.gameRecord.mode == .dailyWord && self.gameRecord.state == .won && (rowIndex == self.gameRecord.numberOfGuesses - 1 || rowIndex == self.board.count) {
                                                     RoundedRectangle(cornerRadius: 5)
                                                         .foregroundStyle(self.gradient)
                                                         .gradientShadow(gradient: self.shadowGradient, radius: 3, x: 0, y: 0)
@@ -79,8 +78,6 @@ struct BoardView: View {
                 Spacer(minLength: geometry.size.height*2 / 5)
             }
             .padding(.top, 15)
-            
-            
         }
         .navigationTitle("The Board")
         .navigationBarTitleDisplayMode(.inline)

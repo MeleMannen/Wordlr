@@ -170,6 +170,7 @@ struct NorwegianWordDefinitionView: View {
                         }
                     }
                 }
+                .safeAreaPadding(.bottom, 54)
                 
             } else {
                 ProgressView()

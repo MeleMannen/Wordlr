@@ -263,6 +263,7 @@ struct EnglishWordDefinitionView: View {
                         dump(self.englishDefinition)
                     }
                 }
+                .safeAreaPadding(.bottom, 54)
                 
             } else {
                 ProgressView()

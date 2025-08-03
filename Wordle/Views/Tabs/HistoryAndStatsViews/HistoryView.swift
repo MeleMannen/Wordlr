@@ -7,13 +7,16 @@
 
 import SwiftUI
 import SwiftData
+import GoogleMobileAds
 
 struct HistoryView: View {
     @Environment(\.modelContext) private var modelContext
+    @Environment(\.colorScheme) private var colorScheme
     @AppStorage("defaultStatLanguage") private var defaultStatLanguage: LanguageSelection = .both
     @AppStorage("defaultStatNumberOfLetters") private var defaultStatNumberOfLetters: Int = 9
     @AppStorage("defaultStatGameMode") private var defaultStatGameMode: GameMode = .both
     @AppStorage("defaultStatHintsUsed") private var defaultStatHintsUsed: ShowsWhenHintsUsed = .both
+    @AppStorage("userWantsNormalTheme") private var userWantsNormalTheme: Bool = true
     @State private var hasFixedDefualtValues: Bool = false
     @State private var numberOfLetters: Int = 9
     @State private var selectedLanguage: LanguageSelection = .both
@@ -36,112 +39,113 @@ struct HistoryView: View {
     
     var body: some View {
         NavigationStack {
-            VStack {
-                FilterView(numberOfLetters: $numberOfLetters, selectedLanguage: $selectedLanguage, gameMode: $gameMode, showsWhenHintsUsed: $showsWhenHintsUsed)
-                if self.searchResults.isEmpty && !self.searchedWord.isEmpty {
-                    ContentUnavailableView.search(text: self.searchedWord)
-                } else if self.searchResults.isEmpty {
-                    ContentUnavailableView.init("History is not available with this selction!", systemImage: "exclamationmark.arrow.trianglehead.counterclockwise.rotate.90", description: Text("Try playing a game first."))
-                } else {
-                    List {
-                        ForEach(sectionKeys, id: \.self) { date in
-                            Section {
-                                ForEach(groupedWords[date] ?? [], id: \.id) { gameRecordEntity in
-                                    NavigationLink(destination: {
-                                        GameRecordView(gameRecord: gameRecordEntity.gameRecord)
-                                        
-                                    }, label: {
-                                        HStack {
-                                            if gameRecordEntity.gameRecord.mode == .dailyWord && gameRecordEntity.gameRecord.state == .won {
-                                                Image(systemName: "checkmark")
-                                                    .foregroundStyle(.white)
-                                                    .conditionalShadow(color: .black.opacity(0.3), radius: 2, x: 2, y: 2)
-                                                    .padding(10)
-                                                    .background {
-                                                        Circle()
-                                                            .foregroundStyle(LinearGradient(colors: [.orange, .yellow, .white], startPoint: .bottomLeading, endPoint: .topTrailing))
-                                                        //                                        .padding(5)
-                                                            .gradientShadow(gradient: self.shadowGradient, radius: 3, x: 0, y: 0)
-                                                            .conditionalShadow(color: .black.opacity(0.5), radius: 3, x: 4, y: 4)
-                                                    }
-                                                    .font(.title2).bold()
-                                                    
-                                            } else {
-                                                Image(systemName: gameRecordEntity.gameRecord.state == .won ? "checkmark" : "xmark")
-                                                    .foregroundStyle(.white)
-                                                    .conditionalShadow(color: .black.opacity(0.4), radius: 2, x: 2, y: 2)
-                                                    .padding(10)
-                                                    .background {
-                                                        Circle()
-                                                            .foregroundColor(gameRecordEntity.gameRecord.state == .won ? .green : .red)
-                                                            .conditionalShadow(color: .black.opacity(0.3), radius: 3, x: 4, y: 4)
-                                                    }
-                                                    .font(.title2).bold()
-                                            }
+            GeometryReader { geometry in
+                VStack {
+                    FilterView(numberOfLetters: $numberOfLetters, selectedLanguage: $selectedLanguage, gameMode: $gameMode, showsWhenHintsUsed: $showsWhenHintsUsed)
+                    if self.searchResults.isEmpty && !self.searchedWord.isEmpty {
+                        ContentUnavailableView.search(text: self.searchedWord)
+                    } else if self.searchResults.isEmpty {
+                        ContentUnavailableView.init("History is not available with this selction!", systemImage: "exclamationmark.arrow.trianglehead.counterclockwise.rotate.90", description: Text("Try playing a game first."))
+                    } else {
+                        List {
+                            ForEach(sectionKeys, id: \.self) { date in
+                                Section {
+                                    ForEach(groupedWords[date] ?? [], id: \.id) { gameRecordEntity in
+                                        NavigationLink(destination: {
+                                            GameRecordView(gameRecord: gameRecordEntity.gameRecord)
                                             
-                                            VStack(alignment: .leading) {
-                                                Text(gameRecordEntity.gameRecord.word)
-                                                    .font(.title3)
-                                                    .foregroundStyle(.primary)
-                                                    .conditionalShadow(color: .black.opacity(0.3), radius: 1.5, x: 4, y: 4)
-                                                if gameRecordEntity.gameRecord.mode == .dailyWord && gameRecordEntity.gameRecord.state == .won {
-//                                                    GradientShadowView(text: gameRecordEntity.gameRecord.mode.localizedName + " - \(gameRecordEntity.gameRecord.numberOfLetters) letters", gradient: self.gradient, alignment: .leading, blurRadius: 5)
-//                                                        .font(.caption)
-//                                                        .padding(.top, -5)
-                                                    Text(gameRecordEntity.gameRecord.mode.localizedName + " - " + String(format: NSLocalizedString("number_letters", comment: "Daily Word Mode with number of letters"), gameRecordEntity.gameRecord.numberOfLetters))
-                                                        .font(.caption)
-                                                        .foregroundStyle(self.gradient)
-                                                        .gradientShadow(gradient: self.shadowGradient, radius: 3, x: 0, y: 0)
-                                                        .conditionalShadow(color: .black.opacity(0.5), radius: 4, x: 4, y: 4)
-//
-                                                } else if gameRecordEntity.gameRecord.mode == .dailyWord {
-                                                    Text(gameRecordEntity.gameRecord.mode.localizedName + " - \(gameRecordEntity.gameRecord.numberOfLetters) letters")
-                                                        .font(.caption)
-                                                        .foregroundStyle(.secondary)
+                                        }, label: {
+                                            HStack {
+                                                if !self.userWantsNormalTheme && self.colorScheme == .dark && gameRecordEntity.gameRecord.mode == .dailyWord && gameRecordEntity.gameRecord.state == .won {
+                                                    Image(systemName: "checkmark")
+                                                        .foregroundStyle(.white)
+                                                        .conditionalShadow(color: .black.opacity(0.3), radius: 2, x: 2, y: 2)
+                                                        .padding(10)
+                                                        .background {
+                                                            Circle()
+                                                                .foregroundStyle(LinearGradient(colors: [.orange, .yellow, .white], startPoint: .bottomLeading, endPoint: .topTrailing))
+                                                            //                                        .padding(5)
+                                                                .gradientShadow(gradient: self.shadowGradient, radius: 3, x: 0, y: 0)
+                                                                .conditionalShadow(color: .black.opacity(0.5), radius: 3, x: 4, y: 4)
+                                                        }
+                                                        .font(.title2).bold()
+                                                    
+                                                } else {
+                                                    Image(systemName: gameRecordEntity.gameRecord.state == .won ? "checkmark" : "xmark")
+                                                        .foregroundStyle(.white)
+                                                        .conditionalShadow(color: .black.opacity(0.4), radius: 2, x: 2, y: 2)
+                                                        .padding(10)
+                                                        .background {
+                                                            Circle()
+                                                                .foregroundColor(gameRecordEntity.gameRecord.state == .won ? .green : .red)
+                                                                .conditionalShadow(color: .black.opacity(0.3), radius: 3, x: 4, y: 4)
+                                                        }
+                                                        .font(.title2).bold()
                                                 }
+                                                
+                                                VStack(alignment: .leading) {
+                                                    Text(gameRecordEntity.gameRecord.word)
+                                                        .font(.title3)
+                                                        .foregroundStyle(.primary)
+                                                        .conditionalShadow(color: .black.opacity(0.3), radius: 1.5, x: 4, y: 4)
+                                                    
+                                                    if !self.userWantsNormalTheme && self.colorScheme == .dark && gameRecordEntity.gameRecord.mode == .dailyWord && gameRecordEntity.gameRecord.state == .won {
+                                                        Text(gameRecordEntity.gameRecord.mode.localizedName + " - " + String(format: NSLocalizedString("number_letters", comment: "Daily Word Mode with number of letters"), gameRecordEntity.gameRecord.numberOfLetters))
+                                                            .font(.caption)
+                                                            .foregroundStyle(self.gradient)
+                                                            .gradientShadow(gradient: self.shadowGradient, radius: 3, x: 0, y: 0)
+                                                            .conditionalShadow(color: .black.opacity(0.5), radius: 4, x: 4, y: 4)
+                                                        
+                                                    } else if gameRecordEntity.gameRecord.mode == .dailyWord {
+                                                        Text(gameRecordEntity.gameRecord.mode.localizedName + " - " + String(format: NSLocalizedString("number_letters", comment: "Daily Word Mode with number of letters"), gameRecordEntity.gameRecord.numberOfLetters))
+                                                            .font(.caption)
+                                                            .foregroundStyle(.secondary)
+                                                    }
+                                                }
+                                                Spacer()
                                             }
-                                            Spacer()
-                                        }
-                                    })
-                                    
+                                        })
+                                        
+                                    }
+                                    //                                .onDelete { indexSet in
+                                    //                                    withAnimation {
+                                    //                                        let toDelete = indexSet.map { groupedWords[date]![$0] }
+                                    //                                        toDelete.forEach { modelContext.delete($0) }
+                                    //                                    }
+                                    //                                }
+                                } header: {
+                                    SectionHeaderView(letter: date)
                                 }
-//                                .onDelete { indexSet in
-//                                    withAnimation {
-//                                        let toDelete = indexSet.map { groupedWords[date]![$0] }
-//                                        toDelete.forEach { modelContext.delete($0) }
-//                                    }
-//                                }
-                            } header: {
-                                SectionHeaderView(letter: date)
+                                .listSectionSeparator(.hidden)
                             }
-                            .listSectionSeparator(.hidden)
                         }
+                        .safeAreaPadding(.bottom, 54)
                     }
                 }
-            }
-            .searchable(text: self.$searchedWord, placement: .navigationBarDrawer(displayMode: .always), prompt: "Search for a Phrase")
-            .navigationTitle("History")
-            .onChange(of: self.searchedWord) {
-                self.filterGameRecords()
-            }
-            .onChange(of: self.numberOfLetters) {
-                self.filterGameRecords()
-            }
-            .onChange(of: self.selectedLanguage) {
-                self.filterGameRecords()
-            }
-            .onChange(of: self.gameMode) {
-                self.filterGameRecords()
-            }
-            .onChange(of: self.showsWhenHintsUsed) {
-                self.filterGameRecords()
-            }
-            .onAppear {
-                if !self.hasFixedDefualtValues {
-                    self.setDefaultValues()
-                    self.hasFixedDefualtValues = true
+                .searchable(text: self.$searchedWord, placement: .navigationBarDrawer(displayMode: .always), prompt: "Search for a Phrase")
+                .navigationTitle("History")
+                .onChange(of: self.searchedWord) {
+                    self.filterGameRecords()
                 }
-                self.filterGameRecords()
+                .onChange(of: self.numberOfLetters) {
+                    self.filterGameRecords()
+                }
+                .onChange(of: self.selectedLanguage) {
+                    self.filterGameRecords()
+                }
+                .onChange(of: self.gameMode) {
+                    self.filterGameRecords()
+                }
+                .onChange(of: self.showsWhenHintsUsed) {
+                    self.filterGameRecords()
+                }
+                .onAppear {
+                    if !self.hasFixedDefualtValues {
+                        self.setDefaultValues()
+                        self.hasFixedDefualtValues = true
+                    }
+                    self.filterGameRecords()
+                }
             }
         }
     }

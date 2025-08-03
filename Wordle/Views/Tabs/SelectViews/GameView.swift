@@ -13,8 +13,7 @@ struct GameView: View {
     @EnvironmentObject var appManager: AppManager
     @Environment(\.dismiss) var dismiss
     @Environment(\.colorScheme) private var colorScheme
-    @AppStorage("appTheme") private var appTheme: AppTheme = .dark
-    @AppStorage("userWantsAds") var userWantAds: Bool = false
+    @AppStorage("userWantsNormalTheme") private var userWantsNormalTheme: Bool = true
     
     @State var didTapSubmitButton: Bool = false
     @State var didTapBackButton: Bool = false
@@ -54,7 +53,7 @@ struct GameView: View {
                                             .foregroundStyle(letter.state == .notUsed ? AnyShapeStyle(.black) : AnyShapeStyle(Color.white))
                                             .frame(width: geometry2.size.height / CGFloat(6), height: geometry2.size.height / CGFloat(6))
                                             .background {
-                                                if appManager.selectedGameMode == .dailyWord && appManager.didWinGame == .won && appManager.isGameOver && (rowIndex == appManager.currentRow - 1 || rowIndex == appManager.board.count) {
+                                                if !self.userWantsNormalTheme && self.colorScheme == .dark && appManager.selectedGameMode == .dailyWord && appManager.didWinGame == .won && appManager.isGameOver && (rowIndex == appManager.currentRow - 1 || rowIndex == appManager.board.count) {
                                                     RoundedRectangle(cornerRadius: 5)
                                                         .foregroundStyle(appManager.gradient)
                                                         .gradientShadow(gradient: appManager.shadowGradient, radius: 3, x: 0, y: 0)
@@ -89,7 +88,7 @@ struct GameView: View {
                                             .foregroundStyle(letter.state == .notUsed ? AnyShapeStyle(.black) : AnyShapeStyle(Color.white))
                                             .frame(width: geometry2.size.height / CGFloat(appManager.numberOfLetters + 1), height: geometry2.size.height / CGFloat(appManager.numberOfLetters + 1))
                                             .background {
-                                                if appManager.selectedGameMode == .dailyWord && appManager.didWinGame == .won && appManager.isGameOver && (rowIndex == appManager.currentRow - 1 || rowIndex == appManager.board.count) {
+                                                if !self.userWantsNormalTheme && self.colorScheme == .dark && appManager.selectedGameMode == .dailyWord && appManager.didWinGame == .won && appManager.isGameOver && (rowIndex == appManager.currentRow - 1 || rowIndex == appManager.board.count) {
                                                     RoundedRectangle(cornerRadius: 5)
                                                         .foregroundStyle(appManager.gradient)
                                                         .gradientShadow(gradient: appManager.shadowGradient, radius: 3, x: 0, y: 0)
@@ -251,7 +250,7 @@ struct GameView: View {
                                         .frame(minWidth: (geometry2.size.width*7) / CGFloat(14) + CGFloat(self.device == .pad ? 60 : 30), maxWidth: (geometry2.size.width*7) / CGFloat(12) + CGFloat(self.device == .pad ? 60 : 30), minHeight: geometry2.size.height / CGFloat(10), idealHeight: geometry2.size.height / CGFloat(8), maxHeight: geometry2.size.height / CGFloat(6))
                                         .foregroundStyle(.white)
                                         .background {
-                                            if appManager.selectedGameMode == .dailyWord {
+                                            if !self.userWantsNormalTheme && self.colorScheme == .dark && appManager.selectedGameMode == .dailyWord {
                                                 RoundedRectangle(cornerRadius: 10)
                                                     .foregroundStyle(appManager.gradient)
                                                     .gradientShadow(gradient: appManager.shadowGradient, radius: 3, x: 0, y: 0)
@@ -338,7 +337,7 @@ struct GameView: View {
                                 }, label: {
                                     Text("New Game")
                                         .conditionalShadow(color: .black.opacity(0.2), radius: 2, x: 4, y: 4)
-                                        .font(.title).bold()
+                                        .font(.title2).bold()
                                         .frame(maxWidth: .infinity, minHeight: 40, idealHeight: 45, maxHeight: 50)
                                         .foregroundStyle(.white)
                                         .background {
@@ -359,7 +358,7 @@ struct GameView: View {
                                 }, label: {
                                     Text("Play Something Else")
                                         .conditionalShadow(color: .black.opacity(0.2), radius: 2, x: 4, y: 4)
-                                        .font(.title).bold()
+                                        .font(.title2).bold()
                                         .frame(maxWidth: .infinity, minHeight: 40, idealHeight: 45, maxHeight: 50)
                                         .foregroundStyle(.white)
                                         .background {
@@ -376,15 +375,29 @@ struct GameView: View {
                             Spacer()
                             
                             NavigationLink(destination: WordDefinitionView(word: appManager.word, language: appManager.selectedLanguage), label: {
-                                Text("Show Definition")
-                                    .conditionalShadow(color: .black.opacity(0.2), radius: 2, x: 4, y: 4)
-                                    .font(.title).bold()
-                                    .frame(maxWidth: .infinity, minHeight: 40, idealHeight: 45, maxHeight: 50)
-                                    .foregroundStyle(.white)
-                                    .background {
-                                        RoundedRectangle(cornerRadius: 10)
-                                            .foregroundStyle(Color.orange)
-                                    }
+                                if !self.userWantsNormalTheme && self.colorScheme == .dark && appManager.selectedGameMode == .dailyWord {
+                                    
+                                    Text("Show Definition")
+                                        .conditionalShadow(color: .black.opacity(0.2), radius: 2, x: 4, y: 4)
+                                        .font(.title2).bold()
+                                        .frame(maxWidth: .infinity, minHeight: 40, idealHeight: 45, maxHeight: 50)
+                                        .foregroundStyle(.white)
+                                        .background {
+                                            RoundedRectangle(cornerRadius: 10)
+                                                .foregroundStyle(appManager.gradient)
+                                                .gradientShadow(gradient: appManager.shadowGradient, radius: 3, x: 0, y: 0)
+                                        }
+                                } else {
+                                    Text("Show Definition")
+                                        .conditionalShadow(color: .black.opacity(0.2), radius: 2, x: 4, y: 4)
+                                        .font(.title2).bold()
+                                        .frame(maxWidth: .infinity, minHeight: 40, idealHeight: 45, maxHeight: 50)
+                                        .foregroundStyle(.white)
+                                        .background {
+                                            RoundedRectangle(cornerRadius: 10)
+                                                .foregroundStyle(Color.orange)
+                                        }
+                                }
                             })
                             .simultaneousGesture(TapGesture().onEnded {
                                 self.didTapShowDefinitionButton.toggle()
@@ -406,19 +419,19 @@ struct GameView: View {
                                         
                                     }
                                 } label: {
-                                    if appManager.didWinGame == .won {
+//                                    if appManager.didWinGame == .won {
+//                                        Label("Copy Result", systemImage: appManager.hasSharedResult ? "doc.on.doc.fill" : "doc.on.doc")
+//                                            .font(.title2).bold()
+//                                            .contentTransition(.symbolEffect(.replace))
+//                                            .foregroundStyle(appManager.gradient)
+////                                            .gradientShadow(gradient: appManager.shadowGradient, radius: 1, x: 0, y: 0)
+//                                            .conditionalShadow(color: .black.opacity(0.6), radius: 4, x: 8, y: 8)
+//                                    } else {
                                         Label("Copy Result", systemImage: appManager.hasSharedResult ? "doc.on.doc.fill" : "doc.on.doc")
                                             .font(.title2).bold()
                                             .contentTransition(.symbolEffect(.replace))
-                                            .foregroundStyle(appManager.gradient)
-//                                            .gradientShadow(gradient: appManager.shadowGradient, radius: 1, x: 0, y: 0)
-                                            .conditionalShadow(color: .black.opacity(0.6), radius: 4, x: 8, y: 8)
-                                    } else {
-                                        Label("Copy Result", systemImage: appManager.hasSharedResult ? "doc.on.doc.fill" : "doc.on.doc")
-                                            .font(.title2).bold()
-                                            .contentTransition(.symbolEffect(.replace))
-                                            .conditionalShadow(color: .black.opacity(0.6), radius: 4, x: 8, y: 8)
-                                    }
+                                            .conditionalShadow(color: .black.opacity(0.5), radius: 4, x: 4, y: 4)
+//                                    }
                                 }
                                 Spacer()
                             }
@@ -463,11 +476,10 @@ struct GameView: View {
             }
         }
         .onAppear {
+//            appManager.selectViewIsActive = false
             if appManager.word.isEmpty || appManager.selectedLanguage != appManager.language || appManager.gameMode != appManager.selectedGameMode {
-                print("GameMode: \(appManager.selectedGameMode), \(appManager.gameMode)")
                 appManager.getWords()
             } else if appManager.word.count != appManager.numberOfLetters {
-                print("GameMode2: \(appManager.selectedGameMode), \(appManager.gameMode)")
                 appManager.resetBoard()
             }
             
@@ -477,7 +489,8 @@ struct GameView: View {
 
 struct AdButton: View {
     @EnvironmentObject var appManager: AppManager
-    @AppStorage("userWantsAds") var userWantAds: Bool = false
+    @AppStorage("userWantsAds") var userWantsAds: Bool = true
+    @AppStorage("hasSeenAdOption") var hasSeenAdOption: Bool = false
     @State var isPresentingAdOption: Bool = false
     @State var hasLoadedAd: Bool = false
     @State private var didTap: Bool = false
@@ -486,7 +499,7 @@ struct AdButton: View {
         Button(action: {
             self.didTap.toggle()
             if !appManager.isGameOver && !appManager.isAnimating {
-                if !userWantAds {
+                if !userWantsAds || !hasSeenAdOption {
                     self.isPresentingAdOption = true
                 } else {
                     if hasLoadedAd {
@@ -506,10 +519,12 @@ struct AdButton: View {
         })
         .alert("Hint", isPresented: $isPresentingAdOption, actions: {
             Button("No", role: .cancel) {
-                self.userWantAds = false
+                self.userWantsAds = false
+                self.hasSeenAdOption = true
             }
             Button("Sure") {
-                self.userWantAds = true
+                self.userWantsAds = true
+                self.hasSeenAdOption = true
                 
                 Task {
                     await MobileAds.shared.start()
@@ -521,23 +536,13 @@ struct AdButton: View {
             Text("Do you want to see an ad to get a hint and support the app? It helps us keep the app free and improve it further.")
         })
         .task {
-            if userWantAds {
-//                Task {
-                    await appManager.loadAd()
-                    self.hasLoadedAd = true
-//                }
+            if userWantsAds && hasSeenAdOption {
+                await appManager.loadAd()
+                self.hasLoadedAd = true
             }
         }
-//        .onAppear {
-//            if userWantAds {
-//                Task {
-//                    await appManager.loadAd()
-//                    self.hasLoadedAd = true
-//                }
-//            }
-//        }
         .onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)) { _ in
-            if self.userWantAds {
+            if self.userWantsAds && hasSeenAdOption {
                 ATTrackingManager.requestTrackingAuthorization(completionHandler: { status in })
             }
         }

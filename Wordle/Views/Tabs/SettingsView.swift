@@ -10,8 +10,11 @@ import GoogleMobileAds
 import AppTrackingTransparency
 
 struct SettingsView: View {
+    @Environment(\.colorScheme) private var colorScheme
     @Environment(\.scenePhase) private var scenePhase
     @AppStorage("appTheme") private var appTheme: AppTheme = .dark
+    @AppStorage("userWantsAds") var userWantsAds: Bool = true
+    @AppStorage("userWantsNormalTheme") private var userWantsNormalTheme: Bool = true
     @AppStorage("defaultLanguage") private var defaultLanguage: LanguageSelection = .norwegian
     @AppStorage("defaultNumberOfLetters") private var defaultNumberOfLetters: Int = 5
     
@@ -19,9 +22,6 @@ struct SettingsView: View {
     @AppStorage("defaultStatNumberOfLetters") private var defaultStatNumberOfLetters: Int = 9
     @AppStorage("defaultStatGameMode") private var defaultStatGameMode: GameMode = .both
     @AppStorage("defaultStatHintsUsed") private var defaultStatHintsUsed: ShowsWhenHintsUsed = .both
-    
-    @AppStorage("userWantsAds") var userWantAds: Bool = false
-    @State private var bannerReloadID = UUID()
     
     var body: some View {
         GeometryReader { geometry in
@@ -49,9 +49,27 @@ struct SettingsView: View {
                             .padding(.vertical, 5)
                         }
                         
+                        if self.colorScheme == .dark {
+                            DisclosureGroup {
+                                Picker("", selection: $userWantsNormalTheme) {
+                                    Text("Standard")
+                                        .tag(true)
+                                    Text("Gold")
+                                        .tag(false)
+                                }
+                                .pickerStyle(SegmentedPickerStyle())
+                                .padding(.vertical, 5)
+                            } label: {
+                                HStack {
+                                    Text("Daily Word Theme:")
+                                        .font(.headline)
+                                }
+                                .padding(.vertical, 5)
+                            }
+                        }
                         
                         DisclosureGroup {
-                            Picker("", selection: $userWantAds) {
+                            Picker("", selection: $userWantsAds) {
                                 Text("Allow Ads")
                                     .tag(true)
                                 Text("Don't Allow Ads")
@@ -68,14 +86,15 @@ struct SettingsView: View {
                             }
                             .padding(.vertical, 5)
                         }
-                        .onChange(of: userWantAds) {
-                            if userWantAds {
+                        .onChange(of: userWantsAds) {
+                            if userWantsAds {
                                 MobileAds.shared.start()
                             }
                         }
                     } header: {
                         Text("App")
                     }
+                    
                     Section {
                         DisclosureGroup {
                             HStack {
@@ -254,38 +273,66 @@ struct SettingsView: View {
                         Text("Stats and History")
                     }
                     
+                    Section {
+                        VStack {
+                            HStack {
+                                Text("Version:")
+                                    .padding(.leading, 3)
+                                    .font(.headline)
+                                
+                                Spacer()
+                                
+                                Text("\(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "0.0.0")")
+                                //                                .font(.headline)
+                                    .contextMenu {
+                                        Button(action: {
+                                            UIPasteboard.general.string = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "0.0.0"
+                                        }) {
+                                            Text("Copy")
+                                            Image(systemName: "doc.on.doc")
+                                        }
+                                    }
+                            }
+                        }
+                        VStack {
+                            HStack {
+                                Text("Build:")
+                                    .padding(.leading, 3)
+                                    .font(.headline)
+                                
+                                
+                                Spacer()
+                                
+                                Text("\(Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "0")")
+                                //                                .font(.headline)
+                                    .contextMenu {
+                                        Button(action: {
+                                            UIPasteboard.general.string = Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "0"
+                                        }) {
+                                            Text("Copy")
+                                            Image(systemName: "doc.on.doc")
+                                        }
+                                    }
+                            }
+                        }
+                        
+                    } header: {
+                        Text("App Info")
+                    }
                 }
                 .navigationTitle("Settings")
                 .onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)) { _ in
-                    if self.userWantAds {
+                    if self.userWantsAds {
                         ATTrackingManager.requestTrackingAuthorization(completionHandler: { _ in })
                     }
                 }
-                .onChange(of: self.scenePhase) { _, newPhase in
-                    if newPhase == .active, userWantAds {
-                        self.bannerReloadID = UUID()
-                    }
-                }
-                .safeAreaInset(edge: .bottom) {
-                    if self.userWantAds {
-                        if #available(iOS 26.0, *) {
-                            let adSize = currentOrientationAnchoredAdaptiveBanner(width: geometry.size.width - 40)
-                            BannerViewContainer(adSize)
-                                .frame(width: adSize.size.width, height: adSize.size.height)
-                                .padding(.bottom, 5)
-                                .id(bannerReloadID)
-                        } else {
-                            let adSize = currentOrientationAnchoredAdaptiveBanner(width: geometry.size.width)
-                            BannerViewContainer(adSize)
-                                .frame(width: adSize.size.width, height: adSize.size.height)
-                                .id(bannerReloadID)
-                        }
-                    }
-                }
+                .safeAreaPadding(.bottom, 54)
             }
         }
     }
 }
+
+
 
 struct BannerViewContainer: UIViewRepresentable {
     typealias UIViewType = BannerView

@@ -93,6 +93,7 @@ struct Info: View {
                     .padding(.bottom, 5)
             }
         }
+        .safeAreaPadding(.bottom, 54)
         .navigationTitle("Info")
         .navigationBarTitleDisplayMode(.inline)
     }
