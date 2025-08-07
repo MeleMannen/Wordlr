@@ -15,7 +15,6 @@ enum FilterOptionsFields: Hashable {
 
 struct FilterOptionsView: View {
     @EnvironmentObject var appManager: AppManager
-    @Environment(\.dismiss) var dismiss
     @FocusState var focusedField: FilterOptionsFields?
     
     
@@ -152,6 +151,7 @@ struct FilterOptionsView: View {
                         if #unavailable(iOS 26.0, ) {
                             RoundedRectangle(cornerRadius: 10)
                                 .foregroundStyle(Color(uiColor: .tertiarySystemBackground))
+                                .conditionalShadow(color: .black.opacity(0.5), radius: 4, x: 4, y: 4)
                         }
                         
                     }
@@ -214,6 +214,7 @@ struct FilterOptionsView: View {
                         if #unavailable(iOS 26.0, ) {
                             RoundedRectangle(cornerRadius: 10)
                                 .foregroundStyle(Color(uiColor: .tertiarySystemBackground))
+                                .conditionalShadow(color: .black.opacity(0.5), radius: 4, x: 4, y: 4)
                         }
                     }
                     .onChange(of: appManager.selectedExcludedLetters) { oldValue, newValue in

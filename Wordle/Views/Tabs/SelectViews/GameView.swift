@@ -419,19 +419,10 @@ struct GameView: View {
                                         
                                     }
                                 } label: {
-//                                    if appManager.didWinGame == .won {
-//                                        Label("Copy Result", systemImage: appManager.hasSharedResult ? "doc.on.doc.fill" : "doc.on.doc")
-//                                            .font(.title2).bold()
-//                                            .contentTransition(.symbolEffect(.replace))
-//                                            .foregroundStyle(appManager.gradient)
-////                                            .gradientShadow(gradient: appManager.shadowGradient, radius: 1, x: 0, y: 0)
-//                                            .conditionalShadow(color: .black.opacity(0.6), radius: 4, x: 8, y: 8)
-//                                    } else {
-                                        Label("Copy Result", systemImage: appManager.hasSharedResult ? "doc.on.doc.fill" : "doc.on.doc")
-                                            .font(.title2).bold()
-                                            .contentTransition(.symbolEffect(.replace))
-                                            .conditionalShadow(color: .black.opacity(0.5), radius: 4, x: 4, y: 4)
-//                                    }
+                                    Label("Copy Result", systemImage: appManager.hasSharedResult ? "doc.on.doc.fill" : "doc.on.doc")
+                                        .font(.title2).bold()
+                                        .contentTransition(.symbolEffect(.replace))
+                                        .conditionalShadow(color: .black.opacity(0.5), radius: 4, x: 4, y: 4)
                                 }
                                 Spacer()
                             }
@@ -476,12 +467,11 @@ struct GameView: View {
             }
         }
         .onAppear {
-//            appManager.selectViewIsActive = false
-            if appManager.word.isEmpty || appManager.selectedLanguage != appManager.language || appManager.gameMode != appManager.selectedGameMode {
+			if appManager.word.isEmpty || appManager.selectedLanguage != appManager.language || appManager.gameMode != appManager.selectedGameMode || appManager.message == "" && appManager.isGameOver {
                 appManager.getWords()
             } else if appManager.word.count != appManager.numberOfLetters {
                 appManager.resetBoard()
-            }
+			}
             
         }
     }
@@ -489,7 +479,7 @@ struct GameView: View {
 
 struct AdButton: View {
     @EnvironmentObject var appManager: AppManager
-    @AppStorage("userWantsAds") var userWantsAds: Bool = true
+    @AppStorage("userWantsAds") var userWantsAds: Bool = false
     @AppStorage("hasSeenAdOption") var hasSeenAdOption: Bool = false
     @State var isPresentingAdOption: Bool = false
     @State var hasLoadedAd: Bool = false

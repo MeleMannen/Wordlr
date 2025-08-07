@@ -7,10 +7,9 @@
 
 import SwiftUI
 import SwiftData
-import GoogleMobileAds
 
 struct HistoryView: View {
-    @Environment(\.modelContext) private var modelContext
+//    @Environment(\.modelContext) private var modelContext
     @Environment(\.colorScheme) private var colorScheme
     @AppStorage("defaultStatLanguage") private var defaultStatLanguage: LanguageSelection = .both
     @AppStorage("defaultStatNumberOfLetters") private var defaultStatNumberOfLetters: Int = 9

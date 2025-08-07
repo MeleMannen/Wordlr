@@ -6,9 +6,6 @@
 //
 
 import SwiftUI
-import SwiftData
-import GoogleMobileAds
-import AppTrackingTransparency
 
 struct SelectView: View {
     @Environment(\.modelContext) var modelContext
@@ -27,257 +24,259 @@ struct SelectView: View {
     
     
     var body: some View {
-//        NavigationStack {
-            GeometryReader { geometry in
-                ScrollView {
+        GeometryReader { geometry in
+            ScrollView {
+                VStack {
+                    Spacer()
                     VStack {
-                        Spacer()
-                        VStack {
-                            HStack {
-                                Text("The Phrase Length: ")
-                                    .font(.title2).bold()
-                                    .conditionalShadow(color: .black.opacity(0.5), radius: 4, x: 4, y: 4)
-                                
-                                Spacer()
-                            }
-                            HStack {
-                                Spacer()
-                                
-                                Picker("", selection: $appManager.numberOfLetters) {
-                                    ForEach(1...8, id: \.self) { number in
-                                        Text("\(number) letters")
-                                    }
-                                }
-                                .pickerStyle(.menu)
-                                .foregroundStyle(.primary)
-                                .accentColor(.primary)
-                                .font(.title).bold()
-                                .background {
-                                    if #unavailable(iOS 26.0, ) {
-                                        RoundedRectangle(cornerRadius: 10)
-                                            .foregroundStyle(Color(uiColor: .tertiarySystemBackground))
-                                    }
-                                }
-                                .sensoryFeedback(.selection, trigger: appManager.numberOfLetters)
-                                .modifier(ConditionalGlassEffect())
-                            }
+                        HStack {
+                            Text("The Phrase Length: ")
+                                .font(.title2).bold()
+                                .conditionalShadow(color: .black.opacity(0.5), radius: 4, x: 4, y: 4)
+                            
+                            Spacer()
                         }
-                        .padding(.bottom, 30)
+                        HStack {
+                            Spacer()
+                            
+                            Picker("", selection: $appManager.numberOfLetters) {
+                                ForEach(1...8, id: \.self) { number in
+                                    Text("\(number) letters")
+                                }
+                            }
+                            .pickerStyle(.menu)
+                            .foregroundStyle(.primary)
+                            .accentColor(.primary)
+                            .font(.title).bold()
+                            .background {
+                                if #unavailable(iOS 26.0, ) {
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .foregroundStyle(Color(uiColor: .tertiarySystemBackground))
+                                        .conditionalShadow(color: .black.opacity(0.5), radius: 4, x: 4, y: 4)
+                                }
+                            }
+                            .sensoryFeedback(.selection, trigger: appManager.numberOfLetters)
+                            .modifier(ConditionalGlassEffect())
+                        }
+                    }
+                    .padding(.bottom, 30)
+                    
+                    Spacer()
+                    
+                    VStack {
+                        HStack {
+                            Text("Language:")
+                                .font(.title2).bold()
+                                .conditionalShadow(color: .black.opacity(0.5), radius: 4, x: 4, y: 4)
+                            
+                            Spacer()
+                        }
                         
-                        Spacer()
-                        
-                        VStack {
-                            HStack {
-                                Text("Language:")
-                                    .font(.title2).bold()
-                                    .conditionalShadow(color: .black.opacity(0.5), radius: 4, x: 4, y: 4)
+                        HStack {
+                            Spacer()
+                            
+                            Picker(selection: $appManager.selectedLanguage) {
+                                ForEach(LanguageSelection.languages) { language in
+                                    Text(language.localizedName.capitalized)
+                                }
+                            } label: {
                                 
-                                Spacer()
+                            }
+                            .pickerStyle(.menu)
+                            .foregroundStyle(.primary)
+                            .accentColor(.primary)
+                            .background {
+                                if #unavailable(iOS 26.0, ) {
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .foregroundStyle(Color(uiColor: .tertiarySystemBackground))
+                                        .conditionalShadow(color: .black.opacity(0.5), radius: 4, x: 4, y: 4)
+                                }
+                            }
+                            .sensoryFeedback(.selection, trigger: appManager.selectedLanguage)
+                            .modifier(ConditionalGlassEffect())
+                        }
+                    }
+                    .padding(.bottom, 30)
+                    
+                    Spacer()
+                    Spacer()
+                    
+                    VStack {
+                        NavigationLink(destination: GameView().environmentObject(appManager)) {
+                            if let streakEntity = appManager.getNormalStreakEntity(), streakEntity.streak.currentStreak >= 3 {
+                                Text("Play  -  \(streakEntity.streak.currentStreak)🔥")
+                                    .contentTransition(.numericText(value: Double(streakEntity.streak.currentStreak)))
+                                    .conditionalShadow(color: .black.opacity(0.05), radius: 1.5, x: 1, y: 1)
+                                    .font(.title2).bold()
+                                    .padding()
+                                    .foregroundStyle(.white)
+                                    .frame(maxWidth: .infinity)
+                                    .background {
+                                        RoundedRectangle(cornerRadius: 15)
+                                            .foregroundStyle(.green)
+                                    }
+                                    .padding(.horizontal, 30)
+                            } else {
+                                Text("Play")
+                                    .conditionalShadow(color: .black.opacity(0.05), radius: 1.5, x: 1, y: 1)
+                                    .font(.title2).bold()
+                                    .padding()
+                                    .foregroundStyle(.white)
+                                    .frame(maxWidth: .infinity)
+                                    .background {
+                                        RoundedRectangle(cornerRadius: 15)
+                                            .foregroundStyle(.green)
+                                    }
+                                    .padding(.horizontal, 30)
                             }
                             
-                            HStack {
-                                Spacer()
-                                
-                                Picker(selection: $appManager.selectedLanguage) {
-                                    ForEach(LanguageSelection.languages) { language in
-                                        Text(language.localizedName.capitalized)
-                                    }
-                                } label: {
-                                    
-                                }
-                                .pickerStyle(.menu)
-                                .foregroundStyle(.primary)
-                                .accentColor(.primary)
-                                .background {
-                                    if #unavailable(iOS 26.0, ) {
-                                        RoundedRectangle(cornerRadius: 10)
-                                            .foregroundStyle(Color(uiColor: .tertiarySystemBackground))
-                                    }
-                                }
-                                .sensoryFeedback(.selection, trigger: appManager.selectedLanguage)
-                                .modifier(ConditionalGlassEffect())
-                            }
+                            
                         }
-                        .padding(.bottom, 30)
-                        
-                        Spacer()
-                        Spacer()
-                        
-                        VStack {
-                            NavigationLink(destination: GameView().environmentObject(appManager)) {
-                                if let streakEntity = appManager.getNormalStreakEntity(), streakEntity.streak.currentStreak >= 3 {
-                                    Text("Play  -  \(streakEntity.streak.currentStreak)🔥")
+                        .simultaneousGesture(TapGesture().onEnded {
+                            self.selectViewIsActive = false
+                            self.didTapPlayNormalButton.toggle()
+                            appManager.selectedGameMode = .normal
+                        })
+                        .sensoryFeedback(.impact, trigger: self.didTapPlayNormalButton)
+                        .buttonStyle(GrowingButton())
+                        .conditionalShadow(color: .black.opacity(0.5), radius: 4, x: 4, y: 4)
+                    }
+                    .padding(.bottom, 25)
+                    
+                    
+                    VStack {
+                        if appManager.checkIfDailyWordIsAlreadyPlayed2() {
+                            if let streakEntity = appManager.getStreakEntity(), streakEntity.streak.currentStreak >= 3, streakEntity.streak.isAlive {
+                                VStack {
+                                    Text("Play Daily Word\n\(streakEntity.streak.currentStreak)🔥")
                                         .contentTransition(.numericText(value: Double(streakEntity.streak.currentStreak)))
-                                        .conditionalShadow(color: .black.opacity(0.05), radius: 1.5, x: 1, y: 1)
+                                        .multilineTextAlignment(.center)
+                                        .lineSpacing(5)
+                                    
                                         .font(.title2).bold()
                                         .padding()
-                                        .foregroundStyle(.white)
                                         .frame(maxWidth: .infinity)
+                                        .foregroundStyle(.white)
                                         .background {
-                                            RoundedRectangle(cornerRadius: 15)
-                                                .foregroundStyle(.green)
+                                            ConditionalButtonBackground()
+                                                .environmentObject(appManager)
+                                                .opacity(0.3)
+                                        }
+                                        .padding(.horizontal, 30)
+                                        .onTapGesture {
+                                            self.didTapFakePlayDailyWordButton.toggle()
+                                            self.isShowingAlreadyPlayedAlert = true
+                                            
+                                        }
+                                        .sensoryFeedback(.error, trigger: self.didTapFakePlayDailyWordButton)
+                                        .alert(isPresented: self.$isShowingAlreadyPlayedAlert) {
+                                            Alert(title: Text("You can't play this"), message: Text("You have already played this exact Phrase today. Try again tomorrow or play with a different Phrase length."), dismissButton: .cancel(Text("Got it!")))
+                                        }
+                                    
+                                }
+                            } else {
+                                VStack {
+                                    
+                                    Text("Play Daily Word")
+                                        .multilineTextAlignment(.center)
+                                    
+                                        .font(.title2).bold()
+                                        .padding()
+                                        .frame(maxWidth: .infinity)
+                                        .foregroundStyle(.white)
+                                        .background {
+                                            ConditionalButtonBackground()
+                                                .environmentObject(appManager)
+                                                .opacity(0.3)
+                                        }
+                                        .padding(.horizontal, 30)
+                                        .onTapGesture {
+                                            self.didTapFakePlayDailyWordButton.toggle()
+                                            self.isShowingAlreadyPlayedAlert = true
+                                            
+                                        }
+                                        .sensoryFeedback(.error, trigger: self.didTapFakePlayDailyWordButton)
+                                        .alert(isPresented: self.$isShowingAlreadyPlayedAlert) {
+                                            Alert(title: Text("You can't play this"), message: Text("You have already played this exact Phrase today. Try again tomorrow or play with a different Phrase length."), dismissButton: .cancel(Text("Got it!")))
+                                        }
+                                }
+                            }
+                            
+                            
+                        } else {
+                            NavigationLink(destination: GameView().environmentObject(appManager)) {
+                                if let streakEntity = appManager.getStreakEntity(), streakEntity.streak.currentStreak >= 3, streakEntity.streak.isAlive {
+                                    Text("Play Daily Word\n\(streakEntity.streak.currentStreak)🔥")
+                                        .contentTransition(.numericText(value: Double(streakEntity.streak.currentStreak)))
+                                        .multilineTextAlignment(.center)
+                                        .conditionalShadow(color: .black.opacity(0.05), radius: 1.5, x: 1, y: 1)
+                                        .lineSpacing(5)
+                                        .font(.title2).bold()
+                                        .padding()
+                                    
+                                        .frame(maxWidth: .infinity)
+                                        .foregroundStyle(.white)
+                                        .background {
+                                            ConditionalButtonBackground()
+                                                .environmentObject(appManager)
                                         }
                                         .padding(.horizontal, 30)
                                 } else {
-                                    Text("Play")
+                                    Text("Play Daily Word")
+                                        .multilineTextAlignment(.center)
                                         .conditionalShadow(color: .black.opacity(0.05), radius: 1.5, x: 1, y: 1)
                                         .font(.title2).bold()
                                         .padding()
-                                        .foregroundStyle(.white)
+                                    
                                         .frame(maxWidth: .infinity)
+                                        .foregroundStyle(.white)
                                         .background {
-                                            RoundedRectangle(cornerRadius: 15)
-                                                .foregroundStyle(.green)
+                                            ConditionalButtonBackground()
+                                                .environmentObject(appManager)
                                         }
                                         .padding(.horizontal, 30)
                                 }
-                                
-                                
                             }
                             .simultaneousGesture(TapGesture().onEnded {
                                 self.selectViewIsActive = false
-                                self.didTapPlayNormalButton.toggle()
-                                appManager.selectedGameMode = .normal
+                                self.didTapPlayDailyWordButton.toggle()
+                                appManager.selectedGameMode = .dailyWord
+                                
                             })
-                            .sensoryFeedback(.impact, trigger: self.didTapPlayNormalButton)
+                            .sensoryFeedback(.impact, trigger: self.didTapPlayDailyWordButton)
                             .buttonStyle(GrowingButton())
                             .conditionalShadow(color: .black.opacity(0.5), radius: 4, x: 4, y: 4)
                         }
-                        .padding(.bottom, 25)
-                        
-                        
-                        VStack {
-                            if appManager.checkIfDailyWordIsAlreadyPlayed2() {
-                                if let streakEntity = appManager.getStreakEntity(), streakEntity.streak.currentStreak >= 3, streakEntity.streak.isAlive {
-                                    VStack {
-                                        Text("Play Daily Word\n\(streakEntity.streak.currentStreak)🔥")
-                                            .contentTransition(.numericText(value: Double(streakEntity.streak.currentStreak)))
-                                            .multilineTextAlignment(.center)
-                                            .lineSpacing(5)
-                                        
-                                            .font(.title2).bold()
-                                            .padding()
-                                            .frame(maxWidth: .infinity)
-                                            .foregroundStyle(.white)
-                                            .background {
-                                                ConditionalButtonBackground()
-                                                    .environmentObject(appManager)
-                                                    .opacity(0.3)
-                                            }
-                                            .padding(.horizontal, 30)
-                                            .onTapGesture {
-                                                self.didTapFakePlayDailyWordButton.toggle()
-                                                self.isShowingAlreadyPlayedAlert = true
-                                                
-                                            }
-                                            .sensoryFeedback(.error, trigger: self.didTapFakePlayDailyWordButton)
-                                            .alert(isPresented: self.$isShowingAlreadyPlayedAlert) {
-                                                Alert(title: Text("You can't play this"), message: Text("You have already played this exact Phrase today. Try again tomorrow or play with a different Phrase length."), dismissButton: .cancel(Text("Got it!")))
-                                            }
-                                        
-                                    }
-                                } else {
-                                    VStack {
-                                        
-                                        Text("Play Daily Word")
-                                            .multilineTextAlignment(.center)
-                                        
-                                            .font(.title2).bold()
-                                            .padding()
-                                            .frame(maxWidth: .infinity)
-                                            .foregroundStyle(.white)
-                                            .background {
-                                                ConditionalButtonBackground()
-                                                    .environmentObject(appManager)
-                                                    .opacity(0.3)
-                                            }
-                                            .padding(.horizontal, 30)
-                                            .onTapGesture {
-                                                self.didTapFakePlayDailyWordButton.toggle()
-                                                self.isShowingAlreadyPlayedAlert = true
-                                                
-                                            }
-                                            .sensoryFeedback(.error, trigger: self.didTapFakePlayDailyWordButton)
-                                            .alert(isPresented: self.$isShowingAlreadyPlayedAlert) {
-                                                Alert(title: Text("You can't play this"), message: Text("You have already played this exact Phrase today. Try again tomorrow or play with a different Phrase length."), dismissButton: .cancel(Text("Got it!")))
-                                            }
-                                    }
-                                }
-                                
-                                
-                            } else {
-                                NavigationLink(destination: GameView().environmentObject(appManager)) {
-                                    if let streakEntity = appManager.getStreakEntity(), streakEntity.streak.currentStreak >= 3, streakEntity.streak.isAlive {
-                                        Text("Play Daily Word\n\(streakEntity.streak.currentStreak)🔥")
-                                            .contentTransition(.numericText(value: Double(streakEntity.streak.currentStreak)))
-                                            .multilineTextAlignment(.center)
-                                            .conditionalShadow(color: .black.opacity(0.05), radius: 1.5, x: 1, y: 1)
-                                            .lineSpacing(5)
-                                            .font(.title2).bold()
-                                            .padding()
-                                        
-                                            .frame(maxWidth: .infinity)
-                                            .foregroundStyle(.white)
-                                            .background {
-                                                ConditionalButtonBackground()
-                                                    .environmentObject(appManager)
-                                            }
-                                            .padding(.horizontal, 30)
-                                    } else {
-                                        Text("Play Daily Word")
-                                            .multilineTextAlignment(.center)
-                                            .conditionalShadow(color: .black.opacity(0.05), radius: 1.5, x: 1, y: 1)
-                                            .font(.title2).bold()
-                                            .padding()
-                                        
-                                            .frame(maxWidth: .infinity)
-                                            .foregroundStyle(.white)
-                                            .background {
-                                                ConditionalButtonBackground()
-                                                    .environmentObject(appManager)
-                                            }
-                                            .padding(.horizontal, 30)
-                                    }
-                                }
-                                .simultaneousGesture(TapGesture().onEnded {
-                                    self.selectViewIsActive = false
-                                    self.didTapPlayDailyWordButton.toggle()
-                                    appManager.selectedGameMode = .dailyWord
-                                    
-                                })
-                                .sensoryFeedback(.impact, trigger: self.didTapPlayDailyWordButton)
-                                .buttonStyle(GrowingButton())
-                                .conditionalShadow(color: .black.opacity(0.5), radius: 4, x: 4, y: 4)
-                            }
-                        }
-                        .padding(.bottom, 10)
                     }
-                    .padding(20)
-                    .background {
-                        RoundedRectangle(cornerRadius: 25)
-                            .foregroundStyle(Color(uiColor: .secondarySystemBackground))
-                    }
-                    .padding(.horizontal)
+                    .padding(.bottom, 10)
                 }
-                
-                .navigationTitle("The Phrase")
-                .safeAreaPadding(.bottom, 54)
-                .toolbar {
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        NavigationLink(destination: Info().environmentObject(appManager)) {
-                            Image(systemName: "info")
-                                .font(.title2)
-                                .foregroundStyle(.primary)
-                        }
-                        .simultaneousGesture(TapGesture().onEnded {
-                            self.didTapInfoButton.toggle()
-                        })
-                        .sensoryFeedback(.selection, trigger: self.didTapInfoButton)
+                .padding(20)
+                .background {
+                    RoundedRectangle(cornerRadius: 25)
+                        .foregroundStyle(Color(uiColor: .secondarySystemBackground))
+                }
+                .padding(.horizontal)
+            }
+            
+            .navigationTitle("The Phrase")
+            .safeAreaPadding(.bottom, 54)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    NavigationLink(destination: Info().environmentObject(appManager)) {
+                        Image(systemName: "info")
+                            .font(.title2)
+                            .foregroundStyle(.primary)
                     }
+                    .simultaneousGesture(TapGesture().onEnded {
+                        self.selectViewIsActive = false
+                        self.didTapInfoButton.toggle()
+                    })
+                    .sensoryFeedback(.selection, trigger: self.didTapInfoButton)
                 }
             }
-//        }
+        }
         .onAppear {
+			appManager.message = ""
             self.selectViewIsActive = true
             if !self.hasFixedContextAndFetched {
                 appManager.modelContext = modelContext

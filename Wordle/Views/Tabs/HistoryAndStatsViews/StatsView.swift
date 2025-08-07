@@ -8,7 +8,6 @@
 import SwiftUI
 import Charts
 import SwiftData
-import GoogleMobileAds
 
 struct StatsView: View {
     @AppStorage("defaultStatLanguage") private var defaultStatLanguage: LanguageSelection = .both

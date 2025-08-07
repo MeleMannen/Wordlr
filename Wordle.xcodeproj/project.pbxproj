@@ -458,7 +458,7 @@
 				INFOPLIST_FILE = Wordle/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "The Phrase";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.word-games";
-				INFOPLIST_KEY_NSUserTrackingUsageDescription = "This identifier will be used to deliver personalized ads to you. ";
+				INFOPLIST_KEY_NSUserTrackingUsageDescription = "This will be used to deliver personalized ads to you. ";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -474,9 +474,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 15.2;
-				MARKETING_VERSION = 1.9.0;
-				"OTHER_LDFLAGS[arch=*]" = "-ObjC";
-				PRODUCT_BUNDLE_IDENTIFIER = SwoshEB.ThePhrase;
+				MARKETING_VERSION = 1.9.2;
+				PRODUCT_BUNDLE_IDENTIFIER = Melen.ThePhrase;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
@@ -504,7 +503,7 @@
 				INFOPLIST_FILE = Wordle/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "The Phrase";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.word-games";
-				INFOPLIST_KEY_NSUserTrackingUsageDescription = "This identifier will be used to deliver personalized ads to you. ";
+				INFOPLIST_KEY_NSUserTrackingUsageDescription = "This will be used to deliver personalized ads to you. ";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -520,8 +519,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 15.2;
-				MARKETING_VERSION = 1.9.0;
-				PRODUCT_BUNDLE_IDENTIFIER = SwoshEB.ThePhrase;
+				MARKETING_VERSION = 1.9.2;
+				PRODUCT_BUNDLE_IDENTIFIER = Melen.ThePhrase;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";

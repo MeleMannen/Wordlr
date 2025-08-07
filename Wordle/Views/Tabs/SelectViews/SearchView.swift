@@ -90,8 +90,6 @@ struct SearchView: View {
                     .clipShape(Circle())
                     .sensoryFeedback(.selection, trigger: self.isShowingFilterOptions)
                     .matchedTransitionSource(id: "filter", in: namespace)
-//                    .glassEffect(in: .circle)
-//                    .glassEffectID("filter", in: namespace)
                     .simultaneousGesture(
                         LongPressGesture(minimumDuration: 1.2)
                             .onEnded { _ in
@@ -99,18 +97,14 @@ struct SearchView: View {
                                 self.isShowingFilterOptions.toggle()
                             }
                     )
-                    
-                
             })
             .padding(.trailing, 25)
             .padding(.bottom, 25)
             .transition(.scale)
-//            .buttonStyle(GrowingButton())
             
             .simultaneousGesture(TapGesture().onEnded {
                 self.isShowingFilterOptions.toggle()
             })
-//            .buttonStyle(.glass)
             
         }
         .onAppear {

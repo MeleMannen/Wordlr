@@ -13,7 +13,6 @@ struct EnglishWordDefinitionView: View {
     @State var englishDefinition: [EnglishDefinition] = []
     @State var word: String = ""
     @State var isLoading: Bool = true
-    @State private var audioPlayer: AVPlayer?
     
     var body: some View {
         VStack {

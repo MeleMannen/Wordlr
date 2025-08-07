@@ -1050,19 +1050,12 @@
         }
       }
     },
-    "NAOB - %@" : {
-      "extractionState" : "stale",
+    "NAOB – %@" : {
       "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "NAOB - %@"
-          }
-        },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "NAOB - %@"
+            "value" : "NAOB – %@"
           }
         }
       }
@@ -1362,6 +1355,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Søk"
+          }
+        }
+      }
+    },
+    "Search %@" : {
+      "localizations" : {
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Søk %@"
           }
         }
       }
@@ -2036,7 +2039,6 @@
       }
     },
     "You could try to search in the Dictionary NAOB: " : {
-      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {

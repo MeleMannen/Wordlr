@@ -6,30 +6,35 @@
 //
 
 import SwiftUI
-//#if canImport(WebKit)
-//import WebKit
-//#endif
+import WebKit
 
 struct NAOBView: View {
-    @State var word: String = ""
-//#if canImport(WebKit)
-//    @State var page: WebPage = WebPage()
-//#endif
+    @State var word = ""
+    
     var body: some View {
-        EmptyView()
-//#if canImport(WebKit)
-//        if #available(iOS 26.0, *) {
-//            WebView(page)
-//                .navigationTitle("NAOB - \(self.word)")
-//                .onAppear {
-//                    page.load(URLRequest(url: URL(string: "https://naob.no/ordbok/\(self.word)")!))
-//                }
-//                .ignoresSafeArea(.all, edges: .bottom)
-//        }
-//#endif
-        #warning("NAOBView is not implemented yet. Fix when WebKit is available for iOS 26.0 and later.")
+        if #available(iOS 26, *) {
+            WebView(url: URL(string: "https://naob.no/ordbok/\(word)")!)
+                .navigationTitle("NAOB – \(word)")
+                .ignoresSafeArea(.all, edges: .bottom)
+        } else {
+            MyWebView(request: URLRequest(
+                url: URL(string: "https://naob.no/ordbok/\(word)")!
+            ))
+            .navigationTitle("NAOB – \(word)")
+        }
     }
 }
+
+struct MyWebView: UIViewRepresentable {
+    let request: URLRequest
+    func makeUIView(context: Context) -> WKWebView {
+        let webView = WKWebView()
+        webView.load(request)
+        return webView
+    }
+    func updateUIView(_: WKWebView, context: Context) {}
+}
+
 
 #Preview {
     NAOBView(word: "Sessing")

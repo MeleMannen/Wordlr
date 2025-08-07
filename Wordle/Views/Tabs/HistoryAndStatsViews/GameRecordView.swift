@@ -25,17 +25,6 @@ struct GameRecordView: View {
         return formatter
     }()
     
-    var colorForUnused: Color {
-        switch colorScheme {
-            case .light:
-                return Color(UIColor.lightGray)
-            case .dark:
-                return .primary
-            @unknown default:
-                return .primary
-        }
-    }
-    
     var body: some View {
         GeometryReader { geometry in
             ScrollView {

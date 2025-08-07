@@ -29,7 +29,6 @@ struct NorwegianWordDefinitionView: View {
                                     } else {
                                         Text(self.word.uppercased())
                                             .font(.largeTitle)
-                                        
                                             .bold()
                                     }
                                     
@@ -121,30 +120,30 @@ struct NorwegianWordDefinitionView: View {
                                 }
                                 
 //                                if #available(iOS 26.0, *) {
-//                                    Text("You could try to search in the Dictionary NAOB: ")
-//                                        .font(.headline)
-//                                        .padding(.top, 10)
-//                                    
-//                                    NavigationLink(destination: NAOBView(word: self.word)) {
-//                                        Text("Search \(self.word.uppercased())")
-//                                            .foregroundColor(.white)
-//                                            .font(.title2).bold()
-//                                            .padding(14)
-//                                            .frame(maxWidth: .infinity)
-//                                            .background {
-//                                                RoundedRectangle(cornerRadius: 15)
-//                                                    .fill(Color.green)
-//                                            }
-//                                            .padding(.horizontal, 40)
-//                                        
-//                                        
-//                                    }
-//                                    .simultaneousGesture(TapGesture().onEnded {
-//                                        self.didTap.toggle()
-//                                    })
-//                                    .padding(.top, 10)
-//                                    .sensoryFeedback(.impact, trigger: self.didTap)
-//                                    .buttonStyle(GrowingButton())
+                                    Text("You could try to search in the Dictionary NAOB: ")
+                                        .font(.headline)
+                                        .padding(.top, 10)
+                                    
+                                    NavigationLink(destination: NAOBView(word: self.word)) {
+                                        Text("Search \(self.word.uppercased())")
+                                            .foregroundColor(.white)
+                                            .font(.title2).bold()
+                                            .padding(14)
+                                            .frame(maxWidth: .infinity)
+                                            .background {
+                                                RoundedRectangle(cornerRadius: 15)
+                                                    .fill(Color.green)
+                                            }
+                                            .padding(.horizontal, 40)
+                                        
+                                        
+                                    }
+                                    .simultaneousGesture(TapGesture().onEnded {
+                                        self.didTap.toggle()
+                                    })
+                                    .padding(.top, 10)
+                                    .sensoryFeedback(.impact, trigger: self.didTap)
+                                    .buttonStyle(GrowingButton())
 //                                }
                             }
                             .padding(25)

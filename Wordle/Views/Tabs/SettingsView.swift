@@ -11,9 +11,8 @@ import AppTrackingTransparency
 
 struct SettingsView: View {
     @Environment(\.colorScheme) private var colorScheme
-    @Environment(\.scenePhase) private var scenePhase
     @AppStorage("appTheme") private var appTheme: AppTheme = .dark
-    @AppStorage("userWantsAds") var userWantsAds: Bool = true
+    @AppStorage("userWantsAds") var userWantsAds: Bool = false
     @AppStorage("userWantsNormalTheme") private var userWantsNormalTheme: Bool = true
     @AppStorage("defaultLanguage") private var defaultLanguage: LanguageSelection = .norwegian
     @AppStorage("defaultNumberOfLetters") private var defaultNumberOfLetters: Int = 5
@@ -114,6 +113,7 @@ struct SettingsView: View {
                                     if #unavailable(iOS 26.0, ) {
                                         RoundedRectangle(cornerRadius: 10)
                                             .foregroundStyle(Color(uiColor: .tertiarySystemBackground))
+                                            .conditionalShadow(color: .black.opacity(0.5), radius: 4, x: 4, y: 4)
                                     }
                                 }
                                 .padding(3)
@@ -180,6 +180,7 @@ struct SettingsView: View {
                                     if #unavailable(iOS 26.0, ) {
                                         RoundedRectangle(cornerRadius: 10)
                                             .foregroundStyle(Color(uiColor: .tertiarySystemBackground))
+                                            .conditionalShadow(color: .black.opacity(0.5), radius: 4, x: 4, y: 4)
                                     }
                                 }
                                 .padding(3)

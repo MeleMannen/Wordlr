@@ -13,7 +13,6 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
     @AppStorage("defaultLanguage") private var defaultLanguage: LanguageSelection = .norwegian
     @AppStorage("defaultNumberOfLetters") private var defaultNumberOfLetters: Int = 5
     
-//    @Published var selectViewIsActive: Bool = true
     @Published var streaks: [StreakEntity] = []
     @Published var normalStreaks: [NormalStreakEntity] = []
     var gameRecords: [GameRecordEntity] = []
@@ -44,7 +43,6 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
     var endDate: Date = Date()
     @Published var hasSharedResult: Bool = false
     @Published var didWinGame: GameEndState = .lost
-    
     @Published var searchedWord: String = ""
     
     @Published var isFilteringSearchWord: Bool = true
@@ -670,6 +668,7 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
         self.currentRow = 0
         self.currentIndex = 0
         self.hintsUsed = 0
+		self.message = ""
         self.isGameOver = false
         self.hasSharedResult = false
         self.didWinGame = .lost

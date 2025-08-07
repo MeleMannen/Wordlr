@@ -13,7 +13,7 @@ import GoogleMobileAds
 struct WordleApp: App {
     @Environment(\.scenePhase) private var scenePhase
     @AppStorage("appTheme") private var appTheme: AppTheme = .dark
-    @AppStorage("userWantsAds") var userWantsAds: Bool = true
+    @AppStorage("userWantsAds") var userWantsAds: Bool = false
     @State var selection: TabSelection = .home
     @State private var bannerReloadID = UUID()
     @State var selectViewIsActive: Bool = true
@@ -62,19 +62,24 @@ struct WordleApp: App {
                 }
                 .safeAreaInset(edge: .bottom) {
                     if self.userWantsAds && (self.selection != .home || (self.selection == .home && self.selectViewIsActive)) {
-                        if #available(iOS 26.0, *) {
-                            let adSize = currentOrientationAnchoredAdaptiveBanner(width: geometry.size.width - 40)
+                        if #available(iOS 26.0, *), UIDevice.current.userInterfaceIdiom == .phone {
+                            let _ = print("width: \(geometry.size.width)")
+                            let adSize = currentOrientationAnchoredAdaptiveBanner(width: geometry.size.width - (geometry.size.width / 11))
                             BannerViewContainer(adSize)
                                 .frame(width: adSize.size.width < 0 ? 0 : adSize.size.width, height: adSize.size.height < 0 ? 0 : adSize.size.height)
                                 .padding(.bottom, 54)
                                 .id(bannerReloadID)
-//                                .opacity((self.selection != .home ? 1 : (self.selection == .home && self.selectViewIsActive ? 1 : 0)))
-                        } else {
+                        } else if UIDevice.current.userInterfaceIdiom == .pad {
                             let adSize = currentOrientationAnchoredAdaptiveBanner(width: geometry.size.width)
                             BannerViewContainer(adSize)
                                 .frame(width: adSize.size.width < 0 ? 0 : adSize.size.width, height: adSize.size.height < 0 ? 0 : adSize.size.height)
                                 .id(bannerReloadID)
-//                                .opacity((self.selection != .home ? 1 : (self.selection == .home && self.selectViewIsActive ? 1 : 0)))
+                        } else {
+                            let adSize = currentOrientationAnchoredAdaptiveBanner(width: geometry.size.width)
+                            BannerViewContainer(adSize)
+                                .frame(width: adSize.size.width < 0 ? 0 : adSize.size.width, height: adSize.size.height < 0 ? 0 : adSize.size.height)
+                                .padding(.bottom, 49)
+                                .id(bannerReloadID)
                         }
                     }
                 }
