@@ -44,6 +44,7 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
     @Published var hasSharedResult: Bool = false
     @Published var didWinGame: GameEndState = .lost
     @Published var searchedWord: String = ""
+	@Published var isSearching: Bool = false
     
     @Published var isFilteringSearchWord: Bool = true
     @Published var isFilteringStartWith: Bool = false
@@ -129,7 +130,7 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
     
     func getRandomWord() {
         if selectedGameMode == .normal {
-            self.word = self.words?.wordGroups["\(numberOfLetters)"]?.randomElement() ?? ""
+            self.word = self.words?.wordGroups["\(numberOfLetters)"]?.randomElement() ?? "PIANO"
             print("Ordet er \(self.word)")
         } else {
             self.word = self.getDailyWord()

@@ -43,9 +43,9 @@ struct SelectView: View {
                             Picker("", selection: $appManager.numberOfLetters) {
                                 ForEach(1...8, id: \.self) { number in
 									if number == 1 {
-										Text("\(number) letter")
+										Text("\(number) Letter")
 									} else {
-										Text("\(number) letters")
+										Text("\(number) Letters")
 									}
                                 }
                             }

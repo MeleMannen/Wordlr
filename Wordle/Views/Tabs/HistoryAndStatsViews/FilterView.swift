@@ -18,11 +18,14 @@ struct FilterView: View {
             HStack(spacing: 10) {
                 Picker("", selection: $numberOfLetters) {
                     ForEach(1...9, id: \.self) { number in
-                        if number != 9 {
-                            Text("\(number) letters")
+						if number == 1 {
+							Text("\(number) Letter")
+								.font(.title2).bold()
+						} else if number != 9 {
+                            Text("\(number) Letters")
                                 .font(.title2).bold()
                         } else {
-                            Text("All letters")
+                            Text("All Letters")
                                 .font(.title2).bold()
                         }
                     }

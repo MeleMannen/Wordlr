@@ -121,40 +121,34 @@
         }
       }
     },
-    "%lld letter" : {
+    "%lld Letter" : {
       "localizations" : {
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%lld letra"
+            "value" : "%lld Letra"
           }
         },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%lld bokstav"
+            "value" : "%lld Bokstav"
           }
         }
       }
     },
-    "%lld letters" : {
+    "%lld Letters" : {
       "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%lld letters"
-          }
-        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%lld letras"
+            "value" : "%lld Letras"
           }
         },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%lld bokstaver"
+            "value" : "%lld Bokstaver"
           }
         }
       }
@@ -235,14 +229,8 @@
         }
       }
     },
-    "All letters" : {
+    "All Letters" : {
       "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "All letters"
-          }
-        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -252,7 +240,7 @@
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Alle bokstaver"
+            "value" : "Alle Bokstaver"
           }
         }
       }

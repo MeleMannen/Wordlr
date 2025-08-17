@@ -26,208 +26,208 @@ struct SettingsView: View {
 			NavigationStack {
 				List {
 					Section {
-						Button(action: {
-							if let url = URL(string: UIApplication.openSettingsURLString) {
-								UIApplication.shared.open(url)
-							}
-						}, label: {
-							HStack {
-								Text("App Language:")
-									.padding(.vertical, 4)
-								
-								Spacer()
-								
-								Image(systemName: "chevron.right")
-									.font(.caption).bold()
-									.foregroundStyle(.primary)
-							}
+						if #available(iOS 26.0, *) {
+							Button(action: {
+								if let url = URL(string: UIApplication.openSettingsURLString) {
+									UIApplication.shared.open(url)
+								}
+							}, label: {
+								HStack {
+									Text("App Language:")
+									
+									Spacer()
+									Text("\(Locale.current.localizedString(forIdentifier: String(Locale.preferredLanguages.first?.prefix(2) ?? "en"))?.capitalized ?? "English")")
+										.fontWeight(.regular)
+									
+									Image(systemName: "chevron.right")
+										.font(.caption).bold()
+										.foregroundStyle(.primary)
+								}
+								.padding(.vertical, 4)
+							})
 							.padding(.vertical, 4)
-						})
-
-
-						DisclosureGroup {
-							Picker("", selection: $appTheme) {
-								Text("System")
-									.tag(AppTheme.system)
-								Text("Dark")
-									.tag(AppTheme.dark)
-								Text("Light")
-									.tag(AppTheme.light)
-								
-							}
-							.pickerStyle(SegmentedPickerStyle())
-							
-						} label: {
-							HStack {
-								Text("App Theme:")
-							}
-							.padding(.vertical, 4)
+						} else {
+							Button(action: {
+								if let url = URL(string: UIApplication.openSettingsURLString) {
+									UIApplication.shared.open(url)
+								}
+							}, label: {
+								HStack {
+									Text("App Language:")
+									
+									Spacer()
+									Text("\(Locale.current.localizedString(forIdentifier: String(Locale.preferredLanguages.first?.prefix(2) ?? "en"))?.capitalized ?? "English")")
+										.fontWeight(.regular)
+									
+									Image(systemName: "chevron.right")
+										.font(.caption).bold()
+										.foregroundStyle(.primary)
+								}
+							})
 						}
-						.padding(.vertical, 4)
+						
+						
+						Picker("App Theme:", selection: $appTheme) {
+							Text("System")
+								.tag(AppTheme.system)
+							Text("Dark")
+								.tag(AppTheme.dark)
+							Text("Light")
+								.tag(AppTheme.light)
+							
+						}
+						.pickerStyle(.menu)
+						.modifier(ConditionalGlassEffect())
 						
 						if self.colorScheme == .dark {
-							HStack {
-								Text("Daily Word Theme:")
-								
-								Spacer()
-								
-								Picker("", selection: $userWantsNormalTheme) {
-									Text("Standard")
-										.tag(true)
-									Text("Gold")
-										.tag(false)
-								}
-								.pickerStyle(.menu)
-								.font(.headline)
+							Picker("Daily Word Theme:", selection: $userWantsNormalTheme) {
+								Text("Standard")
+									.tag(true)
+								Text("Gold")
+									.tag(false)
 							}
+							.pickerStyle(.menu)
+							.modifier(ConditionalGlassEffect())
 						}
+						
 					} header: {
 						Text("General")
 					}
 					
 					Section {
-						HStack {
-							Text("Number of Letters:")
-							
-							Spacer()
-							
-							Picker(selection: $defaultNumberOfLetters) {
-								ForEach(1...8, id: \.self) { number in
-									if number == 1 {
-										Text("\(number) letter")
-											.tag(number)
-									} else {
-										Text("\(number) letters")
-											.tag(number)
-									}
+						Picker("Number of Letters:", selection: $defaultNumberOfLetters) {
+							ForEach(1...8, id: \.self) { number in
+								if number == 1 {
+									Text("\(number) Letter")
+										.tag(number)
+								} else {
+									Text("\(number) Letters")
+										.tag(number)
 								}
-								
-							} label: {
-								
 							}
-							.pickerStyle(.menu)
-							.modifier(ConditionalGlassEffect())
+							
 						}
-						HStack {
-							Text("Language:")
-							
-							Spacer()
-							
-							Picker("", selection: $defaultLanguage) {
-								ForEach(LanguageSelection.languages) { language in
-									Text(language.localizedName.capitalized)
-										.tag(language)
-										.font(.headline)
-								}
-								
+						.pickerStyle(.menu)
+						.modifier(ConditionalGlassEffect())
+						
+						Picker("Language:", selection: $defaultLanguage) {
+							ForEach(LanguageSelection.languages) { language in
+								Text(language.localizedName.capitalized)
+									.tag(language)
 							}
-							.pickerStyle(.menu)
+							
 						}
+						.pickerStyle(.menu)
+						.modifier(ConditionalGlassEffect())
+						
 					} header: {
 						Text("Game (Default)")
 					}
 					
 					Section {
-						HStack {
-							Text("Number of Letters:")
-							
-							Spacer()
-							
-							Picker(selection: $defaultStatNumberOfLetters) {
-								ForEach(1...9, id: \.self) { number in
-									if number == 1 {
-										Text("\(number) letter")
-											.tag(number)
-									} else if number != 9 {
-										Text("\(number) letters")
-											.font(.title2).bold()
-									} else {
-										Text("All letters")
-											.font(.title2).bold()
-									}
+						Picker("Number of Letters:", selection: $defaultStatNumberOfLetters) {
+							ForEach(1...9, id: \.self) { number in
+								if number == 1 {
+									Text("\(number) Letter")
+										.tag(number)
+								} else if number != 9 {
+									Text("\(number) Letters")
+										.tag(number)
+								} else {
+									Text("All Letters")
+										.tag(number)
 								}
-								
-							} label: {
-								
 							}
-							.pickerStyle(.menu)
-							.modifier(ConditionalGlassEffect())
+							
 						}
+						.pickerStyle(.menu)
+						.modifier(ConditionalGlassEffect())
 						
-						HStack {
-							Text("Language:")
-							Spacer()
-							Picker("", selection: $defaultStatLanguage) {
-								ForEach(LanguageSelection.allCases) { language in
-									if language == .all {
-										Text("All")
-											.tag(language)
-									} else {
-										Text(language.localizedName.capitalized)
-											.tag(language)
-									}
-								}
-								
-							}
-							.pickerStyle(.menu)
-						}
-						HStack {
-							Text("Gamemode:")
-							
-							Spacer()
-							
-							Picker("", selection: $defaultStatGameMode) {
-								ForEach(GameMode.allCases) { mode in
-									if mode == .both {
-										Text("Both")
-											.tag(mode)
-									} else {
-										Text(mode.localizedName.capitalized)
-											.tag(mode)
-									}
+						Picker("Language:", selection: $defaultStatLanguage) {
+							ForEach(LanguageSelection.allCases) { language in
+								if language == .all {
+									Text("All")
+										.tag(language)
+								} else {
+									Text(language.localizedName.capitalized)
+										.tag(language)
 								}
 							}
-							.pickerStyle(.menu)
+							
 						}
-						HStack {
-							Text("Show If Hints Used:")
-							
-							Spacer()
-							
-							Picker("", selection: $defaultStatHintsUsed) {
-								ForEach(ShowsWhenHintsUsed.allCases) { mode in
+						.pickerStyle(.menu)
+						.modifier(ConditionalGlassEffect())
+						
+						Picker("Gamemode:", selection: $defaultStatGameMode) {
+							ForEach(GameMode.allCases) { mode in
+								if mode == .both {
+									Text("Both")
+										.tag(mode)
+								} else {
 									Text(mode.localizedName.capitalized)
 										.tag(mode)
 								}
 							}
-							.pickerStyle(.menu)
 						}
+						.pickerStyle(.menu)
+						.modifier(ConditionalGlassEffect())
+						
+						Picker("Show If Hints Used:", selection: $defaultStatHintsUsed) {
+							ForEach(ShowsWhenHintsUsed.allCases) { mode in
+								Text(mode.localizedName.capitalized)
+									.tag(mode)
+							}
+						}
+						.pickerStyle(.menu)
+						.modifier(ConditionalGlassEffect())
+						
 					} header: {
 						Text("Stats and History (Default)")
 					}
 					
 					Section {
-						VStack {
-							HStack {
-								Text("Version:")
-									.padding(.leading, 3)
-									.padding(.vertical, 4)
-								
-								Spacer()
-								
-								Text("\(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "0.0.0") (\(Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "0"))")
-									.fontWeight(.regular)
-									.contextMenu {
-										Button(action: {
-											UIPasteboard.general.string = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "0.0.0"
-										}) {
-											Text("Copy")
-											Image(systemName: "doc.on.doc")
+						if #available(iOS 26.0, *) {
+							VStack {
+								HStack {
+									Text("Version:")
+										.padding(.leading, 3)
+										.padding(.vertical, 4)
+									
+									Spacer()
+									
+									Text("\(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "0.0.0") (\(Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "0"))")
+										.fontWeight(.regular)
+										.contextMenu {
+											Button(action: {
+												UIPasteboard.general.string = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "0.0.0"
+											}) {
+												Text("Copy")
+												Image(systemName: "doc.on.doc")
+											}
 										}
-									}
+								}
+								.padding(.vertical, 4)
 							}
-							.padding(.vertical, 4)
-							
+						} else {
+							VStack {
+								HStack {
+									Text("Version:")
+										.padding(.leading, 3)
+									
+									Spacer()
+									
+									Text("\(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "0.0.0") (\(Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "0"))")
+										.fontWeight(.regular)
+										.contextMenu {
+											Button(action: {
+												UIPasteboard.general.string = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "0.0.0"
+											}) {
+												Text("Copy")
+												Image(systemName: "doc.on.doc")
+											}
+										}
+								}
+							}
 						}
 					} header: {
 						Text("About")

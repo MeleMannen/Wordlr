@@ -81,8 +81,15 @@ struct SearchView: View {
 				}
             }
         }
-        .searchable(text: $appManager.searchedWord, placement: .navigationBarDrawer(displayMode: .always), prompt: "Search for a Phrase")
+		.searchable(text: $appManager.searchedWord, isPresented: $appManager.isSearching, placement: .navigationBarDrawer(displayMode: .always), prompt: "Search for a Phrase")
         .navigationTitle("Search")
+		.onChange(of: appManager.isSearching) {
+			if appManager.isSearching {
+				adManager.shouldShowAds = false
+			} else {
+				adManager.shouldShowAds = true
+			}
+		}
         .onChange(of: appManager.searchedWord) {
             self.filterGameRecords()
         }
@@ -133,7 +140,7 @@ struct SearchView: View {
 						)
 				})
 				.padding(.trailing, 25)
-				.padding(.bottom, self.userWantsAds ? 75 : 25)
+				.padding(.bottom, self.userWantsAds && adManager.shouldShowAds ? 75 : 25)
 				.transition(.scale)
 				.simultaneousGesture(TapGesture().onEnded {
 					self.isShowingFilterOptions.toggle()
@@ -156,7 +163,7 @@ struct SearchView: View {
 						)
 				})
 				.padding(.trailing, 25)
-				.padding(.bottom, self.userWantsAds ? 75 : 25)
+				.padding(.bottom, self.userWantsAds && adManager.shouldShowAds ? 75 : 25)
 				.simultaneousGesture(TapGesture().onEnded {
 					self.isShowingFilterOptions.toggle()
 				})
