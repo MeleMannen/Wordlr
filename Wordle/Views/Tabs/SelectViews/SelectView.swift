@@ -259,7 +259,7 @@ struct SelectView: View {
                 .padding(.horizontal)
             }
             
-            .navigationTitle("The Phrase")
+            
 			.safeAreaPadding(.bottom, self.userWantsAds ? 54 : 0)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
@@ -275,6 +275,7 @@ struct SelectView: View {
                 }
             }
         }
+		.navigationTitle("The Phrase")
         .onAppear {
 			appManager.message = ""
             if !self.hasFixedContextAndFetched {
@@ -312,9 +313,6 @@ struct SelectView: View {
 				adManager.shouldShowAds = true
 			}
         }
-//        .onDisappear {
-//            self.selectViewIsActive = false
-//        }
     }
 }
 
@@ -334,8 +332,6 @@ struct ConditionalButtonBackground: View {
             RoundedRectangle(cornerRadius: 15)
                 .foregroundStyle(Color.green)
         }
-        
-            
     }
 }
 
@@ -347,8 +343,7 @@ struct ConditionalGlassEffect: ViewModifier {
 //                .glassEffect(.regular.interactive())
         } else {
             content
-        }
-            
+        }  
     }
 }
 

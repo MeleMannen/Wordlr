@@ -15,7 +15,7 @@ struct FilterView: View {
     
     var body: some View {
         ScrollView(.horizontal) {
-            HStack(spacing: 10) {
+            HStack(spacing: UIDevice.current.userInterfaceIdiom == .pad ? 20 : 10) {
                 Picker("", selection: $numberOfLetters) {
                     ForEach(1...9, id: \.self) { number in
 						if number == 1 {

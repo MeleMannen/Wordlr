@@ -195,7 +195,7 @@ struct SettingsView: View {
 									
 									Spacer()
 									
-									Text("\(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "0.0.0") (\(Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "0"))")
+									Text("\(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0.0") (\(Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "0"))")
 										.fontWeight(.regular)
 										.contextMenu {
 											Button(action: {

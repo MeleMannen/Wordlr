@@ -7,7 +7,6 @@
 
 import SwiftUI
 import GoogleMobileAds
-//import AppTrackingTransparency
 
 struct GameView: View {
     @EnvironmentObject var appManager: AppManager
@@ -378,7 +377,6 @@ struct GameView: View {
                             
                             NavigationLink(destination: WordDefinitionView(word: appManager.word, language: appManager.selectedLanguage), label: {
                                 if !self.userWantsNormalTheme && self.colorScheme == .dark && appManager.selectedGameMode == .dailyWord {
-                                    
                                     Text("Show Definition")
                                         .conditionalShadow(color: .black.opacity(0.2), radius: 2, x: 4, y: 4)
                                         .font(.title2).bold()
@@ -403,6 +401,7 @@ struct GameView: View {
                             })
                             .simultaneousGesture(TapGesture().onEnded {
                                 self.didTapShowDefinitionButton.toggle()
+								adManager.shouldShowAds = true
                             })
                             .buttonStyle(GrowingButton())
                             .conditionalShadow(color: .black.opacity(0.1), radius: 0.5, x: 1, y: 1)

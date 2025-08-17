@@ -15,9 +15,9 @@ struct WordleApp: App {
     @Environment(\.scenePhase) private var scenePhase
     @AppStorage("appTheme") private var appTheme: AppTheme = .dark
     @AppStorage("userWantsAds") var userWantsAds: Bool = true
+	@AppStorage("hasTurnedOnAds") private var hasTurnedOnAds: Bool = false
     @State var selection: TabSelection = .home
     @State private var bannerReloadID = UUID()
-//    @State var selectViewIsActive: Bool = true
 	@State var adManager: AdManager = AdManager()
     
     init() {
@@ -90,6 +90,12 @@ struct WordleApp: App {
 				}
                 .tint(.primary)
                 .preferredColorScheme(appTheme == .system ? nil : (appTheme == .light ? .light : .dark))
+				.onAppear {
+					if !self.hasTurnedOnAds {
+						self.userWantsAds = true
+						self.hasTurnedOnAds = true
+					}
+				}
             }
         }
         .modelContainer(for: [StreakEntity.self, NormalStreakEntity.self, GameRecordEntity.self, GameRecord.self])
