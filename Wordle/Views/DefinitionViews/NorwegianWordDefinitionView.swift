@@ -9,6 +9,7 @@ import SwiftUI
 
 struct NorwegianWordDefinitionView: View {
     @EnvironmentObject private var definitionManager: DefinitionManager
+	@AppStorage("userWantsAds") private var userWantsAds: Bool = false
     @State var processedWords: [ProcessedWord] = []
     @State var word: String
     @State var isLoading: Bool = true
@@ -91,17 +92,21 @@ struct NorwegianWordDefinitionView: View {
                                     }
                                 }
                                 .padding(25)
-                                
-                                
                             }
                             .background {
                                 RoundedRectangle(cornerRadius: 10)
                                     .fill(Color(uiColor: .quaternarySystemFill))
                             }
+							.overlay(alignment: .bottomTrailing) {
+								Text("ordbokene.no")
+									.font(.body)
+									.fontWeight(.semibold)
+									.foregroundColor(.secondary)
+									.padding(.trailing, 10)
+									.padding(.bottom, 8)
+							}
                             .padding(.horizontal, 15)
                             .padding(.top, 20)
-                            
-                            
                         }
                     }
                     else {
@@ -113,38 +118,35 @@ struct NorwegianWordDefinitionView: View {
                                     .padding(.bottom, 10)
                                 
                                 HStack {
-                                    Text("We couldn't find a definition for this Phrase. That might be because it is a name or a placename.")
+                                    Text("We couldn't find a definition for this Phrase. That might be because it is a name or a place name.")
                                         .font(.title3)
                                     
                                     Spacer()
                                 }
-                                
-//                                if #available(iOS 26.0, *) {
-                                    Text("You could try to search in the Dictionary NAOB: ")
-                                        .font(.headline)
-                                        .padding(.top, 10)
-                                    
-                                    NavigationLink(destination: NAOBView(word: self.word)) {
-                                        Text("Search \(self.word.uppercased())")
-                                            .foregroundColor(.white)
-                                            .font(.title2).bold()
-                                            .padding(14)
-                                            .frame(maxWidth: .infinity)
-                                            .background {
-                                                RoundedRectangle(cornerRadius: 15)
-                                                    .fill(Color.green)
-                                            }
-                                            .padding(.horizontal, 40)
-                                        
-                                        
-                                    }
-                                    .simultaneousGesture(TapGesture().onEnded {
-                                        self.didTap.toggle()
-                                    })
-                                    .padding(.top, 10)
-                                    .sensoryFeedback(.impact, trigger: self.didTap)
-                                    .buttonStyle(GrowingButton())
-//                                }
+								Text("You could try to search in the Dictionary NAOB: ")
+									.font(.headline)
+									.padding(.top, 10)
+								
+								NavigationLink(destination: NAOBView(word: self.word)) {
+									Text("Search \(self.word.uppercased())")
+										.foregroundColor(.white)
+										.font(.title2).bold()
+										.padding(14)
+										.frame(maxWidth: .infinity)
+										.background {
+											RoundedRectangle(cornerRadius: 15)
+												.fill(Color.green)
+										}
+										.padding(.horizontal, 40)
+									
+									
+								}
+								.simultaneousGesture(TapGesture().onEnded {
+									self.didTap.toggle()
+								})
+								.padding(.top, 10)
+								.sensoryFeedback(.impact, trigger: self.didTap)
+								.buttonStyle(GrowingButton())
                             }
                             .padding(25)
                             
@@ -169,7 +171,7 @@ struct NorwegianWordDefinitionView: View {
                         }
                     }
                 }
-                .safeAreaPadding(.bottom, 54)
+				.safeAreaPadding(.bottom, self.userWantsAds ? 54 : 0)
                 
             } else {
                 ProgressView()

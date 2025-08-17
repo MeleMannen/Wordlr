@@ -18,7 +18,11 @@ struct WordDefinitionView: View {
         } else if self.language == .norwegian {
             NorwegianWordDefinitionView(word: self.word)
                 .environmentObject(DefinitionManager())
-        }
+		} else if self.language == .spanish {
+			SpanishWordDefinitionView(word: self.word)
+				.environmentObject(DefinitionManager())
+		
+		}
     }
 }
 

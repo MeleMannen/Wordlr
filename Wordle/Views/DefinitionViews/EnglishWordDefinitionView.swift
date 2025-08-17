@@ -10,6 +10,7 @@ import AVFoundation
 
 struct EnglishWordDefinitionView: View {
     @EnvironmentObject private var definitionManager: DefinitionManager
+	@AppStorage("userWantsAds") private var userWantsAds: Bool = false
     @State var englishDefinition: [EnglishDefinition] = []
     @State var word: String = ""
     @State var isLoading: Bool = true
@@ -142,23 +143,17 @@ struct EnglishWordDefinitionView: View {
                                                                     }
                                                                 }
                                                             }
-                                                            
                                                         }
                                                         .padding(.bottom, 20)
                                                         .padding(.leading, 2)
                                                     }
                                                 }
-                                                
-                                                
                                             }
                                             .padding(.bottom, 10)
                                             .padding(.leading, 2)
-                                            
-                                            
-                                            
                                         }
+										
                                         if !meaning.synonyms.isEmpty {
-                                            
                                             Text("SYNONYMS")
                                                 .font(.headline)
                                                 .padding(.bottom, 3)
@@ -213,11 +208,8 @@ struct EnglishWordDefinitionView: View {
                                                 .padding(.leading, 2)
                                             }
                                         }
-                                        
                                     }
                                     .padding(25)
-                                    
-                                    
                                 }
                             }
                             .background {
@@ -236,13 +228,11 @@ struct EnglishWordDefinitionView: View {
                                     .font(.largeTitle)
                                     .bold()
                                 HStack {
-                                    Text("We couldn't find a definition for this Phrase. That might be because it is a name or a placename.")
+                                    Text("We couldn't find a definition for this Phrase. That might be because it is a name or a place name.")
                                         .font(.title3)
                                     
                                     Spacer()
-                                    
                                 }
-                                
                             }
                             .padding(25)
                         }
@@ -262,7 +252,7 @@ struct EnglishWordDefinitionView: View {
                         dump(self.englishDefinition)
                     }
                 }
-                .safeAreaPadding(.bottom, 54)
+				.safeAreaPadding(.bottom, self.userWantsAds ? 54 : 0)
                 
             } else {
                 ProgressView()
@@ -279,14 +269,10 @@ struct EnglishWordDefinitionView: View {
                 dump(self.englishDefinition)
             }
         }
-        
     }
-    
-    
 }
 
 #Preview {
     EnglishWordDefinitionView(word: "World")
         .environmentObject(DefinitionManager())
-        
 }

@@ -197,21 +197,50 @@ enum GameMode: String, Codable, CaseIterable, Identifiable {
 }
 
 enum LanguageSelection: String, Codable, CaseIterable, Identifiable {
-    case norwegian
     case english
-    case both
+	case spanish
+	case norwegian
+    case all
     var id: Self { self }
     
     var localizedName: String {
         switch self {
-            case .norwegian: return NSLocalizedString("language_norwegian", comment: "Norwegian Language")
             case .english: return NSLocalizedString("language_english", comment: "English Language")
-            case .both: return NSLocalizedString("language_both", comment: "Both Languages")
+			case .spanish: return NSLocalizedString("language_spanish", comment: "Spanish Language")
+			case .norwegian: return NSLocalizedString("language_norwegian", comment: "Norwegian Language")
+            case .all: return NSLocalizedString("language_all", comment: "All Languages")
         }
     }
+	
+	var fileName: String {
+		switch self {
+			case .english: return "englishWords"
+			case .spanish: return "spanishWords"
+			case .norwegian: return "norwegianWords"
+			case .all: return "BadBadError"
+		}
+	}
+	
+	var dailyWordFileName: String {
+		switch self {
+			case .english: return "dailyEnglishWords"
+			case .spanish: return "dailySpanishWords"
+			case .norwegian: return "dailyNorwegianWords"
+			case .all: return "BadBadDailyWordError"
+		}
+	}
+	
+	var alphabet: [String] {
+		switch self {
+			case .english: return ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
+			case .spanish: return ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "Ñ", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
+			case .norwegian: return ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "Æ", "Ø", "Å"]
+			case .all: return ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
+		}
+	}
     
     static var languages: [LanguageSelection] {
-        return [.norwegian, .english]
+		return [.english, .spanish, .norwegian]
     }
     
 }
@@ -236,7 +265,6 @@ struct ShortedContent: Codable {
     enum CodingKeys: String, CodingKey {
         case class2 = "class"
         case expansion
-        
     }
 }
 
@@ -605,6 +633,85 @@ struct Phonetic: Codable, Identifiable {
 }
 
 
+// MARK: - SpanishDefinition
+struct SpanishDefinition: Codable, Identifiable {
+	let id = UUID()
+	let word: String
+	let entries: [Entry2]
+	let source: Source
+	
+	enum CodingKeys: String, CodingKey {
+		case word
+		case entries
+		case source
+	}
+}
+
+// MARK: - Entry
+struct Entry2: Codable, Identifiable {
+	let id = UUID()
+	let language: Language
+	let partOfSpeech: String
+	let pronunciations: [Pronunciation2]
+	let forms: [Form]
+	let senses: [Sense]
+	let synonyms, antonyms: [String]
+	
+	enum CodingKeys: String, CodingKey {
+		case language
+		case partOfSpeech
+		case pronunciations
+		case forms
+		case senses
+		case synonyms
+		case antonyms
+	}
+}
+
+// MARK: - Form
+struct Form: Codable {
+	let word: String
+	let tags: [String]
+}
+
+// MARK: - Language
+struct Language: Codable {
+	let code, name: String
+}
+
+// MARK: - Pronunciation
+struct Pronunciation2: Codable {
+	let type, text: String
+	let tags: [String]
+}
+
+// MARK: - Sense
+struct Sense: Codable {
+	let definition: String
+	let tags, examples: [String]
+	let quotes: [Quote2]
+	let synonyms, antonyms: [String]
+}
+
+// MARK: - Quote
+struct Quote2: Codable {
+	let text, reference: String
+}
+
+// MARK: - Source
+struct Source: Codable {
+	let url: String
+	let license: License2
+}
+
+// MARK: - License
+struct License2: Codable {
+	let name, url: String
+}
+
+
+
+
 final class WordleDataManager {
     static let shared = WordleDataManager()
    
@@ -612,7 +719,7 @@ final class WordleDataManager {
 
 extension WordleDataManager {
     func loadWordsFromJSONFile(selectedLanguage: LanguageSelection) -> Words? {
-        guard let filePath = Bundle.main.path(forResource: selectedLanguage == .norwegian ? "norwegianWords" : "englishWords", ofType: "json") else {
+		guard let filePath = Bundle.main.path(forResource: selectedLanguage.fileName, ofType: "json") else {
             print("File not found")
             return nil
         }
@@ -629,7 +736,7 @@ extension WordleDataManager {
     }
     
     func loadDailyWordsFromJSONFile(selectedLanguage: LanguageSelection) -> Words? {
-        guard let filePath = Bundle.main.path(forResource: selectedLanguage == .norwegian ? "dailyNorwegianWords" : "dailyEnglishWords", ofType: "json") else {
+        guard let filePath = Bundle.main.path(forResource: selectedLanguage.dailyWordFileName, ofType: "json") else {
             print("File not found")
             return nil
         }
@@ -1151,8 +1258,37 @@ extension WordleDataManager {
             }
         }.resume()
     }
-    
-    
+	
+	
+	func fetchSpanishDefinition(for word: String, completion: @escaping (SpanishDefinition?) -> Void) {
+		let urlString = "https://freedictionaryapi.com/api/v1/entries/es/\(word.lowercased())"
+		print("urlString: \(urlString)")
+		guard let url = URL(string: urlString) else {
+			completion(nil)
+			return
+		}
+		
+		URLSession.shared.dataTask(with: url) { data, response, error in
+			guard let data = data, error == nil else {
+				completion(nil)
+				return
+			}
+			print("data: \(data)")
+			do {
+				let jsonObject = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers)
+				print("jsonObject: \(jsonObject)")
+				if let jsonDict = jsonObject as? [NSDictionary] {
+					print("jsonDict: \(jsonDict)")
+				}
+				let result = try JSONDecoder().decode(SpanishDefinition.self, from: data)
+				dump(result)
+				completion(result)
+			} catch {
+				print("Error decoding Spanish Definition: \(error)")
+				completion(nil)
+			}
+		}.resume()
+	}
 }
 
 

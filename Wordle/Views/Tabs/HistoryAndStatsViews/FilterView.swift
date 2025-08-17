@@ -31,10 +31,10 @@ struct FilterView: View {
                 .foregroundStyle(.primary)
                 .accentColor(.primary)
                 .background {
-                    if #unavailable(iOS 26.0, ) {
+//                    if #unavailable(iOS 26.0, ) {
                         RoundedRectangle(cornerRadius: 10)
                             .foregroundStyle(Color(uiColor: .tertiarySystemBackground))
-                    }
+//                    }
                 }
                 .sensoryFeedback(.selection, trigger: self.numberOfLetters)
                 .modifier(ConditionalGlassEffect())
@@ -48,10 +48,10 @@ struct FilterView: View {
                 .foregroundStyle(.primary)
                 .accentColor(.primary)
                 .background {
-                    if #unavailable(iOS 26.0, ) {
+//                    if #unavailable(iOS 26.0, ) {
                         RoundedRectangle(cornerRadius: 10)
                             .foregroundStyle(Color(uiColor: .tertiarySystemBackground))
-                    }
+//                    }
                 }
                 .sensoryFeedback(.selection, trigger: selectedLanguage)
                 .modifier(ConditionalGlassEffect())
@@ -65,10 +65,10 @@ struct FilterView: View {
                 .foregroundStyle(.primary)
                 .accentColor(.primary)
                 .background {
-                    if #unavailable(iOS 26.0, ) {
+//                    if #unavailable(iOS 26.0, ) {
                         RoundedRectangle(cornerRadius: 10)
                             .foregroundStyle(Color(uiColor: .tertiarySystemBackground))
-                    }
+//                    }
                 }
                 .sensoryFeedback(.selection, trigger: gameMode)
                 .modifier(ConditionalGlassEffect())
@@ -88,10 +88,10 @@ struct FilterView: View {
                 .foregroundStyle(.primary)
                 .accentColor(.primary)
                 .background {
-                    if #unavailable(iOS 26.0, ) {
+//                    if #unavailable(iOS 26.0, ) {
                         RoundedRectangle(cornerRadius: 10)
                             .foregroundStyle(Color(uiColor: .tertiarySystemBackground))
-                    }
+//                    }
                 }
                 .sensoryFeedback(.selection, trigger: showsWhenHintsUsed)
                 .modifier(ConditionalGlassEffect())
@@ -103,5 +103,5 @@ struct FilterView: View {
 }
 
 #Preview {
-    FilterView(numberOfLetters: .constant(9), selectedLanguage: .constant(.both), gameMode: .constant(.both), showsWhenHintsUsed: .constant(.both))
+    FilterView(numberOfLetters: .constant(9), selectedLanguage: .constant(.all), gameMode: .constant(.both), showsWhenHintsUsed: .constant(.both))
 }

@@ -8,15 +8,17 @@
 import SwiftUI
 import SwiftData
 import GoogleMobileAds
+import AppTrackingTransparency
 
 @main
 struct WordleApp: App {
     @Environment(\.scenePhase) private var scenePhase
     @AppStorage("appTheme") private var appTheme: AppTheme = .dark
-    @AppStorage("userWantsAds") var userWantsAds: Bool = false
+    @AppStorage("userWantsAds") var userWantsAds: Bool = true
     @State var selection: TabSelection = .home
     @State private var bannerReloadID = UUID()
-    @State var selectViewIsActive: Bool = true
+//    @State var selectViewIsActive: Bool = true
+	@State var adManager: AdManager = AdManager()
     
     init() {
         if userWantsAds {
@@ -29,12 +31,13 @@ struct WordleApp: App {
             GeometryReader { geometry in
                 TabView(selection: $selection) {
                     NavigationStack {
-                        SelectView(selectViewIsActive: $selectViewIsActive)
+                        SelectView()
                     }
                     .tag(TabSelection.home)
                     .tabItem {
                         Label("The Phrase", systemImage: "p.square.fill")
                     }
+					.environment(adManager)
                     
                     StatsView()
                         .tag(TabSelection.stats)
@@ -61,9 +64,8 @@ struct WordleApp: App {
                     }
                 }
                 .safeAreaInset(edge: .bottom) {
-                    if self.userWantsAds && (self.selection != .home || (self.selection == .home && self.selectViewIsActive)) {
+					if self.userWantsAds && (self.selection != .home || (self.selection == .home && adManager.shouldShowAds)) {
                         if #available(iOS 26.0, *), UIDevice.current.userInterfaceIdiom == .phone {
-                            let _ = print("width: \(geometry.size.width)")
                             let adSize = currentOrientationAnchoredAdaptiveBanner(width: geometry.size.width - (geometry.size.width / 11))
                             BannerViewContainer(adSize)
                                 .frame(width: adSize.size.width < 0 ? 0 : adSize.size.width, height: adSize.size.height < 0 ? 0 : adSize.size.height)
@@ -83,6 +85,9 @@ struct WordleApp: App {
                         }
                     }
                 }
+				.onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)) { _ in
+					ATTrackingManager.requestTrackingAuthorization(completionHandler: { _ in })
+				}
                 .tint(.primary)
                 .preferredColorScheme(appTheme == .system ? nil : (appTheme == .light ? .light : .dark))
             }
@@ -90,5 +95,12 @@ struct WordleApp: App {
         .modelContainer(for: [StreakEntity.self, NormalStreakEntity.self, GameRecordEntity.self, GameRecord.self])
     }
 }
+
+@Observable
+final class AdManager {
+	var shouldShowAds: Bool = true
+}
+
+
 
 

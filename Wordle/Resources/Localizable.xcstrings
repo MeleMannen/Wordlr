@@ -3,6 +3,12 @@
   "strings" : {
     "" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : ""
+          }
+        },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13,6 +19,12 @@
     },
     "  " : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "  "
+          }
+        },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
@@ -24,6 +36,12 @@
     "%@" : {
       "localizations" : {
         "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@"
+          }
+        },
+        "es" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@"
@@ -45,6 +63,12 @@
             "value" : "%@"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@"
+          }
+        },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
@@ -53,9 +77,37 @@
         }
       }
     },
+    "%@ (%@)" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ (%2$@)"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ (%2$@)"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ (%2$@)"
+          }
+        }
+      }
+    },
     "%lld" : {
       "localizations" : {
         "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld"
+          }
+        },
+        "es" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "%lld"
@@ -69,12 +121,34 @@
         }
       }
     },
+    "%lld letter" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld letra"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld bokstav"
+          }
+        }
+      }
+    },
     "%lld letters" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "%lld letters"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld letras"
           }
         },
         "nb" : {
@@ -88,6 +162,12 @@
     "%lld." : {
       "localizations" : {
         "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld."
+          }
+        },
+        "es" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "%lld."
@@ -109,6 +189,12 @@
             "value" : "•"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "•"
+          }
+        },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
@@ -117,12 +203,34 @@
         }
       }
     },
-    "Ads:" : {
+    "About" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Acerca de"
+          }
+        },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Reklame:"
+            "value" : "Om"
+          }
+        }
+      }
+    },
+    "All" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Todo"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alle"
           }
         }
       }
@@ -135,20 +243,16 @@
             "value" : "All letters"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Todas las Letras"
+          }
+        },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Alle bokstaver"
-          }
-        }
-      }
-    },
-    "Allow Ads" : {
-      "localizations" : {
-        "nb" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tillatt Reklame"
           }
         }
       }
@@ -160,6 +264,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Almost!! - %@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¡Casi! - %@"
           }
         },
         "nb" : {
@@ -178,6 +288,12 @@
             "value" : "ANTONYMS"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Antónimos"
+          }
+        },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
@@ -186,22 +302,18 @@
         }
       }
     },
-    "App" : {
+    "App Language:" : {
       "localizations" : {
-        "nb" : {
+        "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "App"
+            "value" : "Idioma de la App:"
           }
-        }
-      }
-    },
-    "App Info" : {
-      "localizations" : {
+        },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "App Info"
+            "value" : "App Språk:"
           }
         }
       }
@@ -212,6 +324,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "App Theme:"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tema de la App:"
           }
         },
         "nb" : {
@@ -230,6 +348,12 @@
             "value" : "Are you sure you want to Restart?"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿Estás seguro de que quieres Reiniciar?"
+          }
+        },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
@@ -244,6 +368,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Both"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ambos"
           }
         },
         "nb" : {
@@ -262,6 +392,12 @@
             "value" : "Both Hint Usage"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uso de Ambas Pistas"
+          }
+        },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
@@ -270,18 +406,14 @@
         }
       }
     },
-    "Build:" : {
-      "localizations" : {
-        "nb" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Bygg:"
-          }
-        }
-      }
-    },
     "Copy" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copiar"
+          }
+        },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
@@ -296,6 +428,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Copy Result"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copiar Resultado"
           }
         },
         "nb" : {
@@ -314,6 +452,12 @@
             "value" : "Count"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Contar"
+          }
+        },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
@@ -324,6 +468,12 @@
     },
     "Daily Word Theme:" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tema de la Palabra Diaria:"
+          }
+        },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
@@ -338,6 +488,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Dark"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Oscuro"
           }
         },
         "nb" : {
@@ -356,74 +512,16 @@
             "value" : "Date:"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fecha:"
+          }
+        },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Dato:"
-          }
-        }
-      }
-    },
-    "Default Gamemode:" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Default Gamemode:"
-          }
-        },
-        "nb" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Standard Modus:"
-          }
-        }
-      }
-    },
-    "Default Language:" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Default Language:"
-          }
-        },
-        "nb" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Standard Språk:"
-          }
-        }
-      }
-    },
-    "Default Number of Letters:" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Default Number of Letters:"
-          }
-        },
-        "nb" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Standard Antall Bokstaver:"
-          }
-        }
-      }
-    },
-    "Default Show When Hints Used:" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Default Show When Hints Used:"
-          }
-        },
-        "nb" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Standard Vis Når Hint Brukt: "
           }
         }
       }
@@ -434,6 +532,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Dismiss"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Desechar"
           }
         },
         "nb" : {
@@ -452,6 +556,12 @@
             "value" : "Do you want to see an ad to get a hint and support the app? It helps us keep the app free and improve it further."
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿Quieres ver un anuncio para obtener una pista y apoyar la app? Esto nos ayuda a mantener la app gratuita y mejorarla aún más."
+          }
+        },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
@@ -468,20 +578,16 @@
             "value" : "Do you want to see the definition?"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿Quieres ver la definición?"
+          }
+        },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Vil du se definisjonen av ordet?"
-          }
-        }
-      }
-    },
-    "Don't Allow Ads" : {
-      "localizations" : {
-        "nb" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ikke Tillatt Reklame"
           }
         }
       }
@@ -492,6 +598,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ends with:"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Termina con:"
           }
         },
         "nb" : {
@@ -510,6 +622,12 @@
             "value" : "Enter ending letters"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Introduce las letras finales"
+          }
+        },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
@@ -524,6 +642,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Enter starting letters"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Introduce las letras iniciales"
           }
         },
         "nb" : {
@@ -542,10 +666,32 @@
             "value" : "Example"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ejemplo"
+          }
+        },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Eksempel"
+          }
+        }
+      }
+    },
+    "EXAMPLE" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "EJEMPLO"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "EKSEMPEL"
           }
         }
       }
@@ -556,6 +702,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Exclude letters:"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Excluir letras:"
           }
         },
         "nb" : {
@@ -569,6 +721,12 @@
     "Excluded letters" : {
       "comment" : "Label for excluded letters in filter options",
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Letras excluidas"
+          }
+        },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
@@ -583,6 +741,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "EXPLANATION AND USAGE"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "EXPLICACIÓN Y USO"
           }
         },
         "nb" : {
@@ -601,6 +765,12 @@
             "value" : "Filter Options"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Opciones de Filtro"
+          }
+        },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
@@ -609,18 +779,18 @@
         }
       }
     },
-    "Game" : {
+    "Game (Default)" : {
       "localizations" : {
-        "en" : {
+        "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Game"
+            "value" : "Juego (Estándar)"
           }
         },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Spill"
+            "value" : "Spill (Standard)"
           }
         }
       }
@@ -632,6 +802,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Both Modes"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ambos Modos"
           }
         },
         "nb" : {
@@ -651,6 +827,12 @@
             "value" : "Daily Word"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Palabra Diaria"
+          }
+        },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
@@ -668,6 +850,12 @@
             "value" : "Normal"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Normal"
+          }
+        },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
@@ -676,8 +864,46 @@
         }
       }
     },
+    "Gamemode:" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Modo de juego:"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Modus:"
+          }
+        }
+      }
+    },
+    "General" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "General"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Generelt"
+          }
+        }
+      }
+    },
     "Gold" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Oro"
+          }
+        },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
@@ -692,6 +918,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Got it!"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¡Entendido!"
           }
         },
         "nb" : {
@@ -710,6 +942,12 @@
             "value" : "Guess The Phrase"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Adivina la Frase"
+          }
+        },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
@@ -723,7 +961,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Sure"
+            "value" : "Hint"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pista"
           }
         },
         "nb" : {
@@ -742,6 +986,12 @@
             "value" : "Hints"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pistas"
+          }
+        },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
@@ -758,6 +1008,12 @@
             "value" : "Hints Never Used"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pistas Nunca Usadas"
+          }
+        },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
@@ -772,6 +1028,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Hints used:"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pistas usadas:"
           }
         },
         "nb" : {
@@ -791,6 +1053,12 @@
             "value" : "Both"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ambos"
+          }
+        },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
@@ -806,6 +1074,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Never Used"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nunca Usado"
           }
         },
         "nb" : {
@@ -825,10 +1099,16 @@
             "value" : "Only When Used"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Solo Cuando se Use"
+          }
+        },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bare Når Brukt"
+            "value" : "Bare Brukt"
           }
         }
       }
@@ -841,6 +1121,12 @@
             "value" : "History"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Historia"
+          }
+        },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
@@ -849,12 +1135,12 @@
         }
       }
     },
-    "History is not available with this selction!" : {
+    "History is not available with this selection!" : {
       "localizations" : {
-        "en" : {
+        "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "History is not available with this selction!"
+            "value" : "¡Historia no está disponible con esta selección!"
           }
         },
         "nb" : {
@@ -869,6 +1155,12 @@
       "comment" : "String for the hours",
       "localizations" : {
         "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@h "
+          }
+        },
+        "es" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@h "
@@ -890,10 +1182,16 @@
             "value" : "How to Play?"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿Cómo Jugar?"
+          }
+        },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Hvordan spille?"
+            "value" : "Hvordan Spille?"
           }
         }
       }
@@ -906,10 +1204,16 @@
             "value" : "How to Start a Game?"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿Cómo Iniciar un Juego?"
+          }
+        },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Hvordan starte et spill?"
+            "value" : "Hvordan Starte et Spill?"
           }
         }
       }
@@ -917,6 +1221,12 @@
     "Included letters" : {
       "comment" : "Label for included letters in filter options",
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Letras incluidas"
+          }
+        },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
@@ -927,6 +1237,12 @@
     },
     "Included letters:" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Letras incluidas:"
+          }
+        },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
@@ -943,6 +1259,12 @@
             "value" : "Info"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Info"
+          }
+        },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
@@ -951,19 +1273,25 @@
         }
       }
     },
-    "language_both" : {
-      "comment" : "Both Languages",
+    "language_all" : {
+      "comment" : "All Languages",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Both Languages"
+            "value" : "All Languages"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Todos los Idiomas"
           }
         },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Begge språk"
+            "value" : "Alle Språk"
           }
         }
       }
@@ -975,6 +1303,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "English"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Inglés"
           }
         },
         "nb" : {
@@ -994,10 +1328,39 @@
             "value" : "Norwegian"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Noruego"
+          }
+        },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Norsk"
+          }
+        }
+      }
+    },
+    "language_spanish" : {
+      "comment" : "Spanish Language",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spanish"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Español"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spansk"
           }
         }
       }
@@ -1008,6 +1371,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Language:"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Idioma:"
           }
         },
         "nb" : {
@@ -1026,6 +1395,12 @@
             "value" : "Light"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Luz"
+          }
+        },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1042,6 +1417,12 @@
             "value" : "Mode:"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Modo:"
+          }
+        },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1052,6 +1433,18 @@
     },
     "NAOB – %@" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "NAOB – %@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "NAOB – %@"
+          }
+        },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1068,10 +1461,16 @@
             "value" : "New Game"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nuevo Juego"
+          }
+        },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Spill på nytt"
+            "value" : "Spill På Nytt"
           }
         }
       }
@@ -1079,6 +1478,12 @@
     "No" : {
       "localizations" : {
         "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No"
+          }
+        },
+        "es" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "No"
@@ -1092,18 +1497,24 @@
         }
       }
     },
-    "No stats available for this selection." : {
+    "No stats available for this selection!" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "No stats available for this selection."
+            "value" : "No stats available for this selection!"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¡No hay estadísticas disponibles para esta selección!"
           }
         },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ingen statistikk tilgjengelig for dette utvalget."
+            "value" : "Det er ingen statistikk tilgjengelig med dette utvalget!"
           }
         }
       }
@@ -1114,6 +1525,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Number of Guesses"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Número de Adivinas"
           }
         },
         "nb" : {
@@ -1132,6 +1549,12 @@
             "value" : "Number of Guesses:"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Número de Adivinas:"
+          }
+        },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1142,6 +1565,18 @@
     },
     "Number of Letters:" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Number of Letters:"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Número de Letras:"
+          }
+        },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1157,6 +1592,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%lld Letters"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld Letras"
           }
         },
         "nb" : {
@@ -1175,10 +1616,38 @@
             "value" : "Only When Hints Was Used"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Solo Cuando se Usaron Pistas"
+          }
+        },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Bare Når Hint Var Brukt"
+          }
+        }
+      }
+    },
+    "ordbokene.no" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ordbokene.no"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ordbokene.no"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ordbokene.no"
           }
         }
       }
@@ -1189,6 +1658,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "ORIGIN   "
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ORIGEN   "
           }
         },
         "nb" : {
@@ -1207,6 +1682,12 @@
             "value" : "Play"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jugar"
+          }
+        },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1221,6 +1702,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Play  -  %lld🔥"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jugar  -  %lld🔥"
           }
         },
         "nb" : {
@@ -1239,6 +1726,12 @@
             "value" : "Play Daily Word"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jugar Palabra Diaria"
+          }
+        },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1253,6 +1746,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Play Daily Word\n%lld🔥"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jugar Palabra Diaria\n%lld🔥"
           }
         },
         "nb" : {
@@ -1271,6 +1770,12 @@
             "value" : "Play Something Else"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jugar Otra Cosa"
+          }
+        },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1285,6 +1790,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Played:"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jugado:"
           }
         },
         "nb" : {
@@ -1303,6 +1814,12 @@
             "value" : "PRONUNCIATION   "
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PRONUNCIACIÓN   "
+          }
+        },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1317,6 +1834,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Reset filter"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Restablecer filtro"
           }
         },
         "nb" : {
@@ -1335,6 +1858,12 @@
             "value" : "Restart"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reiniciar"
+          }
+        },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1351,6 +1880,12 @@
             "value" : "Search"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Buscar"
+          }
+        },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1361,6 +1896,12 @@
     },
     "Search %@" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Buscar %@"
+          }
+        },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1375,6 +1916,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Search for a Phrase"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Buscar una Frase"
           }
         },
         "nb" : {
@@ -1393,6 +1940,12 @@
             "value" : "Search:"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Buscar:"
+          }
+        },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1407,6 +1960,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Settings"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ajustes"
           }
         },
         "nb" : {
@@ -1426,6 +1985,12 @@
             "value" : "%lld Letter"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld Letra"
+          }
+        },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1441,6 +2006,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%lld Letters"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld Letras"
           }
         },
         "nb" : {
@@ -1460,6 +2031,12 @@
             "value" : "Rows"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Filas"
+          }
+        },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1475,6 +2052,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Used"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usado"
           }
         },
         "nb" : {
@@ -1493,6 +2076,12 @@
             "value" : "Sharing"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Compartir"
+          }
+        },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1509,6 +2098,12 @@
             "value" : "Show Definition"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mostrar Definición"
+          }
+        },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1517,8 +2112,36 @@
         }
       }
     },
+    "Show If Hints Used:" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mostrar si se Usaron Pistas:"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vis Når Hint Brukt: "
+          }
+        }
+      }
+    },
     "Standard" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Standard"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Estándar"
+          }
+        },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1533,6 +2156,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Starts with:"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Comienza con:"
           }
         },
         "nb" : {
@@ -1551,6 +2180,12 @@
             "value" : "State"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Estado"
+          }
+        },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1567,6 +2202,12 @@
             "value" : "Stats"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Estadísticas"
+          }
+        },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1575,18 +2216,18 @@
         }
       }
     },
-    "Stats and History" : {
+    "Stats and History (Default)" : {
       "localizations" : {
-        "en" : {
+        "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Stats and History"
+            "value" : "Estadísticas y Historia (Estándar)"
           }
         },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Stats og Historikk"
+            "value" : "Stats og Historikk (Standard)"
           }
         }
       }
@@ -1597,6 +2238,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Streaks🔥"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rachas🔥"
           }
         },
         "nb" : {
@@ -1613,6 +2260,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "SUBMIT WORD"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ELIGE PALABRAS"
           }
         },
         "nb" : {
@@ -1632,6 +2285,12 @@
             "value" : "You did it!! - %@"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¡Lo lograste! - %@"
+          }
+        },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1646,6 +2305,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Sure"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Claro"
           }
         },
         "nb" : {
@@ -1664,6 +2329,12 @@
             "value" : "SYNONYMS"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "SINÓNIMOS"
+          }
+        },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1680,6 +2351,12 @@
             "value" : "System"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sistema"
+          }
+        },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1690,6 +2367,18 @@
     },
     "The Board" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The Board"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El Tablero"
+          }
+        },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1704,6 +2393,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "The Game Modes"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Los Modos de Juego"
           }
         },
         "nb" : {
@@ -1722,6 +2417,12 @@
             "value" : "The Normal mode allows you to play as many times as you want, while the Daily Word mode provides a unique phrase each day, that is the same for all players."
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El modo Normal te permite jugar tantas veces como quieras, mientras que el modo Palabra Diaria ofrece una frase única cada día, que es la misma para todos los jugadores."
+          }
+        },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1733,6 +2434,12 @@
     "The Phrase" : {
       "localizations" : {
         "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The Phrase"
+          }
+        },
+        "es" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "The Phrase"
@@ -1754,6 +2461,12 @@
             "value" : "The Phrase is a word game where you guess a secret phrase by entering letters. The game provides feedback on your guesses, indicating correct letters and their positions."
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The Phrase es un juego de palabras en el que adivinas una frase secreta ingresando letras. El juego proporciona retroalimentación sobre tus adivinar, indicando las letras correctas y sus posiciones."
+          }
+        },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1768,6 +2481,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "The Phrase Length:"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Longitud de la Frase:"
           }
         },
         "nb" : {
@@ -1786,6 +2505,12 @@
             "value" : "The Phrase Was: %@!"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¡La Frase era: %@!"
+          }
+        },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1800,6 +2525,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Time Used: "
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tiempo Usado:"
           }
         },
         "nb" : {
@@ -1818,6 +2549,12 @@
             "value" : "To play the game, just enter a valid phrase and submit your guess. The game will highlight correct letters in green, correct letters in the wrong position in orange, and unused letters in gray."
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Para jugar, solo ingresa una frase válida y realiza una adivinar. El juego resaltará las letras correctas en verde, las letras correctas en la posición incorrecta en naranja y las letras no usadas en gris."
+          }
+        },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1834,6 +2571,12 @@
             "value" : "To start a game, select a language and the number of letters in the phrase that you are going to guess. After that, you choose the game mode, which can be either a Normal game or a Daily Word game."
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Para iniciar un juego, selecciona un idioma y el número de letras de la frase que vas a adivinar. Después, elige el modo de juego, que puede ser un juego Normal o un juego de Palabra Diaria."
+          }
+        },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1842,18 +2585,24 @@
         }
       }
     },
-    "Try playing a game first or changing the selction." : {
+    "Try playing a game first or changing the selection." : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Try playing a game first or changing the selction."
+            "value" : "Try playing a game first or changing the selection."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Intenta jugar un juego primero o cambiar la selección."
           }
         },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Prøv å spille et spill først eller endre utvalget."
+            "value" : "Prøv å spille et spill først eller endre valgene."
           }
         }
       }
@@ -1866,6 +2615,12 @@
             "value" : "Try playing a game first."
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Intenta jugar un juego primero."
+          }
+        },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1876,6 +2631,12 @@
     },
     "Version:" : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Versión:"
+          }
+        },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1892,6 +2653,12 @@
             "value" : "View The Board"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ver el Tablero"
+          }
+        },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1900,18 +2667,40 @@
         }
       }
     },
-    "We couldn't find a definition for this Phrase. That might be because it is a name or a placename." : {
+    "We couldn't find a definition for this Phrase. That might be because it is a name or a place name." : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "We couldn't find a definition for this Phrase. That might be because it is a name or a placename."
+            "value" : "We couldn't find a definition for this Phrase. That might be because it is a name or a place name."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No pudimos encontrar una definición para esta Frase. Esto podría deberse a que es un nombre propio o un nombre de lugar."
           }
         },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Vi kunne ikke finne en definisjon for denne Frasen. Det kan være fordi det er et navn eller stedsnavn. "
+          }
+        }
+      }
+    },
+    "wiktionary.org" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "wiktionary.org"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "wiktionary.org"
           }
         }
       }
@@ -1924,6 +2713,12 @@
             "value" : "Win Rate:"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tasa de Victorias:"
+          }
+        },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1932,34 +2727,20 @@
         }
       }
     },
-    "You can also use hints to help you guess the phrase. A hint will reveal a letter in the phrase, but not the postion of the letter. You can use a hint by tapping the hint button in the top right corner, which will make you watch an ad to get the hint." : {
+    "You can also use hints to help you guess the phrase. A hint will reveal a letter in the phrase, but not the position of the letter. You can use a hint by tapping the hint button in the top right corner, which will make you watch an ad to get the hint." : {
+      "comment" : "A description of how to use hints in the game.",
+      "isCommentAutoGenerated" : true,
       "localizations" : {
-        "en" : {
+        "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "You can also use hints to help you guess the phrase. A hint will reveal a letter in the phrase, but not the postion of the letter. You can use a hint by tapping the hint button in the top right corner, which will make you watch an ad to get the hint."
+            "value" : "También puedes usar pistas para ayudarte a adivinar la frase. Una pista revelará una letra de la frase, pero no su posición. Puedes usar una botón de pistas en la esquina superior derecha, lo que te hará ver un anuncio para obtener la pista."
           }
         },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Du kan også bruke hint for å hjelpe deg med å gjette frasen. Et hint vil avsløre en bokstav i frasen, men ikke posisjonen av bokstaven. Du kan bruke et hint ved å trykke på hint-knappen øverst til høyre, noe som får deg til å se en reklame for å få hintet."
-          }
-        }
-      }
-    },
-    "You can change the app settings by tapping the Settings tab. This will allow you to change the default language and the default number of letters in the phrase, and the defualt game mode. You can also change the app theme, which will change the app appearance to either light or dark mode." : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "You can change the app settings by tapping the Settings tab. This will allow you to change the default language and the default number of letters in the phrase, and the defualt game mode. You can also change the app theme, which will change the app appearance to either light or dark mode."
-          }
-        },
-        "nb" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Du kan endre appinnstillingene ved å trykke på Innstillinger. Dette vil tillate deg å endre standardspråket og standard antall bokstaver i uttrykket, og standard spillmodus. Du kan også endre app temaet, som vil endre appens utseende til enten lys eller mørk modus."
           }
         }
       }
@@ -1972,6 +2753,12 @@
             "value" : "You can keep track of your game streaks by looking next to the 🔥 emoji, next to the game mode on the The Phrase tab. This will either show you how many days or games in a row you have played and managed to guess The Phrase, depending on the game mode."
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Puedes llevar un registro de tus rachas de juego mirando junto al emoji 🔥, al lado del modo de juego en la pestaña La Frase. Esto te mostrará cuántos días o juegos consecutivos has jugado y logrado adivinar La Frase, dependiendo del modo de juego."
+          }
+        },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1980,18 +2767,18 @@
         }
       }
     },
-    "You can share your Daily Word game results with your friends by tapping the copy button at the bottom of the screen after the game, or by going to the game history and copy it from there. This will generate a shareable text of your game results, which you can then share with your friends and family." : {
+    "You can share your Daily Word game results with your friends by tapping the copy button at the bottom of the screen after the game, or by going to the game history and copy it from there. This will generate a text of your game results, which you can then share with your friends and family." : {
       "localizations" : {
-        "en" : {
+        "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "You can share your Daily Word game results with your friends by tapping the copy button at the bottom of the screen after the game, or by going to the game history and copy it from there. This will generate a shareable text of your game results, which you can then share with your friends and family."
+            "value" : "Puedes compartir los resultados de tu juego de Palabra Diaria con tus amigos tocando el botón de copiar en la parte inferior de la pantalla después del juego, o yendo al historia de juegos y copiándolo desde allí. Esto generará un texto con los resultados de tu juego, que luego podrás compartir con tus amigos y familiares."
           }
         },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Du kan dele dine Daglig Ord resultater med vennene dine ved å trykke på kopi-knappen under bunnen av skjermen etter spillet, eller ved å gå til spillhistorikken og kopiere den derfra. Dette vil generere en delbar tekst på spillresultatene dine, som du deretter kan dele med dine venner og familie."
+            "value" : "Du kan dele dine Daglig Ord resultater med vennene dine ved å trykke på kopi-knappen under bunnen av skjermen etter spillet, eller ved å gå til spillhistorikken og kopiere den derfra. Dette vil generere en tekst av spillresultatene dine, som du deretter kan dele med dine venner og familie."
           }
         }
       }
@@ -2004,6 +2791,12 @@
             "value" : "You can view your game history by tapping the History tab. This will show you your game history, including the phrases you have guessed, the number of guesses you needed to win the game, the number of hints used, and the date and time of the game. You can also filter your history by language, game mode, and number of letters in the phrase."
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Puedes ver tu historial de juegos tocando la pestaña Historia. Esto mostrará tu historia de juegos, incluyendo las frases que has adivinado, el número de adivinas que necesitaste para ganar, la cantidad de pistas usadas y la fecha y hora del juego. También puedes filtrar tu historia por idioma, modo de juego y número de letras de la frase."
+          }
+        },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2014,6 +2807,12 @@
     },
     "You can view your game stats by tapping the Stats tab. This will show you your game stats, including the number of games played, your win rate, and the amount of guesses you needed to guess the phrase. You can also filter your stats by language, game mode, and number of letters in the phrase." : {
       "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Puedes ver tus estadísticas de juego tocando la pestaña Estadísticas. Esto mostrará tus estadísticas de juego, incluyendo el número de juegos jugados, tu tasa de victorias y el número de adivinas que necesitaste para adivinar la frase. También puedes filtrar tus estadísticas por idioma, modo de juego y número de letras de la frase."
+          }
+        },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2028,6 +2827,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "You can't play this"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No puedes jugar esto"
           }
         },
         "nb" : {
@@ -2046,6 +2851,12 @@
             "value" : "You could try to search in the Dictionary NAOB: "
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Podrías intentar buscar en el Diccionario NAOB:"
+          }
+        },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2060,6 +2871,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "You have already played this exact Phrase today. Try again tomorrow or play with a different Phrase length."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ya has jugado esta frase exacta hoy. Intenta de nuevo mañana o juega con una frase de diferente longitud."
           }
         },
         "nb" : {
@@ -2078,6 +2895,12 @@
             "value" : "You will lose your word and you cannot undo this action!"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¡Perderás tu palabra y no podrás deshacer esta acción!"
+          }
+        },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2094,6 +2917,12 @@
             "value" : "Z"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Z"
+          }
+        },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2103,5 +2932,5 @@
       }
     }
   },
-  "version" : "1.0"
+  "version" : "1.1"
 }

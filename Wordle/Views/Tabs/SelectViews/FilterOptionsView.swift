@@ -15,11 +15,11 @@ enum FilterOptionsFields: Hashable {
 
 struct FilterOptionsView: View {
     @EnvironmentObject var appManager: AppManager
+	@Environment(AdManager.self) private var adManager: AdManager
     @FocusState var focusedField: FilterOptionsFields?
+	@AppStorage("userWantsAds") var userWantsAds: Bool = true
     
     
-    let englishLetters: [String] = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
-    let norwegianLetters: [String] = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "Æ", "Ø", "Å"]
     
     var body: some View {
         List {
@@ -116,7 +116,7 @@ struct FilterOptionsView: View {
                     Spacer()
                     
                     Menu {
-                        ForEach(appManager.selectedLanguage == .english ? self.englishLetters : self.norwegianLetters, id: \.self) { letter in
+						ForEach(appManager.selectedLanguage.alphabet, id: \.self) { letter in
                             Toggle(
                                 isOn: Binding(
                                     get: { appManager.selectedIncludedLetters.contains(letter) },
@@ -148,11 +148,11 @@ struct FilterOptionsView: View {
                     .accentColor(.primary)
                     .menuActionDismissBehavior(.disabled)
                     .background {
-                        if #unavailable(iOS 26.0, ) {
+//                        if #unavailable(iOS 26.0, ) {
                             RoundedRectangle(cornerRadius: 10)
                                 .foregroundStyle(Color(uiColor: .tertiarySystemBackground))
                                 .conditionalShadow(color: .black.opacity(0.5), radius: 4, x: 4, y: 4)
-                        }
+//                        }
                         
                     }
                     .onChange(of: appManager.selectedIncludedLetters) { oldValue, newValue in
@@ -179,7 +179,7 @@ struct FilterOptionsView: View {
                     Spacer()
                     
                     Menu {
-                        ForEach(appManager.selectedLanguage == .english ? self.englishLetters : self.norwegianLetters, id: \.self) { letter in
+                        ForEach(appManager.selectedLanguage.alphabet, id: \.self) { letter in
                             Toggle(
                                 isOn: Binding(
                                     get: { appManager.selectedExcludedLetters.contains(letter) },
@@ -211,11 +211,11 @@ struct FilterOptionsView: View {
                     .accentColor(.primary)
                     .menuActionDismissBehavior(.disabled)
                     .background {
-                        if #unavailable(iOS 26.0, ) {
+//                        if #unavailable(iOS 26.0, ) {
                             RoundedRectangle(cornerRadius: 10)
                                 .foregroundStyle(Color(uiColor: .tertiarySystemBackground))
                                 .conditionalShadow(color: .black.opacity(0.5), radius: 4, x: 4, y: 4)
-                        }
+//                        }
                     }
                     .onChange(of: appManager.selectedExcludedLetters) { oldValue, newValue in
                         if newValue.count == 0 {
@@ -259,8 +259,14 @@ struct FilterOptionsView: View {
                 }
         )
         .scrollDisabled(true)
+		.safeAreaPadding(.bottom, self.userWantsAds ? 54 : 0)
         .navigationTitle("Filter Options")
         .navigationBarTitleDisplayMode(.inline)
+		.onAppear {
+			DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
+				adManager.shouldShowAds = true
+			}
+		}
         .onDisappear {
             withAnimation {
                 DispatchQueue.main.async {
@@ -268,6 +274,13 @@ struct FilterOptionsView: View {
                 }
             }
         }
+		.onChange(of: self.focusedField) {
+			if self.focusedField == nil {
+				adManager.shouldShowAds = true
+			} else {
+				adManager.shouldShowAds = false
+			}
+		}
     }
     
     func focusNextField() {

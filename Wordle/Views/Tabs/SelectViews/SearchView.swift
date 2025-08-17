@@ -9,6 +9,8 @@ import SwiftUI
 
 struct SearchView: View {
     @EnvironmentObject var appManager: AppManager
+	@Environment(AdManager.self) private var adManager: AdManager
+	@AppStorage("userWantsAds") var userWantsAds: Bool = true
     @Namespace private var namespace
     @State private var isShowingFilterOptions: Bool = false
     @State private var searchResults: [String] = []
@@ -20,32 +22,63 @@ struct SearchView: View {
             if self.searchResults.isEmpty && !appManager.searchedWord.isEmpty {
                 ContentUnavailableView.search(text: appManager.searchedWord)
             } else {
-                HStack(spacing: 0) {
-                    List {
-                        ForEach(self.sectionKeys, id: \.self) { letter in
-                            Section {
-                                ForEach(Array((self.groupedWords[letter] ?? []).enumerated()), id: \.offset) { index, word in
-                                    LazyVStack(spacing: 0) {
-                                        NavigationLink(destination: {
-                                            WordDefinitionView(word: word, language: appManager.selectedLanguage)
-                                        }, label: {
-                                            HStack {
-                                                Text(word)
-                                                    .font(.title3)
-                                                    .foregroundStyle(.primary)
-                                                Spacer()
-                                            }
-                                        })
-                                    }
-                                }
-                            } header: {
-                                SectionHeaderView(letter: letter)
-                            }
-                            .listSectionSeparator(.hidden)
-                            .id(letter)
-                        }
-                    }
-                }
+				HStack(spacing: 0) {
+//					if #available(iOS 26, *) {
+//						List {
+//							ForEach(self.sectionKeys, id: \.self) { letter in
+//								Section {
+//									ForEach(Array((self.groupedWords[letter] ?? []).enumerated()), id: \.offset) { index, word in
+//										LazyVStack(spacing: 0) {
+//											NavigationLink(destination: {
+//												WordDefinitionView(word: word, language: appManager.selectedLanguage)
+//											}, label: {
+//												HStack {
+//													Text(word)
+//														.font(.title3)
+//														.foregroundStyle(.primary)
+//													Spacer()
+//												}
+//											})
+//										}
+//									}
+//								} header: {
+//									SectionHeaderView(letter: letter)
+//								}
+//								.sectionIndexLabel(letter)
+//								.listSectionSeparator(.hidden)
+//								.id(letter)
+//							}
+//						}
+//						.listSectionIndexVisibility(.visible)
+//						.safeAreaPadding(.bottom, self.userWantsAds ? 54 : 0)
+//					} else {
+						List {
+							ForEach(self.sectionKeys, id: \.self) { letter in
+								Section {
+									ForEach(Array((self.groupedWords[letter] ?? []).enumerated()), id: \.offset) { index, word in
+										LazyVStack(spacing: 0) {
+											NavigationLink(destination: {
+												WordDefinitionView(word: word, language: appManager.selectedLanguage)
+											}, label: {
+												HStack {
+													Text(word)
+														.font(.title3)
+														.foregroundStyle(.primary)
+													Spacer()
+												}
+											})
+										}
+									}
+								} header: {
+									SectionHeaderView(letter: letter)
+								}
+								.listSectionSeparator(.hidden)
+								.id(letter)
+							}
+						}
+						.safeAreaPadding(.bottom, self.userWantsAds ? 54 : 0)
+//					}
+				}
             }
         }
         .searchable(text: $appManager.searchedWord, placement: .navigationBarDrawer(displayMode: .always), prompt: "Search for a Phrase")
@@ -81,49 +114,74 @@ struct SearchView: View {
             self.filterGameRecords()
         }
         .overlay(alignment: .bottomTrailing) {
-            NavigationLink(destination: FilterOptionsView().environmentObject(appManager).navigationTransition(.zoom(sourceID: "filter", in: namespace)), label: {
-                Image(systemName: "slider.horizontal.3")
-                    .font(.title)
-                    .foregroundColor(.white)
-                    .padding()
-                    .background(Color.green)
-                    .clipShape(Circle())
-                    .sensoryFeedback(.selection, trigger: self.isShowingFilterOptions)
-                    .matchedTransitionSource(id: "filter", in: namespace)
-                    .simultaneousGesture(
-                        LongPressGesture(minimumDuration: 1.2)
-                            .onEnded { _ in
-                                appManager.resetFilters()
-                                self.isShowingFilterOptions.toggle()
-                            }
-                    )
-            })
-            .padding(.trailing, 25)
-            .padding(.bottom, 25)
-            .transition(.scale)
-            
-            .simultaneousGesture(TapGesture().onEnded {
-                self.isShowingFilterOptions.toggle()
-            })
+			if #available(iOS 18.0, *) {
+				NavigationLink(destination: FilterOptionsView().environmentObject(appManager).navigationTransition(.zoom(sourceID: "filter", in: namespace)), label: {
+					Image(systemName: "slider.horizontal.3")
+						.font(.title)
+						.foregroundColor(.white)
+						.padding()
+						.background(Color.green)
+						.clipShape(Circle())
+						.sensoryFeedback(.selection, trigger: self.isShowingFilterOptions)
+						.matchedTransitionSource(id: "filter", in: namespace)
+						.simultaneousGesture(
+							LongPressGesture(minimumDuration: 1.2)
+								.onEnded { _ in
+									appManager.resetFilters()
+									self.isShowingFilterOptions.toggle()
+								}
+						)
+				})
+				.padding(.trailing, 25)
+				.padding(.bottom, self.userWantsAds ? 75 : 25)
+				.transition(.scale)
+				.simultaneousGesture(TapGesture().onEnded {
+					self.isShowingFilterOptions.toggle()
+				})
+			} else {
+				NavigationLink(destination: FilterOptionsView().environmentObject(appManager), label: {
+					Image(systemName: "slider.horizontal.3")
+						.font(.title)
+						.foregroundColor(.white)
+						.padding()
+						.background(Color.green)
+						.clipShape(Circle())
+						.sensoryFeedback(.selection, trigger: self.isShowingFilterOptions)
+						.simultaneousGesture(
+							LongPressGesture(minimumDuration: 1.2)
+								.onEnded { _ in
+									appManager.resetFilters()
+									self.isShowingFilterOptions.toggle()
+								}
+						)
+				})
+				.padding(.trailing, 25)
+				.padding(.bottom, self.userWantsAds ? 75 : 25)
+				.simultaneousGesture(TapGesture().onEnded {
+					self.isShowingFilterOptions.toggle()
+				})
+			}
             
         }
         .onAppear {
             self.filterGameRecords()
+			DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
+				adManager.shouldShowAds = true
+			}
         }
     }
     
     func filterGameRecords() {
         var filteredWords = appManager.words?.wordGroups["\(appManager.numberOfLetters)"] ?? []
-        //        let shuffledWords = filteredWords.shuffled()
-        //        for word in shuffledWords {
-        //            if word == shuffledWords.last {
-        //                print("\"\(word)\"")
-        //                print("fini")
-        //            } else {
-        //                print("\"\(word)\",")
-        //            }
-        //
-        //        }
+//                let shuffledWords = filteredWords.shuffled()
+//                for word in shuffledWords {
+//                    if word == shuffledWords.last {
+//                        print("\"\(word)\"")
+//                        print("fini")
+//                    } else {
+//                        print("\"\(word)\",")
+//                    }
+//                }
         if appManager.isFilteringSearchWord && !appManager.searchedWord.isEmpty {
             filteredWords = filteredWords.filter { $0.contains(appManager.searchedWord.uppercased()) }
         }
@@ -135,10 +193,10 @@ struct SearchView: View {
         }
         
         if appManager.isFilteringIncludedLetters && !appManager.selectedIncludedLetters.isEmpty {
-            let excludedCharacters = Set(appManager.selectedIncludedLetters.joined())
-            filteredWords = filteredWords.filter { word in
-                excludedCharacters.isDisjoint(with: word.uppercased())
-            }
+            let includedCharacters = Set(appManager.selectedIncludedLetters.joined())
+			filteredWords = filteredWords.filter { word in
+				includedCharacters.isSubset(of: Set(word.uppercased()))
+			}
         }
         
         if appManager.isFilteringExcludeLetters && !appManager.selectedExcludedLetters.isEmpty {
@@ -149,7 +207,7 @@ struct SearchView: View {
         }
         self.searchResults = filteredWords
         self.groupedWords = Dictionary(grouping: self.searchResults.sorted(), by: { String($0.prefix(1)).uppercased() })
-        self.sectionKeys = self.groupedWords.keys.sorted()
+		self.sectionKeys = self.groupedWords.keys.sorted(using: String.Comparator(options: .caseInsensitive, locale: Locale(identifier: "nb"), order: .forward))
     }
 }
 

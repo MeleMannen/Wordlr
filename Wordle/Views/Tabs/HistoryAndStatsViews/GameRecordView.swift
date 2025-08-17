@@ -10,6 +10,7 @@ import SwiftUI
 struct GameRecordView: View {
     @Environment(\.colorScheme) private var colorScheme
     @AppStorage("userWantsNormalTheme") private var userWantsNormalTheme: Bool = true
+	@AppStorage("userWantsAds") private var userWantsAds: Bool = false
     var gameRecord: GameRecord
     @State private var didTap: Bool = false
     @State private var hasSharedResult: Bool = false
@@ -290,7 +291,7 @@ struct GameRecordView: View {
             }
             .navigationTitle(gameRecord.word)
             .navigationBarTitleDisplayMode(.inline)
-            .safeAreaPadding(.bottom, 54)
+			.safeAreaPadding(.bottom, self.userWantsAds ? 54 : 0)
             .onAppear {
                 if let endDate = gameRecord.endDate {
                     self.timeUsedString = self.getTimeUsedString(startDate: self.gameRecord.date, endDate: endDate).trimmingCharacters(in: .whitespaces)
@@ -343,29 +344,33 @@ struct GameRecordView: View {
         return shareText
     }
     
-    func getTimeUsedString(startDate: Date, endDate: Date) -> String {
-        print("End date: \(endDate)")
-        print("startDate: \(startDate)")
-        let timeInterval = endDate.timeIntervalSince(startDate)
-        print("Time interval: \(timeInterval)")
-        let hours = Int(timeInterval) / 3600
-        let minutes = (Int(timeInterval) % 3600) / 60
-        let seconds = Int(timeInterval) % 60
-        
-        var timeUsedString = ""
-        if hours > 0 {
-            let hourString = String(format: NSLocalizedString("hour_string", comment: "String for the hours"), hours)
-            timeUsedString += hourString
-        }
-        if minutes > 0 {
-            timeUsedString += "\(minutes)m "
-        }
-        if seconds > 0 {
-            timeUsedString += "\(seconds)s"
-        }
-        print("Time used string: \(timeUsedString)")
-        return timeUsedString
-    }
+	func getTimeUsedString(startDate: Date, endDate: Date) -> String {
+		print("End date: \(endDate)")
+		print("startDate: \(startDate)")
+		let timeInterval = max(0, endDate.timeIntervalSince(startDate))
+		print("Time interval: \(timeInterval)")
+		let hours = Int(timeInterval) / 3600
+		let minutes = (Int(timeInterval) % 3600) / 60
+		let seconds = Int(timeInterval) % 60
+		
+		var timeUsedString = ""
+		if hours > 0 {
+			let hourFormatString = NSLocalizedString("hour_string", comment: "String for the hours")
+			if hourFormatString.contains("%") {
+				timeUsedString += String(format: hourFormatString, hours)
+			} else {
+				timeUsedString += "\(hours)h "
+			}
+		}
+		if minutes > 0 {
+			timeUsedString += "\(minutes)m "
+		}
+		if seconds > 0 {
+			timeUsedString += "\(seconds)s"
+		}
+		print("Time used string: \(timeUsedString)")
+		return timeUsedString
+	}
 }
 
 

@@ -97,14 +97,14 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
     
 
     
-    func checkIfDailyWordIsAlreadyPlayed() -> Bool {
-        if let streakEntity = self.getStreakEntity() {
-            return streakEntity.streak.hasPlayedDailyWord
-        }
-        return false
-    }
+//    func checkIfDailyWordIsAlreadyPlayed() -> Bool {
+//        if let streakEntity = self.getStreakEntity() {
+//            return streakEntity.streak.hasPlayedDailyWord
+//        }
+//        return false
+//    }
     
-    func checkIfDailyWordIsAlreadyPlayed2() -> Bool {
+    func checkIfDailyWordIsAlreadyPlayed() -> Bool {
         var cetCalendar = Calendar(identifier: .gregorian)
         cetCalendar.timeZone = TimeZone(identifier: "CET")!
         let currentDate = Date()
@@ -113,7 +113,6 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
                 if cetCalendar.isDate(gameRecord.gameRecord.date, inSameDayAs: currentDate) {
                     return true
                 }
-                
             }
         }
         return false
@@ -151,8 +150,6 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
         } else {
             return "PIANO"
         }
-        
-        
     }
     
     
@@ -180,7 +177,6 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
                     }
                     dispatchGroup.leave()
                 }
-                
             }
             
             dispatchGroup.notify(queue: .main) {
@@ -195,9 +191,11 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
         var keyBoardCharacters: [[String]] = []
         if self.selectedLanguage == .english {
             keyBoardCharacters = [["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"], ["A", "S", "D", "F", "G", "H", "J", "K", "L"], ["Z", "X", "C", "V", "B", "N", "M"]]
-        } else {
+		} else if self.selectedLanguage == .norwegian {
             keyBoardCharacters = [["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P", "Å"], ["A", "S", "D", "F", "G", "H", "J", "K", "L", "Ø", "Æ"], ["Z", "X", "C", "V", "B", "N", "M"]]
-        }
+		} else {
+			keyBoardCharacters = [["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"], ["A", "S", "D", "F", "G", "H", "J", "K", "L", "Ñ"], ["Z", "X", "C", "V", "B", "N", "M"]]
+		}
         
         for row in keyBoardCharacters {
             var keyBoardRow: [KeyBoardLetter] = []
@@ -258,7 +256,6 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
                     //                    print("changanbleWord2: \(changableWord), i: \(i)")
                 }
             }
-            
         }
         
         for i in 0..<self.board[self.currentRow].count {
@@ -499,11 +496,15 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
             self.selectedLanguage = .norwegian
             self.language = .norwegian
             self.defaultLanguage = .norwegian
-        } else {
-            self.selectedLanguage = .english
-            self.language = .english
-            self.defaultLanguage = .english
-        }
+        } else if pre == "es" || pre == "es-ES" || pre == "es-MX" || pre == "es-AR" {
+			self.selectedLanguage = .spanish
+			self.language = .spanish
+			self.defaultLanguage = .spanish
+		} else {
+			self.selectedLanguage = .english
+			self.language = .english
+			self.defaultLanguage = .english
+		}
     }
     
     
@@ -633,30 +634,33 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
         return shareText
     }
     
-    func getTimeUsedString(startDate: Date, endDate: Date) -> String {
-        print("End date: \(endDate)")
-        print("startDate: \(startDate)")
-        let timeInterval = endDate.timeIntervalSince(startDate)
-        print("Time interval: \(timeInterval)")
-        let hours = Int(timeInterval) / 3600
-        let minutes = (Int(timeInterval) % 3600) / 60
-        let seconds = Int(timeInterval) % 60
-        
-        var timeUsedString = ""
-        if hours > 0 {
-            let hourString = String(format: NSLocalizedString("hour_string", comment: "String for the hours"), hours)
-            timeUsedString += hourString
-        }
-        if minutes > 0 {
-            timeUsedString += "\(minutes)m "
-        }
-        if seconds > 0 {
-            timeUsedString += "\(seconds)s"
-        }
-        print("Time used string: \(timeUsedString)")
-        return timeUsedString
-    }
-    
+	func getTimeUsedString(startDate: Date, endDate: Date) -> String {
+		print("End date: \(endDate)")
+		print("startDate: \(startDate)")
+		let timeInterval = max(0, endDate.timeIntervalSince(startDate))
+		print("Time interval: \(timeInterval)")
+		let hours = Int(timeInterval) / 3600
+		let minutes = (Int(timeInterval) % 3600) / 60
+		let seconds = Int(timeInterval) % 60
+		
+		var timeUsedString = ""
+		if hours > 0 {
+			let hourFormatString = NSLocalizedString("hour_string", comment: "String for the hours")
+			if hourFormatString.contains("%") {
+				timeUsedString += String(format: hourFormatString, hours)
+			} else {
+				timeUsedString += "\(hours)h "
+			}
+		}
+		if minutes > 0 {
+			timeUsedString += "\(minutes)m "
+		}
+		if seconds > 0 {
+			timeUsedString += "\(seconds)s"
+		}
+		print("Time used string: \(timeUsedString)")
+		return timeUsedString
+	}
     
     
     func resetBoard() {
@@ -674,6 +678,7 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
         self.didWinGame = .lost
         self.language = self.selectedLanguage
         self.gameMode = self.selectedGameMode
+		self.resetFilters()
         self.startDate = Date()
     }
     
@@ -829,9 +834,9 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
     // MARK: - ADS
     func loadAd() async {
         do {
-            // ca-app-pub-7619403750703078/7682260846
+            // ca-app-pub-3940256099942544/1712485313
             self.rewardedAd = try await RewardedAd.load(
-                with: "ca-app-pub-3940256099942544/1712485313", request: Request())
+                with: "ca-app-pub-7619403750703078/7682260846", request: Request())
             self.rewardedAd?.fullScreenContentDelegate = self
         } catch {
             print("Failed to load rewarded ad with error: \(error.localizedDescription)")

@@ -7,13 +7,15 @@
 
 import SwiftUI
 import GoogleMobileAds
-import AppTrackingTransparency
+//import AppTrackingTransparency
 
 struct GameView: View {
     @EnvironmentObject var appManager: AppManager
+	@Environment(AdManager.self) private var adManager: AdManager
     @Environment(\.dismiss) var dismiss
     @Environment(\.colorScheme) private var colorScheme
     @AppStorage("userWantsNormalTheme") private var userWantsNormalTheme: Bool = true
+	@AppStorage("userWantsAds") var userWantsAds: Bool = true
     
     @State var didTapSubmitButton: Bool = false
     @State var didTapBackButton: Bool = false
@@ -472,6 +474,9 @@ struct GameView: View {
             } else if appManager.word.count != appManager.numberOfLetters {
                 appManager.resetBoard()
 			}
+			DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
+				adManager.shouldShowAds = false
+			}
             
         }
     }
@@ -479,7 +484,7 @@ struct GameView: View {
 
 struct AdButton: View {
     @EnvironmentObject var appManager: AppManager
-    @AppStorage("userWantsAds") var userWantsAds: Bool = false
+    @AppStorage("userWantsAds") var userWantsAds: Bool = true
     @AppStorage("hasSeenAdOption") var hasSeenAdOption: Bool = false
     @State var isPresentingAdOption: Bool = false
     @State var hasLoadedAd: Bool = false
@@ -531,11 +536,6 @@ struct AdButton: View {
                 self.hasLoadedAd = true
             }
         }
-        .onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)) { _ in
-            if self.userWantsAds && hasSeenAdOption {
-                ATTrackingManager.requestTrackingAuthorization(completionHandler: { status in })
-            }
-        }
         .sensoryFeedback(.selection, trigger: self.didTap)
     }
 }
@@ -544,7 +544,7 @@ struct GrowingButton: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .scaleEffect(configuration.isPressed ? 1.05 : 1)
-            .animation(.easeInOut(duration: 0.15), value: configuration.isPressed)
+            .animation(.easeInOut(duration: 0.1), value: configuration.isPressed)
     }
 }
 
@@ -552,7 +552,7 @@ struct ScalingButton: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .scaleEffect(configuration.isPressed ? 1.1 : 1)
-            .animation(.easeInOut(duration: 0.15), value: configuration.isPressed)
+            .animation(.easeInOut(duration: 0.1), value: configuration.isPressed)
     }
 }
 

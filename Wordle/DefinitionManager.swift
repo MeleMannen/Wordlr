@@ -70,6 +70,18 @@ final class DefinitionManager: NSObject, ObservableObject {
             }
         }
     }
+	
+	func getSpanishDefinition(for word: String, completion: @escaping (SpanishDefinition?) -> Void) {
+		WordleDataManager.shared.fetchSpanishDefinition(for: word) { definition in
+			guard let definition = definition else {
+				completion(nil)
+				return
+			}
+			DispatchQueue.main.async {
+				completion(definition)
+			}
+		}
+	}
     
     
 }

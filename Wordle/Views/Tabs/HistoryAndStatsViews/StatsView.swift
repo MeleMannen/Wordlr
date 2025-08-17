@@ -10,13 +10,14 @@ import Charts
 import SwiftData
 
 struct StatsView: View {
-    @AppStorage("defaultStatLanguage") private var defaultStatLanguage: LanguageSelection = .both
+    @AppStorage("defaultStatLanguage") private var defaultStatLanguage: LanguageSelection = .all
     @AppStorage("defaultStatNumberOfLetters") private var defaultStatNumberOfLetters: Int = 9
     @AppStorage("defaultStatGameMode") private var defaultStatGameMode: GameMode = .both
     @AppStorage("defaultStatHintsUsed") private var defaultStatHintsUsed: ShowsWhenHintsUsed = .both
+	@AppStorage("userWantsAds") private var userWantsAds: Bool = false
     @State private var hasFixedDefualtValues: Bool = false
     @State private var numberOfLetters: Int = 9
-    @State private var selectedLanguage: LanguageSelection = .both
+    @State private var selectedLanguage: LanguageSelection = .all
     @State private var gameMode: GameMode = .both
     @State private var showsWhenHintsUsed: ShowsWhenHintsUsed = .both
     @State private var maxNumberOfRows: Int = 6
@@ -37,7 +38,7 @@ struct StatsView: View {
                     FilterView(numberOfLetters: $numberOfLetters, selectedLanguage: $selectedLanguage, gameMode: $gameMode, showsWhenHintsUsed: $showsWhenHintsUsed)
                     
                     if self.filteredGameRecords.isEmpty {
-                        ContentUnavailableView.init("No stats available for this selection.", systemImage: "exclamationmark.triangle.fill", description: Text("Try playing a game first or changing the selction."))
+                        ContentUnavailableView.init("No stats available for this selection!", systemImage: "exclamationmark.triangle.fill", description: Text("Try playing a game first or changing the selection."))
                             .padding(.bottom, 20)
                     } else {
                         List {
@@ -136,7 +137,7 @@ struct StatsView: View {
                                 .frame(minHeight: 250)
                             }
                         }
-                        .safeAreaPadding(.bottom, 54)
+						.safeAreaPadding(.bottom, self.userWantsAds ? 54 : 0)
                     }
                 }
                 .navigationTitle("Stats")
@@ -186,7 +187,7 @@ struct StatsView: View {
             filteredRecords = filteredRecords.filter { $0.gameRecord.numberOfLetters == self.numberOfLetters }
         }
         
-        if self.selectedLanguage != .both {
+        if self.selectedLanguage != .all {
             filteredRecords = filteredRecords.filter { $0.gameRecord.language == self.selectedLanguage }
         }
         

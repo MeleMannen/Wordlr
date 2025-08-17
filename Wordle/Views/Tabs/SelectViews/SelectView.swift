@@ -9,10 +9,12 @@ import SwiftUI
 
 struct SelectView: View {
     @Environment(\.modelContext) var modelContext
+	@Environment(AdManager.self) private var adManager: AdManager
     @StateObject var appManager = AppManager()
     @AppStorage("hasAddedStreaks") private var hasAddedStreaks: Bool = false
     @AppStorage("hasAddedNormalStreaks") private var hasAddedNormalStreaks: Bool = false
     @AppStorage("hasFixedLanguage") private var hasFixedLanguage: Bool = false
+	@AppStorage("userWantsAds") private var userWantsAds: Bool = false
     @State var hasFixedDefualtValues: Bool = false
     @State var hasFixedContextAndFetched: Bool = false
     @State var didTapPlayDailyWordButton: Bool = false
@@ -20,7 +22,6 @@ struct SelectView: View {
     @State var didTapPlayNormalButton: Bool = false
     @State var didTapInfoButton: Bool = false
     @State var isShowingAlreadyPlayedAlert: Bool = false
-    @Binding var selectViewIsActive: Bool
     
     
     var body: some View {
@@ -41,7 +42,11 @@ struct SelectView: View {
                             
                             Picker("", selection: $appManager.numberOfLetters) {
                                 ForEach(1...8, id: \.self) { number in
-                                    Text("\(number) letters")
+									if number == 1 {
+										Text("\(number) letter")
+									} else {
+										Text("\(number) letters")
+									}
                                 }
                             }
                             .pickerStyle(.menu)
@@ -49,11 +54,11 @@ struct SelectView: View {
                             .accentColor(.primary)
                             .font(.title).bold()
                             .background {
-                                if #unavailable(iOS 26.0, ) {
+//                                if #unavailable(iOS 26.0, ) {
                                     RoundedRectangle(cornerRadius: 10)
                                         .foregroundStyle(Color(uiColor: .tertiarySystemBackground))
                                         .conditionalShadow(color: .black.opacity(0.5), radius: 4, x: 4, y: 4)
-                                }
+//                                }
                             }
                             .sensoryFeedback(.selection, trigger: appManager.numberOfLetters)
                             .modifier(ConditionalGlassEffect())
@@ -86,11 +91,11 @@ struct SelectView: View {
                             .foregroundStyle(.primary)
                             .accentColor(.primary)
                             .background {
-                                if #unavailable(iOS 26.0, ) {
+//                                if #unavailable(iOS 26.0, ) {
                                     RoundedRectangle(cornerRadius: 10)
                                         .foregroundStyle(Color(uiColor: .tertiarySystemBackground))
                                         .conditionalShadow(color: .black.opacity(0.5), radius: 4, x: 4, y: 4)
-                                }
+//                                }
                             }
                             .sensoryFeedback(.selection, trigger: appManager.selectedLanguage)
                             .modifier(ConditionalGlassEffect())
@@ -129,11 +134,8 @@ struct SelectView: View {
                                     }
                                     .padding(.horizontal, 30)
                             }
-                            
-                            
                         }
                         .simultaneousGesture(TapGesture().onEnded {
-                            self.selectViewIsActive = false
                             self.didTapPlayNormalButton.toggle()
                             appManager.selectedGameMode = .normal
                         })
@@ -145,7 +147,7 @@ struct SelectView: View {
                     
                     
                     VStack {
-                        if appManager.checkIfDailyWordIsAlreadyPlayed2() {
+                        if appManager.checkIfDailyWordIsAlreadyPlayed() {
                             if let streakEntity = appManager.getStreakEntity(), streakEntity.streak.currentStreak >= 3, streakEntity.streak.isAlive {
                                 VStack {
                                     Text("Play Daily Word\n\(streakEntity.streak.currentStreak)🔥")
@@ -238,7 +240,6 @@ struct SelectView: View {
                                 }
                             }
                             .simultaneousGesture(TapGesture().onEnded {
-                                self.selectViewIsActive = false
                                 self.didTapPlayDailyWordButton.toggle()
                                 appManager.selectedGameMode = .dailyWord
                                 
@@ -259,7 +260,7 @@ struct SelectView: View {
             }
             
             .navigationTitle("The Phrase")
-            .safeAreaPadding(.bottom, 54)
+			.safeAreaPadding(.bottom, self.userWantsAds ? 54 : 0)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     NavigationLink(destination: Info().environmentObject(appManager)) {
@@ -268,7 +269,6 @@ struct SelectView: View {
                             .foregroundStyle(.primary)
                     }
                     .simultaneousGesture(TapGesture().onEnded {
-                        self.selectViewIsActive = false
                         self.didTapInfoButton.toggle()
                     })
                     .sensoryFeedback(.selection, trigger: self.didTapInfoButton)
@@ -277,7 +277,6 @@ struct SelectView: View {
         }
         .onAppear {
 			appManager.message = ""
-            self.selectViewIsActive = true
             if !self.hasFixedContextAndFetched {
                 appManager.modelContext = modelContext
                 appManager.streakManager = StreakManager(context: modelContext)
@@ -309,10 +308,13 @@ struct SelectView: View {
                 appManager.fixLanguageBasedOnLocale()
                 self.hasFixedLanguage = true
             }
+			DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
+				adManager.shouldShowAds = true
+			}
         }
-        .onDisappear {
-            self.selectViewIsActive = false
-        }
+//        .onDisappear {
+//            self.selectViewIsActive = false
+//        }
     }
 }
 
@@ -342,7 +344,7 @@ struct ConditionalGlassEffect: ViewModifier {
     func body(content: Content) -> some View {
         if #available(iOS 26.0, *) {
             content
-                .glassEffect(.regular.interactive())
+//                .glassEffect(.regular.interactive())
         } else {
             content
         }
@@ -390,5 +392,5 @@ extension View {
 
 
 #Preview {
-    SelectView(selectViewIsActive: .constant(true))
+    SelectView()
 }

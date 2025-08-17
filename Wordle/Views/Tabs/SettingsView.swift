@@ -7,330 +7,238 @@
 
 import SwiftUI
 import GoogleMobileAds
-import AppTrackingTransparency
 
 struct SettingsView: View {
-    @Environment(\.colorScheme) private var colorScheme
-    @AppStorage("appTheme") private var appTheme: AppTheme = .dark
-    @AppStorage("userWantsAds") var userWantsAds: Bool = false
-    @AppStorage("userWantsNormalTheme") private var userWantsNormalTheme: Bool = true
-    @AppStorage("defaultLanguage") private var defaultLanguage: LanguageSelection = .norwegian
-    @AppStorage("defaultNumberOfLetters") private var defaultNumberOfLetters: Int = 5
-    
-    @AppStorage("defaultStatLanguage") private var defaultStatLanguage: LanguageSelection = .both
-    @AppStorage("defaultStatNumberOfLetters") private var defaultStatNumberOfLetters: Int = 9
-    @AppStorage("defaultStatGameMode") private var defaultStatGameMode: GameMode = .both
-    @AppStorage("defaultStatHintsUsed") private var defaultStatHintsUsed: ShowsWhenHintsUsed = .both
-    
-    var body: some View {
-        GeometryReader { geometry in
-            NavigationStack {
-                List {
-                    Section {
-                        DisclosureGroup {
-                            Picker("", selection: $appTheme) {
-                                Text("System")
-                                    .tag(AppTheme.system)
-                                Text("Dark")
-                                    .tag(AppTheme.dark)
-                                Text("Light")
-                                    .tag(AppTheme.light)
-                                
-                            }
-                            .pickerStyle(SegmentedPickerStyle())
-                            .padding(.vertical, 5)
-                            
-                        } label: {
-                            HStack {
-                                Text("App Theme:")
-                                    .font(.headline)
-                            }
-                            .padding(.vertical, 5)
-                        }
-                        
-                        if self.colorScheme == .dark {
-                            DisclosureGroup {
-                                Picker("", selection: $userWantsNormalTheme) {
-                                    Text("Standard")
-                                        .tag(true)
-                                    Text("Gold")
-                                        .tag(false)
-                                }
-                                .pickerStyle(SegmentedPickerStyle())
-                                .padding(.vertical, 5)
-                            } label: {
-                                HStack {
-                                    Text("Daily Word Theme:")
-                                        .font(.headline)
-                                }
-                                .padding(.vertical, 5)
-                            }
-                        }
-                        
-                        DisclosureGroup {
-                            Picker("", selection: $userWantsAds) {
-                                Text("Allow Ads")
-                                    .tag(true)
-                                Text("Don't Allow Ads")
-                                    .tag(false)
-                                
-                            }
-                            .pickerStyle(SegmentedPickerStyle())
-                            .padding(.vertical, 5)
-                            
-                        } label: {
-                            HStack {
-                                Text("Ads:")
-                                    .font(.headline)
-                            }
-                            .padding(.vertical, 5)
-                        }
-                        .onChange(of: userWantsAds) {
-                            if userWantsAds {
-                                MobileAds.shared.start()
-                            }
-                        }
-                    } header: {
-                        Text("App")
-                    }
-                    
-                    Section {
-                        DisclosureGroup {
-                            HStack {
-                                Spacer()
-                                Picker(selection: $defaultNumberOfLetters) {
-                                    ForEach(1...8, id: \.self) { number in
-                                        Text("\(number) letters").tag(number)
-                                    }
-                                    
-                                } label: {
-                                    
-                                }
-                                .padding(.trailing, 10)
-                                .pickerStyle(.menu)
-                                .tint(.primary)
-                                .background {
-                                    if #unavailable(iOS 26.0, ) {
-                                        RoundedRectangle(cornerRadius: 10)
-                                            .foregroundStyle(Color(uiColor: .tertiarySystemBackground))
-                                            .conditionalShadow(color: .black.opacity(0.5), radius: 4, x: 4, y: 4)
-                                    }
-                                }
-                                .padding(3)
-                                .padding(.vertical, 5)
-                                .modifier(ConditionalGlassEffect())
-                            }
-                            
-                            
-                        } label: {
-                            HStack {
-                                Text("Default Number of Letters:")
-                                    .font(.headline)
-                            }
-                            .padding(.vertical, 5)
-                        }
-                        
-                        DisclosureGroup {
-                            Picker("", selection: $defaultLanguage) {
-                                ForEach(LanguageSelection.languages) { language in
-                                    Text(language.localizedName.capitalized)
-                                        .tag(language)
-                                }
-                                
-                            }
-                            .pickerStyle(.segmented)
-                            .foregroundStyle(.primary)
-                            .accentColor(.secondary)
-                            .padding(.vertical, 5)
-                            
-                            
-                        } label: {
-                            HStack {
-                                Text("Default Language:")
-                                    .font(.headline)
-                            }
-                            .padding(.vertical, 5)
-                        }
-                    } header: {
-                        Text("Game")
-                    }
-                    
-                    Section {
-                        DisclosureGroup {
-                            HStack {
-                                Spacer()
-                                Picker(selection: $defaultStatNumberOfLetters) {
-                                    ForEach(1...9, id: \.self) { number in
-                                        if number != 9 {
-                                            Text("\(number) letters")
-                                                .font(.title2).bold()
-                                        } else {
-                                            Text("All letters")
-                                                .font(.title2).bold()
-                                        }
-                                    }
-                                    
-                                } label: {
-                                    
-                                }
-                                .padding(.trailing, 10)
-                                .pickerStyle(.menu)
-                                .tint(.primary)
-                                .background {
-                                    if #unavailable(iOS 26.0, ) {
-                                        RoundedRectangle(cornerRadius: 10)
-                                            .foregroundStyle(Color(uiColor: .tertiarySystemBackground))
-                                            .conditionalShadow(color: .black.opacity(0.5), radius: 4, x: 4, y: 4)
-                                    }
-                                }
-                                .padding(3)
-                                .padding(.vertical, 5)
-                                .modifier(ConditionalGlassEffect())
-                            }
-                            
-                            
-                        } label: {
-                            HStack {
-                                Text("Default Number of Letters:")
-                                    .font(.headline)
-                            }
-                            .padding(.vertical, 5)
-                        }
-                        
-                        DisclosureGroup {
-                            Picker("", selection: $defaultStatLanguage) {
-                                ForEach(LanguageSelection.allCases) { language in
-                                    if language == .both {
-                                        Text("Both")
-                                            .tag(language)
-                                    } else {
-                                        Text(language.localizedName.capitalized)
-                                            .tag(language)
-                                    }
-                                }
-                                
-                            }
-                            .pickerStyle(.segmented)
-                            .foregroundStyle(.primary)
-                            .accentColor(.secondary)
-                            .padding(.vertical, 5)
-                            
-                            
-                        } label: {
-                            HStack {
-                                Text("Default Language:")
-                                    .font(.headline)
-                            }
-                            .padding(.vertical, 5)
-                        }
-                        
-                        DisclosureGroup {
-                            Picker("", selection: $defaultStatGameMode) {
-                                ForEach(GameMode.allCases) { mode in
-                                    if mode == .both {
-                                        Text("Both")
-                                            .tag(mode)
-                                    } else {
-                                        Text(mode.localizedName.capitalized)
-                                            .tag(mode)
-                                    }
-                                }
-                            }
-                            .pickerStyle(.segmented)
-                            .foregroundStyle(.primary)
-                            .accentColor(.primary)
-                            .padding(.vertical, 5)
-                            
-                            
-                        } label: {
-                            HStack {
-                                Text("Default Gamemode:")
-                                    .font(.headline)
-                            }
-                            .padding(.vertical, 5)
-                        }
-                        
-                        DisclosureGroup {
-                            Picker("", selection: $defaultStatHintsUsed) {
-                                ForEach(ShowsWhenHintsUsed.allCases) { mode in
-                                    Text(mode.localizedName.capitalized)
-                                        .tag(mode)
-                                }
-                            }
-                            .pickerStyle(.segmented)
-                            .foregroundStyle(.primary)
-                            .accentColor(.primary)
-                            .padding(.vertical, 5)
-                            
-                            
-                        } label: {
-                            HStack {
-                                Text("Default Show When Hints Used:")
-                                    .font(.headline)
-                            }
-                            .padding(.vertical, 5)
-                        }
-                    } header: {
-                        Text("Stats and History")
-                    }
-                    
-                    Section {
-                        VStack {
-                            HStack {
-                                Text("Version:")
-                                    .padding(.leading, 3)
-                                    .font(.headline)
-                                
-                                Spacer()
-                                
-                                Text("\(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "0.0.0")")
-                                //                                .font(.headline)
-                                    .contextMenu {
-                                        Button(action: {
-                                            UIPasteboard.general.string = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "0.0.0"
-                                        }) {
-                                            Text("Copy")
-                                            Image(systemName: "doc.on.doc")
-                                        }
-                                    }
-                            }
-                        }
-                        VStack {
-                            HStack {
-                                Text("Build:")
-                                    .padding(.leading, 3)
-                                    .font(.headline)
-                                
-                                
-                                Spacer()
-                                
-                                Text("\(Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "0")")
-                                //                                .font(.headline)
-                                    .contextMenu {
-                                        Button(action: {
-                                            UIPasteboard.general.string = Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "0"
-                                        }) {
-                                            Text("Copy")
-                                            Image(systemName: "doc.on.doc")
-                                        }
-                                    }
-                            }
-                        }
-                        
-                    } header: {
-                        Text("App Info")
-                    }
-                }
-                .navigationTitle("Settings")
-                .onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)) { _ in
-                    if self.userWantsAds {
-                        ATTrackingManager.requestTrackingAuthorization(completionHandler: { _ in })
-                    }
-                }
-                .safeAreaPadding(.bottom, 54)
-            }
-        }
-    }
+	@Environment(\.colorScheme) private var colorScheme
+	@AppStorage("appTheme") private var appTheme: AppTheme = .dark
+	@AppStorage("userWantsAds") var userWantsAds: Bool = true
+	@AppStorage("userWantsNormalTheme") private var userWantsNormalTheme: Bool = true
+	@AppStorage("defaultLanguage") private var defaultLanguage: LanguageSelection = .norwegian
+	@AppStorage("defaultNumberOfLetters") private var defaultNumberOfLetters: Int = 5
+	
+	@AppStorage("defaultStatLanguage") private var defaultStatLanguage: LanguageSelection = .all
+	@AppStorage("defaultStatNumberOfLetters") private var defaultStatNumberOfLetters: Int = 9
+	@AppStorage("defaultStatGameMode") private var defaultStatGameMode: GameMode = .both
+	@AppStorage("defaultStatHintsUsed") private var defaultStatHintsUsed: ShowsWhenHintsUsed = .both
+	
+	var body: some View {
+		GeometryReader { geometry in
+			NavigationStack {
+				List {
+					Section {
+						Button(action: {
+							if let url = URL(string: UIApplication.openSettingsURLString) {
+								UIApplication.shared.open(url)
+							}
+						}, label: {
+							HStack {
+								Text("App Language:")
+									.padding(.vertical, 4)
+								
+								Spacer()
+								
+								Image(systemName: "chevron.right")
+									.font(.caption).bold()
+									.foregroundStyle(.primary)
+							}
+							.padding(.vertical, 4)
+						})
+
+
+						DisclosureGroup {
+							Picker("", selection: $appTheme) {
+								Text("System")
+									.tag(AppTheme.system)
+								Text("Dark")
+									.tag(AppTheme.dark)
+								Text("Light")
+									.tag(AppTheme.light)
+								
+							}
+							.pickerStyle(SegmentedPickerStyle())
+							
+						} label: {
+							HStack {
+								Text("App Theme:")
+							}
+							.padding(.vertical, 4)
+						}
+						.padding(.vertical, 4)
+						
+						if self.colorScheme == .dark {
+							HStack {
+								Text("Daily Word Theme:")
+								
+								Spacer()
+								
+								Picker("", selection: $userWantsNormalTheme) {
+									Text("Standard")
+										.tag(true)
+									Text("Gold")
+										.tag(false)
+								}
+								.pickerStyle(.menu)
+								.font(.headline)
+							}
+						}
+					} header: {
+						Text("General")
+					}
+					
+					Section {
+						HStack {
+							Text("Number of Letters:")
+							
+							Spacer()
+							
+							Picker(selection: $defaultNumberOfLetters) {
+								ForEach(1...8, id: \.self) { number in
+									if number == 1 {
+										Text("\(number) letter")
+											.tag(number)
+									} else {
+										Text("\(number) letters")
+											.tag(number)
+									}
+								}
+								
+							} label: {
+								
+							}
+							.pickerStyle(.menu)
+							.modifier(ConditionalGlassEffect())
+						}
+						HStack {
+							Text("Language:")
+							
+							Spacer()
+							
+							Picker("", selection: $defaultLanguage) {
+								ForEach(LanguageSelection.languages) { language in
+									Text(language.localizedName.capitalized)
+										.tag(language)
+										.font(.headline)
+								}
+								
+							}
+							.pickerStyle(.menu)
+						}
+					} header: {
+						Text("Game (Default)")
+					}
+					
+					Section {
+						HStack {
+							Text("Number of Letters:")
+							
+							Spacer()
+							
+							Picker(selection: $defaultStatNumberOfLetters) {
+								ForEach(1...9, id: \.self) { number in
+									if number == 1 {
+										Text("\(number) letter")
+											.tag(number)
+									} else if number != 9 {
+										Text("\(number) letters")
+											.font(.title2).bold()
+									} else {
+										Text("All letters")
+											.font(.title2).bold()
+									}
+								}
+								
+							} label: {
+								
+							}
+							.pickerStyle(.menu)
+							.modifier(ConditionalGlassEffect())
+						}
+						
+						HStack {
+							Text("Language:")
+							Spacer()
+							Picker("", selection: $defaultStatLanguage) {
+								ForEach(LanguageSelection.allCases) { language in
+									if language == .all {
+										Text("All")
+											.tag(language)
+									} else {
+										Text(language.localizedName.capitalized)
+											.tag(language)
+									}
+								}
+								
+							}
+							.pickerStyle(.menu)
+						}
+						HStack {
+							Text("Gamemode:")
+							
+							Spacer()
+							
+							Picker("", selection: $defaultStatGameMode) {
+								ForEach(GameMode.allCases) { mode in
+									if mode == .both {
+										Text("Both")
+											.tag(mode)
+									} else {
+										Text(mode.localizedName.capitalized)
+											.tag(mode)
+									}
+								}
+							}
+							.pickerStyle(.menu)
+						}
+						HStack {
+							Text("Show If Hints Used:")
+							
+							Spacer()
+							
+							Picker("", selection: $defaultStatHintsUsed) {
+								ForEach(ShowsWhenHintsUsed.allCases) { mode in
+									Text(mode.localizedName.capitalized)
+										.tag(mode)
+								}
+							}
+							.pickerStyle(.menu)
+						}
+					} header: {
+						Text("Stats and History (Default)")
+					}
+					
+					Section {
+						VStack {
+							HStack {
+								Text("Version:")
+									.padding(.leading, 3)
+									.padding(.vertical, 4)
+								
+								Spacer()
+								
+								Text("\(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "0.0.0") (\(Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "0"))")
+									.fontWeight(.regular)
+									.contextMenu {
+										Button(action: {
+											UIPasteboard.general.string = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "0.0.0"
+										}) {
+											Text("Copy")
+											Image(systemName: "doc.on.doc")
+										}
+									}
+							}
+							.padding(.vertical, 4)
+							
+						}
+					} header: {
+						Text("About")
+					}
+				}
+				.fontWeight(.medium)
+				.navigationTitle("Settings")
+				.safeAreaPadding(.bottom, self.userWantsAds ? 54 : 0)
+			}
+		}
+	}
 }
 
 
@@ -345,7 +253,7 @@ struct BannerViewContainer: UIViewRepresentable {
     
     func makeUIView(context: Context) -> BannerView {
         let banner = BannerView(adSize: adSize)
-        banner.adUnitID = "ca-app-pub-3940256099942544/2435281174" // ca-app-pub-7619403750703078/6852604335
+        banner.adUnitID = "ca-app-pub-7619403750703078/6852604335" // ca-app-pub-3940256099942544/2435281174
         banner.load(Request())
         banner.delegate = context.coordinator
         return banner
