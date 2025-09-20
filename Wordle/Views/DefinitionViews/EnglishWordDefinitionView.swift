@@ -49,7 +49,7 @@ struct EnglishWordDefinitionView: View {
                                                 
                                                 VStack(alignment: .leading) {
                                                     ForEach(Array(definition.phonetics.enumerated()), id: \.offset) { index, phonetic in
-                                                        if !phonetic.text.isEmpty {
+                                                        if let text = phonetic.text, !text.isEmpty {
                                                             HStack(alignment: .center) {
                                                                 Text("\(index+1).")
                                                                     .foregroundColor(.gray)
@@ -57,13 +57,14 @@ struct EnglishWordDefinitionView: View {
                                                                     .frame(width: 25, alignment: .leading)
                                                                 Text("  ")
                                                                     .foregroundColor(.gray)
+																
                                                                 if let sourceURL = phonetic.sourceURL, !sourceURL.isEmpty {
-                                                                    Link("\(phonetic.text.replacingOccurrences(of: "/", with: ""))", destination: URL(string: "\(sourceURL)")!)
+                                                                    Link("\(text.replacingOccurrences(of: "/", with: ""))", destination: URL(string: "\(sourceURL)")!)
                                                                         .foregroundColor(.blue)
                                                                         .lineLimit(nil)
                                                                         .fixedSize(horizontal: false, vertical: true)
                                                                 } else {
-                                                                    Text("\(phonetic.text.replacingOccurrences(of: "/", with: ""))")
+                                                                    Text("\(text.replacingOccurrences(of: "/", with: ""))")
                                                                         .foregroundColor(.gray)
                                                                         .lineLimit(nil)
                                                                         .fixedSize(horizontal: false, vertical: true)
@@ -228,7 +229,7 @@ struct EnglishWordDefinitionView: View {
                                     .font(.largeTitle)
                                     .bold()
                                 HStack {
-                                    Text("We couldn't find a definition for this Phrase. That might be because it is a name or a place name.")
+                                    Text("We couldn't find a definition for this Word. That might be because it is a name or a place name.")
                                         .font(.title3)
                                     
                                     Spacer()
@@ -252,7 +253,7 @@ struct EnglishWordDefinitionView: View {
                         dump(self.englishDefinition)
                     }
                 }
-				.safeAreaPadding(.bottom, self.userWantsAds ? 54 : 0)
+				.safeAreaPadding(.bottom, (UIDevice.current.userInterfaceIdiom == .pad || UIDevice.current.userInterfaceIdiom == .mac) && self.userWantsAds ? 80 : (self.userWantsAds ? 54 : 0))
                 
             } else {
                 ProgressView()

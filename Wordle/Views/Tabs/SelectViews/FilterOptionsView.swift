@@ -25,12 +25,12 @@ struct FilterOptionsView: View {
         List {
             VStack {
                 Toggle(isOn: $appManager.isFilteringSearchWord) {
-                    Text("Search:")
+                    Text("Search")
                         .font(.headline)
                 }
                 .tint(.green)
                 
-                TextField("Search for a Phrase", text: $appManager.searchedWord)
+                TextField("Search for a Word", text: $appManager.searchedWord)
                     .textFieldStyle(ThePhraseTextFieldStyle())
                     .focused($focusedField, equals: .search)
                     .simultaneousGesture(
@@ -47,16 +47,17 @@ struct FilterOptionsView: View {
                             appManager.isFilteringSearchWord = true
                         }
                     }
+					.modifier(ConditionalGlassEffect())
             }
             
             VStack {
                 Toggle(isOn: $appManager.isFilteringStartWith) {
-                    Text("Starts with:")
+                    Text("Starts With")
                         .font(.headline)
                 }
                 .tint(.green)
                 
-                TextField("Enter starting letters", text: $appManager.startsWithFilter)
+                TextField("Enter Starting Letters", text: $appManager.startsWithFilter)
                     .textFieldStyle(ThePhraseTextFieldStyle())
                     .focused($focusedField, equals: .startsWith)
                     .simultaneousGesture(
@@ -75,16 +76,17 @@ struct FilterOptionsView: View {
                             appManager.isFilteringStartWith = true
                         }
                     }
+					.modifier(ConditionalGlassEffect())
             }
             
             VStack {
                 Toggle(isOn: $appManager.isFilteringEndsWith) {
-                    Text("Ends with:")
+                    Text("Ends With")
                         .font(.headline)
                 }
                 .tint(.green)
                 
-                TextField("Enter ending letters", text: $appManager.endsWithFilter)
+                TextField("Enter Ending Letters", text: $appManager.endsWithFilter)
                     .textFieldStyle(ThePhraseTextFieldStyle())
                     .focused($focusedField, equals: .endsWith)
                     .simultaneousGesture(
@@ -103,11 +105,12 @@ struct FilterOptionsView: View {
                             appManager.isFilteringEndsWith = true
                         }
                     }
+					.modifier(ConditionalGlassEffect())
             }
             
             VStack {
                 Toggle(isOn: $appManager.isFilteringIncludedLetters) {
-                    Text("Included letters:")
+                    Text("Included Letters")
                         .font(.headline)
                 }
                 .tint(.green)
@@ -138,21 +141,24 @@ struct FilterOptionsView: View {
                             let includedLettersText = NSLocalizedString("Included letters", comment: "Label for included letters in filter options")
                             Text(appManager.selectedIncludedLetters.isEmpty ? includedLettersText : appManager.selectedIncludedLetters.joined(separator: ", "))
                                 .font(.callout)
+								.padding([.vertical, .leading], 5)
                             
                             Image(systemName: "chevron.up.chevron.down")
+								.padding([.vertical, .trailing], 5)
                         }
-                        .padding(5)
-                        .frame(width: 170, alignment: .center)
+						.padding(5)
+                        .frame(alignment: .center)
                         .modifier(ConditionalGlassEffect())
+						
                     }
                     .accentColor(.primary)
                     .menuActionDismissBehavior(.disabled)
                     .background {
-//                        if #unavailable(iOS 26.0, ) {
+                        if #unavailable(iOS 26.0, ) {
                             RoundedRectangle(cornerRadius: 10)
                                 .foregroundStyle(Color(uiColor: .tertiarySystemBackground))
                                 .conditionalShadow(color: .black.opacity(0.5), radius: 4, x: 4, y: 4)
-//                        }
+                        }
                         
                     }
                     .onChange(of: appManager.selectedIncludedLetters) { oldValue, newValue in
@@ -165,12 +171,14 @@ struct FilterOptionsView: View {
                             appManager.isFilteringIncludedLetters = true
                         }
                     }
+					.padding(.vertical, 5)
                 }
             }
+			
             
             VStack {
                 Toggle(isOn: $appManager.isFilteringExcludeLetters) {
-                    Text("Exclude letters:")
+                    Text("Exclude Letters")
                         .font(.headline)
                 }
                 .tint(.green)
@@ -201,21 +209,22 @@ struct FilterOptionsView: View {
                             let excludedLettersText = NSLocalizedString("Excluded letters", comment: "Label for excluded letters in filter options")
                             Text(appManager.selectedExcludedLetters.isEmpty ? excludedLettersText : appManager.selectedExcludedLetters.joined(separator: ", "))
                                 .font(.callout)
-                            
+								.padding([.vertical, .leading], 5)
                             Image(systemName: "chevron.up.chevron.down")
+								.padding([.vertical, .trailing], 5)
                         }
-                        .padding(5)
-                        .frame(width: 170, alignment: .center)
+						.padding(5)
+						.frame(alignment: .center)
                         .modifier(ConditionalGlassEffect())
                     }
                     .accentColor(.primary)
                     .menuActionDismissBehavior(.disabled)
                     .background {
-//                        if #unavailable(iOS 26.0, ) {
+                        if #unavailable(iOS 26.0, ) {
                             RoundedRectangle(cornerRadius: 10)
                                 .foregroundStyle(Color(uiColor: .tertiarySystemBackground))
                                 .conditionalShadow(color: .black.opacity(0.5), radius: 4, x: 4, y: 4)
-//                        }
+                        }
                     }
                     .onChange(of: appManager.selectedExcludedLetters) { oldValue, newValue in
                         if newValue.count == 0 {
@@ -225,6 +234,7 @@ struct FilterOptionsView: View {
                             appManager.isFilteringExcludeLetters = true
                         }
                     }
+					.padding(.vertical, 5)
                 }
             }
             
@@ -232,11 +242,11 @@ struct FilterOptionsView: View {
                 HStack {
                     Spacer()
                     Button {
-                        print("Resetting filters")
+                        print("Resetting Filters")
                         appManager.resetFilters()
                         
                     } label: {
-                        Text("Reset filter")
+                        Text("Reset Filter")
                             .font(.headline)
                             .foregroundStyle(.red)
                     }
@@ -258,11 +268,12 @@ struct FilterOptionsView: View {
                     focusedField = nil
                 }
         )
-        .scrollDisabled(true)
-		.safeAreaPadding(.bottom, self.userWantsAds ? 54 : 0)
+//        .scrollDisabled(true)
+		.safeAreaPadding(.bottom, (UIDevice.current.userInterfaceIdiom == .pad || UIDevice.current.userInterfaceIdiom == .mac) && self.userWantsAds ? 80 : (self.userWantsAds ? 54 : 0))
         .navigationTitle("Filter Options")
         .navigationBarTitleDisplayMode(.inline)
 		.onAppear {
+			adManager.currentSelectView = .filterOptionsView
 			DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
 				adManager.shouldShowAds = true
 			}

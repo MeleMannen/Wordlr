@@ -15,6 +15,8 @@ struct GameRecordView: View {
     @State private var didTap: Bool = false
     @State private var hasSharedResult: Bool = false
     @State private var timeUsedString: String = ""
+	
+	@Namespace private var namespace
     
     let gradient = LinearGradient(colors: [.orange, .yellow, .yellow, .yellow, .yellow, .white], startPoint: .bottomLeading, endPoint: .topTrailing)
     let shadowGradient = LinearGradient(colors: [.orange, .yellow, .yellow, .yellow, .yellow], startPoint: .bottomLeading, endPoint: .topTrailing)
@@ -36,33 +38,62 @@ struct GameRecordView: View {
                             .conditionalShadow(color: .black.opacity(0.5), radius: 3, x: 6, y: 6)
                         
                         Spacer()
-                        if !self.userWantsNormalTheme && self.colorScheme == .dark && gameRecord.mode == .dailyWord && gameRecord.state == .won {
-                            Image(systemName: "checkmark")
-                                .foregroundStyle(.white)
-                                .conditionalShadow(color: .black.opacity(0.4), radius: 2, x: 2, y: 2)
-                                .padding(12)
-                                .background {
-                                    Circle()
-                                        .foregroundStyle(LinearGradient(colors: [.orange, .yellow, .white], startPoint: .bottomLeading, endPoint: .topTrailing))
-                                        .gradientShadow(gradient: self.shadowGradient, radius: 3, x: 0, y: 0)
-                                        .conditionalShadow(color: .black.opacity(0.5), radius: 3, x: 4, y: 4)
-                                }
-                                .font(.largeTitle).bold()
-                                
-                                
-                            
-                        } else {
-                            Image(systemName: gameRecord.state == .won ? "checkmark" : "xmark")
-                                .foregroundStyle(.white)
-                                .conditionalShadow(color: .black.opacity(0.4), radius: 2, x: 2, y: 2)
-                                .padding(12)
-                                .background {
-                                    Circle()
-                                        .foregroundStyle(gameRecord.state == .won ? .green : .red)
-                                        .conditionalShadow(color: .black.opacity(0.3), radius: 3, x: 4, y: 4)
-                                }
-                                .font(.largeTitle).bold()
-                        }
+						if #available(iOS 26.0, *) {
+							if !self.userWantsNormalTheme && self.colorScheme == .dark && gameRecord.mode == .dailyWord && gameRecord.state == .won {
+								Image(systemName: "checkmark")
+									.foregroundStyle(.white)
+									.conditionalShadow(color: .black.opacity(0.4), radius: 2, x: 2, y: 2)
+									.padding(12)
+									.background {
+										Circle()
+											.foregroundStyle(LinearGradient(colors: [.orange, .yellow, .white], startPoint: .bottomLeading, endPoint: .topTrailing))
+											.gradientShadow(gradient: self.shadowGradient, radius: 3, x: 0, y: 0)
+											.conditionalShadow(color: .black.opacity(0.5), radius: 3, x: 4, y: 4)
+									}
+									.glassEffect(.regular.interactive(), in: .circle)
+									.glassEffectID("board", in: self.namespace)
+									.font(.largeTitle).bold()
+							} else {
+								Image(systemName: gameRecord.state == .won ? "checkmark" : "xmark")
+									.foregroundStyle(.white)
+									.conditionalShadow(color: .black.opacity(0.4), radius: 2, x: 2, y: 2)
+									.padding(12)
+//									.background {
+//										Circle()
+////											.foregroundStyle(gameRecord.state == .won ? .green : .red)
+//											.conditionalShadow(color: .black.opacity(0.3), radius: 3, x: 4, y: 4)
+//									}
+									.glassEffect(.regular.tint(gameRecord.state == .won ? .green : .red).interactive())
+									.glassEffectID("board", in: self.namespace)
+									.font(.largeTitle).bold()
+									.conditionalShadow(color: .black.opacity(0.3), radius: 3, x: 4, y: 4)
+							}
+						} else {
+							if !self.userWantsNormalTheme && self.colorScheme == .dark && gameRecord.mode == .dailyWord && gameRecord.state == .won {
+								Image(systemName: "checkmark")
+									.foregroundStyle(.white)
+									.conditionalShadow(color: .black.opacity(0.4), radius: 2, x: 2, y: 2)
+									.padding(12)
+									.background {
+										Circle()
+											.foregroundStyle(LinearGradient(colors: [.orange, .yellow, .white], startPoint: .bottomLeading, endPoint: .topTrailing))
+											.gradientShadow(gradient: self.shadowGradient, radius: 3, x: 0, y: 0)
+											.conditionalShadow(color: .black.opacity(0.5), radius: 3, x: 4, y: 4)
+									}
+									.font(.largeTitle).bold()
+							} else {
+								Image(systemName: gameRecord.state == .won ? "checkmark" : "xmark")
+									.foregroundStyle(.white)
+									.conditionalShadow(color: .black.opacity(0.4), radius: 2, x: 2, y: 2)
+									.padding(12)
+									.background {
+										Circle()
+											.foregroundStyle(gameRecord.state == .won ? .green : .red)
+											.conditionalShadow(color: .black.opacity(0.3), radius: 3, x: 4, y: 4)
+									}
+									.font(.largeTitle).bold()
+							}
+						}
                     }
                     .padding(.top)
                     .padding(.horizontal)
@@ -70,7 +101,7 @@ struct GameRecordView: View {
                     
                     VStack(alignment: .leading) {
                         HStack(alignment: .bottom) {
-                            Text("Date: ")
+                            Text("Date")
                                 .foregroundStyle(.secondary)
                                 .font(.title3)
                             Spacer()
@@ -87,7 +118,7 @@ struct GameRecordView: View {
                         .padding(.bottom, 5)
                         
                         HStack(alignment: .bottom) {
-                            Text("Number of Letters:")
+                            Text("Number of Letters")
                                 .foregroundStyle(.secondary)
                                 .font(.title3)
                             Spacer()
@@ -106,7 +137,7 @@ struct GameRecordView: View {
                        
                         
                         HStack(alignment: .bottom) {
-                            Text("Language:")
+                            Text("Language")
                                 .foregroundStyle(.secondary)
                                 .font(.title3)
                             Spacer()
@@ -123,7 +154,7 @@ struct GameRecordView: View {
                         .padding(.bottom, 5)
                         
                         HStack(alignment: .bottom) {
-                            Text("Mode:")
+                            Text("Mode")
                                 .foregroundStyle(.secondary)
                                 .font(.title3)
                             Spacer()
@@ -140,7 +171,7 @@ struct GameRecordView: View {
                         .padding(.bottom, 5)
                         
                         HStack(alignment: .bottom) {
-                            Text("Number of Guesses:")
+                            Text("Number of Guesses")
                                 .foregroundStyle(.secondary)
                                 .font(.title3)
                             Spacer()
@@ -160,7 +191,7 @@ struct GameRecordView: View {
                         
                         if let hintsUsed = gameRecord.hintsUsed, hintsUsed > 0 {
                             HStack(alignment: .bottom) {
-                                Text("Hints used:")
+                                Text("Hints Used")
                                     .foregroundStyle(.secondary)
                                     .font(.title3)
                                 Spacer()
@@ -179,7 +210,7 @@ struct GameRecordView: View {
                         
                         if !self.timeUsedString.isEmpty {
                             HStack(alignment: .bottom) {
-                                Text("Time Used: ")
+                                Text("Time Used")
                                     .foregroundStyle(.secondary)
                                     .font(.title3)
                                 Spacer()
@@ -197,57 +228,113 @@ struct GameRecordView: View {
                     }
                     .padding()
                     
-                    NavigationLink(destination: WordDefinitionView(word: gameRecord.word, language: gameRecord.language)) {
-                        Text("Show Definition")
-                            .foregroundColor(.white)
-                            .conditionalShadow(color: .black.opacity(0.05), radius: 2, x: 1, y: 1)
-                            .font(.title2).bold()
-                            .padding(14)
-                            .frame(maxWidth: .infinity)
-                            .background {
-                                RoundedRectangle(cornerRadius: 15)
-                                    .fill(Color.green)
-                            }
-                            .padding(.horizontal, 40)
-                    }
-                    .simultaneousGesture(TapGesture().onEnded {
-                        self.didTap.toggle()
-                    })
-                    .padding(.vertical, 10)
-                    .sensoryFeedback(.impact, trigger: self.didTap)
-                    .buttonStyle(GrowingButton())
-                    .conditionalShadow(color: .black.opacity(0.5), radius: 4, x: 4, y: 4)
-                    
-                    
-                    if let board = gameRecord.board {
-                        NavigationLink(destination: BoardView(gameRecord: self.gameRecord, board: board)) {
-                            Text("View The Board")
-                                .foregroundColor(.white)
-                                .conditionalShadow(color: .black.opacity(0.05), radius: 1.5, x: 1, y: 1)
-                                .font(.title2).bold()
-                                .padding(14)
-                                .frame(maxWidth: .infinity)
-                                .background {
-                                    if !self.userWantsNormalTheme && self.colorScheme == .dark && gameRecord.mode == .dailyWord && gameRecord.state == .won {
-                                        RoundedRectangle(cornerRadius: 15)
-                                            .foregroundStyle(self.gradient)
-                                            .gradientShadow(gradient: self.shadowGradient, radius: 3, x: 0, y: 0)
-                                    } else {
-                                        RoundedRectangle(cornerRadius: 15)
-                                            .fill(Color.orange)
-                                            .conditionalShadow(color: .black.opacity(0.05), radius: 2, x: 1, y: 1)
-                                    }
-                                }
-                                .padding(.horizontal, 40)
-                        }
-                        .simultaneousGesture(TapGesture().onEnded {
-                            self.didTap.toggle()
-                        })
-                        .padding(.vertical, 10)
-                        .sensoryFeedback(.impact, trigger: self.didTap)
-                        .buttonStyle(GrowingButton())
-                        .conditionalShadow(color: .black.opacity(0.5), radius: 4, x: 4, y: 4)
-                    }
+					if #available(iOS 26.0, *) {
+						NavigationLink(destination: WordDefinitionView(word: gameRecord.word, language: gameRecord.language)) {
+							Text("Show Definition")
+								.foregroundColor(.white)
+								.conditionalShadow(color: .black.opacity(0.5), radius: 4, x: 4, y: 4)
+								.font(.title2).bold()
+								.padding(14)
+								.frame(maxWidth: .infinity)
+//								.background {
+//									RoundedRectangle(cornerRadius: 15)
+//										.fill(Color.green)
+//								}
+						}
+						.glassEffect(.regular.tint(.green).interactive(), in: .rect(cornerRadius: 15.0))
+						.glassEffectID("definition", in: self.namespace)
+						.simultaneousGesture(TapGesture().onEnded {
+							self.didTap.toggle()
+						})
+						.padding(.vertical, 10)
+						
+						.padding(.horizontal, 40)
+						.sensoryFeedback(.impact, trigger: self.didTap)
+//						.buttonStyle(GrowingButton())
+						.conditionalShadow(color: .black.opacity(0.5), radius: 4, x: 4, y: 4)
+						
+						
+						if let board = gameRecord.board {
+							NavigationLink(destination: BoardView(gameRecord: self.gameRecord, board: board)) {
+								Text("View The Board")
+									.foregroundColor(.white)
+									.conditionalShadow(color: .black.opacity(0.5), radius: 4, x: 4, y: 4)
+									.font(.title2).bold()
+									.padding(14)
+									.frame(maxWidth: .infinity)
+									.background {
+										if !self.userWantsNormalTheme && self.colorScheme == .dark && gameRecord.mode == .dailyWord && gameRecord.state == .won {
+											RoundedRectangle(cornerRadius: 15)
+												.foregroundStyle(self.gradient)
+												.gradientShadow(gradient: self.shadowGradient, radius: 3, x: 0, y: 0)
+										}
+									}
+									
+							}
+							.glassEffect(self.userWantsNormalTheme || !self.userWantsNormalTheme && self.colorScheme == .dark && gameRecord.mode == .dailyWord && gameRecord.state == .won ? .regular.interactive() : .regular.tint(.orange).interactive(), in: .rect(cornerRadius: 15.0))
+							.glassEffectID("board", in: self.namespace)
+							.simultaneousGesture(TapGesture().onEnded {
+								self.didTap.toggle()
+							})
+							.padding(.vertical, 10)
+							.padding(.horizontal, 40)
+							.sensoryFeedback(.impact, trigger: self.didTap)
+//							.buttonStyle(GrowingButton())
+							.conditionalShadow(color: .black.opacity(0.5), radius: 4, x: 4, y: 4)
+						}
+					} else {
+						NavigationLink(destination: WordDefinitionView(word: gameRecord.word, language: gameRecord.language)) {
+							Text("Show Definition")
+								.foregroundColor(.white)
+								.conditionalShadow(color: .black.opacity(0.05), radius: 2, x: 1, y: 1)
+								.font(.title2).bold()
+								.padding(14)
+								.frame(maxWidth: .infinity)
+								.background {
+									RoundedRectangle(cornerRadius: 15)
+										.fill(Color.green)
+								}
+								.padding(.horizontal, 40)
+						}
+						.simultaneousGesture(TapGesture().onEnded {
+							self.didTap.toggle()
+						})
+						.padding(.vertical, 10)
+						.sensoryFeedback(.impact, trigger: self.didTap)
+						.buttonStyle(GrowingButton())
+						.conditionalShadow(color: .black.opacity(0.5), radius: 4, x: 4, y: 4)
+						
+						
+						if let board = gameRecord.board {
+							NavigationLink(destination: BoardView(gameRecord: self.gameRecord, board: board)) {
+								Text("View The Board")
+									.foregroundColor(.white)
+									.conditionalShadow(color: .black.opacity(0.05), radius: 1.5, x: 1, y: 1)
+									.font(.title2).bold()
+									.padding(14)
+									.frame(maxWidth: .infinity)
+									.background {
+										if !self.userWantsNormalTheme && self.colorScheme == .dark && gameRecord.mode == .dailyWord && gameRecord.state == .won {
+											RoundedRectangle(cornerRadius: 15)
+												.foregroundStyle(self.gradient)
+												.gradientShadow(gradient: self.shadowGradient, radius: 3, x: 0, y: 0)
+										} else {
+											RoundedRectangle(cornerRadius: 15)
+												.fill(Color.orange)
+												.conditionalShadow(color: .black.opacity(0.05), radius: 2, x: 1, y: 1)
+										}
+									}
+									.padding(.horizontal, 40)
+							}
+							.simultaneousGesture(TapGesture().onEnded {
+								self.didTap.toggle()
+							})
+							.padding(.vertical, 10)
+							.sensoryFeedback(.impact, trigger: self.didTap)
+							.buttonStyle(GrowingButton())
+							.conditionalShadow(color: .black.opacity(0.5), radius: 4, x: 4, y: 4)
+						}
+					}
                     
                     if let board = gameRecord.board, gameRecord.mode == .dailyWord {
                         HStack {
@@ -272,6 +359,7 @@ struct GameRecordView: View {
                             }
                             .padding(.vertical, 15)
                             .sensoryFeedback(.impact, trigger: self.didTap)
+							.keyboardShortcut("c", modifiers: .command)
                             
                             Spacer()
                             
@@ -291,7 +379,7 @@ struct GameRecordView: View {
             }
             .navigationTitle(gameRecord.word)
             .navigationBarTitleDisplayMode(.inline)
-			.safeAreaPadding(.bottom, self.userWantsAds ? 54 : 0)
+			.safeAreaPadding(.bottom, (UIDevice.current.userInterfaceIdiom == .pad || UIDevice.current.userInterfaceIdiom == .mac) && self.userWantsAds ? 80 : (self.userWantsAds ? 60 : 0))
             .onAppear {
                 if let endDate = gameRecord.endDate {
                     self.timeUsedString = self.getTimeUsedString(startDate: self.gameRecord.date, endDate: endDate).trimmingCharacters(in: .whitespaces)
@@ -356,7 +444,9 @@ struct GameRecordView: View {
 		var timeUsedString = ""
 		if hours > 0 {
 			let hourFormatString = NSLocalizedString("hour_string", comment: "String for the hours")
-			if hourFormatString.contains("%") {
+			if hourFormatString.contains("%@") {
+				timeUsedString += String(format: hourFormatString, "\(hours)")
+			} else if hourFormatString.contains("%d") || hourFormatString.contains("%ld") {
 				timeUsedString += String(format: hourFormatString, hours)
 			} else {
 				timeUsedString += "\(hours)h "

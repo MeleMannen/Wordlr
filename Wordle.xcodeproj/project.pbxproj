@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		6303029D2E135067004CD304 /* NormalStreakManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6303029C2E135067004CD304 /* NormalStreakManager.swift */; };
+		6306D32F2E7760270099E7AD /* GameView18.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6306D32E2E7760150099E7AD /* GameView18.swift */; };
+		6306D3322E7762110099E7AD /* GameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6306D3312E7762110099E7AD /* GameView.swift */; };
 		6310860C2D4040F200AC2C4E /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 6310860B2D4040F200AC2C4E /* PrivacyInfo.xcprivacy */; };
 		631156FD2D5FFA910017D1F4 /* dailyNorwegianWords.json in Resources */ = {isa = PBXBuildFile; fileRef = 631156FC2D5FFA910017D1F4 /* dailyNorwegianWords.json */; };
 		631C9D802DFA043A00742B34 /* StatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631C9D7F2DFA043A00742B34 /* StatsView.swift */; };
@@ -22,7 +24,10 @@
 		637651CD2E4DC80200AEFA55 /* SpanishWordDefinitionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637651CC2E4DC80100AEFA55 /* SpanishWordDefinitionView.swift */; };
 		6378C1C12E12DCF4005B8FC6 /* BoardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6378C1C02E12DCF4005B8FC6 /* BoardView.swift */; };
 		638274D52DFCC8BE00BD38DA /* NAOBView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638274D42DFCC8BE00BD38DA /* NAOBView.swift */; };
-		63E081E32D3414DA00748133 /* GameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E081D82D3414DA00748133 /* GameView.swift */; };
+		63D6C72C2E56824A0052BE44 /* Tips.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63D6C72B2E5682410052BE44 /* Tips.swift */; };
+		63D6C72E2E5699D50052BE44 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63D6C72D2E5699CE0052BE44 /* NotificationManager.swift */; };
+		63D6C7302E569B9A0052BE44 /* NotificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63D6C72F2E569B9A0052BE44 /* NotificationView.swift */; };
+		63E081E32D3414DA00748133 /* GameView26.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E081D82D3414DA00748133 /* GameView26.swift */; };
 		63E081E42D3414DA00748133 /* SelectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E081D92D3414DA00748133 /* SelectView.swift */; };
 		63E081E52D3414DA00748133 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E081DA2D3414DA00748133 /* SettingsView.swift */; };
 		63E081E62D3414DA00748133 /* WordleApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E081DB2D3414DA00748133 /* WordleApp.swift */; };
@@ -36,6 +41,8 @@
 		63E081F32D346CB800748133 /* NorwegianWordDefinitionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E081F22D346CB800748133 /* NorwegianWordDefinitionView.swift */; };
 		63E41E072E28335C00AA3DF8 /* DefinitionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E41E062E28335C00AA3DF8 /* DefinitionManager.swift */; };
 		63E6B3E32DF5D6B9007C66EB /* FilterOptionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E6B3E22DF5D6B6007C66EB /* FilterOptionsView.swift */; };
+		63F225952E53B24100248D30 /* GoogleUserMessagingPlatform in Frameworks */ = {isa = PBXBuildFile; productRef = 63F225942E53B24100248D30 /* GoogleUserMessagingPlatform */; };
+		63F225972E53CFF600248D30 /* ReviewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F225962E53CFED00248D30 /* ReviewManager.swift */; };
 		63F697CB2E05A328008B0B6E /* GoogleMobileAds in Frameworks */ = {isa = PBXBuildFile; productRef = 63F697CA2E05A328008B0B6E /* GoogleMobileAds */; };
 		63F987922E01F86400D1B9CB /* HistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F987912E01F86400D1B9CB /* HistoryView.swift */; };
 		63F987942E02001E00D1B9CB /* GameRecordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F987932E02001E00D1B9CB /* GameRecordView.swift */; };
@@ -46,6 +53,8 @@
 
 /* Begin PBXFileReference section */
 		6303029C2E135067004CD304 /* NormalStreakManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NormalStreakManager.swift; sourceTree = "<group>"; };
+		6306D32E2E7760150099E7AD /* GameView18.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameView18.swift; sourceTree = "<group>"; };
+		6306D3312E7762110099E7AD /* GameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameView.swift; sourceTree = "<group>"; };
 		6310860B2D4040F200AC2C4E /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		631156FC2D5FFA910017D1F4 /* dailyNorwegianWords.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = dailyNorwegianWords.json; sourceTree = "<group>"; };
 		631C9D7F2DFA043A00742B34 /* StatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsView.swift; sourceTree = "<group>"; };
@@ -62,8 +71,11 @@
 		638274D42DFCC8BE00BD38DA /* NAOBView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NAOBView.swift; sourceTree = "<group>"; };
 		6382E3BC2D12FE0500B61353 /* Wordle.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Wordle.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		63B0C6502E056A710047E4E9 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS26.0.sdk/System/Library/Frameworks/WebKit.framework; sourceTree = DEVELOPER_DIR; };
+		63D6C72B2E5682410052BE44 /* Tips.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tips.swift; sourceTree = "<group>"; };
+		63D6C72D2E5699CE0052BE44 /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
+		63D6C72F2E569B9A0052BE44 /* NotificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationView.swift; sourceTree = "<group>"; };
 		63E081D62D3414DA00748133 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		63E081D82D3414DA00748133 /* GameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameView.swift; sourceTree = "<group>"; };
+		63E081D82D3414DA00748133 /* GameView26.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameView26.swift; sourceTree = "<group>"; };
 		63E081D92D3414DA00748133 /* SelectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectView.swift; sourceTree = "<group>"; };
 		63E081DA2D3414DA00748133 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		63E081DB2D3414DA00748133 /* WordleApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordleApp.swift; sourceTree = "<group>"; };
@@ -77,6 +89,7 @@
 		63E081F22D346CB800748133 /* NorwegianWordDefinitionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NorwegianWordDefinitionView.swift; sourceTree = "<group>"; };
 		63E41E062E28335C00AA3DF8 /* DefinitionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefinitionManager.swift; sourceTree = "<group>"; };
 		63E6B3E22DF5D6B6007C66EB /* FilterOptionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterOptionsView.swift; sourceTree = "<group>"; };
+		63F225962E53CFED00248D30 /* ReviewManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewManager.swift; sourceTree = "<group>"; };
 		63F697CC2E05A515008B0B6E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		63F987912E01F86400D1B9CB /* HistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryView.swift; sourceTree = "<group>"; };
 		63F987932E02001E00D1B9CB /* GameRecordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameRecordView.swift; sourceTree = "<group>"; };
@@ -90,6 +103,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				63F225952E53B24100248D30 /* GoogleUserMessagingPlatform in Frameworks */,
 				63F697CB2E05A328008B0B6E /* GoogleMobileAds in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -102,7 +116,7 @@
 			children = (
 				6365B8BC2E04C47100A3F4C1 /* SelectViews */,
 				6365B8BF2E04C50800A3F4C1 /* HistoryAndStatsViews */,
-				63E081DA2D3414DA00748133 /* SettingsView.swift */,
+				63D6C7312E56A11B0052BE44 /* SettingsViews */,
 			);
 			path = Tabs;
 			sourceTree = "<group>";
@@ -111,7 +125,9 @@
 			isa = PBXGroup;
 			children = (
 				63E081D92D3414DA00748133 /* SelectView.swift */,
-				63E081D82D3414DA00748133 /* GameView.swift */,
+				6306D3312E7762110099E7AD /* GameView.swift */,
+				63E081D82D3414DA00748133 /* GameView26.swift */,
+				6306D32E2E7760150099E7AD /* GameView18.swift */,
 				63E081F02D34551A00748133 /* SearchView.swift */,
 				63E6B3E22DF5D6B6007C66EB /* FilterOptionsView.swift */,
 				636A16522E19608B00515809 /* Info.swift */,
@@ -168,6 +184,15 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		63D6C7312E56A11B0052BE44 /* SettingsViews */ = {
+			isa = PBXGroup;
+			children = (
+				63E081DA2D3414DA00748133 /* SettingsView.swift */,
+				63D6C72F2E569B9A0052BE44 /* NotificationView.swift */,
+			);
+			path = SettingsViews;
+			sourceTree = "<group>";
+		};
 		63E081D72D3414DA00748133 /* Preview Content */ = {
 			isa = PBXGroup;
 			children = (
@@ -196,6 +221,9 @@
 				6303029C2E135067004CD304 /* NormalStreakManager.swift */,
 				6335967D2DFC5A2C004A55C4 /* GameRecordManager.swift */,
 				63E41E062E28335C00AA3DF8 /* DefinitionManager.swift */,
+				63F225962E53CFED00248D30 /* ReviewManager.swift */,
+				63D6C72B2E5682410052BE44 /* Tips.swift */,
+				63D6C72D2E5699CE0052BE44 /* NotificationManager.swift */,
 				63E081DC2D3414DA00748133 /* Views */,
 				63E081ED2D34158100748133 /* Resources */,
 				63E081D72D3414DA00748133 /* Preview Content */,
@@ -239,6 +267,7 @@
 			name = Wordle;
 			packageProductDependencies = (
 				63F697CA2E05A328008B0B6E /* GoogleMobileAds */,
+				63F225942E53B24100248D30 /* GoogleUserMessagingPlatform */,
 			);
 			productName = Wordle;
 			productReference = 6382E3BC2D12FE0500B61353 /* Wordle.app */;
@@ -252,7 +281,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1620;
-				LastUpgradeCheck = 1640;
+				LastUpgradeCheck = 2600;
 				TargetAttributes = {
 					6382E3BB2D12FE0500B61353 = {
 						CreatedOnToolsVersion = 16.2;
@@ -272,6 +301,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				63F697C92E05A328008B0B6E /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */,
+				63F225932E53B24100248D30 /* XCRemoteSwiftPackageReference "swift-package-manager-google-user-messaging-platform" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 6382E3BD2D12FE0500B61353 /* Products */;
@@ -312,9 +342,12 @@
 				6303029D2E135067004CD304 /* NormalStreakManager.swift in Sources */,
 				636A16532E19608B00515809 /* Info.swift in Sources */,
 				6378C1C12E12DCF4005B8FC6 /* BoardView.swift in Sources */,
-				63E081E32D3414DA00748133 /* GameView.swift in Sources */,
+				63F225972E53CFF600248D30 /* ReviewManager.swift in Sources */,
+				63E081E32D3414DA00748133 /* GameView26.swift in Sources */,
 				63E081E42D3414DA00748133 /* SelectView.swift in Sources */,
+				63D6C72E2E5699D50052BE44 /* NotificationManager.swift in Sources */,
 				631C9D822DFA1BD500742B34 /* StreakManager.swift in Sources */,
+				63D6C7302E569B9A0052BE44 /* NotificationView.swift in Sources */,
 				63E081E52D3414DA00748133 /* SettingsView.swift in Sources */,
 				63E081F12D34551A00748133 /* SearchView.swift in Sources */,
 				63E41E072E28335C00AA3DF8 /* DefinitionManager.swift in Sources */,
@@ -324,8 +357,11 @@
 				6365B8C12E04C58F00A3F4C1 /* FilterView.swift in Sources */,
 				63FF1C762DF72900003A19B3 /* WordDefinitionView.swift in Sources */,
 				63E081E62D3414DA00748133 /* WordleApp.swift in Sources */,
+				6306D3322E7762110099E7AD /* GameView.swift in Sources */,
+				63D6C72C2E56824A0052BE44 /* Tips.swift in Sources */,
 				638274D52DFCC8BE00BD38DA /* NAOBView.swift in Sources */,
 				63F987942E02001E00D1B9CB /* GameRecordView.swift in Sources */,
+				6306D32F2E7760270099E7AD /* GameView18.swift in Sources */,
 				63FF1C742DF728F0003A19B3 /* EnglishWordDefinitionView.swift in Sources */,
 				63E6B3E32DF5D6B9007C66EB /* FilterOptionsView.swift in Sources */,
 				63E081E72D3414DA00748133 /* AppManager.swift in Sources */,
@@ -397,6 +433,7 @@
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -455,6 +492,7 @@
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 			};
@@ -468,11 +506,13 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CODE_SIGN_ENTITLEMENTS = Wordle/Wordle.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Wordle/Preview Content\"";
+				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Wordle/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "The Phrase";
@@ -493,7 +533,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 15.0;
-				MARKETING_VERSION = 1.10.0;
+				MARKETING_VERSION = 2.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = SwoshEB.ThePhrase;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
@@ -513,11 +553,13 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CODE_SIGN_ENTITLEMENTS = Wordle/Wordle.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Wordle/Preview Content\"";
+				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Wordle/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "The Phrase";
@@ -538,7 +580,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 15.0;
-				MARKETING_VERSION = 1.10.0;
+				MARKETING_VERSION = 2.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = SwoshEB.ThePhrase;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
@@ -574,6 +616,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		63F225932E53B24100248D30 /* XCRemoteSwiftPackageReference "swift-package-manager-google-user-messaging-platform" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/googleads/swift-package-manager-google-user-messaging-platform.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.0.0;
+			};
+		};
 		63F697C92E05A328008B0B6E /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/googleads/swift-package-manager-google-mobile-ads.git";
@@ -585,6 +635,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		63F225942E53B24100248D30 /* GoogleUserMessagingPlatform */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 63F225932E53B24100248D30 /* XCRemoteSwiftPackageReference "swift-package-manager-google-user-messaging-platform" */;
+			productName = GoogleUserMessagingPlatform;
+		};
 		63F697CA2E05A328008B0B6E /* GoogleMobileAds */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 63F697C92E05A328008B0B6E /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */;

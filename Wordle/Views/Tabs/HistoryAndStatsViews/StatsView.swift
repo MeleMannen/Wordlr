@@ -28,119 +28,397 @@ struct StatsView: View {
     @State private var winRate: Double = 0.0
     @State private var counts: [Int] = []
     @State private var maxGuessesPerCount: Int = 0
+	@State private var selectedStreakLanguage: LanguageSelection = .norwegian // Change this to your preferred default streak language
+	@State private var longestStreakPerLetters: [(language: LanguageSelection, streaks: [(index: Int, currentStreak: Int, longestStreak: Int)])] = [(language: .english, streaks: []), (language: .spanish, streaks: []), (language: .norwegian, streaks: [])]
+	@State private var longestNormalStreakPerLetters: [(language: LanguageSelection, streaks: [(index: Int, currentStreak: Int, longestStreak: Int)])] = [(language: .english, streaks: []), (language: .spanish, streaks: []), (language: .norwegian, streaks: [])]
+	@State private var maxStreakLength: Int = 0
+	@State private var maxNormalStreakLength: Int = 0
     
     @Query private var gameRecords: [GameRecordEntity]
+	@Query private var streaks: [StreakEntity]
+	@Query private var normalStreaks: [NormalStreakEntity]
     
     var body: some View {
         NavigationStack {
             GeometryReader { geometry in
                 VStack {
-                    FilterView(numberOfLetters: $numberOfLetters, selectedLanguage: $selectedLanguage, gameMode: $gameMode, showsWhenHintsUsed: $showsWhenHintsUsed)
-                    
                     if self.filteredGameRecords.isEmpty {
                         ContentUnavailableView.init("No stats available for this selection!", systemImage: "exclamationmark.triangle.fill", description: Text("Try playing a game first or changing the selection."))
                             .padding(.bottom, 20)
                     } else {
-                        List {
-                            VStack(alignment: .leading) {
-                                HStack {
-                                    Text("Played:")
-                                        .font(.title3).bold()
-                                    
-                                    Spacer()
-                                    
-                                    Text("\(self.filteredGameRecords.count)")
-                                        .font(.title3)
-                                        .foregroundStyle(.secondary)
-                                }
-                            }
-                            
-                            
-                            VStack(alignment: .leading) {
-                                HStack {
-                                    Text("Win Rate:")
-                                        .font(.title3).bold()
-                                    Spacer()
-                                    Text("\(String(format: "%.0f%%", self.winRate * 100))")
-                                        .font(.title3)
-                                        .foregroundStyle(.secondary)
-                                }
-                                
-                                Chart {
-                                    BarMark(
-                                        x: .value("Count", self.wonCount),
-                                        y: .value("State", "✅"),
-                                        width: .fixed(20.0)
-                                    )
-                                    .foregroundStyle(Color.green)
-                                    .annotation(position: self.wonCount < (self.lostCount / 6) ? .trailing : .overlay) {
-                                        if self.wonCount > 0 {
-                                            Text("\(self.wonCount)")
-                                                .foregroundColor(self.wonCount < (self.lostCount / 6) ? .primary : .white)
-                                                .font(.headline)
-                                        }
-                                    }
-                                    
-                                    BarMark(
-                                        x: .value("Count", self.lostCount),
-                                        y: .value("State", "❌"),
-                                        width: .fixed(20.0)
-                                    )
-                                    .foregroundStyle(Color.red)
-                                    .annotation(position: self.lostCount < (self.wonCount / 6) ? .trailing : .overlay) {
-                                        if self.lostCount > 0 {
-                                            Text("\(self.lostCount)")
-                                                .foregroundColor(self.lostCount < (self.wonCount / 6) ? .primary : .white)
-                                                .font(.headline)
-                                        }
-                                    }
-                                }
-                                .chartXScale(domain: 0...Double(self.totalCount))
-                                .chartYAxis {
-                                    AxisMarks(preset: .extended, position: .leading) { _ in
-                                        AxisValueLabel(horizontalSpacing: 15)
-                                            .font(.footnote)
-                                    }
-                                }
-                                .animation(.easeInOut(duration: 0.5), value: self.filteredGameRecords.count)
-                            }
-                            
-                            VStack(alignment: .leading) {
-                                Text("Number of Guesses:")
-                                    .font(.title3).bold()
-                                
-                                Chart {
-                                    ForEach(Array(self.counts.enumerated()), id: \.offset) { index, count in
-                                        BarMark(
-                                            x: .value("Count", count),
-                                            y: .value("Number of Guesses", " \(index+1) "),
-                                            width: .fixed(20.0)
-                                        )
-                                        .foregroundStyle(Color.green)
-                                        .annotation(position: count < (self.maxGuessesPerCount / 6) ? .trailing : .overlay) {
-                                            if count > 0 {
-                                                Text("\(count)")
-                                                    .foregroundColor(count < (self.maxGuessesPerCount / 6) ? .primary : .white)
-                                                    .font(.headline)
-                                            }
-                                        }
-                                    }
-                                }
-                                .chartXScale(domain: 0...Double(self.maxGuessesPerCount))
-                                .chartYAxis {
-                                    AxisMarks(preset: .extended, position: .leading) { _ in
-                                        AxisValueLabel(horizontalSpacing: 15)
-                                            .font(.footnote)
-                                    }
-                                }
-                                .animation(.easeInOut(duration: 0.5), value: self.filteredGameRecords.count)
-                                .frame(minHeight: 250)
-                            }
-                        }
-						.safeAreaPadding(.bottom, self.userWantsAds ? 54 : 0)
-                    }
-                }
-                .navigationTitle("Stats")
+						List {
+							Section {
+								VStack(alignment: .leading) {
+									HStack {
+										Text("Played")
+											.font(.title3).bold()
+											.conditionalShadow(color: .black.opacity(0.05), radius: 2, x: 1, y: 1)
+										
+										Spacer()
+										
+										Text("\(self.filteredGameRecords.count)")
+											.font(.title3)
+											.foregroundStyle(.secondary)
+									}
+								}
+								VStack(alignment: .leading) {
+									HStack {
+										Text("Win Rate")
+											.font(.title3).bold()
+											.conditionalShadow(color: .black.opacity(0.05), radius: 2, x: 1, y: 1)
+											.padding(.top, 3)
+										
+										Spacer()
+										
+										Text("\(String(format: "%.0f%%", self.winRate * 100))")
+											.font(.title3)
+											.foregroundStyle(.secondary)
+									}
+									
+									Chart {
+										BarMark(
+											x: .value("Count", self.wonCount),
+											y: .value("State", "✅"),
+											width: .fixed(20.0)
+										)
+										.foregroundStyle(Color.green)
+										.annotation(position: self.wonCount < (self.lostCount / 6) ? .trailing : .overlay) {
+											if self.wonCount > 0 {
+												Text("\(self.wonCount)")
+													.foregroundColor(self.wonCount < (self.lostCount / 6) ? .primary : .white)
+													.font(.headline)
+											}
+										}
+										
+										BarMark(
+											x: .value("Count", self.lostCount),
+											y: .value("State", "❌"),
+											width: .fixed(20.0)
+										)
+										.foregroundStyle(Color.red)
+										.annotation(position: self.lostCount < (self.wonCount / 6) ? .trailing : .overlay) {
+											if self.lostCount > 0 {
+												Text("\(self.lostCount)")
+													.foregroundColor(self.lostCount < (self.wonCount / 6) ? .primary : .white)
+													.font(.headline)
+											}
+										}
+									}
+									.chartXScale(domain: 0...Double(self.totalCount))
+									.chartYAxis {
+										AxisMarks(preset: .extended, position: .leading) { _ in
+											AxisValueLabel(horizontalSpacing: 15)
+												.font(.footnote)
+										}
+									}
+									.animation(.easeInOut(duration: 0.5), value: self.filteredGameRecords.count)
+								}
+							} header: {
+								Text("Played")
+							}
+							
+							//							Section {
+							//
+							//							} header: {
+							//								Text("Win Rate")
+							//							}
+							
+							Section {
+								VStack(alignment: .leading) {
+									Text("Number of Guesses Needed")
+										.font(.title3).bold()
+										.conditionalShadow(color: .black.opacity(0.05), radius: 2, x: 1, y: 1)
+										.padding(.top, 3)
+									
+									Chart {
+										ForEach(Array(self.counts.enumerated()), id: \.offset) { index, count in
+											BarMark(
+												x: .value("Count", count),
+												y: .value("Number of Guesses", " \(index+1) "),
+												width: .fixed(20.0)
+											)
+											.foregroundStyle(Color.green)
+											.annotation(position: count < (self.maxGuessesPerCount / 6) ? .trailing : .overlay) {
+												if count > 0 {
+													Text("\(count)")
+														.foregroundColor(count < (self.maxGuessesPerCount / 6) ? .primary : .white)
+														.font(.headline)
+												}
+											}
+										}
+									}
+									.chartXScale(domain: 0...Double(self.maxGuessesPerCount))
+									.chartYAxis {
+										AxisMarks(preset: .extended, position: .leading) { _ in
+											AxisValueLabel(horizontalSpacing: 15)
+												.font(.footnote)
+										}
+									}
+									.animation(.easeInOut(duration: 0.5), value: self.filteredGameRecords.count)
+									.frame(minHeight: 250)
+								}
+							} header: {
+								Text("Guesses")
+							}
+							if self.maxStreakLength > 0 && self.maxNormalStreakLength > 0 {
+								Section {
+									if self.maxStreakLength > 0 {
+										VStack(alignment: .leading) {
+											Text("Daily Word Streaks 🔥")
+												.font(.title3).bold()
+												.conditionalShadow(color: .black.opacity(0.05), radius: 2, x: 1, y: 1)
+												.padding(.top, 3)
+											ForEach(self.longestStreakPerLetters, id: \.language) { longestStreakPerLetter in
+												if !longestStreakPerLetter.streaks.isEmpty {
+													Text(longestStreakPerLetter.language.localizedName)
+														.font(.headline)
+														.padding(.top, 3)
+														.padding(.leading, 3)
+													
+													Chart {
+														ForEach(longestStreakPerLetter.streaks, id: \.index) { streak in
+															let current: Double = (streak.currentStreak == 0) ? 0.05 : Double(streak.currentStreak)
+															
+															BarMark(
+																x: .value("Current", current),
+																y: .value("Number of Guesses", " \(streak.index) "),
+																height: .fixed(20.0)
+															)
+															.foregroundStyle(Color.orange)
+															.annotation(position: streak.currentStreak < (self.maxStreakLength / 6) ? .trailing : .overlay) {
+																Text("\(streak.currentStreak)")
+																	.foregroundColor(streak.currentStreak < (self.maxStreakLength / 6) ? .primary : .white)
+																	.font(.headline)
+																	.padding(.leading, streak.currentStreak == 0 ? 3 : 0)
+															}
+															.position(by: .value("Current", "Current"))
+															
+															BarMark(
+																x: .value("Longest", streak.longestStreak),
+																y: .value("Number of Guesses", " \(streak.index) "),
+																height: .fixed(20.0)
+															)
+															.foregroundStyle(Color.green)
+															.annotation(position: streak.longestStreak < (self.maxStreakLength / 6) ? .trailing : .overlay) {
+																if streak.longestStreak > 0 {
+																	Text("\(streak.longestStreak)")
+																		.foregroundColor(streak.longestStreak < (self.maxStreakLength / 6) ? .primary : .white)
+																		.font(.headline)
+																}
+															}
+															.position(by: .value("Longest", "Longest"))
+														}
+														
+													}
+													.chartXScale(domain: 0...Double(self.maxStreakLength))
+													.chartYAxis {
+														AxisMarks(preset: .extended, position: .leading) { _ in
+															AxisValueLabel(horizontalSpacing: 15)
+																.font(.footnote)
+														}
+													}
+													.animation(.easeInOut(duration: 0.5), value: longestStreakPerLetter.streaks.count)
+													.frame(minHeight: CGFloat(longestStreakPerLetter.streaks.count * 100))
+												}
+											}
+											
+											HStack {
+												Circle()
+													.fill(Color.orange)
+													.frame(width: 5, height: 5)
+												Text("Current")
+													.foregroundStyle(.secondary)
+													.font(.footnote)
+													.padding(.trailing, 10)
+												Circle()
+													.fill(Color.green)
+													.frame(width: 5, height: 5)
+												Text("Longest")
+													.foregroundStyle(.secondary)
+													.font(.footnote)
+											}
+											.padding(.top, 5)
+											.padding(.leading, 3)
+										}
+									}
+									if self.maxNormalStreakLength > 0 {
+										VStack(alignment: .leading) {
+											Text("Unlimited Streaks 🔥")
+												.font(.title3).bold()
+												.conditionalShadow(color: .black.opacity(0.05), radius: 2, x: 1, y: 1)
+												.padding(.top, 3)
+											ForEach(self.longestNormalStreakPerLetters, id: \.language) { longestStreakPerLetter in
+												if !longestStreakPerLetter.streaks.isEmpty {
+													Text(longestStreakPerLetter.language.localizedName)
+														.font(.headline)
+														.padding(.top, 3)
+														.padding(.leading, 3)
+													
+													Chart {
+														ForEach(longestStreakPerLetter.streaks, id: \.index) { streak in
+															let current: Double = (streak.currentStreak == 0) ? 0.05 : Double(streak.currentStreak)
+															BarMark(
+																x: .value("Current", current),
+																y: .value("Number of Guesses", " \(streak.index) "),
+																height: .fixed(20.0)
+															)
+															.foregroundStyle(Color.orange)
+															.annotation(position: streak.currentStreak < (self.maxNormalStreakLength / 6) ? .trailing : .overlay) {
+																//														if streak.currentStreak > 0 {
+																Text("\(streak.currentStreak)")
+																	.foregroundColor(streak.currentStreak < (self.maxNormalStreakLength / 6) ? .primary : .white)
+																	.font(.headline)
+																//														}
+															}
+															.position(by: .value("Current", "Current"))
+															
+															BarMark(
+																x: .value("Longest", streak.longestStreak),
+																y: .value("Number of Guesses", " \(streak.index) "),
+																height: .fixed(20.0)
+															)
+															.foregroundStyle(Color.green)
+															.annotation(position: streak.longestStreak < (self.maxNormalStreakLength / 6) ? .trailing : .overlay) {
+																if streak.longestStreak > 0 {
+																	Text("\(streak.longestStreak)")
+																		.foregroundColor(streak.longestStreak < (self.maxNormalStreakLength / 6) ? .primary : .white)
+																		.font(.headline)
+																}
+															}
+															.position(by: .value("Longest", "Longest"))
+														}
+														
+													}
+													.chartXScale(domain: 0...Double(self.maxNormalStreakLength))
+													.chartYAxis {
+														AxisMarks(preset: .extended, position: .leading) { _ in
+															AxisValueLabel(horizontalSpacing: 15)
+																.font(.footnote)
+														}
+													}
+													.animation(.easeInOut(duration: 0.5), value: longestStreakPerLetter.streaks.count)
+													.frame(minHeight: CGFloat(longestStreakPerLetter.streaks.count * 100))
+												}
+											}
+											
+											HStack {
+												Circle()
+													.fill(Color.orange)
+													.frame(width: 5, height: 5)
+												Text("Current")
+													.foregroundStyle(.secondary)
+													.font(.footnote)
+													.padding(.trailing, 10)
+												Circle()
+													.fill(Color.green)
+													.frame(width: 5, height: 5)
+												Text("Longest")
+													.foregroundStyle(.secondary)
+													.font(.footnote)
+											}
+											.padding(.top, 5)
+											.padding(.leading, 3)
+										}
+									}
+								} header: {
+									Text("Streaks")
+								}
+							}
+							
+//							if self.maxNormalStreakLength > 0 {
+//								Section {
+//									VStack(alignment: .leading) {
+//										Text("Unlimited Streaks 🔥")
+//											.font(.title3).bold()
+//											.conditionalShadow(color: .black.opacity(0.05), radius: 2, x: 1, y: 1)
+//											.padding(.top, 3)
+//										ForEach(self.longestNormalStreakPerLetters, id: \.language) { longestStreakPerLetter in
+//											if !longestStreakPerLetter.streaks.isEmpty {
+//												Text(longestStreakPerLetter.language.localizedName)
+//													.font(.headline)
+//													.padding(.top, 3)
+//													.padding(.leading, 3)
+//												
+//												Chart {
+//													ForEach(longestStreakPerLetter.streaks, id: \.index) { streak in
+//														let current: Double = (streak.currentStreak == 0) ? 0.05 : Double(streak.currentStreak)
+//														BarMark(
+//															x: .value("Current", current),
+//															y: .value("Number of Guesses", " \(streak.index) "),
+//															height: .fixed(20.0)
+//														)
+//														.foregroundStyle(Color.orange)
+//														.annotation(position: streak.currentStreak < (self.maxNormalStreakLength / 6) ? .trailing : .overlay) {
+//															//														if streak.currentStreak > 0 {
+//															Text("\(streak.currentStreak)")
+//																.foregroundColor(streak.currentStreak < (self.maxNormalStreakLength / 6) ? .primary : .white)
+//																.font(.headline)
+//															//														}
+//														}
+//														.position(by: .value("Current", "Current"))
+//														
+//														BarMark(
+//															x: .value("Longest", streak.longestStreak),
+//															y: .value("Number of Guesses", " \(streak.index) "),
+//															height: .fixed(20.0)
+//														)
+//														.foregroundStyle(Color.green)
+//														.annotation(position: streak.longestStreak < (self.maxNormalStreakLength / 6) ? .trailing : .overlay) {
+//															if streak.longestStreak > 0 {
+//																Text("\(streak.longestStreak)")
+//																	.foregroundColor(streak.longestStreak < (self.maxNormalStreakLength / 6) ? .primary : .white)
+//																	.font(.headline)
+//															}
+//														}
+//														.position(by: .value("Longest", "Longest"))
+//													}
+//													
+//												}
+//												.chartXScale(domain: 0...Double(self.maxNormalStreakLength))
+//												.chartYAxis {
+//													AxisMarks(preset: .extended, position: .leading) { _ in
+//														AxisValueLabel(horizontalSpacing: 15)
+//															.font(.footnote)
+//													}
+//												}
+//												.animation(.easeInOut(duration: 0.5), value: longestStreakPerLetter.streaks.count)
+//												.frame(minHeight: CGFloat(longestStreakPerLetter.streaks.count * 100))
+//											}
+//										}
+//										
+//										HStack {
+//											Circle()
+//												.fill(Color.orange)
+//												.frame(width: 5, height: 5)
+//											Text("Current")
+//												.foregroundStyle(.secondary)
+//												.font(.footnote)
+//												.padding(.trailing, 10)
+//											Circle()
+//												.fill(Color.green)
+//												.frame(width: 5, height: 5)
+//											Text("Longest")
+//												.foregroundStyle(.secondary)
+//												.font(.footnote)
+//										}
+//										.padding(.top, 5)
+//										.padding(.leading, 3)
+//									}
+//								} header: {
+//									Text("Unlimited Streaks")
+//								}
+//							}
+							
+							
+						}
+						.safeAreaPadding(.bottom, (UIDevice.current.userInterfaceIdiom == .pad || UIDevice.current.userInterfaceIdiom == .mac) && self.userWantsAds ? 80 : (self.userWantsAds ? 54 : 0))
+					}
+				}
+				.navigationTitle("Stats")
+				.navigationBarTitleDisplayMode(.inline)
+				.safeAreaInset(edge: .top) {
+					FilterView(numberOfLetters: $numberOfLetters, selectedLanguage: $selectedLanguage, gameMode: $gameMode, showsWhenHintsUsed: $showsWhenHintsUsed)
+				}
                 .onChange(of: self.numberOfLetters) {
                     if self.numberOfLetters > 7 {
                         self.maxNumberOfRows = 8
@@ -212,6 +490,40 @@ struct StatsView: View {
             self.counts.append(self.filteredGameRecords.filter { $0.gameRecord.numberOfGuesses == i && $0.gameRecord.state == .won }.count)
         }
         self.maxGuessesPerCount = self.counts.max() ?? 0
+		
+		// Streaks
+		self.maxStreakLength = 0
+		var i = 0
+		for longestStreak in self.longestStreakPerLetters {
+			self.longestStreakPerLetters[i].streaks.removeAll()
+			for streak in self.streaks {
+				if streak.longestStreak > 0 && streak.id.contains("\(longestStreak.language)") {
+					let index = Int(streak.id.prefix(9).suffix(1))
+					let currentStreak = streak.streak.isAlive ? streak.streak.currentStreak : 0
+					self.longestStreakPerLetters[i].streaks.append((index: index, currentStreak: currentStreak, longestStreak: streak.longestStreak) as! (Int, Int, Int))
+					if streak.longestStreak > self.maxStreakLength {
+						self.maxStreakLength = streak.longestStreak
+					}
+				}
+			}
+			i += 1
+		}
+		
+		i = 0
+		self.maxNormalStreakLength = 0
+		for longestStreak in self.longestNormalStreakPerLetters {
+			self.longestNormalStreakPerLetters[i].streaks.removeAll()
+			for streak in self.normalStreaks {
+				if streak.longestStreak > 0 && streak.id.contains("\(longestStreak.language)") {
+					let index = Int(streak.id.prefix(9).suffix(1))
+					self.longestNormalStreakPerLetters[i].streaks.append((index: index, currentStreak: streak.streak.currentStreak, longestStreak: streak.longestStreak) as! (Int, Int, Int))
+					if streak.longestStreak > self.maxNormalStreakLength {
+						self.maxNormalStreakLength = streak.longestStreak
+					}
+				}
+			}
+			i += 1
+		}
     }
     
     func setDefaultValues() {

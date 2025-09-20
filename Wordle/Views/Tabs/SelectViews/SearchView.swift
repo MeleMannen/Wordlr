@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct SearchView: View {
+	@Environment(\.dismiss) var dismiss
     @EnvironmentObject var appManager: AppManager
 	@Environment(AdManager.self) private var adManager: AdManager
 	@AppStorage("userWantsAds") var userWantsAds: Bool = true
@@ -16,6 +17,9 @@ struct SearchView: View {
     @State private var searchResults: [String] = []
     @State private var groupedWords: [String: [String]] = [:]
     @State private var sectionKeys: [String] = []
+	@State private var filterButtonID = UUID()
+	
+	private let filterTip = FilterTip()
     
     var body: some View {
         VStack {
@@ -23,35 +27,7 @@ struct SearchView: View {
                 ContentUnavailableView.search(text: appManager.searchedWord)
             } else {
 				HStack(spacing: 0) {
-//					if #available(iOS 26, *) {
-//						List {
-//							ForEach(self.sectionKeys, id: \.self) { letter in
-//								Section {
-//									ForEach(Array((self.groupedWords[letter] ?? []).enumerated()), id: \.offset) { index, word in
-//										LazyVStack(spacing: 0) {
-//											NavigationLink(destination: {
-//												WordDefinitionView(word: word, language: appManager.selectedLanguage)
-//											}, label: {
-//												HStack {
-//													Text(word)
-//														.font(.title3)
-//														.foregroundStyle(.primary)
-//													Spacer()
-//												}
-//											})
-//										}
-//									}
-//								} header: {
-//									SectionHeaderView(letter: letter)
-//								}
-//								.sectionIndexLabel(letter)
-//								.listSectionSeparator(.hidden)
-//								.id(letter)
-//							}
-//						}
-//						.listSectionIndexVisibility(.visible)
-//						.safeAreaPadding(.bottom, self.userWantsAds ? 54 : 0)
-//					} else {
+					if #available(iOS 26, *) {
 						List {
 							ForEach(self.sectionKeys, id: \.self) { letter in
 								Section {
@@ -68,6 +44,52 @@ struct SearchView: View {
 												}
 											})
 										}
+										.contextMenu {
+											Button {
+												appManager.useWord(word: word)
+												dismiss()
+											} label: {
+												Label("Use Word", systemImage: "checkmark.circle")
+											}
+
+										}
+									}
+								} header: {
+									SectionHeaderView(letter: letter)
+								}
+								.sectionIndexLabel(letter)
+								.listSectionSeparator(.hidden)
+								.id(letter)
+							}
+						}
+						.listSectionIndexVisibility(.visible)
+						.safeAreaPadding(.bottom, (UIDevice.current.userInterfaceIdiom == .pad || UIDevice.current.userInterfaceIdiom == .mac) && self.userWantsAds ? 80 : (self.userWantsAds ? 54 : 0))
+					} else {
+						List {
+							ForEach(self.sectionKeys, id: \.self) { letter in
+								Section {
+									ForEach(Array((self.groupedWords[letter] ?? []).enumerated()), id: \.offset) { index, word in
+										LazyVStack(spacing: 0) {
+											NavigationLink(destination: {
+												WordDefinitionView(word: word, language: appManager.selectedLanguage)
+											}, label: {
+												HStack {
+													Text(word)
+														.font(.title3)
+														.foregroundStyle(.primary)
+													Spacer()
+												}
+											})
+										}
+										.contextMenu {
+											Button {
+												appManager.useWord(word: word)
+												dismiss()
+											} label: {
+												Label("Use Word", systemImage: "checkmark.circle")
+											}
+											
+										}
 									}
 								} header: {
 									SectionHeaderView(letter: letter)
@@ -76,12 +98,12 @@ struct SearchView: View {
 								.id(letter)
 							}
 						}
-						.safeAreaPadding(.bottom, self.userWantsAds ? 54 : 0)
-//					}
+						.safeAreaPadding(.bottom, (UIDevice.current.userInterfaceIdiom == .pad || UIDevice.current.userInterfaceIdiom == .mac) && self.userWantsAds ? 80 : (self.userWantsAds ? 54 : 0))
+					}
 				}
             }
         }
-		.searchable(text: $appManager.searchedWord, isPresented: $appManager.isSearching, placement: .navigationBarDrawer(displayMode: .always), prompt: "Search for a Phrase")
+		.searchable(text: $appManager.searchedWord, isPresented: $appManager.isSearching, placement: .navigationBarDrawer(displayMode: .always), prompt: "Search for a Word")
         .navigationTitle("Search")
 		.onChange(of: appManager.isSearching) {
 			if appManager.isSearching {
@@ -140,11 +162,16 @@ struct SearchView: View {
 						)
 				})
 				.padding(.trailing, 25)
-				.padding(.bottom, self.userWantsAds && adManager.shouldShowAds ? 75 : 25)
+				.padding(.bottom, UIDevice.current.userInterfaceIdiom == .pad || UIDevice.current.userInterfaceIdiom == .mac ? 100 : (self.userWantsAds && adManager.shouldShowAds ? 75 : 25))
 				.transition(.scale)
 				.simultaneousGesture(TapGesture().onEnded {
 					self.isShowingFilterOptions.toggle()
+					Task {
+						await FilterTip.filterEvent.donate()
+					}
 				})
+				.popoverTip(self.filterTip, arrowEdge: .top)
+				.id(filterButtonID)
 			} else {
 				NavigationLink(destination: FilterOptionsView().environmentObject(appManager), label: {
 					Image(systemName: "slider.horizontal.3")
@@ -163,32 +190,46 @@ struct SearchView: View {
 						)
 				})
 				.padding(.trailing, 25)
-				.padding(.bottom, self.userWantsAds && adManager.shouldShowAds ? 75 : 25)
+				.padding(.bottom, UIDevice.current.userInterfaceIdiom == .pad || UIDevice.current.userInterfaceIdiom == .mac ? 100 : (self.userWantsAds && adManager.shouldShowAds ? 75 : 25))
 				.simultaneousGesture(TapGesture().onEnded {
 					self.isShowingFilterOptions.toggle()
+					Task {
+						await FilterTip.filterEvent.donate()
+					}
 				})
+				.popoverTip(self.filterTip, arrowEdge: .top)
+				
+				
 			}
             
         }
         .onAppear {
             self.filterGameRecords()
+			adManager.currentSelectView = .searchView
 			DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
 				adManager.shouldShowAds = true
+			}
+			
+			DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+				self.filterButtonID = UUID()
 			}
         }
     }
     
     func filterGameRecords() {
         var filteredWords = appManager.words?.wordGroups["\(appManager.numberOfLetters)"] ?? []
-//                let shuffledWords = filteredWords.shuffled()
-//                for word in shuffledWords {
-//                    if word == shuffledWords.last {
-//                        print("\"\(word)\"")
-//                        print("fini")
-//                    } else {
-//                        print("\"\(word)\",")
-//                    }
-//                }
+//		let shuffledWords = filteredWords.shuffled()
+//		DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+//			for word in shuffledWords {
+//				if word == shuffledWords.last {
+//					print("\"\(word)\"")
+//					print("fini")
+//				} else {
+//					print("\"\(word)\",")
+//				}
+//			}
+//		}
+		
         if appManager.isFilteringSearchWord && !appManager.searchedWord.isEmpty {
             filteredWords = filteredWords.filter { $0.contains(appManager.searchedWord.uppercased()) }
         }

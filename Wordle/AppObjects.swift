@@ -8,6 +8,14 @@
 import SwiftUI
 import SwiftData
 
+enum CurrentSelectView {
+	case selectView
+	case gameView
+	case searchView
+	case filterOptionsView
+	case infoView
+}
+
 
 enum AppTheme: String {
     case system, dark, light
@@ -90,7 +98,7 @@ enum Streak: Codable {
                 let lastWonDate = cetCalendar.startOfDay(for: lastWonDate)
                 let startDate = cetCalendar.startOfDay(for: startDate)
                 let daysSinceStart = cetCalendar.dateComponents([.day], from: startDate, to: lastWonDate).day ?? 0
-                return daysSinceStart
+                return max(daysSinceStart, 1)
         }
     }
     
@@ -622,7 +630,7 @@ struct Phonetic: Codable, Identifiable {
     let audio: String
     let sourceURL: String?
     let license: License?
-    let text: String
+    let text: String?
     
     enum CodingKeys: String, CodingKey {
         case audio

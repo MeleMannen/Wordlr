@@ -215,7 +215,7 @@ struct SpanishWordDefinitionView: View {
 									.font(.largeTitle)
 									.bold()
 								HStack {
-									Text("We couldn't find a definition for this Phrase. That might be because it is a name or a place name.")
+									Text("We couldn't find a definition for this Word. That might be because it is a name or a place name.")
 										.font(.title3)
 									
 									Spacer()
@@ -239,7 +239,7 @@ struct SpanishWordDefinitionView: View {
 						dump(self.spanishDefinition)
 					}
 				}
-				.safeAreaPadding(.bottom, self.userWantsAds ? 54 : 0)
+				.safeAreaPadding(.bottom, (UIDevice.current.userInterfaceIdiom == .pad || UIDevice.current.userInterfaceIdiom == .mac) && self.userWantsAds ? 80 : (self.userWantsAds ? 54 : 0))
 				
 			} else {
 				ProgressView()

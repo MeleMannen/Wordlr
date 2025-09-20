@@ -118,7 +118,7 @@ struct NorwegianWordDefinitionView: View {
                                     .padding(.bottom, 10)
                                 
                                 HStack {
-                                    Text("We couldn't find a definition for this Phrase. That might be because it is a name or a place name.")
+                                    Text("We couldn't find a definition for this Word. That might be because it is a name or a place name.")
                                         .font(.title3)
                                     
                                     Spacer()
@@ -127,26 +127,44 @@ struct NorwegianWordDefinitionView: View {
 									.font(.headline)
 									.padding(.top, 10)
 								
-								NavigationLink(destination: NAOBView(word: self.word)) {
-									Text("Search \(self.word.uppercased())")
-										.foregroundColor(.white)
-										.font(.title2).bold()
-										.padding(14)
-										.frame(maxWidth: .infinity)
-										.background {
-											RoundedRectangle(cornerRadius: 15)
-												.fill(Color.green)
-										}
-										.padding(.horizontal, 40)
+								if #available(iOS 26.0, *) {
+									NavigationLink(destination: NAOBView(word: self.word)) {
+										Text("Search \(self.word.uppercased())")
+											.foregroundColor(.white)
+											.font(.title2).bold()
+											.padding(14)
+											.frame(maxWidth: .infinity)
+									}
+									.glassEffect(.regular.tint(.green).interactive(), in: .rect(cornerRadius: 15.0))
+									.simultaneousGesture(TapGesture().onEnded {
+										self.didTap.toggle()
+									})
+									.padding(.top, 10)
 									
-									
+									.padding(.horizontal, 40)
+									.sensoryFeedback(.impact, trigger: self.didTap)
+								} else {
+									NavigationLink(destination: NAOBView(word: self.word)) {
+										Text("Search \(self.word.uppercased())")
+											.foregroundColor(.white)
+											.font(.title2).bold()
+											.padding(14)
+											.frame(maxWidth: .infinity)
+											.background {
+												RoundedRectangle(cornerRadius: 15)
+													.fill(Color.green)
+											}
+											.padding(.horizontal, 40)
+										
+										
+									}
+									.simultaneousGesture(TapGesture().onEnded {
+										self.didTap.toggle()
+									})
+									.padding(.top, 10)
+									.sensoryFeedback(.impact, trigger: self.didTap)
+									.buttonStyle(GrowingButton())
 								}
-								.simultaneousGesture(TapGesture().onEnded {
-									self.didTap.toggle()
-								})
-								.padding(.top, 10)
-								.sensoryFeedback(.impact, trigger: self.didTap)
-								.buttonStyle(GrowingButton())
                             }
                             .padding(25)
                             
@@ -171,7 +189,7 @@ struct NorwegianWordDefinitionView: View {
                         }
                     }
                 }
-				.safeAreaPadding(.bottom, self.userWantsAds ? 54 : 0)
+				.safeAreaPadding(.bottom, (UIDevice.current.userInterfaceIdiom == .pad || UIDevice.current.userInterfaceIdiom == .mac) && self.userWantsAds ? 80 : (self.userWantsAds ? 54 : 0))
                 
             } else {
                 ProgressView()

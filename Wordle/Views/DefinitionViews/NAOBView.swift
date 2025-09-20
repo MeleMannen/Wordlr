@@ -9,19 +9,19 @@ import SwiftUI
 import WebKit
 
 struct NAOBView: View {
-    @State var word = ""
+	@State var word: String
     
     var body: some View {
-//        if #available(iOS 26, *) {
-//            WebView(url: URL(string: "https://naob.no/ordbok/\(word)")!)
-//                .navigationTitle("NAOB – \(word)")
-//                .ignoresSafeArea(.all, edges: .bottom)
-//        } else {
+        if #available(iOS 26, *) {
+            WebView(url: URL(string: "https://naob.no/ordbok/\(word)")!)
+                .navigationTitle("NAOB – \(word)")
+                .ignoresSafeArea(.all, edges: .bottom)
+        } else {
             MyWebView(request: URLRequest(
                 url: URL(string: "https://naob.no/ordbok/\(word)")!
             ))
             .navigationTitle("NAOB – \(word)")
-//        }
+        }
     }
 }
 

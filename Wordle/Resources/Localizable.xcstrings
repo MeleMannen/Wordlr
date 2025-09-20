@@ -213,6 +213,12 @@
         }
       }
     },
+    "Ad Inspector" : {
+
+    },
+    "Add Reminder" : {
+
+    },
     "All" : {
       "localizations" : {
         "es" : {
@@ -290,40 +296,34 @@
         }
       }
     },
-    "App Language:" : {
+    "App Language" : {
       "localizations" : {
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Idioma de la App:"
+            "value" : "Idioma de la App"
           }
         },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "App Språk:"
+            "value" : "App Språk"
           }
         }
       }
     },
-    "App Theme:" : {
+    "App Theme" : {
       "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "App Theme:"
-          }
-        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Tema de la App:"
+            "value" : "Tema de la App"
           }
         },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "App Tema:"
+            "value" : "App Tema"
           }
         }
       }
@@ -394,6 +394,12 @@
         }
       }
     },
+    "Cancel" : {
+
+    },
+    "Close" : {
+
+    },
     "Copy" : {
       "localizations" : {
         "es" : {
@@ -454,18 +460,33 @@
         }
       }
     },
-    "Daily Word Theme:" : {
+    "Current" : {
+
+    },
+    "Daily Reminders" : {
+
+    },
+    "Daily Word Reminder" : {
+
+    },
+    "Daily Word Reminders" : {
+
+    },
+    "Daily Word Streaks 🔥" : {
+
+    },
+    "Daily Word Theme" : {
       "localizations" : {
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Tema de la Palabra Diaria:"
+            "value" : "Tema de la Palabra Diaria"
           }
         },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Daglig Ord Tema:"
+            "value" : "Daglig Ord Tema"
           }
         }
       }
@@ -492,27 +513,24 @@
         }
       }
     },
-    "Date: " : {
+    "Date" : {
       "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Date:"
-          }
-        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Fecha:"
+            "value" : "Fecha"
           }
         },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Dato:"
+            "value" : "Dato"
           }
         }
       }
+    },
+    "Delete" : {
+
     },
     "Dismiss" : {
       "localizations" : {
@@ -537,6 +555,7 @@
       }
     },
     "Do you want to see an ad to get a hint and support the app? It helps us keep the app free and improve it further." : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -580,68 +599,59 @@
         }
       }
     },
-    "Ends with:" : {
+    "Done" : {
+
+    },
+    "Edit Reminder" : {
+
+    },
+    "Enable Daily Word Reminders" : {
+
+    },
+    "Ends With" : {
       "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ends with:"
-          }
-        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Termina con:"
+            "value" : "Termina Con"
           }
         },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Slutter med:"
+            "value" : "Slutter Med"
           }
         }
       }
     },
-    "Enter ending letters" : {
+    "Enter Ending Letters" : {
       "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Enter ending letters"
-          }
-        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Introduce las letras finales"
+            "value" : "Introduce las Letras Finales"
           }
         },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Skriv inn endelige bokstaver"
+            "value" : "Skriv Inn Endelige Bokstaver"
           }
         }
       }
     },
-    "Enter starting letters" : {
+    "Enter Starting Letters" : {
       "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Enter starting letters"
-          }
-        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Introduce las letras iniciales"
+            "value" : "Introduce las Letras Iniciales"
           }
         },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Skriv inn start bokstaver"
+            "value" : "Skriv Inn Start Bokstaver"
           }
         }
       }
@@ -684,24 +694,18 @@
         }
       }
     },
-    "Exclude letters:" : {
+    "Exclude Letters" : {
       "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Exclude letters:"
-          }
-        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Excluir letras:"
+            "value" : "Excluir Letras"
           }
         },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ekskluder bokstaver:"
+            "value" : "Ekskluder Bokstaver"
           }
         }
       }
@@ -852,18 +856,18 @@
         }
       }
     },
-    "Gamemode:" : {
+    "Gamemode" : {
       "localizations" : {
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Modo de juego:"
+            "value" : "Modo de Juego"
           }
         },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Modus:"
+            "value" : "Modus"
           }
         }
       }
@@ -883,6 +887,9 @@
           }
         }
       }
+    },
+    "Get a Hint" : {
+
     },
     "Gold" : {
       "localizations" : {
@@ -933,18 +940,22 @@
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Adivina la Frase"
+            "value" : "Adivina la Palabra"
           }
         },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Gjett Frasen"
+            "value" : "Gjett Ordet"
           }
         }
       }
     },
+    "Guesses" : {
+
+    },
     "Hint" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1010,18 +1021,12 @@
         }
       }
     },
-    "Hints used:" : {
+    "Hints Used" : {
       "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Hints used:"
-          }
-        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Pistas usadas:"
+            "value" : "Pistas Usadas"
           }
         },
         "nb" : {
@@ -1223,18 +1228,18 @@
         }
       }
     },
-    "Included letters:" : {
+    "Included Letters" : {
       "localizations" : {
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Letras incluidas:"
+            "value" : "Letras Incluidas"
           }
         },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Inkluder bokstaver:"
+            "value" : "Inkluderte Bokstaver"
           }
         }
       }
@@ -1257,6 +1262,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Info"
+          }
+        }
+      }
+    },
+    "Language" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Idioma"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Språk"
           }
         }
       }
@@ -1353,28 +1374,6 @@
         }
       }
     },
-    "Language:" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Language:"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Idioma:"
-          }
-        },
-        "nb" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Språk:"
-          }
-        }
-      }
-    },
     "Light" : {
       "localizations" : {
         "en" : {
@@ -1397,24 +1396,21 @@
         }
       }
     },
-    "Mode:" : {
+    "Longest" : {
+
+    },
+    "Mode" : {
       "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Mode:"
-          }
-        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Modo:"
+            "value" : "Modo"
           }
         },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Modus:"
+            "value" : "Modus"
           }
         }
       }
@@ -1464,6 +1460,7 @@
       }
     },
     "No" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1484,6 +1481,12 @@
           }
         }
       }
+    },
+    "No Reminders" : {
+
+    },
+    "No reminders has been scheduled yet." : {
+
     },
     "No stats available for this selection!" : {
       "localizations" : {
@@ -1529,46 +1532,21 @@
         }
       }
     },
-    "Number of Guesses:" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Number of Guesses:"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Número de Adivinas:"
-          }
-        },
-        "nb" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Antall Gjett:"
-          }
-        }
-      }
+    "Number of Guesses Needed" : {
+
     },
-    "Number of Letters:" : {
+    "Number of Letters" : {
       "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Number of Letters:"
-          }
-        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Número de Letras:"
+            "value" : "Número de Letras"
           }
         },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Antall Bokstaver:"
+            "value" : "Antall Bokstaver"
           }
         }
       }
@@ -1586,6 +1564,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%lld Letras"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld Bokstaver"
+          }
+        }
+      }
+    },
+    "numberOfLetter" : {
+      "comment" : "Number of letter single",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld Letter"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld Bokstav"
+          }
+        }
+      }
+    },
+    "numberOfLetters" : {
+      "comment" : "Number of letters plural",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld Letters"
           }
         },
         "nb" : {
@@ -1772,24 +1784,34 @@
         }
       }
     },
-    "Played:" : {
+    "Played" : {
       "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Played:"
-          }
-        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Jugado:"
+            "value" : "Jugado"
           }
         },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Spilt:"
+            "value" : "Spilt"
+          }
+        }
+      }
+    },
+    "Privacy Options" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Opciones de Privacidad"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Personvern Valg"
           }
         }
       }
@@ -1816,24 +1838,21 @@
         }
       }
     },
-    "Reset filter" : {
+    "Reminder Details" : {
+
+    },
+    "Reset Filter" : {
       "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Reset filter"
-          }
-        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Restablecer filtro"
+            "value" : "Restablecer Filtro"
           }
         },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Reset filter"
+            "value" : "Reset Filter"
           }
         }
       }
@@ -1898,46 +1917,21 @@
         }
       }
     },
-    "Search for a Phrase" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Search for a Phrase"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Buscar una Frase"
-          }
-        },
-        "nb" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Søk etter en Frase"
-          }
-        }
-      }
+    "Search for a word" : {
+
     },
-    "Search:" : {
+    "Search for a Word" : {
       "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Search:"
-          }
-        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Buscar:"
+            "value" : "Buscar una Palabra"
           }
         },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Søk:"
+            "value" : "Søk"
           }
         }
       }
@@ -2100,18 +2094,18 @@
         }
       }
     },
-    "Show If Hints Used:" : {
+    "Show If Hints Used" : {
       "localizations" : {
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Mostrar si se Usaron Pistas:"
+            "value" : "Mostrar si se Usaron Pistas"
           }
         },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Vis Når Hint Brukt: "
+            "value" : "Vis Når Hint Brukt"
           }
         }
       }
@@ -2138,24 +2132,18 @@
         }
       }
     },
-    "Starts with:" : {
+    "Starts With" : {
       "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Starts with:"
-          }
-        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Comienza con:"
+            "value" : "Comienza Con"
           }
         },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Starter med:"
+            "value" : "Starter Med"
           }
         }
       }
@@ -2219,6 +2207,9 @@
           }
         }
       }
+    },
+    "Streaks" : {
+
     },
     "Streaks🔥" : {
       "localizations" : {
@@ -2288,6 +2279,7 @@
       }
     },
     "Sure" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2353,6 +2345,15 @@
         }
       }
     },
+    "Tap here to be able to search for a word, or to see the definition of a word" : {
+
+    },
+    "Tap here to filter the words, to easily find the word you are looking for" : {
+
+    },
+    "Tap here to get a Hint for the current word, by watching a quick ad" : {
+
+    },
     "The Board" : {
       "localizations" : {
         "en" : {
@@ -2397,24 +2398,18 @@
         }
       }
     },
-    "The Normal mode allows you to play as many times as you want, while the Daily Word mode provides a unique phrase each day, that is the same for all players." : {
+    "The Normal mode allows you to play as many times as you want, while the Daily Word mode provides a unique word each day, that is the same for all players." : {
       "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "The Normal mode allows you to play as many times as you want, while the Daily Word mode provides a unique phrase each day, that is the same for all players."
-          }
-        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "El modo Normal te permite jugar tantas veces como quieras, mientras que el modo Palabra Diaria ofrece una frase única cada día, que es la misma para todos los jugadores."
+            "value" : "El modo Normal te permite jugar tantas veces como quieras, mientras que el modo Palabra Diaria ofrece una palabra única cada día, que es la misma para todos los jugadores."
           }
         },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Normal modus lar deg spille så mange ganger du vil, mens den Daglig Ord modusen gir en unik frase hver dag. Daglig Ord frasen er den samme for alle spillere hver dag."
+            "value" : "Normal modus lar deg spille så mange ganger du vil, mens Daglig Ord-modusen gir et unikt ord hver dag, som er det er det samme for alle spillere."
           }
         }
       }
@@ -2441,46 +2436,18 @@
         }
       }
     },
-    "The Phrase is a word game where you guess a secret phrase by entering letters. The game provides feedback on your guesses, indicating correct letters and their positions." : {
+    "The Phrase is a word game where you guess a secret word by entering letters. The game provides feedback on your guesses, indicating correct letters and their positions." : {
       "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "The Phrase is a word game where you guess a secret phrase by entering letters. The game provides feedback on your guesses, indicating correct letters and their positions."
-          }
-        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The Phrase es un juego de palabras en el que adivinas una frase secreta ingresando letras. El juego proporciona retroalimentación sobre tus adivinar, indicando las letras correctas y sus posiciones."
+            "value" : "The Phrase es un juego de palabras en el que adivinas una palabra secreta ingresando letras. El juego proporciona retroalimentación sobre tus adivinar, indicando las letras correctas y sus posiciones."
           }
         },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The Phrase er et ordspill der du får en hemmelig frase, og skal prøve å gjette den. Spillet gir tilbakemelding på gjetningene dine. Det indikerer riktige bokstaver og deres posisjoner."
-          }
-        }
-      }
-    },
-    "The Phrase Length: " : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "The Phrase Length:"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Longitud de la Frase:"
-          }
-        },
-        "nb" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Frase Lengde:"
+            "value" : "The Phrase er et ordspill der du får et hemmelig ord, og skal prøve å gjette det. Spillet gir tilbakemelding på gjetningene dine. Det indikerer riktige bokstaver og deres posisjoner."
           }
         }
       }
@@ -2496,79 +2463,64 @@
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "¡La Frase era: %@!"
+            "value" : "¡La Palabra Era: %@!"
           }
         },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Frasen var: %@!"
+            "value" : "Ordet Var: %@!"
           }
         }
       }
     },
-    "Time Used: " : {
+    "Time of Day" : {
+
+    },
+    "Time Used" : {
       "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Time Used: "
-          }
-        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Tiempo Usado:"
+            "value" : "Tiempo Usado"
           }
         },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Tid Brukt: "
+            "value" : "Tid Brukt"
           }
         }
       }
     },
-    "To play the game, just enter a valid phrase and submit your guess. The game will highlight correct letters in green, correct letters in the wrong position in orange, and unused letters in gray." : {
+    "To play the game, just enter a valid word and submit your guess. The game will highlight correct letters in green, correct letters in the wrong position in orange, and unused letters in gray." : {
       "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "To play the game, just enter a valid phrase and submit your guess. The game will highlight correct letters in green, correct letters in the wrong position in orange, and unused letters in gray."
-          }
-        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Para jugar, solo ingresa una frase válida y realiza una adivinar. El juego resaltará las letras correctas en verde, las letras correctas en la posición incorrecta en naranja y las letras no usadas en gris."
+            "value" : "Para jugar, solo ingresa una palabra válida y realiza una adivinar. El juego resaltará las letras correctas en verde, las letras correctas en la posición incorrecta en naranja y las letras no usadas en gris."
           }
         },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "For å spille spillet, bare skriv inn en gyldig frase og trykk på VELG ORD knappen. Spillet vil fremheve riktige bokstaver med grønne, riktige bokstaver i feil posisjon i oransje og feil bokstaver i grått."
+            "value" : "For å spille spillet, bare skriv inn et gyldig ord og trykk på VELG ORD knappen. Spillet vil fremheve riktige bokstaver med grønne, riktige bokstaver i feil posisjon i oransje og feil bokstaver i grått."
           }
         }
       }
     },
-    "To start a game, select a language and the number of letters in the phrase that you are going to guess. After that, you choose the game mode, which can be either a Normal game or a Daily Word game." : {
+    "To start a game, select a language and the number of letters in the word that you are going to guess. After that, you choose the gamemode, either Normal or Daily Word." : {
       "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "To start a game, select a language and the number of letters in the phrase that you are going to guess. After that, you choose the game mode, which can be either a Normal game or a Daily Word game."
-          }
-        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Para iniciar un juego, selecciona un idioma y el número de letras de la frase que vas a adivinar. Después, elige el modo de juego, que puede ser un juego Normal o un juego de Palabra Diaria."
+            "value" : "Para iniciar un juego, selecciona un idioma y el número de letras de la palabra que vas a adivinar. Después, elige el modo de juego, ya sea Normal o Palabra Diaria."
           }
         },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "For å starte et spill, velg et språk og antall bokstaver i frasen du skal gjette. Etter det velger du spillmodus, som enten kan være Normal modus eller Daglig Ord modus."
+            "value" : "For å starte et spill, velg et språk og antall bokstaver i ordet du skal gjette. Etter det velger du en spillmodus, enten Normal eller Daglig Ord."
           }
         }
       }
@@ -2617,18 +2569,27 @@
         }
       }
     },
-    "Version:" : {
+    "Unlimited Streaks 🔥" : {
+
+    },
+    "Use filters" : {
+
+    },
+    "Use Word" : {
+
+    },
+    "Version" : {
       "localizations" : {
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Versión:"
+            "value" : "Versión"
           }
         },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Versjon:"
+            "value" : "Versjon"
           }
         }
       }
@@ -2655,7 +2616,18 @@
         }
       }
     },
+    "Want To Rate My App?" : {
+      "localizations" : {
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vil Du Gi Appen En Rating?"
+          }
+        }
+      }
+    },
     "We couldn't find a definition for this Phrase. That might be because it is a name or a place name." : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2677,6 +2649,22 @@
         }
       }
     },
+    "We couldn't find a definition for this Word. That might be because it is a name or a place name." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No pudimos encontrar una definición para esta Palabra. Esto podría deberse a que es un nombre propio o un nombre de lugar."
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vi kunne ikke finne en definisjon for dette Ordet. Det kan være fordi det er et navn eller stedsnavn. "
+          }
+        }
+      }
+    },
     "wiktionary.org" : {
       "localizations" : {
         "es" : {
@@ -2693,64 +2681,50 @@
         }
       }
     },
-    "Win Rate:" : {
+    "Win Rate" : {
       "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Win Rate:"
-          }
-        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Tasa de Victorias:"
+            "value" : "Tasa de Victorias"
           }
         },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Seiere:"
+            "value" : "Seiere"
           }
         }
       }
     },
-    "You can also use hints to help you guess the phrase. A hint will reveal a letter in the phrase, but not the position of the letter. You can use a hint by tapping the hint button in the top right corner, which will make you watch an ad to get the hint." : {
-      "comment" : "A description of how to use hints in the game.",
-      "isCommentAutoGenerated" : true,
+    "You can also use hints to help you guess the word. A hint will reveal a letter in the word, but not the position of the letter. You can use a hint by tapping the hint button in the top right corner, which will make you watch an ad to get the hint." : {
       "localizations" : {
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "También puedes usar pistas para ayudarte a adivinar la frase. Una pista revelará una letra de la frase, pero no su posición. Puedes usar una botón de pistas en la esquina superior derecha, lo que te hará ver un anuncio para obtener la pista."
+            "value" : "También puedes usar pistas para ayudarte a adivinar la palabra. Una pista revelará una letra de la palabra, pero no su posición. Puedes usar una botón de pistas en la esquina superior derecha, lo que te hará ver un anuncio para obtener la pista."
           }
         },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Du kan også bruke hint for å hjelpe deg med å gjette frasen. Et hint vil avsløre en bokstav i frasen, men ikke posisjonen av bokstaven. Du kan bruke et hint ved å trykke på hint-knappen øverst til høyre, noe som får deg til å se en reklame for å få hintet."
+            "value" : "Du kan også bruke hint for å hjelpe deg med å gjette ordet. Et hint vil avsløre en bokstav i ordet, men ikke posisjonen av bokstaven. Du kan bruke et hint ved å trykke på hint-knappen øverst til høyre, noe som får deg til å se en reklame for å få hintet."
           }
         }
       }
     },
-    "You can keep track of your game streaks by looking next to the 🔥 emoji, next to the game mode on the The Phrase tab. This will either show you how many days or games in a row you have played and managed to guess The Phrase, depending on the game mode." : {
+    "You can keep track of your game streaks by looking next to the 🔥 emoji, next to the game mode on the The Phrase tab. This will either show you how many days or games in a row you have played and managed to guess the word, depending on the game mode." : {
       "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "You can keep track of your game streaks by looking next to the 🔥 emoji, next to the game mode on the The Phrase tab. This will either show you how many days or games in a row you have played and managed to guess The Phrase, depending on the game mode."
-          }
-        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Puedes llevar un registro de tus rachas de juego mirando junto al emoji 🔥, al lado del modo de juego en la pestaña La Frase. Esto te mostrará cuántos días o juegos consecutivos has jugado y logrado adivinar La Frase, dependiendo del modo de juego."
+            "value" : "Puedes llevar un registro de tus rachas de juego mirando junto al emoji 🔥, al lado del modo de juego en la pestaña La Frase. Esto te mostrará cuántos días o juegos consecutivos has jugado y logrado adivinar la palabra, dependiendo del modo de juego."
           }
         },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Du kan følge med på spill streak-ene dine ved å se etter 🔥 emoji-en ved siden av spillmodus. Dette vil enten vise deg hvor mange dager eller spill på rad du har spilt og klart å gjette uttrykket, avhengig av spillmodus. "
+            "value" : "Du kan følge med på spill streak-ene dine ved å se etter 🔥 emoji-en ved siden av spillmodus. Dette vil enten vise deg hvor mange dager eller spill på rad du har spilt og klart å gjette ordet, avhengig av spillmodus. "
           }
         }
       }
@@ -2771,40 +2745,34 @@
         }
       }
     },
-    "You can view your game history by tapping the History tab. This will show you your game history, including the phrases you have guessed, the number of guesses you needed to win the game, the number of hints used, and the date and time of the game. You can also filter your history by language, game mode, and number of letters in the phrase." : {
+    "You can view your game history by tapping the History tab. This will show you your game history, including the words you have guessed, the number of guesses you needed to win the game, the number of hints used, and the date and time of the game. You can also filter your history by language, game mode, and number of letters in the word." : {
       "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "You can view your game history by tapping the History tab. This will show you your game history, including the phrases you have guessed, the number of guesses you needed to win the game, the number of hints used, and the date and time of the game. You can also filter your history by language, game mode, and number of letters in the phrase."
-          }
-        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Puedes ver tu historial de juegos tocando la pestaña Historia. Esto mostrará tu historia de juegos, incluyendo las frases que has adivinado, el número de adivinas que necesitaste para ganar, la cantidad de pistas usadas y la fecha y hora del juego. También puedes filtrar tu historia por idioma, modo de juego y número de letras de la frase."
+            "value" : "Puedes ver tu historial de juegos tocando la pestaña Historia. Esto mostrará tu historia de juegos, incluyendo las palabras que has adivinado, el número de adivinas que necesitaste para ganar, la cantidad de pistas usadas y la fecha y hora del juego. También puedes filtrar tu historia por idioma, modo de juego y número de letras de la frase."
           }
         },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Du kan se historikken din ved å trykke på Historikk. Dette vil vise deg historikken din, inkludert frasene du har gjettet, antall gjett du trengte, antall hint som ble brukt og datoen for spillet. Du kan også filtrere historien din etter språk, spillmodus og antall bokstaver i frasen."
+            "value" : "Du kan se historikken din ved å trykke på Historikk. Dette vil vise deg historikken din, inkludert ordene du har gjettet, antall gjett du trengte, antall hint som ble brukt og datoen for spillet. Du kan også filtrere historien din etter språk, spillmodus og antall bokstaver i ordet."
           }
         }
       }
     },
-    "You can view your game stats by tapping the Stats tab. This will show you your game stats, including the number of games played, your win rate, and the amount of guesses you needed to guess the phrase. You can also filter your stats by language, game mode, and number of letters in the phrase." : {
+    "You can view your game stats by tapping the Stats tab. This will show you your game stats, including the number of games played, your win rate, and the amount of guesses you needed to guess the word. You can also filter your stats by language, game mode, and number of letters in the word." : {
       "localizations" : {
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Puedes ver tus estadísticas de juego tocando la pestaña Estadísticas. Esto mostrará tus estadísticas de juego, incluyendo el número de juegos jugados, tu tasa de victorias y el número de adivinas que necesitaste para adivinar la frase. También puedes filtrar tus estadísticas por idioma, modo de juego y número de letras de la frase."
+            "value" : "Puedes ver tus estadísticas de juego tocando la pestaña Estadísticas. Esto mostrará tus estadísticas de juego, incluyendo el número de juegos jugados, tu tasa de victorias y el número de adivinas que necesitaste para adivinar la frase. También puedes filtrar tus estadísticas por idioma, modo de juego y número de letras de la palabra."
           }
         },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Du kan se statistikken din ved å trykke på statistikk -fanen. Dette vil vise deg statistikken din, inkludert antall spilte spill, seiersrate og mengden gjetninger du trengte for å gjette frasen. Du kan også filtrere statistikken din etter språk, spillmodus og antall bokstaver i uttrykket."
+            "value" : "Du kan se statistikken din ved å trykke på Stats fanen. Dette vil vise deg statistikken din, inkludert antall spilte spill, seiersrate og mengden gjetninger du trengte for å gjette ordet. Du kan også filtrere statistikken din etter språk, spillmodus og antall bokstaver i ordet."
           }
         }
       }
@@ -2853,24 +2821,18 @@
         }
       }
     },
-    "You have already played this exact Phrase today. Try again tomorrow or play with a different Phrase length." : {
+    "You have already played this exact Word today. Try again tomorrow or play with a different Number of Letters." : {
       "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "You have already played this exact Phrase today. Try again tomorrow or play with a different Phrase length."
-          }
-        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ya has jugado esta frase exacta hoy. Intenta de nuevo mañana o juega con una frase de diferente longitud."
+            "value" : "Ya has jugado esta Palabra exacta hoy. Intenta de nuevo mañana o juega con un número diferente de letras."
           }
         },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Du har allerede spilt akkurat denne Frasen idag. Prøv igjen i morgen eller spil med en annen Frase lengde."
+            "value" : "Du har allerede spilt akkurat dette Ordet i dag. Prøv igjen i morgen eller spill med et annet Antall Bokstaver."
           }
         }
       }

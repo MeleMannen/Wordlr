@@ -41,7 +41,7 @@ struct HistoryView: View {
         NavigationStack {
             GeometryReader { geometry in
                 VStack {
-                    FilterView(numberOfLetters: $numberOfLetters, selectedLanguage: $selectedLanguage, gameMode: $gameMode, showsWhenHintsUsed: $showsWhenHintsUsed)
+//                    FilterView(numberOfLetters: $numberOfLetters, selectedLanguage: $selectedLanguage, gameMode: $gameMode, showsWhenHintsUsed: $showsWhenHintsUsed)
                     if self.searchResults.isEmpty && !self.searchedWord.isEmpty {
                         ContentUnavailableView.search(text: self.searchedWord)
                     } else if self.searchResults.isEmpty {
@@ -119,11 +119,15 @@ struct HistoryView: View {
                                 .listSectionSeparator(.hidden)
                             }
                         }
-						.safeAreaPadding(.bottom, self.userWantsAds ? 54 : 0)
+						.safeAreaPadding(.bottom, (UIDevice.current.userInterfaceIdiom == .pad || UIDevice.current.userInterfaceIdiom == .mac) && self.userWantsAds ? 80 : (self.userWantsAds ? 54 : 0))
                     }
                 }
-                .searchable(text: self.$searchedWord, placement: .navigationBarDrawer(displayMode: .always), prompt: "Search for a Phrase")
+                .searchable(text: self.$searchedWord, placement: .navigationBarDrawer(displayMode: .always), prompt: "Search for a Word")
                 .navigationTitle("History")
+				.navigationBarTitleDisplayMode(.inline)
+				.safeAreaInset(edge: .top) {
+					FilterView(numberOfLetters: $numberOfLetters, selectedLanguage: $selectedLanguage, gameMode: $gameMode, showsWhenHintsUsed: $showsWhenHintsUsed)
+				}
                 .onChange(of: self.searchedWord) {
                     self.filterGameRecords()
                 }

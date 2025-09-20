@@ -94,16 +94,7 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
             }
         }
     }
-    
-    
-
-    
-//    func checkIfDailyWordIsAlreadyPlayed() -> Bool {
-//        if let streakEntity = self.getStreakEntity() {
-//            return streakEntity.streak.hasPlayedDailyWord
-//        }
-//        return false
-//    }
+	
     
     func checkIfDailyWordIsAlreadyPlayed() -> Bool {
         var cetCalendar = Calendar(identifier: .gregorian)
@@ -418,6 +409,15 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
             }
         
     }
+	
+	func useWord(word: String) {
+		for i in 0..<word.count {
+			self.board[self.currentRow][i].letter = String(word[word.index(word.startIndex, offsetBy: i)])
+		}
+		self.currentIndex = word.count
+	}
+	
+	
     
     func setStreak(state: GameEndState) {
         switch state {
@@ -526,6 +526,7 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
                             if self.selectedGameMode == .dailyWord {
                                 print("updating daily word streak")
                                 self.setStreak(state: .won)
+								self.fixReminderForDailyWord()
                             } else {
                                 print("updating normal streak")
                                 self.setNormalStreak(state: .won)
@@ -558,22 +559,29 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
             } else {
                 if guessedWord.count == self.numberOfLetters {
                     print("Det du gjettet var ikke et ord: \(guessedWord)")
-                    
                 } else {
-                    print("Ikke nok bokstaver: \(guessedWord)")
-                }
-                
-//                DispatchQueue.main.async {
-                    self.isShaking = true
-                    withAnimation(Animation.spring(response: 0.2, dampingFraction: 0.1, blendDuration: 0.1)) {
-                        self.isShaking = false
-                    }
-//                }
-                
-            }
-        }
-        
+					print("Ikke nok bokstaver: \(guessedWord)")
+				}
+				
+				self.isShaking = true
+				withAnimation(Animation.spring(response: 0.2, dampingFraction: 0.1, blendDuration: 0.1)) {
+					self.isShaking = false
+				}
+			}
+		}
     }
+	
+	func fixReminderForDailyWord() {
+		guard let context = self.modelContext else {
+			return
+		}
+		let reminders = NotificationManager.fetchReminders(context: context)
+		for reminder in reminders {
+			if reminder.language == self.selectedLanguage && reminder.numberOfLetters == self.numberOfLetters && reminder.isEnabled {
+				NotificationManager.scheduleForTomorrow(reminder: reminder)
+			}
+		}
+	}
     
     func wordIsValidForSubmitButton() -> Bool {
         if self.isGameOver {
@@ -584,7 +592,6 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
             return true
         }
         return false
-        
     }
     
     func getShareResult(row: Int, numberOfLetters: Int, date: Date, board: [[Letter]], timeUsedString: String = "") -> String {
@@ -647,7 +654,9 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
 		var timeUsedString = ""
 		if hours > 0 {
 			let hourFormatString = NSLocalizedString("hour_string", comment: "String for the hours")
-			if hourFormatString.contains("%") {
+			if hourFormatString.contains("%@") {
+				timeUsedString += String(format: hourFormatString, "\(hours)")
+			} else if hourFormatString.contains("%d") || hourFormatString.contains("%ld") {
 				timeUsedString += String(format: hourFormatString, hours)
 			} else {
 				timeUsedString += "\(hours)h "
@@ -705,7 +714,7 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
             self.streaks = streakManager.fetchStreaks()
             print("Fetched streaks: \(self.streaks)")
             for streak in self.streaks {
-                print("Streak ID: \(streak.id), Streak: \(streak.streak)")
+                print("Streak ID: \(streak.id), Streak: \(streak.streak), LongestStreak: \(streak.longestStreak), CurrentStreak: \(streak.streak.currentStreak)")
             }
         } else {
             print("StreakManager is not initialized")
@@ -718,7 +727,7 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
             self.normalStreaks = normalStreakManager.fetchStreaks()
             print("Fetched normal streaks: \(self.streaks)")
             for streak in self.streaks {
-                print("NormalStreak ID: \(streak.id), Streak: \(streak.streak)")
+				print("NormalStreak ID: \(streak.id), Streak: \(streak.streak), LongestStreak: \(streak.longestStreak), CurrentStreak: \(streak.streak.currentStreak)")
             }
         } else {
             print("NormalStreakManager is not initialized")
@@ -743,6 +752,7 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
         for i in 1...8 {
             self.addStreak(id: "streak: \(i), norwegian", streak: .none)
             self.addStreak(id: "streak: \(i), english", streak: .none)
+			self.addStreak(id: "streak: \(i), spanish", streak: .none)
             
         }
     }
@@ -751,9 +761,24 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
         for i in 1...8 {
             self.addNormalStreak(id: "streak: \(i), norwegian", streak: .none)
             self.addNormalStreak(id: "streak: \(i), english", streak: .none)
+			self.addNormalStreak(id: "streak: \(i), spanish", streak: .none)
             
         }
     }
+	
+	func addSpanishStreaks() {
+		for i in 1...8 {
+			self.addStreak(id: "streak: \(i), spanish", streak: .none)
+			
+		}
+	}
+	
+	func addSpanishNormalStreaks() {
+		for i in 1...8 {
+			self.addNormalStreak(id: "streak: \(i), spanish", streak: .none)
+			
+		}
+	}
     
     func addStreak(id: String, streak: Streak) {
         if let streakManager = self.streakManager {
@@ -835,9 +860,10 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
     // MARK: - ADS
     func loadAd() async {
         do {
-            // ca-app-pub-3940256099942544/1712485313
+			#warning("Replace the ad unit ID with your own ad unit ID when deploying to production.")
+            // ca-app-pub-7619403750703078/7682260846
             self.rewardedAd = try await RewardedAd.load(
-                with: "ca-app-pub-7619403750703078/7682260846", request: Request())
+                with: "ca-app-pub-3940256099942544/1712485313", request: Request())
             self.rewardedAd?.fullScreenContentDelegate = self
         } catch {
             print("Failed to load rewarded ad with error: \(error.localizedDescription)")
