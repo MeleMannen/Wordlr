@@ -167,6 +167,7 @@ struct GameView18: View {
 														.fill(keyBoardKey.state == .correctPosition ? .green : (keyBoardKey.state == .correctLetter ? .orange : (keyBoardKey.state == .usedButNotCorrect ? Color(UIColor.darkGray) : self.colorForUnused)))
 												}
 										})
+										.keyboardShortcut(KeyEquivalent(Character(keyBoardKey.letter.lowercased())), modifiers: [])
 										.buttonStyle(ScalingButton())
 										.sensoryFeedback(.impact, trigger: keyBoardKey.didTapButton)
 										
@@ -194,7 +195,7 @@ struct GameView18: View {
 											message: Text("You will lose your word and you cannot undo this action!"),
 											primaryButton: .destructive(Text("Restart")) {
 												self.alertItem = AlertItem(
-													title: Text("The Phrase Was: \(appManager.word)!"),
+													title: Text("The Word Was: \(appManager.word)!"),
 													message: Text("Do you want to see the definition?"),
 													primaryButton: .default(Text("Show Definition")) {
 														self.isShowingCurrentDefinition = true
@@ -371,6 +372,7 @@ struct GameView18: View {
 											.foregroundStyle(.green)
 									}
 							})
+							.keyboardShortcut("n", modifiers: .command)
 							.padding(.horizontal, 20)
 							.sensoryFeedback(.impact, trigger: self.didTapNewGameButton)
 							.buttonStyle(GrowingButton())
@@ -427,7 +429,9 @@ struct GameView18: View {
 										.font(.title2).bold()
 										.contentTransition(.symbolEffect(.replace))
 										.conditionalShadow(color: .black.opacity(0.5), radius: 4, x: 4, y: 4)
+										.tint(.primary)
 								}
+								.keyboardShortcut("c", modifiers: .command)
 								Spacer()
 							}
 						}
@@ -443,7 +447,7 @@ struct GameView18: View {
 				WordDefinitionView(word: appManager.word)
 					.environmentObject(appManager)
 			})
-			.navigationTitle("Guess The Phrase")
+			.navigationTitle("Guess The Word")
 			.navigationBarTitleDisplayMode(.inline)
 			.toolbar {
 				if appManager.isHintAvailable() {

@@ -24,6 +24,7 @@ struct SettingsView: View {
 	@AppStorage("defaultStatHintsUsed") private var defaultStatHintsUsed: ShowsWhenHintsUsed = .both
 	
 	@AppStorage("notificationsEnabled") private var notificationsEnabled: Bool = false
+	@State private var showingNotificationSettingsAlert: Bool = false
 	
 	@Query(sort: \DailyWordReminder.timeToFire) private var dailyWordReminders: [DailyWordReminder]
 
@@ -185,7 +186,22 @@ struct SettingsView: View {
 							.tint(.green)
 							.onChange(of: notificationsEnabled) { _, newValue in
 								if newValue {
-									NotificationManager.requestPermission()
+									NotificationManager.requestPermission() { result in
+										switch result {
+											case .success(let granted):
+												if granted {
+													print("Permission granted")
+												} else {
+													print("Permission denied")
+													notificationsEnabled = false
+												}
+											case .failure(let error):
+												print("Error requesting permission: \(error)")
+												notificationsEnabled = false
+												self.showingNotificationSettingsAlert = true
+										}
+										
+									}
 									UNUserNotificationCenter.current().delegate = NotificationsDelegate.shared
 									for reminder in dailyWordReminders {
 										if reminder.isEnabled {
@@ -199,6 +215,15 @@ struct SettingsView: View {
 										}
 									}
 								}
+							}
+							.alert("To enable notifications, please go to Settings and allow notifications for this app.", isPresented: $showingNotificationSettingsAlert) {
+								Button("OK", role: .cancel) { }
+								Button("Settings") {
+									if let appSettings = URL(string: UIApplication.openSettingsURLString) {
+										UIApplication.shared.open(appSettings)
+									}
+								}
+								
 							}
 						
 						if notificationsEnabled {
@@ -282,27 +307,32 @@ struct SettingsView: View {
 									.foregroundStyle(.secondary)
 							}
 						})
-						
-						Button(action: {
-							adManager.presentAdInspector()
-							print("Ad Inspector presented.")
-						}, label: {
-							HStack {
-								Image(systemName: "hammer")
-									.font(.title2)
-									.foregroundStyle(.primary)
-								
-								Text("Ad Inspector")
-									.foregroundStyle(.primary)
-								
-								
-								Spacer(minLength: 0)
-								
-								Image(systemName: "arrow.up.right")
-									.font(.caption).bold()
-									.foregroundStyle(.secondary)
-							}
-						})
+//						#warning("Remove this before deploying to production.")
+						// Show only when running in a debug environment
+#if targetEnvironment(simulator) // DEBUG
+
+							Button(action: {
+								adManager.presentAdInspector()
+								print("Ad Inspector presented.")
+							}, label: {
+								HStack {
+									Image(systemName: "hammer")
+										.font(.title2)
+										.foregroundStyle(.primary)
+									
+									Text("Ad Inspector")
+										.foregroundStyle(.primary)
+									
+									
+									Spacer(minLength: 0)
+									
+									Image(systemName: "arrow.up.right")
+										.font(.caption).bold()
+										.foregroundStyle(.secondary)
+								}
+							})
+#endif
+//						}
 						
 					} header: {
 						Text("About")
@@ -336,7 +366,12 @@ struct BannerViewContainer: UIViewRepresentable {
     func makeUIView(context: Context) -> BannerView {
         let banner = BannerView(adSize: adSize)
 		#warning("Replace the ad unit ID with your own ad unit ID when deploying to production.")
+#if targetEnvironment(simulator) // DEBUG
         banner.adUnitID = "ca-app-pub-3940256099942544/2435281174" // ca-app-pub-7619403750703078/6852604335
+#else
+		banner.adUnitID = "ca-app-pub-7619403750703078/6852604335" // ca-app-pub-3940256099942544/2435281174
+#endif
+		
         banner.load(Request())
         banner.delegate = context.coordinator
         return banner

@@ -62,6 +62,7 @@ struct SearchView: View {
 								.id(letter)
 							}
 						}
+						.tint(.blue)
 						.listSectionIndexVisibility(.visible)
 						.safeAreaPadding(.bottom, (UIDevice.current.userInterfaceIdiom == .pad || UIDevice.current.userInterfaceIdiom == .mac) && self.userWantsAds ? 80 : (self.userWantsAds ? 54 : 0))
 					} else {
@@ -143,7 +144,36 @@ struct SearchView: View {
             self.filterGameRecords()
         }
         .overlay(alignment: .bottomTrailing) {
-			if #available(iOS 18.0, *) {
+			if #available(iOS 26.0, *) {
+				NavigationLink(destination: FilterOptionsView().environmentObject(appManager).navigationTransition(.zoom(sourceID: "filter", in: namespace)), label: {
+					Image(systemName: "slider.horizontal.3")
+						.font(.title)
+						.foregroundColor(.white)
+						.padding()
+						.matchedTransitionSource(id: "filter", in: namespace)
+				})
+				.glassEffect(.regular.tint(.green).interactive())
+				.padding(.trailing, 25)
+				.padding(.bottom, UIDevice.current.userInterfaceIdiom == .pad || UIDevice.current.userInterfaceIdiom == .mac ? 100 : (self.userWantsAds && adManager.shouldShowAds ? 75 : 25))
+				.transition(.scale)
+				.simultaneousGesture(
+					LongPressGesture(minimumDuration: 1.2)
+						.onEnded { _ in
+							appManager.resetFilters()
+							self.isShowingFilterOptions.toggle()
+						}
+				)
+				.simultaneousGesture(TapGesture().onEnded {
+					self.isShowingFilterOptions.toggle()
+					Task {
+						await FilterTip.filterEvent.donate()
+					}
+				})
+				.popoverTip(self.filterTip, arrowEdge: .top)
+				.sensoryFeedback(.selection, trigger: self.isShowingFilterOptions)
+				.id(filterButtonID)
+				
+			} else if #available(iOS 18.0, *) {
 				NavigationLink(destination: FilterOptionsView().environmentObject(appManager).navigationTransition(.zoom(sourceID: "filter", in: namespace)), label: {
 					Image(systemName: "slider.horizontal.3")
 						.font(.title)
@@ -210,7 +240,7 @@ struct SearchView: View {
 				adManager.shouldShowAds = true
 			}
 			
-			DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+			DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
 				self.filterButtonID = UUID()
 			}
         }
@@ -220,10 +250,11 @@ struct SearchView: View {
         var filteredWords = appManager.words?.wordGroups["\(appManager.numberOfLetters)"] ?? []
 //		let shuffledWords = filteredWords.shuffled()
 //		DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+//			print("[")
 //			for word in shuffledWords {
 //				if word == shuffledWords.last {
 //					print("\"\(word)\"")
-//					print("fini")
+//					print("]")
 //				} else {
 //					print("\"\(word)\",")
 //				}
@@ -231,13 +262,13 @@ struct SearchView: View {
 //		}
 		
         if appManager.isFilteringSearchWord && !appManager.searchedWord.isEmpty {
-            filteredWords = filteredWords.filter { $0.contains(appManager.searchedWord.uppercased()) }
+            filteredWords = filteredWords.filter { $0.contains(appManager.searchedWord.replacingOccurrences(of: " ", with: "").uppercased()) }
         }
         if appManager.isFilteringStartWith && !appManager.startsWithFilter.isEmpty {
-            filteredWords = filteredWords.filter { $0.hasPrefix(appManager.startsWithFilter.uppercased()) }
+            filteredWords = filteredWords.filter { $0.hasPrefix(appManager.startsWithFilter.replacingOccurrences(of: " ", with: "").uppercased()) }
         }
         if appManager.isFilteringEndsWith && !appManager.endsWithFilter.isEmpty {
-            filteredWords = filteredWords.filter { $0.hasSuffix(appManager.endsWithFilter.uppercased()) }
+			filteredWords = filteredWords.filter { $0.hasSuffix(appManager.endsWithFilter.replacingOccurrences(of: " ", with: "").uppercased()) }
         }
         
         if appManager.isFilteringIncludedLetters && !appManager.selectedIncludedLetters.isEmpty {

@@ -6,6 +6,25 @@
       parallelizeBuildables = "YES"
       buildImplicitDependencies = "YES"
       buildArchitectures = "Automatic">
+      <PostActions>
+         <ExecutionAction
+            ActionType = "Xcode.IDEStandardExecutionActionsCore.ExecutionActionType.ShellScriptAction">
+            <ActionContent
+               title = "Run Script"
+               scriptText = "if [ &quot;${ACTION}&quot; = &quot;build&quot; ]; then&#10;    open &quot;raycast://extensions/raycast/raycast/confetti&quot;&#10;&#9;osascript -e &apos;tell application &quot;Xcode&quot; to activate&apos;&#10;fi&#10;"
+               shellToInvoke = "/bin/bash">
+               <EnvironmentBuildable>
+                  <BuildableReference
+                     BuildableIdentifier = "primary"
+                     BlueprintIdentifier = "6382E3BB2D12FE0500B61353"
+                     BuildableName = "Wordle.app"
+                     BlueprintName = "Wordle"
+                     ReferencedContainer = "container:Wordle.xcodeproj">
+                  </BuildableReference>
+               </EnvironmentBuildable>
+            </ActionContent>
+         </ExecutionAction>
+      </PostActions>
       <BuildActionEntries>
          <BuildActionEntry
             buildForTesting = "YES"

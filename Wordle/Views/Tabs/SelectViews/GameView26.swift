@@ -400,6 +400,7 @@ struct GameView26: View {
 											.font(.title2).bold()
 											.contentTransition(.symbolEffect(.replace))
 											.conditionalShadow(color: .black.opacity(0.5), radius: 4, x: 4, y: 4)
+											.tint(.primary)
 									}
 									.keyboardShortcut("c", modifiers: .command)
 									
@@ -421,7 +422,7 @@ struct GameView26: View {
 					WordDefinitionView(word: appManager.word)
 						.environmentObject(appManager)
 				})
-				.navigationTitle("Guess The Phrase")
+				.navigationTitle("Guess The Word")
 				.navigationBarTitleDisplayMode(.inline)
 				.toolbar {
 					if appManager.isHintAvailable() {

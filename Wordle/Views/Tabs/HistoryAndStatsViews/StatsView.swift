@@ -28,11 +28,11 @@ struct StatsView: View {
     @State private var winRate: Double = 0.0
     @State private var counts: [Int] = []
     @State private var maxGuessesPerCount: Int = 0
-	@State private var selectedStreakLanguage: LanguageSelection = .norwegian // Change this to your preferred default streak language
+	@State private var selectedStreakLanguage: LanguageSelection = .norwegian
 	@State private var longestStreakPerLetters: [(language: LanguageSelection, streaks: [(index: Int, currentStreak: Int, longestStreak: Int)])] = [(language: .english, streaks: []), (language: .spanish, streaks: []), (language: .norwegian, streaks: [])]
 	@State private var longestNormalStreakPerLetters: [(language: LanguageSelection, streaks: [(index: Int, currentStreak: Int, longestStreak: Int)])] = [(language: .english, streaks: []), (language: .spanish, streaks: []), (language: .norwegian, streaks: [])]
-	@State private var maxStreakLength: Int = 0
-	@State private var maxNormalStreakLength: Int = 0
+	@State private var maxStreakLength: Double = 0.0
+	@State private var maxNormalStreakLength: Double = 0.0
     
     @Query private var gameRecords: [GameRecordEntity]
 	@Query private var streaks: [StreakEntity]
@@ -160,255 +160,18 @@ struct StatsView: View {
 							} header: {
 								Text("Guesses")
 							}
-							if self.maxStreakLength > 0 && self.maxNormalStreakLength > 0 {
+							if self.maxStreakLength > 0 || self.maxNormalStreakLength > 0 {
 								Section {
-									if self.maxStreakLength > 0 {
-										VStack(alignment: .leading) {
-											Text("Daily Word Streaks 🔥")
-												.font(.title3).bold()
-												.conditionalShadow(color: .black.opacity(0.05), radius: 2, x: 1, y: 1)
-												.padding(.top, 3)
-											ForEach(self.longestStreakPerLetters, id: \.language) { longestStreakPerLetter in
-												if !longestStreakPerLetter.streaks.isEmpty {
-													Text(longestStreakPerLetter.language.localizedName)
-														.font(.headline)
-														.padding(.top, 3)
-														.padding(.leading, 3)
-													
-													Chart {
-														ForEach(longestStreakPerLetter.streaks, id: \.index) { streak in
-															let current: Double = (streak.currentStreak == 0) ? 0.05 : Double(streak.currentStreak)
-															
-															BarMark(
-																x: .value("Current", current),
-																y: .value("Number of Guesses", " \(streak.index) "),
-																height: .fixed(20.0)
-															)
-															.foregroundStyle(Color.orange)
-															.annotation(position: streak.currentStreak < (self.maxStreakLength / 6) ? .trailing : .overlay) {
-																Text("\(streak.currentStreak)")
-																	.foregroundColor(streak.currentStreak < (self.maxStreakLength / 6) ? .primary : .white)
-																	.font(.headline)
-																	.padding(.leading, streak.currentStreak == 0 ? 3 : 0)
-															}
-															.position(by: .value("Current", "Current"))
-															
-															BarMark(
-																x: .value("Longest", streak.longestStreak),
-																y: .value("Number of Guesses", " \(streak.index) "),
-																height: .fixed(20.0)
-															)
-															.foregroundStyle(Color.green)
-															.annotation(position: streak.longestStreak < (self.maxStreakLength / 6) ? .trailing : .overlay) {
-																if streak.longestStreak > 0 {
-																	Text("\(streak.longestStreak)")
-																		.foregroundColor(streak.longestStreak < (self.maxStreakLength / 6) ? .primary : .white)
-																		.font(.headline)
-																}
-															}
-															.position(by: .value("Longest", "Longest"))
-														}
-														
-													}
-													.chartXScale(domain: 0...Double(self.maxStreakLength))
-													.chartYAxis {
-														AxisMarks(preset: .extended, position: .leading) { _ in
-															AxisValueLabel(horizontalSpacing: 15)
-																.font(.footnote)
-														}
-													}
-													.animation(.easeInOut(duration: 0.5), value: longestStreakPerLetter.streaks.count)
-													.frame(minHeight: CGFloat(longestStreakPerLetter.streaks.count * 100))
-												}
-											}
-											
-											HStack {
-												Circle()
-													.fill(Color.orange)
-													.frame(width: 5, height: 5)
-												Text("Current")
-													.foregroundStyle(.secondary)
-													.font(.footnote)
-													.padding(.trailing, 10)
-												Circle()
-													.fill(Color.green)
-													.frame(width: 5, height: 5)
-												Text("Longest")
-													.foregroundStyle(.secondary)
-													.font(.footnote)
-											}
-											.padding(.top, 5)
-											.padding(.leading, 3)
-										}
+									if self.maxStreakLength > 0 && (self.gameMode == .both || self.gameMode == .dailyWord) {
+										StreakChartView(title: "Daily Word Streaks 🔥", longestStreakPerLetters: self.$longestStreakPerLetters, maxStreakLength: self.$maxStreakLength)
 									}
-									if self.maxNormalStreakLength > 0 {
-										VStack(alignment: .leading) {
-											Text("Unlimited Streaks 🔥")
-												.font(.title3).bold()
-												.conditionalShadow(color: .black.opacity(0.05), radius: 2, x: 1, y: 1)
-												.padding(.top, 3)
-											ForEach(self.longestNormalStreakPerLetters, id: \.language) { longestStreakPerLetter in
-												if !longestStreakPerLetter.streaks.isEmpty {
-													Text(longestStreakPerLetter.language.localizedName)
-														.font(.headline)
-														.padding(.top, 3)
-														.padding(.leading, 3)
-													
-													Chart {
-														ForEach(longestStreakPerLetter.streaks, id: \.index) { streak in
-															let current: Double = (streak.currentStreak == 0) ? 0.05 : Double(streak.currentStreak)
-															BarMark(
-																x: .value("Current", current),
-																y: .value("Number of Guesses", " \(streak.index) "),
-																height: .fixed(20.0)
-															)
-															.foregroundStyle(Color.orange)
-															.annotation(position: streak.currentStreak < (self.maxNormalStreakLength / 6) ? .trailing : .overlay) {
-																//														if streak.currentStreak > 0 {
-																Text("\(streak.currentStreak)")
-																	.foregroundColor(streak.currentStreak < (self.maxNormalStreakLength / 6) ? .primary : .white)
-																	.font(.headline)
-																//														}
-															}
-															.position(by: .value("Current", "Current"))
-															
-															BarMark(
-																x: .value("Longest", streak.longestStreak),
-																y: .value("Number of Guesses", " \(streak.index) "),
-																height: .fixed(20.0)
-															)
-															.foregroundStyle(Color.green)
-															.annotation(position: streak.longestStreak < (self.maxNormalStreakLength / 6) ? .trailing : .overlay) {
-																if streak.longestStreak > 0 {
-																	Text("\(streak.longestStreak)")
-																		.foregroundColor(streak.longestStreak < (self.maxNormalStreakLength / 6) ? .primary : .white)
-																		.font(.headline)
-																}
-															}
-															.position(by: .value("Longest", "Longest"))
-														}
-														
-													}
-													.chartXScale(domain: 0...Double(self.maxNormalStreakLength))
-													.chartYAxis {
-														AxisMarks(preset: .extended, position: .leading) { _ in
-															AxisValueLabel(horizontalSpacing: 15)
-																.font(.footnote)
-														}
-													}
-													.animation(.easeInOut(duration: 0.5), value: longestStreakPerLetter.streaks.count)
-													.frame(minHeight: CGFloat(longestStreakPerLetter.streaks.count * 100))
-												}
-											}
-											
-											HStack {
-												Circle()
-													.fill(Color.orange)
-													.frame(width: 5, height: 5)
-												Text("Current")
-													.foregroundStyle(.secondary)
-													.font(.footnote)
-													.padding(.trailing, 10)
-												Circle()
-													.fill(Color.green)
-													.frame(width: 5, height: 5)
-												Text("Longest")
-													.foregroundStyle(.secondary)
-													.font(.footnote)
-											}
-											.padding(.top, 5)
-											.padding(.leading, 3)
-										}
+									if self.maxNormalStreakLength > 0 && (self.gameMode == .both || self.gameMode == .normal) {
+										StreakChartView(title: "Unlimited Streaks 🔥", longestStreakPerLetters: self.$longestNormalStreakPerLetters, maxStreakLength: self.$maxNormalStreakLength)
 									}
 								} header: {
 									Text("Streaks")
 								}
 							}
-							
-//							if self.maxNormalStreakLength > 0 {
-//								Section {
-//									VStack(alignment: .leading) {
-//										Text("Unlimited Streaks 🔥")
-//											.font(.title3).bold()
-//											.conditionalShadow(color: .black.opacity(0.05), radius: 2, x: 1, y: 1)
-//											.padding(.top, 3)
-//										ForEach(self.longestNormalStreakPerLetters, id: \.language) { longestStreakPerLetter in
-//											if !longestStreakPerLetter.streaks.isEmpty {
-//												Text(longestStreakPerLetter.language.localizedName)
-//													.font(.headline)
-//													.padding(.top, 3)
-//													.padding(.leading, 3)
-//												
-//												Chart {
-//													ForEach(longestStreakPerLetter.streaks, id: \.index) { streak in
-//														let current: Double = (streak.currentStreak == 0) ? 0.05 : Double(streak.currentStreak)
-//														BarMark(
-//															x: .value("Current", current),
-//															y: .value("Number of Guesses", " \(streak.index) "),
-//															height: .fixed(20.0)
-//														)
-//														.foregroundStyle(Color.orange)
-//														.annotation(position: streak.currentStreak < (self.maxNormalStreakLength / 6) ? .trailing : .overlay) {
-//															//														if streak.currentStreak > 0 {
-//															Text("\(streak.currentStreak)")
-//																.foregroundColor(streak.currentStreak < (self.maxNormalStreakLength / 6) ? .primary : .white)
-//																.font(.headline)
-//															//														}
-//														}
-//														.position(by: .value("Current", "Current"))
-//														
-//														BarMark(
-//															x: .value("Longest", streak.longestStreak),
-//															y: .value("Number of Guesses", " \(streak.index) "),
-//															height: .fixed(20.0)
-//														)
-//														.foregroundStyle(Color.green)
-//														.annotation(position: streak.longestStreak < (self.maxNormalStreakLength / 6) ? .trailing : .overlay) {
-//															if streak.longestStreak > 0 {
-//																Text("\(streak.longestStreak)")
-//																	.foregroundColor(streak.longestStreak < (self.maxNormalStreakLength / 6) ? .primary : .white)
-//																	.font(.headline)
-//															}
-//														}
-//														.position(by: .value("Longest", "Longest"))
-//													}
-//													
-//												}
-//												.chartXScale(domain: 0...Double(self.maxNormalStreakLength))
-//												.chartYAxis {
-//													AxisMarks(preset: .extended, position: .leading) { _ in
-//														AxisValueLabel(horizontalSpacing: 15)
-//															.font(.footnote)
-//													}
-//												}
-//												.animation(.easeInOut(duration: 0.5), value: longestStreakPerLetter.streaks.count)
-//												.frame(minHeight: CGFloat(longestStreakPerLetter.streaks.count * 100))
-//											}
-//										}
-//										
-//										HStack {
-//											Circle()
-//												.fill(Color.orange)
-//												.frame(width: 5, height: 5)
-//											Text("Current")
-//												.foregroundStyle(.secondary)
-//												.font(.footnote)
-//												.padding(.trailing, 10)
-//											Circle()
-//												.fill(Color.green)
-//												.frame(width: 5, height: 5)
-//											Text("Longest")
-//												.foregroundStyle(.secondary)
-//												.font(.footnote)
-//										}
-//										.padding(.top, 5)
-//										.padding(.leading, 3)
-//									}
-//								} header: {
-//									Text("Unlimited Streaks")
-//								}
-//							}
-							
 							
 						}
 						.safeAreaPadding(.bottom, (UIDevice.current.userInterfaceIdiom == .pad || UIDevice.current.userInterfaceIdiom == .mac) && self.userWantsAds ? 80 : (self.userWantsAds ? 54 : 0))
@@ -499,10 +262,18 @@ struct StatsView: View {
 			for streak in self.streaks {
 				if streak.longestStreak > 0 && streak.id.contains("\(longestStreak.language)") {
 					let index = Int(streak.id.prefix(9).suffix(1))
+					if self.numberOfLetters != 9 && self.numberOfLetters != index {
+						continue
+					}
+					
+					if self.selectedLanguage != .all && self.selectedLanguage != longestStreak.language {
+						continue
+					}
 					let currentStreak = streak.streak.isAlive ? streak.streak.currentStreak : 0
 					self.longestStreakPerLetters[i].streaks.append((index: index, currentStreak: currentStreak, longestStreak: streak.longestStreak) as! (Int, Int, Int))
-					if streak.longestStreak > self.maxStreakLength {
-						self.maxStreakLength = streak.longestStreak
+					let longestDouble = Double(streak.longestStreak)
+					if longestDouble > self.maxStreakLength {
+						self.maxStreakLength = longestDouble
 					}
 				}
 			}
@@ -516,9 +287,18 @@ struct StatsView: View {
 			for streak in self.normalStreaks {
 				if streak.longestStreak > 0 && streak.id.contains("\(longestStreak.language)") {
 					let index = Int(streak.id.prefix(9).suffix(1))
+					if self.numberOfLetters != 9 && self.numberOfLetters != index {
+						continue
+					}
+					
+					if self.selectedLanguage != .all && self.selectedLanguage != longestStreak.language {
+						continue
+					}
+					
 					self.longestNormalStreakPerLetters[i].streaks.append((index: index, currentStreak: streak.streak.currentStreak, longestStreak: streak.longestStreak) as! (Int, Int, Int))
-					if streak.longestStreak > self.maxNormalStreakLength {
-						self.maxNormalStreakLength = streak.longestStreak
+					let longestDouble = Double(streak.longestStreak)
+					if longestDouble > self.maxNormalStreakLength {
+						self.maxNormalStreakLength = longestDouble
 					}
 				}
 			}
@@ -531,6 +311,7 @@ struct StatsView: View {
         self.numberOfLetters = self.defaultStatNumberOfLetters
         self.gameMode = self.defaultStatGameMode
         self.showsWhenHintsUsed = self.defaultStatHintsUsed
+		self.selectedStreakLanguage = self.defaultStatLanguage
     }
 }
 

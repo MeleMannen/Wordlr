@@ -98,7 +98,7 @@ enum Streak: Codable {
                 let lastWonDate = cetCalendar.startOfDay(for: lastWonDate)
                 let startDate = cetCalendar.startOfDay(for: startDate)
                 let daysSinceStart = cetCalendar.dateComponents([.day], from: startDate, to: lastWonDate).day ?? 0
-                return max(daysSinceStart, 1)
+                return daysSinceStart
         }
     }
     
@@ -192,7 +192,7 @@ enum GameMode: String, Codable, CaseIterable, Identifiable {
     var localizedName: String {
         switch self {
             case .dailyWord: return NSLocalizedString("game_mode_daily_word", comment: "Daily Word Mode")
-            case .normal: return NSLocalizedString("game_mode_normal", comment: "Normal Mode")
+            case .normal: return NSLocalizedString("game_mode_unlimited", comment: "Unlimited Mode")
             case .both: return NSLocalizedString("game_mode_both", comment: "Both Modes")
         }
     }

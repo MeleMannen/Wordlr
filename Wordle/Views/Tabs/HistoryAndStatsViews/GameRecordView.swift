@@ -51,7 +51,6 @@ struct GameRecordView: View {
 											.conditionalShadow(color: .black.opacity(0.5), radius: 3, x: 4, y: 4)
 									}
 									.glassEffect(.regular.interactive(), in: .circle)
-									.glassEffectID("board", in: self.namespace)
 									.font(.largeTitle).bold()
 							} else {
 								Image(systemName: gameRecord.state == .won ? "checkmark" : "xmark")
@@ -64,7 +63,6 @@ struct GameRecordView: View {
 //											.conditionalShadow(color: .black.opacity(0.3), radius: 3, x: 4, y: 4)
 //									}
 									.glassEffect(.regular.tint(gameRecord.state == .won ? .green : .red).interactive())
-									.glassEffectID("board", in: self.namespace)
 									.font(.largeTitle).bold()
 									.conditionalShadow(color: .black.opacity(0.3), radius: 3, x: 4, y: 4)
 							}
@@ -355,6 +353,7 @@ struct GameRecordView: View {
                                     .font(.title2).bold()
                                     .contentTransition(.symbolEffect(.replace))
                                     .conditionalShadow(color: .black.opacity(0.5), radius: 4, x: 4, y: 4)
+									.tint(.primary)
                                 
                             }
                             .padding(.vertical, 15)
@@ -406,7 +405,7 @@ struct GameRecordView: View {
         let usedString = String(format: NSLocalizedString("share_used", comment: "Used"))
         
         
-        var shareText = "The Phrase \(formatter1.string(from: date)), \(letterString), \(row)/\(numberOfRows) \(rowString)\(timeUsedString != "" ? ", \(timeUsedString) \(usedString)" : ""):\n"
+        var shareText = "Wordly \(formatter1.string(from: date)), \(letterString), \(row)/\(numberOfRows) \(rowString)\(timeUsedString != "" ? ", \(timeUsedString) \(usedString)" : ""):\n"
         
         var shouldBreak: Bool = false
         for row in board {

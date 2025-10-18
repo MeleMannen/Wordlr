@@ -543,6 +543,7 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
                                 if self.selectedGameMode == .dailyWord {
                                     print("updating daily word streak")
                                     self.setStreak(state: .lost)
+									self.fixReminderForDailyWord()
                                 } else {
                                     print("updating normal streak")
                                     self.setNormalStreak(state: .lost)
@@ -578,7 +579,7 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
 		let reminders = NotificationManager.fetchReminders(context: context)
 		for reminder in reminders {
 			if reminder.language == self.selectedLanguage && reminder.numberOfLetters == self.numberOfLetters && reminder.isEnabled {
-				NotificationManager.scheduleForTomorrow(reminder: reminder)
+				NotificationManager.cancelTodayNotification(reminder: reminder)
 			}
 		}
 	}
@@ -616,7 +617,7 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
         let usedString = String(format: NSLocalizedString("share_used", comment: "Used"))
             
         
-        var shareText = "The Phrase \(dateFormatter.string(from: date)), \(letterString), \(row)/\(numberOfRows) \(rowString)\(timeUsedString != "" ? ", \(timeUsedString) \(usedString)" : ""):\n"
+        var shareText = "Wordly \(dateFormatter.string(from: date)), \(letterString), \(row)/\(numberOfRows) \(rowString)\(timeUsedString != "" ? ", \(timeUsedString) \(usedString)" : ""):\n"
         
         var shouldBreak: Bool = false
         for row in board {
@@ -725,8 +726,8 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
     func fetchNormalStreaks() {
         if let normalStreakManager = self.normalStreakManager {
             self.normalStreaks = normalStreakManager.fetchStreaks()
-            print("Fetched normal streaks: \(self.streaks)")
-            for streak in self.streaks {
+            print("Fetched normal streaks: \(self.normalStreaks)")
+            for streak in self.normalStreaks {
 				print("NormalStreak ID: \(streak.id), Streak: \(streak.streak), LongestStreak: \(streak.longestStreak), CurrentStreak: \(streak.streak.currentStreak)")
             }
         } else {
@@ -861,9 +862,16 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
     func loadAd() async {
         do {
 			#warning("Replace the ad unit ID with your own ad unit ID when deploying to production.")
-            // ca-app-pub-7619403750703078/7682260846
-            self.rewardedAd = try await RewardedAd.load(
-                with: "ca-app-pub-3940256099942544/1712485313", request: Request())
+            
+#if targetEnvironment(simulator) // DEBUG
+			self.rewardedAd = try await RewardedAd.load(
+				with: "ca-app-pub-3940256099942544/1712485313", request: Request())  // ca-app-pub-7619403750703078/7682260846
+#else
+			self.rewardedAd = try await RewardedAd.load(
+				with: "ca-app-pub-7619403750703078/7682260846", request: Request()) // ca-app-pub-3940256099942544/1712485313
+#endif
+//            self.rewardedAd = try await RewardedAd.load(
+//                with: "ca-app-pub-3940256099942544/1712485313", request: Request())
             self.rewardedAd?.fullScreenContentDelegate = self
         } catch {
             print("Failed to load rewarded ad with error: \(error.localizedDescription)")

@@ -31,7 +31,22 @@ struct NotificationView: View {
 //					if !self.dailyWordReminders.filter({ $0.isEnabled }).isEmpty {
 //						Section("Scheduled") {
 							ForEach(self.dailyWordReminders, id: \.id) { reminder in
-								if reminder.isEnabled {
+//								if reminder.isEnabled {
+//									Button {
+//										self.reminderToEdit = reminder
+//										self.shouldBeEditing = true
+//										self.shouldShowSheet = true
+//									} label: {
+//										ReminderRow(reminder: reminder)
+//									}
+//									.onChange(of: reminder.isEnabled) {
+//										if !reminder.isEnabled {
+//											NotificationManager.cancelDailyWordReminder(reminder: reminder)
+//										} else {
+//											NotificationManager.scheduleDailyWordReminder(reminder: reminder)
+//										}
+//									}
+//								} else {
 									Button {
 										self.reminderToEdit = reminder
 										self.shouldBeEditing = true
@@ -39,6 +54,7 @@ struct NotificationView: View {
 									} label: {
 										ReminderRow(reminder: reminder)
 									}
+									.opacity(reminder.isEnabled ? 1 : 0.5)
 									.onChange(of: reminder.isEnabled) {
 										if !reminder.isEnabled {
 											NotificationManager.cancelDailyWordReminder(reminder: reminder)
@@ -46,23 +62,7 @@ struct NotificationView: View {
 											NotificationManager.scheduleDailyWordReminder(reminder: reminder)
 										}
 									}
-								} else {
-									Button {
-										self.reminderToEdit = reminder
-										self.shouldBeEditing = true
-										self.shouldShowSheet = true
-									} label: {
-										ReminderRow(reminder: reminder)
-									}
-									.opacity(0.5)
-									.onChange(of: reminder.isEnabled) {
-										if !reminder.isEnabled {
-											NotificationManager.cancelDailyWordReminder(reminder: reminder)
-										} else {
-											NotificationManager.scheduleDailyWordReminder(reminder: reminder)
-										}
-									}
-								}
+//								}
 							}
 							.onDelete(perform: deleteReminder)
 //						}
@@ -95,6 +95,7 @@ struct NotificationView: View {
 				.listStyle(.insetGrouped)
 			}
 		}
+		.navigationBarTitleDisplayMode(.inline)
 		.navigationTitle("Daily Word Reminders")
 		.toolbar {
 			ToolbarItem(placement: .navigationBarTrailing) {
@@ -112,8 +113,8 @@ struct NotificationView: View {
 			self.shouldBeEditing = false
 		} content: {
 			AddReminderView(isPresented: self.$shouldShowSheet, isEditing: self.$shouldBeEditing, reminder: self.$reminderToEdit, reminders: self.dailyWordReminders)
-				.presentationDetents([.medium, .large])
-//				.presentationDetents([.large])
+//				.presentationDetents([.medium, .large])
+				.presentationDetents([.large])
 				
 		}
 	}
@@ -153,168 +154,164 @@ struct AddReminderView: View {
 	
 	var body: some View {
 		NavigationStack {
-				List {
-					Section {
-						DatePicker("Time of Day", selection: $notificationTime, displayedComponents: .hourAndMinute)
-//					} header: {
-//						Text("Time of Day")
-//					}
-					
-//					Section {
-						Picker("Language", selection: $notificationLanguage) {
-							ForEach(LanguageSelection.languages) { language in
-								Text(language.localizedName.capitalized).tag(language)
-							}
-						}
-						.pickerStyle(.menu)
-//					} header: {
-//						Text("Language")
-//					}
-					
-//					Section {
-						Picker("Number of Letters", selection: $notificationLetters) {
-							ForEach(1...8, id: \.self) { number in
-								Text(number == 1 ? "\(number) Letter" : "\(number) Letters").tag(number)
-							}
-						}
-						.pickerStyle(.menu)
-						
-						if let reminder, self.isEditing {
-							if #available(iOS 26.0, *) {
-								HStack {
-									Spacer()
-									Button("Delete", role: .destructive) {
-										self.isPresented = false
-										self.isEditing = false
-										context.delete(reminder)
-									}
-									//						.foregroundStyle(.primary)
-									//						.frame(maxWidth: .infinity)
-									//						.padding()
-									//						.glassEffect(.regular.tint(.red).interactive(), in: .capsule)
-									
-									//						.padding(.horizontal, 20)
-									
-									Spacer()
-								}
-								.onAppear {
-									self.notificationLanguage = reminder.language
-									self.notificationLetters = reminder.numberOfLetters
-									self.notificationTime = reminder.timeToFire
-								}
-								
-							} else {
-								HStack {
-									Spacer()
-									Button("Delete", role: .destructive) {
-										self.isPresented = false
-										self.isEditing = false
-										context.delete(reminder)
-									}
-									Spacer()
-								}
-								.onAppear {
-									self.notificationLanguage = reminder.language
-									self.notificationLetters = reminder.numberOfLetters
-									self.notificationTime = reminder.timeToFire
-								}
-							}
-						}
-					} header: {
-						Text("Reminder Details")
-					}
-					
-					
-					
+			List {
+				DatePicker(selection: $notificationTime, displayedComponents: .hourAndMinute) {
 					
 				}
-				.tint(.secondary)
-				.navigationTitle(self.isEditing ? "Edit Reminder" : "Add Reminder")
-				.navigationBarTitleDisplayMode(.inline)
-				.fontWeight(.medium)
-				.toolbar {
-					if #available(iOS 26.0, *) {
-						ToolbarItem(placement: .cancellationAction) {
-								Button("Close", systemImage: "xmark", role: .close) {
-									self.isPresented = false
-									
-								}
-								.glassEffect(.regular.interactive(), in: .circle)
-								.sensoryFeedback(.selection, trigger: self.didTap)
-						}
-						.sharedBackgroundVisibility(.visible)
-						
-					} else {
-						ToolbarItem(placement: .cancellationAction) {
-							Button("Cancel", systemImage: "xmark", role: .cancel) {
-								self.isPresented = false
-							}
-							.sensoryFeedback(.selection, trigger: self.didTap)
+				.datePickerStyle(.wheel)
+				.listRowBackground(Color.clear)
+				.frame(maxWidth: .infinity, alignment: .center)
+				Section {
+					Picker("Language", selection: $notificationLanguage) {
+						ForEach(LanguageSelection.languages) { language in
+							Text(language.localizedName.capitalized).tag(language)
 						}
 					}
+					.pickerStyle(.menu)
+					Picker("Number of Letters", selection: $notificationLetters) {
+						ForEach(1...8, id: \.self) { number in
+							Text(number == 1 ? "\(number) Letter" : "\(number) Letters").tag(number)
+						}
+					}
+					.pickerStyle(.menu)
 					
-					ToolbarItem(placement: .confirmationAction) {
+					if let reminder, self.isEditing {
 						if #available(iOS 26.0, *) {
-							Button("Done", systemImage: "checkmark", role: .confirm) {
-								print("time to fire: \(self.notificationTime.timeIntervalSince1970)")
-								if self.isEditing, let reminder {
-									reminder.language = self.notificationLanguage
-									reminder.numberOfLetters = self.notificationLetters
-									reminder.timeToFire = self.notificationTime
-									reminder.isEnabled = true
-									NotificationManager.scheduleDailyWordReminder(reminder: reminder)
-									
-								} else {
-									if self.checkIfReminderExists() {
-										return
-									}
-									let reminder = DailyWordReminder(language: self.notificationLanguage, numberOfLetters: self.notificationLetters, timeToFire: self.notificationTime)
-									context.insert(reminder)
-									NotificationManager.scheduleDailyWordReminder(reminder: reminder)
+							HStack {
+								Spacer()
+								Button("Delete", role: .destructive) {
+									self.isPresented = false
+									self.isEditing = false
+									context.delete(reminder)
 								}
-								try? context.save()
-								self.isPresented = false
-								self.isEditing = false
+								//						.foregroundStyle(.primary)
+								//						.frame(maxWidth: .infinity)
+								//						.padding()
+								//						.glassEffect(.regular.tint(.red).interactive(), in: .capsule)
+								
+								//						.padding(.horizontal, 20)
+								
+								Spacer()
+							}
+							.onAppear {
+								self.notificationLanguage = reminder.language
+								self.notificationLetters = reminder.numberOfLetters
+								self.notificationTime = reminder.timeToFire
 							}
 							
-							.opacity(self.isEditing ? 1.0 : (self.checkIfReminderExists() ? 0.3 : 1.0))
-							.tint(self.isEditing ? .blue : (self.checkIfReminderExists() ? .secondary : .blue))
-							.buttonStyle(.glassProminent)
 						} else {
-							Button {
-								print("time to fire: \(self.notificationTime.timeIntervalSince1970)")
-								if self.isEditing, let reminder {
-									reminder.language = self.notificationLanguage
-									reminder.numberOfLetters = self.notificationLetters
-									reminder.timeToFire = self.notificationTime
-									reminder.isEnabled = true
-									NotificationManager.scheduleDailyWordReminder(reminder: reminder)
-									
-								} else {
-									if self.checkIfReminderExists() {
-										return
-									}
-									let reminder = DailyWordReminder(language: self.notificationLanguage, numberOfLetters: self.notificationLetters, timeToFire: self.notificationTime)
-									context.insert(reminder)
-									NotificationManager.scheduleDailyWordReminder(reminder: reminder)
+							HStack {
+								Spacer()
+								Button("Delete", role: .destructive) {
+									self.isPresented = false
+									self.isEditing = false
+									context.delete(reminder)
 								}
-								try? context.save()
-								self.isPresented = false
-								self.isEditing = false
-							} label: {
-								Image(systemName: "checkmark")
-									.foregroundStyle(.primary)
-									.opacity(self.isEditing ? 1.0 : (self.checkIfReminderExists() ? 0.3 : 1.0))
+								Spacer()
 							}
-							.sensoryFeedback(self.isEditing ? .selection : (self.checkIfReminderExists() ? .error : .selection), trigger: self.didTap)
-							.keyboardShortcut(.defaultAction)
+							.onAppear {
+								self.notificationLanguage = reminder.language
+								self.notificationLetters = reminder.numberOfLetters
+								self.notificationTime = reminder.timeToFire
+							}
 						}
-						
+					}
+				} header: {
+					Text("Reminder Details")
+				}
+				
+				
+				
+				
+			}
+			.tint(.secondary)
+			.navigationTitle(self.isEditing ? "Edit Reminder" : "Add Reminder")
+			.navigationBarTitleDisplayMode(.inline)
+			.fontWeight(.medium)
+			.toolbar {
+				if #available(iOS 26.0, *) {
+					ToolbarItem(placement: .cancellationAction) {
+						Button("Close", systemImage: "xmark", role: .close) {
+							self.isPresented = false
+							
+						}
+						.glassEffect(.regular.interactive(), in: .circle)
+						.sensoryFeedback(.selection, trigger: self.didTap)
+					}
+					.sharedBackgroundVisibility(.visible)
+					
+				} else {
+					ToolbarItem(placement: .cancellationAction) {
+						Button("Cancel", systemImage: "xmark", role: .cancel) {
+							self.isPresented = false
+						}
+						.sensoryFeedback(.selection, trigger: self.didTap)
 					}
 				}
-			
-			
-			
+				
+				ToolbarItem(placement: .confirmationAction) {
+					if #available(iOS 26.0, *) {
+						Button("Done", systemImage: "checkmark", role: .confirm) {
+							print("time to fire: \(self.notificationTime.timeIntervalSince1970)")
+							if self.isEditing, let reminder {
+								reminder.language = self.notificationLanguage
+								reminder.numberOfLetters = self.notificationLetters
+								reminder.timeToFire = self.notificationTime
+								reminder.isEnabled = true
+								NotificationManager.scheduleDailyWordReminder(reminder: reminder)
+								
+							} else {
+								if self.checkIfReminderExists() {
+									return
+								}
+								let reminder = DailyWordReminder(language: self.notificationLanguage, numberOfLetters: self.notificationLetters, timeToFire: self.notificationTime)
+								context.insert(reminder)
+								NotificationManager.scheduleDailyWordReminder(reminder: reminder)
+							}
+							try? context.save()
+							self.isPresented = false
+							DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+								self.isEditing = false
+							}
+						}
+						
+						.opacity(self.isEditing ? 1.0 : (self.checkIfReminderExists() ? 0.3 : 1.0))
+						.tint(self.isEditing ? .blue : (self.checkIfReminderExists() ? .secondary : .blue))
+						.buttonStyle(.glassProminent)
+					} else {
+						Button {
+							print("time to fire: \(self.notificationTime.timeIntervalSince1970)")
+							if self.isEditing, let reminder {
+								reminder.language = self.notificationLanguage
+								reminder.numberOfLetters = self.notificationLetters
+								reminder.timeToFire = self.notificationTime
+								reminder.isEnabled = true
+								NotificationManager.scheduleDailyWordReminder(reminder: reminder)
+								
+							} else {
+								if self.checkIfReminderExists() {
+									return
+								}
+								let reminder = DailyWordReminder(language: self.notificationLanguage, numberOfLetters: self.notificationLetters, timeToFire: self.notificationTime)
+								context.insert(reminder)
+								NotificationManager.scheduleDailyWordReminder(reminder: reminder)
+							}
+							try? context.save()
+							self.isPresented = false
+							DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+								self.isEditing = false
+							}
+						} label: {
+							Image(systemName: "checkmark")
+								.foregroundStyle(.primary)
+								.opacity(self.isEditing ? 1.0 : (self.checkIfReminderExists() ? 0.3 : 1.0))
+						}
+						.sensoryFeedback(self.isEditing ? .selection : (self.checkIfReminderExists() ? .error : .selection), trigger: self.didTap)
+						.keyboardShortcut(.defaultAction)
+					}
+					
+				}
+			}
 		}
 		.presentationDragIndicator(.hidden)
 	}
@@ -345,6 +342,7 @@ struct ReminderRow: View {
 					.font(.system(.title3, design: .rounded))
 					.fontWeight(.semibold)
 					.monospacedDigit()
+					.tint(.primary)
 				
 				HStack(spacing: 8) {
 					Chip(text: reminder.language.localizedName.capitalized)
@@ -404,6 +402,7 @@ struct Chip: View {
 		.padding(.horizontal, 10)
 		.padding(.vertical, 5)
 		.background(.quaternary.opacity(0.25), in: Capsule())
+		.tint(.primary)
 	}
 }
 

@@ -134,14 +134,16 @@ struct SelectView: View {
 						VStack {
 							NavigationLink(destination: GameView().environmentObject(appManager)) {
 								if let streakEntity = appManager.getNormalStreakEntity(), streakEntity.streak.currentStreak >= 3 {
-									Text("Play  -  \(streakEntity.streak.currentStreak)🔥")
+									Text("Play Unlimited\n\(streakEntity.streak.currentStreak)🔥")
 										.contentTransition(.numericText(value: Double(streakEntity.streak.currentStreak)))
+										.multilineTextAlignment(.center)
+										.lineSpacing(5)
 										.font(.title2).bold()
 										.padding()
 										.foregroundStyle(.white)
 										.frame(maxWidth: .infinity)
 								} else {
-									Text("Play")
+									Text("Play Unlimited")
 										.font(.title2).bold()
 										.padding()
 										.foregroundStyle(.white)
@@ -167,8 +169,10 @@ struct SelectView: View {
 						VStack {
 							NavigationLink(destination: GameView().environmentObject(appManager)) {
 								if let streakEntity = appManager.getNormalStreakEntity(), streakEntity.streak.currentStreak >= 3 {
-									Text("Play  -  \(streakEntity.streak.currentStreak)🔥")
+									Text("Play Unlimited\n\(streakEntity.streak.currentStreak)🔥")
 										.contentTransition(.numericText(value: Double(streakEntity.streak.currentStreak)))
+										.multilineTextAlignment(.center)
+										.lineSpacing(5)
 //										.conditionalShadow(color: .black.opacity(0.05), radius: 1.5, x: 1, y: 1)
 										.font(.title2).bold()
 										.padding()
@@ -181,7 +185,7 @@ struct SelectView: View {
 										}
 										.padding(.horizontal, 30)
 								} else {
-									Text("Play")
+									Text("Play Unlimited")
 //										.conditionalShadow(color: .black.opacity(0.05), radius: 1.5, x: 1, y: 1)
 									
 										.font(.title2).bold()
@@ -418,7 +422,7 @@ struct SelectView: View {
 									
 								})
 								.sensoryFeedback(.impact, trigger: self.didTapPlayDailyWordButton)
-																.buttonStyle(GrowingButton())
+								.buttonStyle(GrowingButton())
 								.conditionalShadow(color: .black.opacity(0.4), radius: 4, x: 4, y: 4)
 							}
 						}
@@ -435,7 +439,7 @@ struct SelectView: View {
 			.safeAreaPadding(.bottom, (UIDevice.current.userInterfaceIdiom == .pad || UIDevice.current.userInterfaceIdiom == .mac) && self.userWantsAds ? 80 : (self.userWantsAds ? 54 : 0))
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    NavigationLink(destination: Info().environmentObject(appManager)) {
+                    NavigationLink(destination: Info().environmentObject(appManager).environmentObject(appState)) {
                         Image(systemName: "info")
                             .font(.title2)
                             .foregroundStyle(.primary)
@@ -447,7 +451,7 @@ struct SelectView: View {
                 }
             }
         }
-		.navigationTitle("The Phrase")
+		.navigationTitle("Wordly")
 		.onChange(of: appState.navigateHomeTrigger) {
 			if appState.selectedLanguageName != nil {
 				if appState.selectedLanguageName == LanguageSelection.english.rawValue {
@@ -484,7 +488,7 @@ struct SelectView: View {
                 appManager.streakManager = StreakManager(context: modelContext)
                 appManager.normalStreakManager = NormalStreakManager(context: modelContext)
                 appManager.gameRecordManager = GameRecordManager(context: modelContext)
-				reviewManager.checkForReviewPrompt()
+//				reviewManager.checkForReviewPrompt()
 				
                 if !self.hasAddedStreaks {
                     appManager.addStreaks()
@@ -586,9 +590,11 @@ struct ConditionalGlassEffect: ViewModifier {
         if #available(iOS 26.0, *) {
             content
                 .glassEffect(.regular.interactive())
+				.tint(.primary)
         } else {
             content
-        }  
+				.tint(.primary)
+        }
     }
 }
 

@@ -10,12 +10,47 @@ import SwiftUI
 
 class ReviewManager: ObservableObject {
 	@AppStorage("lastReviewPrompt") private var lastReviewPrompt: TimeInterval = 0
-	@AppStorage("numberOfTimesAskedBefore") private var numberOfTimesAskedBefore: Int = 1
+	@AppStorage("numberOfTimesAskedBefore") private var numberOfTimesAskedBefore: Int = 0
+	@AppStorage("firstLaunchTime") private var firstLaunchTime: TimeInterval = 0
+	
+	init() {
+		// Initialize first launch timestamp if not set yet
+		if firstLaunchTime == 0 {
+			firstLaunchTime = Date().timeIntervalSince1970
+		}
+	}
 	
 	func checkForReviewPrompt() {
-		let currentTime = Date().timeIntervalSince1970
-		let timeSinceLastPrompt = currentTime - self.lastReviewPrompt
-		if timeSinceLastPrompt >= Double(1209600 + (10518975 * self.numberOfTimesAskedBefore)) {
+		let now = Date().timeIntervalSince1970
+		let day: TimeInterval = 24 * 60 * 60
+		
+		// Ensure we have a first launch time; if not, set it and do not prompt immediately
+		if firstLaunchTime == 0 {
+			firstLaunchTime = now
+			return
+		}
+		
+		let appAge = now - firstLaunchTime
+		let timeSinceLastPrompt = now - self.lastReviewPrompt
+		
+		var shouldPrompt = false
+		
+		switch numberOfTimesAskedBefore {
+		case 0:
+			// Never prompted before: at least 7 days of app age
+			shouldPrompt = appAge >= 7 * day
+		case 1:
+			// Prompted once before: at least 30 days of app age
+			shouldPrompt = appAge >= 30 * day
+		case 2:
+			// Prompted twice before: at least 180 days of app age
+			shouldPrompt = appAge >= 180 * day
+		default:
+			// Prompted 3+ times: every 90 days since last prompt
+			shouldPrompt = timeSinceLastPrompt >= 90 * day
+		}
+		
+		if shouldPrompt {
 			self.requestReview()
 		}
 	}

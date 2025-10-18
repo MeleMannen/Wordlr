@@ -27,77 +27,116 @@ final class NotificationManager {
 		return []
 	}
 	
-	static func requestPermission() {
-		UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { granted, _ in
-			print(granted ? "Notification permission granted" : "Notification permission denied")
+	static func requestPermission(completion: @escaping (Result<Bool, Error>) -> Void) {
+		UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { granted, error in
+			if granted {
+				completion(.success(true))
+			} else {
+				print(granted ? "Notification permission granted" : "Notification permission denied: \(error?.localizedDescription ?? "No error info")")
+				completion(.failure(error ?? NSError(domain: "NotificationPermission", code: 1, userInfo: [NSLocalizedDescriptionKey: "Notification permission denied"])))
+			}
+			
 		}
 	}
 	
-	static func scheduleDailyWordReminder(reminder: DailyWordReminder) {
-		NotificationManager.cancelDailyWordReminder(reminder: reminder)
-		
-		let content = UNMutableNotificationContent()
-		content.title = "Daily Word Reminder"
-		content.body = "Don't forget to complete today's \(reminder.numberOfLetters) Letter \(reminder.language.localizedName) Daily Word!"
-		content.sound = .default
-		content.userInfo = [
-			PayloadKeys.reminderId: reminder.id.uuidString,
-			PayloadKeys.languageName: reminder.language.rawValue,
-			PayloadKeys.numberOfLetters: reminder.numberOfLetters
-		]
-		
-		let components = Calendar.current.dateComponents([.hour, .minute], from: reminder.timeToFire)
-		let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: true)
-		
-		let request = UNNotificationRequest(
-			identifier: "daily-word-reminder: \(reminder.id.uuidString)",
-			content: content,
-			trigger: trigger
-		)
-		
-		UNUserNotificationCenter.current().add(request) { error in
-			if let error = error { print("Error scheduling notification: \(error)") }
+	static func scheduleDailyWordReminder(reminder: DailyWordReminder, daysAhead: Int = 14) {
+		let center = UNUserNotificationCenter.current()
+		center.getPendingNotificationRequests { requests in
+			let existingDates = requests.compactMap { request -> Date? in
+				(request.trigger as? UNCalendarNotificationTrigger)?.nextTriggerDate()
+			}
+			
+			let content = UNMutableNotificationContent()
+			content.title = "Daily Word Reminder"
+			content.body = "Don't forget to complete today's \(reminder.numberOfLetters) Letter \(reminder.language.localizedName) Daily Word!"
+			content.sound = .default
+			content.userInfo = [
+				PayloadKeys.reminderId: reminder.id.uuidString,
+				PayloadKeys.languageName: reminder.language.rawValue,
+				PayloadKeys.numberOfLetters: reminder.numberOfLetters
+			]
+			
+			var datesToAdd: [Date] = []
+			
+			for day in 0...daysAhead {
+				if let date = Calendar.current.date(byAdding: .day, value: day, to: Date()) {
+					let triggerDate2 = Calendar.current.dateComponents([.hour, .minute], from: reminder.timeToFire)
+					guard let hour = triggerDate2.hour, let minute = triggerDate2.minute else { continue }
+					guard let triggerDate = Calendar.current.date(bySettingHour: hour,
+																  minute: minute,
+																  second: 0,
+																  of: date) else { continue }
+					if !existingDates.contains(where: { Calendar.current.isDate($0, inSameDayAs: triggerDate) }) {
+						datesToAdd.append(triggerDate)
+					}
+				}
+			}
+			
+			for date in datesToAdd {
+				let dateComponents = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: date)
+				let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: false)
+				
+				guard let year = dateComponents.year, let month = dateComponents.month, let day = dateComponents.day  else { continue }
+				
+				let request = UNNotificationRequest(
+					identifier: "daily-word-reminder-\(reminder.id.uuidString)-\(year)-\(month)-\(day)",
+					content: content,
+					trigger: trigger
+				)
+				
+				center.add(request) { error in
+					if let error = error { print("Error scheduling notification: \(error)") }
+				}
+				
+			}
 		}
+		
+		center.getPendingNotificationRequests() { requests in
+			print("Pending notifications after scheduling:")
+			for request in requests {
+				if let trigger = request.trigger as? UNCalendarNotificationTrigger,
+				   let date = trigger.nextTriggerDate() {
+					print("ID: \(request.identifier), Date: \(date)")
+				}
+			}
+		}
+		
 	}
 	
-	static func scheduleForTomorrow(reminder: DailyWordReminder) {
-		NotificationManager.cancelDailyWordReminder(reminder: reminder)
-		
-		let hour = Calendar.current.component(.hour, from: reminder.timeToFire)
-		let minute = Calendar.current.component(.minute, from: reminder.timeToFire)
-		let tomorrow = Calendar.current.date(byAdding: .day, value: 1, to: Date())!
-		var components = Calendar.current.dateComponents([.day], from: tomorrow)
-		components.hour = hour
-		components.minute = minute
-		
-		let content = UNMutableNotificationContent()
-		content.title = "Daily Word Reminder"
-		content.body = "Don't forget to complete today's \(reminder.numberOfLetters) Letter \(reminder.language.localizedName) Daily Word!"
-		content.sound = .default
-		content.userInfo = [
-			PayloadKeys.reminderId: reminder.id.uuidString,
-			PayloadKeys.languageName: reminder.language.rawValue,
-			PayloadKeys.numberOfLetters: reminder.numberOfLetters
-		]
-		
-		// Note: repeats=true with year/month/day repeats yearly. Use repeats=false if you only want tomorrow once.
-		let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: true)
-		
-		let request = UNNotificationRequest(
-			identifier: "daily-word-reminder: \(reminder.id.uuidString)",
-			content: content,
-			trigger: trigger
-		)
-		
-		UNUserNotificationCenter.current().add(request) { error in
-			if let error = error { print("Error scheduling notification: \(error)") }
+	static func cancelTodayNotification(reminder: DailyWordReminder) {
+		let center = UNUserNotificationCenter.current()
+		center.getPendingNotificationRequests { requests in
+			let today = Calendar.current.startOfDay(for: Date())
+			let ids = requests.filter {
+				if let trigger = $0.trigger as? UNCalendarNotificationTrigger,
+				   let date = trigger.nextTriggerDate(), $0.identifier.contains("\(reminder.id.uuidString)") {
+					return Calendar.current.isDate(date, inSameDayAs: today)
+				}
+				return false
+			}.map { $0.identifier }
+			print("Cancelling today's notifications with IDs: \(ids)")
+			
+			center.removePendingNotificationRequests(withIdentifiers: ids)
 		}
 	}
 	
 	static func cancelDailyWordReminder(reminder: DailyWordReminder) {
-		UNUserNotificationCenter.current().removePendingNotificationRequests(
-			withIdentifiers: ["daily-word-reminder: \(reminder.id.uuidString)"]
-		)
+		let center = UNUserNotificationCenter.current()
+		center.getPendingNotificationRequests { requests in
+			let ids = requests.filter {
+				if $0.identifier.contains("\(reminder.id.uuidString)") {
+					return true
+				}
+				return false
+			}.map { $0.identifier }
+			print("Cancelling notifications with IDs: \(ids)")
+			
+			center.removePendingNotificationRequests(withIdentifiers: ids)
+		}
+//		UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
+//		UNUserNotificationCenter.current().getPendingNotificationRequests { requests in
+//			print("Pending notifications after cancel: \(requests)")
+//		}
 	}
 }
 
@@ -118,7 +157,6 @@ final class NotificationsDelegate: NSObject, UNUserNotificationCenterDelegate {
 		}
 	}
 	
-	// Optional: show alerts while app is in foreground.
 	func userNotificationCenter(_ center: UNUserNotificationCenter,
 								willPresent notification: UNNotification,
 								withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {

@@ -99,6 +99,9 @@
         }
       }
     },
+    "%@ tile" : {
+
+    },
     "%lld" : {
       "localizations" : {
         "en" : {
@@ -438,6 +441,12 @@
         }
       }
     },
+    "Correct letter, wrong position" : {
+
+    },
+    "Correct position" : {
+
+    },
     "Count" : {
       "localizations" : {
         "en" : {
@@ -512,6 +521,9 @@
           }
         }
       }
+    },
+    "Dark gray means the letter is not in the word at all." : {
+
     },
     "Date" : {
       "localizations" : {
@@ -835,6 +847,7 @@
     },
     "game_mode_normal" : {
       "comment" : "Normal Mode",
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -855,6 +868,9 @@
           }
         }
       }
+    },
+    "game_mode_unlimited" : {
+      "comment" : "Unlimited Mode"
     },
     "Gamemode" : {
       "localizations" : {
@@ -907,6 +923,9 @@
         }
       }
     },
+    "Got It" : {
+
+    },
     "Got it!" : {
       "localizations" : {
         "en" : {
@@ -929,7 +948,11 @@
         }
       }
     },
+    "Green means the letter is in the word and in the correct spot." : {
+
+    },
     "Guess The Phrase" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -950,6 +973,12 @@
           }
         }
       }
+    },
+    "Guess the secret word in a limited number of tries. After each guess, the colors of the tiles will show how close you were." : {
+
+    },
+    "Guess The Word" : {
+
     },
     "Guesses" : {
 
@@ -978,6 +1007,7 @@
       }
     },
     "Hints" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1167,6 +1197,9 @@
         }
       }
     },
+    "How to Play" : {
+
+    },
     "How to Play?" : {
       "localizations" : {
         "en" : {
@@ -1190,6 +1223,7 @@
       }
     },
     "How to Start a Game?" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1510,6 +1544,9 @@
         }
       }
     },
+    "Not in the word" : {
+
+    },
     "Number of Guesses" : {
       "localizations" : {
         "en" : {
@@ -1608,6 +1645,9 @@
         }
       }
     },
+    "OK" : {
+
+    },
     "Only When Hints Was Used" : {
       "localizations" : {
         "en" : {
@@ -1629,6 +1669,9 @@
           }
         }
       }
+    },
+    "Orange means the letter is in the word, but in a different spot." : {
+
     },
     "ordbokene.no" : {
       "localizations" : {
@@ -1675,6 +1718,7 @@
       }
     },
     "Play" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1697,6 +1741,7 @@
       }
     },
     "Play  -  %lld🔥" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1783,6 +1828,12 @@
           }
         }
       }
+    },
+    "Play Unlimited" : {
+
+    },
+    "Play Unlimited\n%lld🔥" : {
+
     },
     "Played" : {
       "localizations" : {
@@ -2051,6 +2102,7 @@
       }
     },
     "Sharing" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2212,6 +2264,7 @@
 
     },
     "Streaks🔥" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2377,6 +2430,7 @@
       }
     },
     "The Game Modes" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2399,6 +2453,7 @@
       }
     },
     "The Normal mode allows you to play as many times as you want, while the Daily Word mode provides a unique word each day, that is the same for all players." : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -2415,6 +2470,7 @@
       }
     },
     "The Phrase" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2437,6 +2493,7 @@
       }
     },
     "The Phrase is a word game where you guess a secret word by entering letters. The game provides feedback on your guesses, indicating correct letters and their positions." : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -2474,7 +2531,7 @@
         }
       }
     },
-    "Time of Day" : {
+    "The Word Was: %@!" : {
 
     },
     "Time Used" : {
@@ -2493,7 +2550,14 @@
         }
       }
     },
+    "To enable notifications, please go to Settings and allow notifications for this app." : {
+
+    },
+    "To play the game, just enter a valid word and submit your guess. After each guess, the colors of the tiles will show how close you were." : {
+
+    },
     "To play the game, just enter a valid word and submit your guess. The game will highlight correct letters in green, correct letters in the wrong position in orange, and unused letters in gray." : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -2510,6 +2574,7 @@
       }
     },
     "To start a game, select a language and the number of letters in the word that you are going to guess. After that, you choose the gamemode, either Normal or Daily Word." : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -2665,6 +2730,9 @@
         }
       }
     },
+    "Welcome to Wordly" : {
+
+    },
     "wiktionary.org" : {
       "localizations" : {
         "es" : {
@@ -2697,7 +2765,14 @@
         }
       }
     },
+    "Wordly" : {
+
+    },
+    "Wordly is a word game where you guess a secret word by entering letters. The game provides feedback on your guesses, indicating correct letters and their positions." : {
+
+    },
     "You can also use hints to help you guess the word. A hint will reveal a letter in the word, but not the position of the letter. You can use a hint by tapping the hint button in the top right corner, which will make you watch an ad to get the hint." : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -2714,6 +2789,7 @@
       }
     },
     "You can keep track of your game streaks by looking next to the 🔥 emoji, next to the game mode on the The Phrase tab. This will either show you how many days or games in a row you have played and managed to guess the word, depending on the game mode." : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -2730,6 +2806,7 @@
       }
     },
     "You can share your Daily Word game results with your friends by tapping the copy button at the bottom of the screen after the game, or by going to the game history and copy it from there. This will generate a text of your game results, which you can then share with your friends and family." : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -2746,6 +2823,7 @@
       }
     },
     "You can view your game history by tapping the History tab. This will show you your game history, including the words you have guessed, the number of guesses you needed to win the game, the number of hints used, and the date and time of the game. You can also filter your history by language, game mode, and number of letters in the word." : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -2762,6 +2840,7 @@
       }
     },
     "You can view your game stats by tapping the Stats tab. This will show you your game stats, including the number of games played, your win rate, and the amount of guesses you needed to guess the word. You can also filter your stats by language, game mode, and number of letters in the word." : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
