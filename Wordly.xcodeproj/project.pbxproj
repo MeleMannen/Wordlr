@@ -303,7 +303,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 6382E3B72D12FE0500B61353 /* Build configuration list for PBXProject "Wordle" */;
+			buildConfigurationList = 6382E3B72D12FE0500B61353 /* Build configuration list for PBXProject "Wordly" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -615,7 +615,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		6382E3B72D12FE0500B61353 /* Build configuration list for PBXProject "Wordle" */ = {
+		6382E3B72D12FE0500B61353 /* Build configuration list for PBXProject "Wordly" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				6382E3C92D12FE0700B61353 /* Debug */,
