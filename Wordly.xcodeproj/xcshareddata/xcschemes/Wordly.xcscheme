@@ -17,8 +17,8 @@
                   <BuildableReference
                      BuildableIdentifier = "primary"
                      BlueprintIdentifier = "6382E3BB2D12FE0500B61353"
-                     BuildableName = "Wordle.app"
-                     BlueprintName = "Wordle"
+                     BuildableName = "Wordly.app"
+                     BlueprintName = "Wordly"
                      ReferencedContainer = "container:Wordly.xcodeproj">
                   </BuildableReference>
                </EnvironmentBuildable>
@@ -35,8 +35,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "6382E3BB2D12FE0500B61353"
-               BuildableName = "Wordle.app"
-               BlueprintName = "Wordle"
+               BuildableName = "Wordly.app"
+               BlueprintName = "Wordly"
                ReferencedContainer = "container:Wordly.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -64,8 +64,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "6382E3BB2D12FE0500B61353"
-            BuildableName = "Wordle.app"
-            BlueprintName = "Wordle"
+            BuildableName = "Wordly.app"
+            BlueprintName = "Wordly"
             ReferencedContainer = "container:Wordly.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -88,8 +88,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "6382E3BB2D12FE0500B61353"
-            BuildableName = "Wordle.app"
-            BlueprintName = "Wordle"
+            BuildableName = "Wordly.app"
+            BlueprintName = "Wordly"
             ReferencedContainer = "container:Wordly.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
