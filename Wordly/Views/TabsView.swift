@@ -19,6 +19,7 @@ struct TabsView: View {
 	@AppStorage("userWantsAds") var userWantsAds: Bool = true
 	@AppStorage("hasTurnedOnAds") private var hasTurnedOnAds: Bool = false
 	@AppStorage("notificationsEnabled") private var notificationsEnabled: Bool = false
+	@AppStorage("userWantsThePhraseNameBack") private var userWantsThePhraseNameBack = false
 	@State var selection: TabSelection = .home
 	@State private var bannerReloadID = UUID()
 	@State var adManager: AdManager = AdManager()
@@ -32,7 +33,7 @@ struct TabsView: View {
 				}
 				.tag(TabSelection.home)
 				.tabItem {
-					Label("Wordly", systemImage: "w.square.fill")
+					Label(self.userWantsThePhraseNameBack ? "The Phrase" : "Wordly", systemImage: self.userWantsThePhraseNameBack ? "p.square.fill" : "w.square.fill")
 				}
 				.environment(adManager)
 				.task {

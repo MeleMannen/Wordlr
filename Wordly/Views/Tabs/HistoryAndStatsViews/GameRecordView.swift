@@ -11,6 +11,7 @@ struct GameRecordView: View {
     @Environment(\.colorScheme) private var colorScheme
     @AppStorage("userWantsNormalTheme") private var userWantsNormalTheme: Bool = true
 	@AppStorage("userWantsAds") private var userWantsAds: Bool = false
+	@AppStorage("userWantsThePhraseNameBack") private var userWantsThePhraseNameBack = false
     var gameRecord: GameRecord
     @State private var didTap: Bool = false
     @State private var hasSharedResult: Bool = false
@@ -52,6 +53,14 @@ struct GameRecordView: View {
 									}
 									.glassEffect(.regular.interactive(), in: .circle)
 									.font(.largeTitle).bold()
+									.onTapGesture(count: 10) {
+										self.userWantsThePhraseNameBack.toggle()
+										self.setAppIcon()
+										print("Toggled userWantsThePhraseNameBack to \(self.userWantsThePhraseNameBack)")
+									}
+									.simultaneousGesture(TapGesture(count: 1).onEnded {
+										self.didTap.toggle()
+									})
 							} else {
 								Image(systemName: gameRecord.state == .won ? "checkmark" : "xmark")
 									.foregroundStyle(.white)
@@ -65,6 +74,14 @@ struct GameRecordView: View {
 									.glassEffect(.regular.tint(gameRecord.state == .won ? .green : .red).interactive())
 									.font(.largeTitle).bold()
 									.conditionalShadow(color: .black.opacity(0.3), radius: 3, x: 4, y: 4)
+									.onTapGesture(count: 10) {
+										self.userWantsThePhraseNameBack.toggle()
+										self.setAppIcon()
+										print("Toggled userWantsThePhraseNameBack to \(self.userWantsThePhraseNameBack)")
+									}
+									.simultaneousGesture(TapGesture(count: 1).onEnded {
+										self.didTap.toggle()
+									})
 							}
 						} else {
 							if !self.userWantsNormalTheme && self.colorScheme == .dark && gameRecord.mode == .dailyWord && gameRecord.state == .won {
@@ -79,6 +96,14 @@ struct GameRecordView: View {
 											.conditionalShadow(color: .black.opacity(0.5), radius: 3, x: 4, y: 4)
 									}
 									.font(.largeTitle).bold()
+									.onTapGesture(count: 10) {
+										self.userWantsThePhraseNameBack.toggle()
+										self.setAppIcon()
+										print("Toggled userWantsThePhraseNameBack to \(self.userWantsThePhraseNameBack)")
+									}
+									.simultaneousGesture(TapGesture(count: 1).onEnded {
+										self.didTap.toggle()
+									})
 							} else {
 								Image(systemName: gameRecord.state == .won ? "checkmark" : "xmark")
 									.foregroundStyle(.white)
@@ -90,6 +115,14 @@ struct GameRecordView: View {
 											.conditionalShadow(color: .black.opacity(0.3), radius: 3, x: 4, y: 4)
 									}
 									.font(.largeTitle).bold()
+									.onTapGesture(count: 10) {
+										self.userWantsThePhraseNameBack.toggle()
+										self.setAppIcon()
+										print("Toggled userWantsThePhraseNameBack to \(self.userWantsThePhraseNameBack)")
+									}
+									.simultaneousGesture(TapGesture(count: 1).onEnded {
+										self.didTap.toggle()
+									})
 							}
 						}
                     }
@@ -254,7 +287,7 @@ struct GameRecordView: View {
 						
 						if let board = gameRecord.board {
 							NavigationLink(destination: BoardView(gameRecord: self.gameRecord, board: board)) {
-								Text("View The Board")
+								Text("View the Board")
 									.foregroundColor(.white)
 									.conditionalShadow(color: .black.opacity(0.5), radius: 4, x: 4, y: 4)
 									.font(.title2).bold()
@@ -269,7 +302,7 @@ struct GameRecordView: View {
 									}
 									
 							}
-							.glassEffect(self.userWantsNormalTheme || !self.userWantsNormalTheme && self.colorScheme == .dark && gameRecord.mode == .dailyWord && gameRecord.state == .won ? .regular.interactive() : .regular.tint(.orange).interactive(), in: .rect(cornerRadius: 15.0))
+							.glassEffect(self.userWantsNormalTheme || !self.userWantsNormalTheme && self.colorScheme == .dark && gameRecord.mode == .dailyWord && gameRecord.state == .won ? .regular.tint(.orange).interactive() : .regular.interactive(), in: .rect(cornerRadius: 15.0))
 							.glassEffectID("board", in: self.namespace)
 							.simultaneousGesture(TapGesture().onEnded {
 								self.didTap.toggle()
@@ -305,7 +338,7 @@ struct GameRecordView: View {
 						
 						if let board = gameRecord.board {
 							NavigationLink(destination: BoardView(gameRecord: self.gameRecord, board: board)) {
-								Text("View The Board")
+								Text("View the Board")
 									.foregroundColor(.white)
 									.conditionalShadow(color: .black.opacity(0.05), radius: 1.5, x: 1, y: 1)
 									.font(.title2).bold()
@@ -459,6 +492,21 @@ struct GameRecordView: View {
 		}
 		print("Time used string: \(timeUsedString)")
 		return timeUsedString
+	}
+	
+	private func setAppIcon() {
+		guard UIApplication.shared.supportsAlternateIcons else { return }
+		var iconName: String? = nil
+		if self.userWantsThePhraseNameBack {
+			iconName = "ThePhraseAppIcon"
+		} else {
+			iconName = nil
+		}
+		UIApplication.shared.setAlternateIconName(iconName) { error in
+			if let error = error {
+				print("Icon change failed: \(error.localizedDescription)")
+			}
+		}
 	}
 }
 

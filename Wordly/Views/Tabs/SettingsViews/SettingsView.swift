@@ -48,7 +48,7 @@ struct SettingsView: View {
 								Text("\(Locale.current.localizedString(forIdentifier: String(Locale.preferredLanguages.first?.prefix(2) ?? "en"))?.capitalized ?? "")")
 									.fontWeight(.regular)
 								
-								Image(systemName: "chevron.right")
+								Image(systemName: "arrow.up.right")
 									.font(.caption).bold()
 									.foregroundStyle(.secondary)
 							}
@@ -81,6 +81,67 @@ struct SettingsView: View {
 						}
 					} header: {
 						Text("General")
+					}
+					
+					Section {
+						Toggle("Daily Word Reminders", isOn: $notificationsEnabled)
+							.modifier(ConditionalPadding())
+							.tint(.green)
+							.onChange(of: notificationsEnabled) { _, newValue in
+								if newValue {
+									NotificationManager.requestPermission() { result in
+										switch result {
+											case .success(let granted):
+												if granted {
+													print("Permission granted")
+												} else {
+													print("Permission denied")
+													notificationsEnabled = false
+												}
+											case .failure(let error):
+												print("Error requesting permission: \(error)")
+												notificationsEnabled = false
+												self.showingNotificationSettingsAlert = true
+										}
+										
+									}
+									UNUserNotificationCenter.current().delegate = NotificationsDelegate.shared
+									for reminder in dailyWordReminders {
+										if reminder.isEnabled {
+											scheduleNotification(reminder: reminder)
+										}
+									}
+								} else {
+									for reminder in dailyWordReminders {
+										if reminder.isEnabled {
+											NotificationManager.cancelDailyWordReminder(reminder: reminder)
+										}
+									}
+								}
+							}
+							.alert("To enable notifications, please go to Settings and allow notifications for this app.", isPresented: $showingNotificationSettingsAlert) {
+								Button("OK", role: .cancel) { }
+								Button("Settings") {
+									if let appSettings = URL(string: UIApplication.openSettingsURLString) {
+										UIApplication.shared.open(appSettings)
+									}
+								}
+								
+							}
+						
+						if notificationsEnabled {
+							NavigationLink {
+								NotificationView()
+							} label: {
+								Text("Edit Daily Word Reminders")
+									.foregroundStyle(.primary)
+									.modifier(ConditionalPadding())
+							}
+							
+							
+						}
+					} header: {
+						Text("Reminders")
 					}
 					
 					Section {
@@ -180,66 +241,6 @@ struct SettingsView: View {
 						Text("Stats and History (Default)")
 					}
 					
-					Section {
-						Toggle("Enable Daily Word Reminders", isOn: $notificationsEnabled)
-							.modifier(ConditionalPadding())
-							.tint(.green)
-							.onChange(of: notificationsEnabled) { _, newValue in
-								if newValue {
-									NotificationManager.requestPermission() { result in
-										switch result {
-											case .success(let granted):
-												if granted {
-													print("Permission granted")
-												} else {
-													print("Permission denied")
-													notificationsEnabled = false
-												}
-											case .failure(let error):
-												print("Error requesting permission: \(error)")
-												notificationsEnabled = false
-												self.showingNotificationSettingsAlert = true
-										}
-										
-									}
-									UNUserNotificationCenter.current().delegate = NotificationsDelegate.shared
-									for reminder in dailyWordReminders {
-										if reminder.isEnabled {
-											scheduleNotification(reminder: reminder)
-										}
-									}
-								} else {
-									for reminder in dailyWordReminders {
-										if reminder.isEnabled {
-											NotificationManager.cancelDailyWordReminder(reminder: reminder)
-										}
-									}
-								}
-							}
-							.alert("To enable notifications, please go to Settings and allow notifications for this app.", isPresented: $showingNotificationSettingsAlert) {
-								Button("OK", role: .cancel) { }
-								Button("Settings") {
-									if let appSettings = URL(string: UIApplication.openSettingsURLString) {
-										UIApplication.shared.open(appSettings)
-									}
-								}
-								
-							}
-						
-						if notificationsEnabled {
-							NavigationLink {
-								NotificationView()
-							} label: {
-								Text("Daily Word Reminders")
-									.foregroundStyle(.primary)
-									.modifier(ConditionalPadding())
-							}
-							
-							
-						}
-					} header: {
-						Text("Daily Reminders")
-					}
 					
 					Section {
 						VStack {

@@ -15,7 +15,7 @@ struct HintTip: Tip {
 		Text("Get a Hint")
 	}
 	var message: Text? {
-		Text("Tap here to get a Hint for the current word, by watching a quick ad")
+		Text("Tap here to get a hint for the current secret word, by watching a quick ad.")
 	}
 	
 	var image: Image? {
@@ -36,11 +36,11 @@ struct HintTip: Tip {
 struct SearchTip: Tip {
 	static let searchEvent = Event(id: "search")
 	var title: Text {
-		Text("Search for a word")
+		Text("Search for a Word")
 	}
 	
 	var message: Text? {
-		Text("Tap here to be able to search for a word, or to see the definition of a word")
+		Text("Tap here to be able to search for words, and to see the definitions.")
 	}
 	
 	var image: Image? {
@@ -66,7 +66,7 @@ struct FilterTip: Tip {
 	}
 	
 	var message: Text? {
-		Text("Tap here to filter the words, to easily find the word you are looking for")
+		Text("Tap here to filter the words, to easily find the word you are looking for.")
 	}
 	
 	var image: Image? {

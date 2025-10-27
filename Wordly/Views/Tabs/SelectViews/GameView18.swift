@@ -447,10 +447,10 @@ struct GameView18: View {
 				WordDefinitionView(word: appManager.word)
 					.environmentObject(appManager)
 			})
-			.navigationTitle("Guess The Word")
+			.navigationTitle("Guess the Word")
 			.navigationBarTitleDisplayMode(.inline)
 			.toolbar {
-				if appManager.isHintAvailable() {
+				if appManager.isHintAvailable() && appManager.shouldShowAdButton {
 					ToolbarItem(placement: .topBarTrailing) {
 						AdButton()
 							.environmentObject(appManager)
@@ -490,7 +490,12 @@ struct GameView18: View {
 		.onDisappear {
 			adManager.currentSelectView = .selectView
 		}
-		
+		.task {
+			if userWantsAds {
+				await appManager.loadAd()
+				appManager.hasLoadedAd = true
+			}
+		}
 	}
 }
 

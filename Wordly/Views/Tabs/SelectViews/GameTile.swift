@@ -4,15 +4,13 @@ public struct GameTile: View {
     public let letter: String
     public let fill: Color
     public let textColor: Color
-    public let size: CGFloat
-    public let cornerRadius: CGFloat
+    public let size: CGFloat = 48
+    public let cornerRadius: CGFloat = 8
 
-    public init(letter: String, fill: Color, textColor: Color, size: CGFloat = 48, cornerRadius: CGFloat = 8) {
+	public init(letter: String, fill: Color, textColor: Color) {
         self.letter = letter
         self.fill = fill
         self.textColor = textColor
-        self.size = size
-        self.cornerRadius = cornerRadius
     }
 
     public var body: some View {
@@ -24,7 +22,6 @@ public struct GameTile: View {
                 RoundedRectangle(cornerRadius: cornerRadius)
                     .fill(fill)
             )
-            .accessibilityLabel("\(letter) tile")
     }
 }
 

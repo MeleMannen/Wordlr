@@ -21,14 +21,11 @@ struct GameView26: View {
     @State var didTapBackButton: Bool = false
     @State var didTapResetButton: Bool = false
     @State var didTapNewGameButton: Bool = false
-    @State var didTapSearchButton: Bool = false
     @State var didTapShowDefinitionButton: Bool = false
     @State var isShowingCurrentDefinition: Bool = false
     @State var alertItem: AlertItem?
 	
 	@Namespace private var namespace
-	
-	private let searchTip = SearchTip()
     
     private var device : UIUserInterfaceIdiom { UIDevice.current.userInterfaceIdiom }
     
@@ -196,7 +193,7 @@ struct GameView26: View {
 													message: Text("You will lose your word and you cannot undo this action!"),
 													primaryButton: .destructive(Text("Restart")) {
 														self.alertItem = AlertItem(
-															title: Text("The Phrase Was: \(appManager.word)!"),
+															title: Text("The Word Was: \(appManager.word)!"),
 															message: Text("Do you want to see the definition?"),
 															primaryButton: .default(Text("Show Definition")) {
 																self.isShowingCurrentDefinition = true
@@ -422,37 +419,25 @@ struct GameView26: View {
 					WordDefinitionView(word: appManager.word)
 						.environmentObject(appManager)
 				})
-				.navigationTitle("Guess The Word")
+				.navigationTitle("Guess the Word")
 				.navigationBarTitleDisplayMode(.inline)
 				.toolbar {
-					if appManager.isHintAvailable() {
-						ToolbarItem(placement: .topBarTrailing) {
+					ToolbarItemGroup(placement: .topBarTrailing) {
+						if appManager.isHintAvailable() && appManager.shouldShowAdButton {
 							AdButton()
 								.environmentObject(appManager)
 								.keyboardShortcut("h", modifiers: .command)
+							
+							SearchToolbarItem()
+								.environmentObject(appManager)
+							
+						} else {
+							SearchToolbarItem()
+								.environmentObject(appManager)
 						}
 					}
-					
-					//				if #available(iOS 26.0, *) {
-					//					ToolbarSpacer(.fixed, placement: .topBarTrailing)
-					//				}
-					
-					ToolbarItem(placement: .topBarTrailing) {
-						NavigationLink(destination: SearchView().environmentObject(appManager), label: {
-							Image(systemName: "magnifyingglass")
-								.contentShape(Rectangle())
-						})
-						.simultaneousGesture(TapGesture().onEnded {
-							self.didTapSearchButton.toggle()
-							Task {
-								await SearchTip.searchEvent.donate()
-							}
-						})
-						.sensoryFeedback(.selection, trigger: self.didTapSearchButton)
-						.popoverTip(self.searchTip)
-						.keyboardShortcut("s", modifiers: .command)
-					}
 				}
+				.animation(.default, value: appManager.isHintAvailable() && appManager.shouldShowAdButton)
 			}
 			.onAppear {
 				if appManager.word.isEmpty || appManager.selectedLanguage != appManager.language || appManager.gameMode != appManager.selectedGameMode || appManager.message == "" && appManager.isGameOver {
@@ -469,6 +454,12 @@ struct GameView26: View {
 			.onDisappear {
 				adManager.currentSelectView = .selectView
 			}
+			.task {
+				if userWantsAds {
+					await appManager.loadAd()
+					appManager.hasLoadedAd = true
+				}
+			}
 		}
 		
     }
@@ -477,9 +468,6 @@ struct GameView26: View {
 struct AdButton: View {
     @EnvironmentObject var appManager: AppManager
     @AppStorage("userWantsAds") var userWantsAds: Bool = true
-//    @AppStorage("hasSeenAdOption") var hasSeenAdOption: Bool = false
-    @State var isPresentingAdOption: Bool = false
-    @State var hasLoadedAd: Bool = false
     @State private var didTap: Bool = false
 	let hintTip = HintTip()
     
@@ -490,52 +478,51 @@ struct AdButton: View {
 			Task {
 				await HintTip.getHintEvent.donate()
 			}
-            if !appManager.isGameOver && !appManager.isAnimating {
-//                if !userWantsAds || !hasSeenAdOption {
-//                    self.isPresentingAdOption = true
-//                } else {
-                    if hasLoadedAd {
-                        appManager.showAd()
-                        
-                    } else {
-                        Task {
-                            await appManager.loadAd()
-                            appManager.showAd()
-                        }
-                    }
-//                }
-            }
+			if !appManager.isGameOver && !appManager.isAnimating {
+				if appManager.hasLoadedAd {
+					appManager.showAd()
+					
+				} else {
+					Task {
+						await appManager.loadAd()
+						appManager.showAd()
+					}
+				}
+			}
         }, label: {
             Image(systemName: "lightbulb.max.fill")
                 .contentShape(Rectangle())
         })
-//        .alert("Hint", isPresented: $isPresentingAdOption, actions: {
-//            Button("No", role: .cancel) {
-//                self.userWantsAds = false
-//                self.hasSeenAdOption = true
-//            }
-//            Button("Sure") {
-//                self.userWantsAds = true
-//                self.hasSeenAdOption = true
-//                
-//                Task {
-//                    await MobileAds.shared.start()
-//                    await appManager.loadAd()
-//                    appManager.showAd()
-//                }
-//            }
-//        }, message: {
-//            Text("Do you want to see an ad to get a hint and support the app? It helps us keep the app free and improve it further.")
-//        })
         .task {
-            if userWantsAds {
+			if userWantsAds && !appManager.hasLoadedAd {
                 await appManager.loadAd()
-                self.hasLoadedAd = true
+				appManager.hasLoadedAd = true
             }
         }
         .sensoryFeedback(.selection, trigger: self.didTap)
 		.popoverTip(self.hintTip)
     }
+}
+
+struct SearchToolbarItem: View {
+	@EnvironmentObject var appManager: AppManager
+	@State var didTapSearchButton: Bool = false
+	private let searchTip = SearchTip()
+	
+	var body: some View {
+		NavigationLink(destination: SearchView().environmentObject(appManager), label: {
+			Image(systemName: "magnifyingglass")
+				.contentShape(Rectangle())
+		})
+		.simultaneousGesture(TapGesture().onEnded {
+			self.didTapSearchButton.toggle()
+			Task {
+				await SearchTip.searchEvent.donate()
+			}
+		})
+		.sensoryFeedback(.selection, trigger: self.didTapSearchButton)
+		.popoverTip(self.searchTip)
+	}
 }
 
 struct GrowingButton: ButtonStyle {
@@ -560,3 +547,4 @@ struct ScalingButton: ButtonStyle {
     GameView26()
         .environmentObject(AppManager())
 }
+

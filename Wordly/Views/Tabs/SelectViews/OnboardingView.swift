@@ -1,18 +1,16 @@
 import SwiftUI
 
 struct OnboardingView: View {
+	@AppStorage("userWantsThePhraseNameBack") private var userWantsThePhraseNameBack = false
     @Binding var isPresented: Bool
     @Binding var hasSeenOnboarding: Bool
-
-    private let tileSize: CGFloat = 48
-    private let cornerRadius: CGFloat = 8
 
     var body: some View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: 20) {
                     VStack(alignment: .leading, spacing: 8) {
-                        Text("How to Play")
+                        Text("How to Play?")
                             .font(.largeTitle).bold()
                         Text("Guess the secret word in a limited number of tries. After each guess, the colors of the tiles will show how close you were.")
                             .font(.body)
@@ -22,11 +20,11 @@ struct OnboardingView: View {
                         Text("Correct position")
                             .font(.title3).bold()
 						HStack(spacing: 8) {
-							GameTile(letter: "G", fill: .green, textColor: .white, size: tileSize, cornerRadius: cornerRadius)
-							GameTile(letter: "U", fill: Color(UIColor.lightGray), textColor: .black, size: tileSize, cornerRadius: cornerRadius)
-							GameTile(letter: "E", fill: Color(UIColor.lightGray), textColor: .black, size: tileSize, cornerRadius: cornerRadius)
-							GameTile(letter: "S", fill: Color(UIColor.lightGray), textColor: .black, size: tileSize, cornerRadius: cornerRadius)
-							GameTile(letter: "S", fill: Color(UIColor.lightGray), textColor: .black, size: tileSize, cornerRadius: cornerRadius)
+							GameTile(letter: "G", fill: .green, textColor: .white)
+							GameTile(letter: "U", fill: Color(UIColor.lightGray), textColor: .black)
+							GameTile(letter: "E", fill: Color(UIColor.lightGray), textColor: .black)
+							GameTile(letter: "S", fill: Color(UIColor.lightGray), textColor: .black)
+							GameTile(letter: "S", fill: Color(UIColor.lightGray), textColor: .black)
 						}
                         Text("Green means the letter is in the word and in the correct spot.")
                             .font(.callout)
@@ -37,9 +35,9 @@ struct OnboardingView: View {
                         Text("Correct letter, wrong position")
                             .font(.title3).bold()
                         HStack(spacing: 8) {
-                            GameTile(letter: "T", fill: Color(UIColor.lightGray), textColor: .black, size: tileSize, cornerRadius: cornerRadius)
-                            GameTile(letter: "H", fill: .orange, textColor: .white, size: tileSize, cornerRadius: cornerRadius)
-                            GameTile(letter: "E", fill: Color(UIColor.lightGray), textColor: .black, size: tileSize, cornerRadius: cornerRadius)
+                            GameTile(letter: "T", fill: Color(UIColor.lightGray), textColor: .black)
+                            GameTile(letter: "H", fill: .orange, textColor: .white)
+                            GameTile(letter: "E", fill: Color(UIColor.lightGray), textColor: .black)
                         }
                         Text("Orange means the letter is in the word, but in a different spot.")
                             .font(.callout)
@@ -51,10 +49,10 @@ struct OnboardingView: View {
                             .font(.title3).bold()
                         
 						HStack(spacing: 8) {
-							GameTile(letter: "W", fill: Color(uiColor: .darkGray), textColor: .white, size: tileSize, cornerRadius: cornerRadius)
-							GameTile(letter: "O", fill: Color(UIColor.lightGray), textColor: .black, size: tileSize, cornerRadius: cornerRadius)
-							GameTile(letter: "R", fill: Color(UIColor.lightGray), textColor: .black, size: tileSize, cornerRadius: cornerRadius)
-							GameTile(letter: "D", fill: Color(UIColor.lightGray), textColor: .black, size: tileSize, cornerRadius: cornerRadius)
+							GameTile(letter: "W", fill: Color(uiColor: .darkGray), textColor: .white)
+							GameTile(letter: "O", fill: Color(UIColor.lightGray), textColor: .black)
+							GameTile(letter: "R", fill: Color(UIColor.lightGray), textColor: .black)
+							GameTile(letter: "D", fill: Color(UIColor.lightGray), textColor: .black)
 						}
                         Text("Dark gray means the letter is not in the word at all.")
                             .font(.callout)
@@ -72,7 +70,7 @@ struct OnboardingView: View {
                             hasSeenOnboarding = true
                             isPresented = false
                         }, label: {
-                            Text("Got It")
+                            Text("Got it!")
                                 .font(.title2).bold()
                                 .frame(maxWidth: .infinity)
                                 .padding(.vertical, 14)
@@ -87,7 +85,7 @@ struct OnboardingView: View {
                             hasSeenOnboarding = true
                             isPresented = false
                         }, label: {
-                            Text("Got It")
+                            Text("Got it!")
                                 .font(.title2).bold()
                                 .frame(maxWidth: .infinity)
                                 .padding(.vertical, 14)
@@ -104,7 +102,7 @@ struct OnboardingView: View {
                     }
                 }
             }
-            .navigationTitle("Welcome to Wordly")
+            .navigationTitle("Welcome to \(self.userWantsThePhraseNameBack ? "The Phrase" : "Wordly")")
             .navigationBarTitleDisplayMode(.inline)
 			.presentationDragIndicator(.hidden)
 			.interactiveDismissDisabled(true)

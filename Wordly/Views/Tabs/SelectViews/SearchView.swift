@@ -49,7 +49,7 @@ struct SearchView: View {
 												appManager.useWord(word: word)
 												dismiss()
 											} label: {
-												Label("Use Word", systemImage: "checkmark.circle")
+												Label("Use the Word", systemImage: "checkmark.circle")
 											}
 
 										}
@@ -87,7 +87,7 @@ struct SearchView: View {
 												appManager.useWord(word: word)
 												dismiss()
 											} label: {
-												Label("Use Word", systemImage: "checkmark.circle")
+												Label("Use the Word", systemImage: "checkmark.circle")
 											}
 											
 										}

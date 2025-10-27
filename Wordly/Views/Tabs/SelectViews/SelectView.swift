@@ -21,6 +21,7 @@ struct SelectView: View {
     @AppStorage("hasFixedLanguage") private var hasFixedLanguage: Bool = false
 	@AppStorage("userWantsAds") private var userWantsAds: Bool = false
 	@AppStorage("userWantsNormalTheme") private var userWantsNormalTheme: Bool = true
+	@AppStorage("userWantsThePhraseNameBack") private var userWantsThePhraseNameBack = false
     @State var hasFixedDefualtValues: Bool = false
     @State var hasFixedContextAndFetched: Bool = false
     @State var didTapPlayDailyWordButton: Bool = false
@@ -318,9 +319,7 @@ struct SelectView: View {
 								.glassEffect((self.userWantsNormalTheme || self.colorScheme == .light) ? .regular.tint(.green).interactive() : .regular.interactive(), in: .rect(cornerRadius: 15.0))
 								
 							}
-							
 						}
-						
 						.padding(.horizontal, 30)
 						.padding(.bottom, 10)
 					} else {
@@ -438,20 +437,20 @@ struct SelectView: View {
             }
 			.safeAreaPadding(.bottom, (UIDevice.current.userInterfaceIdiom == .pad || UIDevice.current.userInterfaceIdiom == .mac) && self.userWantsAds ? 80 : (self.userWantsAds ? 54 : 0))
             .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    NavigationLink(destination: Info().environmentObject(appManager).environmentObject(appState)) {
-                        Image(systemName: "info")
-                            .font(.title2)
-                            .foregroundStyle(.primary)
-                    }
-                    .simultaneousGesture(TapGesture().onEnded {
-                        self.didTapInfoButton.toggle()
-                    })
-                    .sensoryFeedback(.selection, trigger: self.didTapInfoButton)
-                }
+				ToolbarItem(placement: .navigationBarTrailing) {
+					NavigationLink(destination: Info().environmentObject(appManager).environmentObject(appState)) {
+						Image(systemName: "info")
+							.font(.title2)
+							.foregroundStyle(.primary)
+					}
+					.simultaneousGesture(TapGesture().onEnded {
+						self.didTapInfoButton.toggle()
+					})
+					.sensoryFeedback(.selection, trigger: self.didTapInfoButton)
+				}
             }
         }
-		.navigationTitle("Wordly")
+		.navigationTitle(self.userWantsThePhraseNameBack ? "The Phrase" : "Wordly")
 		.onChange(of: appState.navigateHomeTrigger) {
 			if appState.selectedLanguageName != nil {
 				if appState.selectedLanguageName == LanguageSelection.english.rawValue {
@@ -488,7 +487,6 @@ struct SelectView: View {
                 appManager.streakManager = StreakManager(context: modelContext)
                 appManager.normalStreakManager = NormalStreakManager(context: modelContext)
                 appManager.gameRecordManager = GameRecordManager(context: modelContext)
-//				reviewManager.checkForReviewPrompt()
 				
                 if !self.hasAddedStreaks {
                     appManager.addStreaks()

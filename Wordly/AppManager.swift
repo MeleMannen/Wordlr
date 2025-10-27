@@ -9,6 +9,7 @@ import SwiftUI
 import SwiftData
 import GoogleMobileAds
 
+@MainActor
 final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
     @AppStorage("defaultLanguage") private var defaultLanguage: LanguageSelection = .norwegian
     @AppStorage("defaultNumberOfLetters") private var defaultNumberOfLetters: Int = 5
@@ -39,6 +40,8 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
     @Published var isAnimating: Bool = false
     @Published var isShaking: Bool = false
     @Published var submitOpacity: Double = 0.5
+	@Published var shouldShowAdButton: Bool = false
+	@Published var hasLoadedAd: Bool = false
     var startDate: Date = Date()
     var endDate: Date = Date()
     @Published var hasSharedResult: Bool = false
@@ -873,8 +876,19 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
 //            self.rewardedAd = try await RewardedAd.load(
 //                with: "ca-app-pub-3940256099942544/1712485313", request: Request())
             self.rewardedAd?.fullScreenContentDelegate = self
+			await MainActor.run {
+//				withAnimation(.easeInOut) {
+					self.shouldShowAdButton = true
+//				}
+			}
+			print("Rewarded ad loaded.")
         } catch {
             print("Failed to load rewarded ad with error: \(error.localizedDescription)")
+			await MainActor.run {
+				withAnimation {
+					self.shouldShowAdButton = false
+				}
+			}
         }
     }
     
@@ -920,3 +934,4 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
     }
     
 }
+

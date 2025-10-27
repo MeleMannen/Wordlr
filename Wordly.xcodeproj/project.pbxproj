@@ -157,15 +157,15 @@
 		63B9B3E92EA58ED2008483FB /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				63B9B3DF2EA58ED2008483FB /* Assets.xcassets */,
+				63B9B3E42EA58ED2008483FB /* Localizable.xcstrings */,
 				63B9B3E02EA58ED2008483FB /* dailyEnglishWords.json */,
 				63B9B3E12EA58ED2008483FB /* dailyNorwegianWords.json */,
 				63B9B3E22EA58ED2008483FB /* dailySpanishWords.json */,
 				63B9B3E32EA58ED2008483FB /* englishWords.json */,
-				63B9B3E42EA58ED2008483FB /* Localizable.xcstrings */,
 				63B9B3E52EA58ED2008483FB /* norwegianWords.json */,
 				63B9B3E62EA58ED2008483FB /* shortedNorwegainWords.json */,
 				63B9B3E72EA58ED2008483FB /* spanishWords.json */,
+				63B9B3DF2EA58ED2008483FB /* Assets.xcassets */,
 				63B9B3E82EA58ED2008483FB /* Wordly.icon */,
 			);
 			path = Resources;
@@ -186,11 +186,11 @@
 		63B9B3F62EA58ED2008483FB /* HistoryAndStatsViews */ = {
 			isa = PBXGroup;
 			children = (
+				63B9B3F42EA58ED2008483FB /* StatsView.swift */,
+				63B9B3F32EA58ED2008483FB /* HistoryView.swift */,
+				63B9B3F22EA58ED2008483FB /* GameRecordView.swift */,
 				63B9B3F02EA58ED2008483FB /* BoardView.swift */,
 				63B9B3F12EA58ED2008483FB /* FilterView.swift */,
-				63B9B3F22EA58ED2008483FB /* GameRecordView.swift */,
-				63B9B3F32EA58ED2008483FB /* HistoryView.swift */,
-				63B9B3F42EA58ED2008483FB /* StatsView.swift */,
 				63B9B3F52EA58ED2008483FB /* StreakChartView.swift */,
 			);
 			path = HistoryAndStatsViews;
@@ -199,15 +199,15 @@
 		63B9B4002EA58ED2008483FB /* SelectViews */ = {
 			isa = PBXGroup;
 			children = (
-				63B9B3F72EA58ED2008483FB /* FilterOptionsView.swift */,
-				63B9B3F82EA58ED2008483FB /* GameTile.swift */,
+				63B9B3FF2EA58ED2008483FB /* SelectView.swift */,
 				63B9B3F92EA58ED2008483FB /* GameView.swift */,
 				63B9B3FA2EA58ED2008483FB /* GameView18.swift */,
 				63B9B3FB2EA58ED2008483FB /* GameView26.swift */,
+				63B9B3FE2EA58ED2008483FB /* SearchView.swift */,
+				63B9B3F72EA58ED2008483FB /* FilterOptionsView.swift */,
 				63B9B3FC2EA58ED2008483FB /* Info.swift */,
 				63B9B3FD2EA58ED2008483FB /* OnboardingView.swift */,
-				63B9B3FE2EA58ED2008483FB /* SearchView.swift */,
-				63B9B3FF2EA58ED2008483FB /* SelectView.swift */,
+				63B9B3F82EA58ED2008483FB /* GameTile.swift */,
 			);
 			path = SelectViews;
 			sourceTree = "<group>";
@@ -215,8 +215,8 @@
 		63B9B4032EA58ED2008483FB /* SettingsViews */ = {
 			isa = PBXGroup;
 			children = (
-				63B9B4012EA58ED2008483FB /* NotificationView.swift */,
 				63B9B4022EA58ED2008483FB /* SettingsView.swift */,
+				63B9B4012EA58ED2008483FB /* NotificationView.swift */,
 			);
 			path = SettingsViews;
 			sourceTree = "<group>";
@@ -224,8 +224,8 @@
 		63B9B4042EA58ED2008483FB /* Tabs */ = {
 			isa = PBXGroup;
 			children = (
-				63B9B3F62EA58ED2008483FB /* HistoryAndStatsViews */,
 				63B9B4002EA58ED2008483FB /* SelectViews */,
+				63B9B3F62EA58ED2008483FB /* HistoryAndStatsViews */,
 				63B9B4032EA58ED2008483FB /* SettingsViews */,
 			);
 			path = Tabs;
@@ -255,11 +255,11 @@
 				63B9B4112EA58ED2008483FB /* StreakManager.swift */,
 				63B9B4122EA58ED2008483FB /* Tips.swift */,
 				63B9B4072EA58ED2008483FB /* Views */,
+				63B9B3E92EA58ED2008483FB /* Resources */,
+				63B9B3DE2EA58ED2008483FB /* Preview Content */,
 				63B9B4132EA58ED2008483FB /* Wordly.entitlements */,
 				63B9B40F2EA58ED2008483FB /* PrivacyInfo.xcprivacy */,
 				63B9B40C2EA58ED2008483FB /* Info.plist */,
-				63B9B3E92EA58ED2008483FB /* Resources */,
-				63B9B3DE2EA58ED2008483FB /* Preview Content */,
 			);
 			path = Wordly;
 			sourceTree = "<group>";

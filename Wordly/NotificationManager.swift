@@ -29,7 +29,7 @@ final class NotificationManager {
 	
 	static func requestPermission(completion: @escaping (Result<Bool, Error>) -> Void) {
 		UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { granted, error in
-			if granted {
+			if granted || error == nil {
 				completion(.success(true))
 			} else {
 				print(granted ? "Notification permission granted" : "Notification permission denied: \(error?.localizedDescription ?? "No error info")")
@@ -39,7 +39,7 @@ final class NotificationManager {
 		}
 	}
 	
-	static func scheduleDailyWordReminder(reminder: DailyWordReminder, daysAhead: Int = 14) {
+	static func scheduleDailyWordReminder(reminder: DailyWordReminder, daysAhead: Int = 7) {
 		let center = UNUserNotificationCenter.current()
 		center.getPendingNotificationRequests { requests in
 			let existingDates = requests.compactMap { request -> Date? in
