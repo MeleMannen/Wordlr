@@ -447,12 +447,12 @@ struct SelectView: View {
 						DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
 							self.shouldNotAllowChangeGameSettings = true
 						}
-					}), secondaryButton: .destructive(Text("I'm Sure!"), action: {
+					}), secondaryButton: .destructive(Text("I'm Sure"), action: {
 						self.shouldNotAllowChangeGameSettings = false
 					}))
 				}
 				.alert(isPresented: self.$isShowingAlreadyPlayedAlert) {
-					Alert(title: Text("You have already played this Word!"), message: Text("You have already played this exact Word today. Are you sure you want to play the same Word again?"), primaryButton: .cancel(Text("Got it!")), secondaryButton: .default(Text("I'm Sure!"), action: {
+					Alert(title: Text("You have already played this Word"), message: Text("You have already played this exact Word today. Are you sure you want to play the same Word again?"), primaryButton: .cancel(), secondaryButton: .default(Text("I'm Sure"), action: {
 						self.isAllowedToPlayDailyWordAgain = true
 					}))
 				}
