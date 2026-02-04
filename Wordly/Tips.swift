@@ -28,7 +28,7 @@ struct HintTip: Tip {
 		}
 		
 		#Rule(Self.gamesPlayedEvent) { event in
-			event.donations.count >= 5
+			event.donations.count >= 6
 		}
 	}
 }
@@ -60,7 +60,6 @@ struct SearchTip: Tip {
 
 struct FilterTip: Tip {
 	static let filterEvent = Event(id: "filter")
-//	static let searchViewVisitedEvent = Event(id: "searchViewVisited")
 	var title: Text {
 		Text("Use filters")
 	}
@@ -79,7 +78,7 @@ struct FilterTip: Tip {
 		}
 		
 		#Rule(SearchTip.searchEvent) { event in
-			event.donations.count >= 3
+			event.donations.count >= 5
 		}
 	}
 }

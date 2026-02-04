@@ -100,7 +100,20 @@
       }
     },
     "%@ is a word game where you guess a secret word. The game provides feedback on your guesses, indicating correct letters and their positions." : {
-
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ es un juego de palabras en el que debes adivinar una palabra secreta. El juego te da retroalimentación sobre tus intentos, indicando las letras correctas y sus posiciones."
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ er et ordspill hvor du gjetter et hemmelig ord. Spillet gir tilbakemelding på gjettene dine, og indikerer riktige bokstaver og deres posisjoner."
+          }
+        }
+      }
     },
     "%lld" : {
       "localizations" : {
@@ -357,6 +370,22 @@
         }
       }
     },
+    "Are you sure that you want to discard your current Word?" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿Seguro que quieres descartar la Palabra actual?"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Er du sikker på at du vil forkaste ditt påbegynte Ord?"
+          }
+        }
+      }
+    },
     "Are you sure you want to Restart?" : {
       "localizations" : {
         "en" : {
@@ -547,7 +576,8 @@
         }
       }
     },
-    "Daily Word Reminder" : {
+    "Daily Wordly Reminder" : {
+      "comment" : "Title for Daily Wordly reminder notification",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -563,7 +593,7 @@
         }
       }
     },
-    "Daily Word Reminders" : {
+    "Daily Wordly Reminders" : {
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -579,12 +609,13 @@
         }
       }
     },
-    "Daily Word Streaks 🔥" : {
+    "Daily Wordly Streaks 🔥" : {
+      "comment" : "Title for daily word streaks chart in stats view",
       "localizations" : {
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Rachas de la Palabra Diaria"
+            "value" : "Rachas de la Palabra Diaria 🔥"
           }
         },
         "nb" : {
@@ -595,7 +626,7 @@
         }
       }
     },
-    "Daily Word Theme" : {
+    "Daily Wordly Theme" : {
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -681,6 +712,22 @@
         }
       }
     },
+    "Discard current Word?" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿Descartar la palabra actual?"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Forkaste påbegynt Ord?"
+          }
+        }
+      }
+    },
     "Dismiss" : {
       "localizations" : {
         "en" : {
@@ -725,7 +772,30 @@
         }
       }
     },
-    "Edit Daily Word Reminders" : {
+    "Don't forget to complete today's %d Letter, %@ Daily Wordly!" : {
+      "comment" : "Body for Daily Wordly reminder notification",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Don't forget to complete today's %1$d Letter, %2$@ Daily Wordly!"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¡No olvides completar la Palabra Diaria de %1$d letras de hoy en %2$@!"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ikke glem å spille dagens %1$d Bokstav, %2$@ Daglig Ord!"
+          }
+        }
+      }
+    },
+    "Edit Daily Wordly Reminders" : {
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -784,7 +854,7 @@
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Skriv Inn Endelige Bokstaver"
+            "value" : "Skriv Endelige Bokstaver"
           }
         }
       }
@@ -800,7 +870,7 @@
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Skriv Inn Start Bokstaver"
+            "value" : "Skriv Start Bokstaver"
           }
         }
       }
@@ -1341,6 +1411,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Hvordan Spille?"
+          }
+        }
+      }
+    },
+    "I'm Sure!" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¡Seguro!"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jeg er Sikker!"
           }
         }
       }
@@ -1897,14 +1983,8 @@
         }
       }
     },
-    "Play Daily Word" : {
+    "Play Daily Wordly" : {
       "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Play Daily Word"
-          }
-        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1919,14 +1999,8 @@
         }
       }
     },
-    "Play Daily Word\n%lld🔥" : {
+    "Play Daily Wordly\n%lld🔥" : {
       "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Play Daily Word\n%lld🔥"
-          }
-        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1984,13 +2058,13 @@
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Jugar Ilimitado %lld🔥"
+            "value" : "Jugar Ilimitado\n%lld🔥"
           }
         },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Spill Ubegrenset %lld🔥"
+            "value" : "Spill Ubegrenset\n%lld🔥"
           }
         }
       }
@@ -2466,7 +2540,7 @@
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "ELIGE PALABRAS"
+            "value" : "ELIGE PALABRA"
           }
         },
         "nb" : {
@@ -2615,7 +2689,20 @@
       }
     },
     "The Phrase" : {
-
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The Phrase"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The Phrase"
+          }
+        }
+      }
     },
     "The Word Was: %@!" : {
       "localizations" : {
@@ -2676,7 +2763,7 @@
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "For å spille, bare skriv inn et gyldig ord og gjett ordet. Etter hver gjetning vil fargene vil vise hvor nærme du var."
+            "value" : "For å spille, bare skriv et gyldig ord og gjett ordet. Etter hver gjetning vil fargene vil vise hvor nærme du var."
           }
         }
       }
@@ -2726,6 +2813,7 @@
       }
     },
     "Unlimited Streaks 🔥" : {
+      "comment" : "Title for daily word streaks chart in stats view",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -2838,21 +2926,17 @@
       }
     },
     "Welcome to %@" : {
-
-    },
-    "Welcome to Wordly" : {
-      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bienvenidos a Wordly"
+            "value" : "Bienvenidos a %@"
           }
         },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Velkommen til Wordly"
+            "value" : "Velkommen til %@"
           }
         }
       }
@@ -2905,45 +2989,6 @@
         }
       }
     },
-    "Wordly is a word game where you guess a secret word. The game provides feedback on your guesses, indicating correct letters and their positions." : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Wordly es un juego de palabras en el que debes adivinar una palabra secreta. El juego te da retroalimentación sobre tus intentos, indicando las letras correctas y sus posiciones."
-          }
-        },
-        "nb" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Wordly er et ordspill hvor du gjetter et hemmelig ord. Spillet gir tilbakemelding på gjettene dine, og indikerer riktige bokstaver og deres posisjoner."
-          }
-        }
-      }
-    },
-    "You can't play this" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "You can't play this"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "No puedes jugar esto"
-          }
-        },
-        "nb" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Du kan ikke spille dette"
-          }
-        }
-      }
-    },
     "You could try to search in the Dictionary NAOB: " : {
       "localizations" : {
         "en" : {
@@ -2966,18 +3011,34 @@
         }
       }
     },
-    "You have already played this exact Word today. Try again tomorrow or play with a different Number of Letters." : {
+    "You have already played this exact Word today. Are you sure you want to play the same Word again?" : {
       "localizations" : {
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ya has jugado esta Palabra exacta hoy. Intenta de nuevo mañana o juega con un número diferente de letras."
+            "value" : "Ya has jugado exactamente esta Palabra hoy. ¿Seguro que quieres jugar la misma Palabra otra vez?"
           }
         },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Du har allerede spilt akkurat dette Ordet i dag. Prøv igjen i morgen eller spill med et annet Antall Bokstaver."
+            "value" : "Du har allerede gjette dette Ordet i dag. Er du sikker på at du vil gjette det samme ordet igjen?"
+          }
+        }
+      }
+    },
+    "You have already played this Word!" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¡Ya has jugado esta Palabra!"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Du har allerede spillt dette Ordet!"
           }
         }
       }

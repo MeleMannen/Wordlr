@@ -9,6 +9,7 @@ import SwiftUI
 
 struct SearchView: View {
 	@Environment(\.dismiss) var dismiss
+	@Environment(\.scenePhase) private var scenePhase
     @EnvironmentObject var appManager: AppManager
 	@Environment(AdManager.self) private var adManager: AdManager
 	@AppStorage("userWantsAds") var userWantsAds: Bool = true
@@ -62,7 +63,6 @@ struct SearchView: View {
 								.id(letter)
 							}
 						}
-						.tint(.blue)
 						.listSectionIndexVisibility(.visible)
 						.safeAreaPadding(.bottom, (UIDevice.current.userInterfaceIdiom == .pad || UIDevice.current.userInterfaceIdiom == .mac) && self.userWantsAds ? 80 : (self.userWantsAds ? 54 : 0))
 					} else {
@@ -151,6 +151,13 @@ struct SearchView: View {
 						.foregroundColor(.white)
 						.padding()
 						.matchedTransitionSource(id: "filter", in: namespace)
+						.background {
+							if self.scenePhase == .background {
+								Capsule()
+									.foregroundStyle(Color(uiColor: .systemGreen))
+								
+							}
+						}
 				})
 				.glassEffect(.regular.tint(.green).interactive())
 				.padding(.trailing, 25)

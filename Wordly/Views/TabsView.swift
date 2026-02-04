@@ -21,7 +21,7 @@ struct TabsView: View {
 	@AppStorage("notificationsEnabled") private var notificationsEnabled: Bool = false
 	@AppStorage("userWantsThePhraseNameBack") private var userWantsThePhraseNameBack = false
 	@State var selection: TabSelection = .home
-	@State private var bannerReloadID = UUID()
+//	@State private var bannerReloadID = UUID()
 	@State var adManager: AdManager = AdManager()
 	
 	var body: some View {
@@ -38,24 +38,29 @@ struct TabsView: View {
 				.environment(adManager)
 				.task {
 					//						#warning("Resetting the datastore is only for testing purposes, remove this in production!")
-					//						try? Tips.resetDatastore()
-					try? Tips.configure([
-						//							.displayFrequency(.monthly),
-						.datastoreLocation(.applicationDefault)
-					])
+//											try? Tips.resetDatastore()
+					try? Tips.configure([.datastoreLocation(.applicationDefault)])
 				}
 				
 				
 				StatsView()
 					.tag(TabSelection.stats)
 					.tabItem {
-						Label("Stats", systemImage: "chart.bar.yaxis")
+						if #available(iOS 18.0, *) {
+							Label("Stats", systemImage: "chart.bar.yaxis")
+						} else {
+							Label("Stats", systemImage: "chart.bar.xaxis")
+						}
 					}
 				
 				HistoryView()
 					.tag(TabSelection.history)
 					.tabItem {
-						Label("History", systemImage: "clock.arrow.trianglehead.counterclockwise.rotate.90")
+						if #available(iOS 18.0, *) {
+							Label("History", systemImage: "clock.arrow.trianglehead.counterclockwise.rotate.90")
+						} else {
+							Label("History", systemImage: "clock")
+						}
 					}
 				
 				SettingsView()
@@ -69,31 +74,32 @@ struct TabsView: View {
 			.onChange(of: self.scenePhase) { _, newPhase in
 				if newPhase == .active, self.userWantsAds {
 					print("App became active, reloading banner ad")
-					self.bannerReloadID = UUID()
+//					self.bannerReloadID = UUID()
 				}
 			}
-			.safeAreaInset(edge: .bottom) {
-				if self.userWantsAds && (self.selection != .home || (self.selection == .home && adManager.shouldShowAds && (adManager.currentSelectView == .selectView || adManager.currentSelectView == .searchView || adManager.currentSelectView == .filterOptionsView || adManager.currentSelectView == .infoView))) && adManager.canRequestAds {
-					if #available(iOS 26.0, *), UIDevice.current.userInterfaceIdiom == .phone {
-						let adSize = currentOrientationAnchoredAdaptiveBanner(width: geometry.size.width - (geometry.size.width / 11))
-						BannerViewContainer(adSize)
-							.frame(width: adSize.size.width < 0 ? 0 : adSize.size.width, height: adSize.size.height < 0 ? 0 : adSize.size.height)
-							.padding(.bottom, 54)
-							.id(bannerReloadID)
-					} else if #available(iOS 18.0, *), UIDevice.current.userInterfaceIdiom == .pad || UIDevice.current.userInterfaceIdiom == .mac {
-						let adSize = currentOrientationAnchoredAdaptiveBanner(width: geometry.size.width)
-						BannerViewContainer(adSize)
-							.frame(width: adSize.size.width < 0 ? 0 : adSize.size.width, height: adSize.size.height < 0 ? 0 : adSize.size.height)
-							.id(bannerReloadID)
-					} else {
-						let adSize = currentOrientationAnchoredAdaptiveBanner(width: geometry.size.width)
-						BannerViewContainer(adSize)
-							.frame(width: adSize.size.width < 0 ? 0 : adSize.size.width, height: adSize.size.height < 0 ? 0 : adSize.size.height)
-							.padding(.bottom, 49)
-							.id(bannerReloadID)
-					}
-				}
-			}
+			.safeAreaInset(edge: .bottom) { bottomAd(for: geometry) }
+//			.safeAreaInset(edge: .bottom) {
+//				if self.userWantsAds && (self.selection != .home || (self.selection == .home && adManager.shouldShowAds && (adManager.currentSelectView == .selectView || adManager.currentSelectView == .searchView || adManager.currentSelectView == .filterOptionsView || adManager.currentSelectView == .infoView))) && adManager.canRequestAds {
+//					if #available(iOS 26.0, *), UIDevice.current.userInterfaceIdiom == .phone {
+//						let adSize = currentOrientationAnchoredAdaptiveBanner(width: geometry.size.width - (geometry.size.width / 11))
+//						BannerViewContainer(adSize)
+//							.frame(width: adSize.size.width < 0 ? 0 : adSize.size.width, height: adSize.size.height < 0 ? 0 : adSize.size.height)
+//							.padding(.bottom, 54)
+//							.id(bannerReloadID)
+//					} else if #available(iOS 18.0, *), UIDevice.current.userInterfaceIdiom == .pad || UIDevice.current.userInterfaceIdiom == .mac {
+//						let adSize = currentOrientationAnchoredAdaptiveBanner(width: geometry.size.width)
+//						BannerViewContainer(adSize)
+//							.frame(width: adSize.size.width < 0 ? 0 : adSize.size.width, height: adSize.size.height < 0 ? 0 : adSize.size.height)
+//							.id(bannerReloadID)
+//					} else {
+//						let adSize = currentOrientationAnchoredAdaptiveBanner(width: geometry.size.width)
+//						BannerViewContainer(adSize)
+//							.frame(width: adSize.size.width < 0 ? 0 : adSize.size.width, height: adSize.size.height < 0 ? 0 : adSize.size.height)
+//							.padding(.bottom, 49)
+//							.id(bannerReloadID)
+//					}
+//				}
+//			}
 			.tint(.primary)
 			.preferredColorScheme(appTheme == .system ? nil : (appTheme == .light ? .light : .dark))
 			.onAppear {
@@ -153,6 +159,39 @@ struct TabsView: View {
 			}
 		}
 	}
+	
+	@ViewBuilder
+	private func bottomAd(for geometry: GeometryProxy) -> some View {
+		if self.userWantsAds &&
+			(self.selection != .home ||
+			 (self.selection == .home && adManager.shouldShowAds &&
+			  (adManager.currentSelectView == .selectView ||
+			   adManager.currentSelectView == .searchView ||
+			   adManager.currentSelectView == .filterOptionsView ||
+			   adManager.currentSelectView == .infoView))) &&
+			adManager.canRequestAds {
+			
+			if #available(iOS 26.0, *), UIDevice.current.userInterfaceIdiom == .phone {
+				let adSize = currentOrientationAnchoredAdaptiveBanner(width: geometry.size.width - (geometry.size.width / 11))
+				BannerViewContainer(adSize)
+					.frame(width: max(0, adSize.size.width), height: max(0, adSize.size.height))
+					.padding(.bottom, 54)
+//					.id(bannerReloadID)
+			} else if #available(iOS 18.0, *),
+					  UIDevice.current.userInterfaceIdiom == .pad || UIDevice.current.userInterfaceIdiom == .mac {
+				let adSize = currentOrientationAnchoredAdaptiveBanner(width: geometry.size.width)
+				BannerViewContainer(adSize)
+					.frame(width: max(0, adSize.size.width), height: max(0, adSize.size.height))
+//					.id(bannerReloadID)
+			} else {
+				let adSize = currentOrientationAnchoredAdaptiveBanner(width: geometry.size.width)
+				BannerViewContainer(adSize)
+					.frame(width: max(0, adSize.size.width), height: max(0, adSize.size.height))
+					.padding(.bottom, 49)
+//					.id(bannerReloadID)
+			}
+		}
+	}
 }
 
 @MainActor
@@ -202,9 +241,10 @@ final class AdManager {
 	
 	/// Method to initialize the Google Mobile Ads SDK. The SDK should only be initialized once.
 	func startGoogleMobileAdsSDK() {
-		guard canRequestAds, !isMobileAdsStartCalled else { return }
-#if targetEnvironment(simulator) //DEBUG
-								 //		#warning("Remove this before deploying to production.")
+		guard canRequestAds, !isMobileAdsStartCalled else {
+			return
+		}
+#if targetEnvironment(simulator)
 		let testDeviceIdentifiers = ["AC276EF4-3093-42DF-8DE1-84C495BF8585"]
 		MobileAds.shared.requestConfiguration.testDeviceIdentifiers = testDeviceIdentifiers
 #endif

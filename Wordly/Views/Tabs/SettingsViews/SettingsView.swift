@@ -69,7 +69,7 @@ struct SettingsView: View {
 						.sensoryFeedback(.selection, trigger: appTheme)
 						
 						if self.colorScheme == .dark {
-							Picker("Daily Word Theme", selection: $userWantsNormalTheme) {
+							Picker("Daily Wordly Theme", selection: $userWantsNormalTheme) {
 								Text("Standard")
 									.tag(true)
 								Text("Gold")
@@ -84,7 +84,7 @@ struct SettingsView: View {
 					}
 					
 					Section {
-						Toggle("Daily Word Reminders", isOn: $notificationsEnabled)
+						Toggle("Daily Wordly Reminders", isOn: $notificationsEnabled)
 							.modifier(ConditionalPadding())
 							.tint(.green)
 							.onChange(of: notificationsEnabled) { _, newValue in
@@ -133,7 +133,7 @@ struct SettingsView: View {
 							NavigationLink {
 								NotificationView()
 							} label: {
-								Text("Edit Daily Word Reminders")
+								Text("Edit Daily Wordly Reminders")
 									.foregroundStyle(.primary)
 									.modifier(ConditionalPadding())
 							}
@@ -308,9 +308,8 @@ struct SettingsView: View {
 									.foregroundStyle(.secondary)
 							}
 						})
-//						#warning("Remove this before deploying to production.")
-						// Show only when running in a debug environment
-#if targetEnvironment(simulator) // DEBUG
+						
+#if targetEnvironment(simulator)
 
 							Button(action: {
 								adManager.presentAdInspector()
@@ -333,7 +332,6 @@ struct SettingsView: View {
 								}
 							})
 #endif
-//						}
 						
 					} header: {
 						Text("About")
@@ -366,8 +364,8 @@ struct BannerViewContainer: UIViewRepresentable {
     
     func makeUIView(context: Context) -> BannerView {
         let banner = BannerView(adSize: adSize)
-		#warning("Replace the ad unit ID with your own ad unit ID when deploying to production.")
-#if targetEnvironment(simulator) // DEBUG
+//		#warning("Replace the ad unit ID with your own ad unit ID when deploying to production.")
+#if targetEnvironment(simulator)
         banner.adUnitID = "ca-app-pub-3940256099942544/2435281174" // ca-app-pub-7619403750703078/6852604335
 #else
 		banner.adUnitID = "ca-app-pub-7619403750703078/6852604335" // ca-app-pub-3940256099942544/2435281174

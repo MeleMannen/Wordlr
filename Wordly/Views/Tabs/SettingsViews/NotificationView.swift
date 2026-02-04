@@ -55,7 +55,7 @@ struct NotificationView: View {
 			}
 		}
 		.navigationBarTitleDisplayMode(.inline)
-		.navigationTitle("Daily Word Reminders")
+		.navigationTitle("Daily Wordly Reminders")
 		.toolbar {
 			if #available(iOS 26.0, *) {
 				ToolbarItem(placement: .navigationBarTrailing) {
@@ -88,11 +88,11 @@ struct NotificationView: View {
 		} content: {
 			if #available(iOS 26.0, *), self.isPresentingFromAdd {
 				AddReminderView(isPresented: self.$shouldShowSheet, isEditing: self.$shouldBeEditing, reminder: self.$reminderToEdit, reminders: self.dailyWordReminders)
-					.presentationDetents([.fraction(0.7), .large])
+					.presentationDetents([.fraction(0.8), .large])
 					.navigationTransition(.zoom(sourceID: "add", in: self.namespace))
 			} else {
 				AddReminderView(isPresented: self.$shouldShowSheet, isEditing: self.$shouldBeEditing, reminder: self.$reminderToEdit, reminders: self.dailyWordReminders)
-					.presentationDetents([.fraction(0.7), .large])
+					.presentationDetents([.fraction(0.8), .large])
 			}
 			
 		}
@@ -143,13 +143,19 @@ struct AddReminderView: View {
 				Section {
 					Picker("Language", selection: $notificationLanguage) {
 						ForEach(LanguageSelection.languages) { language in
-							Text(language.localizedName.capitalized).tag(language)
+							Text(language.localizedName.capitalized)
+								.tag(language)
+								.foregroundStyle(.secondary)
+								
 						}
 					}
 					.pickerStyle(.menu)
 					Picker("Number of Letters", selection: $notificationLetters) {
 						ForEach(1...8, id: \.self) { number in
-							Text(number == 1 ? "\(number) Letter" : "\(number) Letters").tag(number)
+							Text(number == 1 ? "\(number) Letter" : "\(number) Letters")
+								.tag(number)
+								.foregroundStyle(.secondary)
+							
 						}
 					}
 					.pickerStyle(.menu)
@@ -164,6 +170,7 @@ struct AddReminderView: View {
 						Button("Delete", role: .destructive) {
 							self.isPresented = false
 							self.isEditing = false
+							NotificationManager.cancelDailyWordReminder(reminder: reminder)
 							context.delete(reminder)
 							try? context.save()
 						}
@@ -213,7 +220,6 @@ struct AddReminderView: View {
 							self.saveButtonAction()
 						}
 						.sensoryFeedback(self.isEditing ? .selection : (self.checkIfReminderExists() ? .error : .selection), trigger: self.didTap)
-						.keyboardShortcut(.defaultAction)
 						.opacity(self.isEditing ? 1.0 : (self.checkIfReminderExists() ? 0.3 : 1.0))
 						.tint(self.isEditing ? .blue : (self.checkIfReminderExists() ? .secondary : .blue))
 						.animation(.easeInOut, value: self.isEditing)
@@ -227,7 +233,6 @@ struct AddReminderView: View {
 								.opacity(self.isEditing ? 1.0 : (self.checkIfReminderExists() ? 0.3 : 1.0))
 						}
 						.sensoryFeedback(self.isEditing ? .selection : (self.checkIfReminderExists() ? .error : .selection), trigger: self.didTap)
-						.keyboardShortcut(.defaultAction)
 						.animation(.easeInOut, value: self.isEditing)
 						.animation(.easeInOut, value: self.checkIfReminderExists())
 					}
@@ -241,11 +246,14 @@ struct AddReminderView: View {
 	private func saveButtonAction() {
 		print("time to fire: \(self.notificationTime.timeIntervalSince1970)")
 		if self.isEditing, let reminder {
-			reminder.language = self.notificationLanguage
-			reminder.numberOfLetters = self.notificationLetters
-			reminder.timeToFire = self.notificationTime
-			reminder.isEnabled = true
-			NotificationManager.scheduleDailyWordReminder(reminder: reminder)
+			NotificationManager.cancelDailyWordReminder(reminder: reminder) {
+				reminder.language = self.notificationLanguage
+				reminder.numberOfLetters = self.notificationLetters
+				reminder.timeToFire = self.notificationTime
+				reminder.isEnabled = true
+				NotificationManager.scheduleDailyWordReminder(reminder: reminder)
+			}
+			
 			
 		} else {
 			if self.checkIfReminderExists() {

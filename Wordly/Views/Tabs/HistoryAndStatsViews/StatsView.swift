@@ -42,6 +42,9 @@ struct StatsView: View {
         NavigationStack {
             GeometryReader { geometry in
                 VStack {
+					if #unavailable(iOS 26.0) {
+						FilterView(numberOfLetters: $numberOfLetters, selectedLanguage: $selectedLanguage, gameMode: $gameMode, showsWhenHintsUsed: $showsWhenHintsUsed)
+					}
                     if self.filteredGameRecords.isEmpty {
                         ContentUnavailableView.init("No stats available for this selection!", systemImage: "exclamationmark.triangle.fill", description: Text("Try playing a game first or changing the selection."))
                             .padding(.bottom, 20)
@@ -163,10 +166,10 @@ struct StatsView: View {
 							if self.maxStreakLength > 0 || self.maxNormalStreakLength > 0 {
 								Section {
 									if self.maxStreakLength > 0 && (self.gameMode == .both || self.gameMode == .dailyWord) {
-										StreakChartView(title: "Daily Word Streaks 🔥", longestStreakPerLetters: self.$longestStreakPerLetters, maxStreakLength: self.$maxStreakLength)
+										StreakChartView(title: NSLocalizedString("Daily Wordly Streaks 🔥", comment: "Title for daily word streaks chart in stats view"), longestStreakPerLetters: self.$longestStreakPerLetters, maxStreakLength: self.$maxStreakLength)
 									}
 									if self.maxNormalStreakLength > 0 && (self.gameMode == .both || self.gameMode == .normal) {
-										StreakChartView(title: "Unlimited Streaks 🔥", longestStreakPerLetters: self.$longestNormalStreakPerLetters, maxStreakLength: self.$maxNormalStreakLength)
+										StreakChartView(title: NSLocalizedString("Unlimited Streaks 🔥", comment: "Title for daily word streaks chart in stats view"), longestStreakPerLetters: self.$longestNormalStreakPerLetters, maxStreakLength: self.$maxNormalStreakLength)
 									}
 								} header: {
 									Text("Streaks")
@@ -180,7 +183,9 @@ struct StatsView: View {
 				.navigationTitle("Stats")
 				.navigationBarTitleDisplayMode(.inline)
 				.safeAreaInset(edge: .top) {
-					FilterView(numberOfLetters: $numberOfLetters, selectedLanguage: $selectedLanguage, gameMode: $gameMode, showsWhenHintsUsed: $showsWhenHintsUsed)
+					if #available(iOS 26.0, *) {
+						FilterView(numberOfLetters: $numberOfLetters, selectedLanguage: $selectedLanguage, gameMode: $gameMode, showsWhenHintsUsed: $showsWhenHintsUsed)
+					}
 				}
                 .onChange(of: self.numberOfLetters) {
                     if self.numberOfLetters > 7 {

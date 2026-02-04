@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6344F4FF2EB9502300948552 /* KeyPress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6344F4FE2EB9500D00948552 /* KeyPress.swift */; };
 		63B9B4152EA58ED2008483FB /* FilterOptionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B9B3F72EA58ED2008483FB /* FilterOptionsView.swift */; };
 		63B9B4162EA58ED2008483FB /* GameTile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B9B3F82EA58ED2008483FB /* GameTile.swift */; };
 		63B9B4172EA58ED2008483FB /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B9B40E2EA58ED2008483FB /* NotificationManager.swift */; };
@@ -47,7 +48,6 @@
 		63B9B43A2EA58ED2008483FB /* englishWords.json in Resources */ = {isa = PBXBuildFile; fileRef = 63B9B3E32EA58ED2008483FB /* englishWords.json */; };
 		63B9B43B2EA58ED2008483FB /* dailySpanishWords.json in Resources */ = {isa = PBXBuildFile; fileRef = 63B9B3E22EA58ED2008483FB /* dailySpanishWords.json */; };
 		63B9B43C2EA58ED2008483FB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 63B9B3DF2EA58ED2008483FB /* Assets.xcassets */; };
-		63B9B43D2EA58ED2008483FB /* Wordly.icon in Resources */ = {isa = PBXBuildFile; fileRef = 63B9B3E82EA58ED2008483FB /* Wordly.icon */; };
 		63B9B43F2EA58ED2008483FB /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 63B9B40F2EA58ED2008483FB /* PrivacyInfo.xcprivacy */; };
 		63B9B4402EA58ED2008483FB /* dailyEnglishWords.json in Resources */ = {isa = PBXBuildFile; fileRef = 63B9B3E02EA58ED2008483FB /* dailyEnglishWords.json */; };
 		63B9B4412EA58ED2008483FB /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 63B9B3E42EA58ED2008483FB /* Localizable.xcstrings */; };
@@ -57,6 +57,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		6344F4FE2EB9500D00948552 /* KeyPress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyPress.swift; sourceTree = "<group>"; };
 		6382E3BC2D12FE0500B61353 /* Wordly.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Wordly.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		63B0C6502E056A710047E4E9 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS26.0.sdk/System/Library/Frameworks/WebKit.framework; sourceTree = DEVELOPER_DIR; };
 		63B9B3DD2EA58ED2008483FB /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
@@ -69,7 +70,6 @@
 		63B9B3E52EA58ED2008483FB /* norwegianWords.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = norwegianWords.json; sourceTree = "<group>"; };
 		63B9B3E62EA58ED2008483FB /* shortedNorwegainWords.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = shortedNorwegainWords.json; sourceTree = "<group>"; };
 		63B9B3E72EA58ED2008483FB /* spanishWords.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = spanishWords.json; sourceTree = "<group>"; };
-		63B9B3E82EA58ED2008483FB /* Wordly.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = Wordly.icon; sourceTree = "<group>"; };
 		63B9B3EA2EA58ED2008483FB /* EnglishWordDefinitionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnglishWordDefinitionView.swift; sourceTree = "<group>"; };
 		63B9B3EB2EA58ED2008483FB /* NAOBView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NAOBView.swift; sourceTree = "<group>"; };
 		63B9B3EC2EA58ED2008483FB /* NorwegianWordDefinitionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NorwegianWordDefinitionView.swift; sourceTree = "<group>"; };
@@ -166,7 +166,6 @@
 				63B9B3E62EA58ED2008483FB /* shortedNorwegainWords.json */,
 				63B9B3E72EA58ED2008483FB /* spanishWords.json */,
 				63B9B3DF2EA58ED2008483FB /* Assets.xcassets */,
-				63B9B3E82EA58ED2008483FB /* Wordly.icon */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -187,11 +186,11 @@
 			isa = PBXGroup;
 			children = (
 				63B9B3F42EA58ED2008483FB /* StatsView.swift */,
+				63B9B3F52EA58ED2008483FB /* StreakChartView.swift */,
 				63B9B3F32EA58ED2008483FB /* HistoryView.swift */,
 				63B9B3F22EA58ED2008483FB /* GameRecordView.swift */,
 				63B9B3F02EA58ED2008483FB /* BoardView.swift */,
 				63B9B3F12EA58ED2008483FB /* FilterView.swift */,
-				63B9B3F52EA58ED2008483FB /* StreakChartView.swift */,
 			);
 			path = HistoryAndStatsViews;
 			sourceTree = "<group>";
@@ -208,6 +207,7 @@
 				63B9B3FC2EA58ED2008483FB /* Info.swift */,
 				63B9B3FD2EA58ED2008483FB /* OnboardingView.swift */,
 				63B9B3F82EA58ED2008483FB /* GameTile.swift */,
+				6344F4FE2EB9500D00948552 /* KeyPress.swift */,
 			);
 			path = SelectViews;
 			sourceTree = "<group>";
@@ -340,7 +340,6 @@
 				63B9B43A2EA58ED2008483FB /* englishWords.json in Resources */,
 				63B9B43B2EA58ED2008483FB /* dailySpanishWords.json in Resources */,
 				63B9B43C2EA58ED2008483FB /* Assets.xcassets in Resources */,
-				63B9B43D2EA58ED2008483FB /* Wordly.icon in Resources */,
 				63B9B43F2EA58ED2008483FB /* PrivacyInfo.xcprivacy in Resources */,
 				63B9B4402EA58ED2008483FB /* dailyEnglishWords.json in Resources */,
 				63B9B4412EA58ED2008483FB /* Localizable.xcstrings in Resources */,
@@ -358,6 +357,7 @@
 				63B9B4152EA58ED2008483FB /* FilterOptionsView.swift in Sources */,
 				63B9B4162EA58ED2008483FB /* GameTile.swift in Sources */,
 				63B9B4172EA58ED2008483FB /* NotificationManager.swift in Sources */,
+				6344F4FF2EB9502300948552 /* KeyPress.swift in Sources */,
 				63B9B4182EA58ED2008483FB /* GameRecordView.swift in Sources */,
 				63B9B4192EA58ED2008483FB /* SpanishWordDefinitionView.swift in Sources */,
 				63B9B41A2EA58ED2008483FB /* NotificationView.swift in Sources */,
@@ -553,7 +553,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 15.0;
-				MARKETING_VERSION = 2.0.0;
+				MARKETING_VERSION = 2.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = SwoshEB.ThePhrase;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
@@ -600,7 +600,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 15.0;
-				MARKETING_VERSION = 2.0.0;
+				MARKETING_VERSION = 2.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = SwoshEB.ThePhrase;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;

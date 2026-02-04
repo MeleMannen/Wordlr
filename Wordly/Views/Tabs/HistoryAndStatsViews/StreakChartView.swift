@@ -35,7 +35,7 @@ struct StreakChartView: View {
 								y: .value("Number of Guesses", " \(streak.index) "),
 								height: .fixed(20.0)
 							)
-							.foregroundStyle(Color.orange)
+							.foregroundStyle(Color.green)
 							.annotation(position: currentDouble < (self.maxStreakLength / 8.0) ? .trailing : .overlay) {
 								Text("\(streak.currentStreak)")
 									.foregroundColor(currentDouble < (self.maxStreakLength / 8.0) ? .primary : .white)
@@ -49,7 +49,7 @@ struct StreakChartView: View {
 								y: .value("Number of Guesses", " \(streak.index) "),
 								height: .fixed(20.0)
 							)
-							.foregroundStyle(Color.green)
+							.foregroundStyle(Color.orange)
 							.annotation(position: longestDouble < (self.maxStreakLength / 8.0) ? .trailing : .overlay) {
 								Text("\(streak.longestStreak)")
 									.foregroundColor(longestDouble < (self.maxStreakLength / 8.0) ? .primary : .white)
@@ -73,14 +73,14 @@ struct StreakChartView: View {
 			
 			HStack {
 				Circle()
-					.fill(Color.orange)
+					.fill(Color.green)
 					.frame(width: 5, height: 5)
 				Text("Current")
 					.foregroundStyle(.secondary)
 					.font(.footnote)
 					.padding(.trailing, 10)
 				Circle()
-					.fill(Color.green)
+					.fill(Color.orange)
 					.frame(width: 5, height: 5)
 				Text("Longest")
 					.foregroundStyle(.secondary)
@@ -93,5 +93,5 @@ struct StreakChartView: View {
 }
 
 #Preview {
-	StreakChartView(title: "Daily Word Streaks 🔥", longestStreakPerLetters:  .constant([(language: .english, streaks: [(5, 1, 1)]), (language: .spanish, streaks: []), (language: .norwegian, streaks: [])]), maxStreakLength: .constant(1.0))
+	StreakChartView(title: "Daily Wordly Streaks 🔥", longestStreakPerLetters:  .constant([(language: .english, streaks: [(5, 1, 1)]), (language: .spanish, streaks: []), (language: .norwegian, streaks: [])]), maxStreakLength: .constant(1.0))
 }

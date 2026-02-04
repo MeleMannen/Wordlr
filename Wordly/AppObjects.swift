@@ -16,6 +16,11 @@ enum CurrentSelectView {
 	case infoView
 }
 
+struct CurrentGameSettings {
+	var numberOfLetters: Int
+	var selectedLanguage: LanguageSelection
+}
+
 
 enum AppTheme: String {
     case system, dark, light
@@ -277,7 +282,7 @@ struct ShortedContent: Codable {
 }
 
 struct Words: Decodable {
-    let wordGroups: [String: [String]]
+    var wordGroups: [String: [String]]
 }
 
 enum LetterState: Codable {

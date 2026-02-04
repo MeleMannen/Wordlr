@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct NorwegianWordDefinitionView: View {
+	@Environment(\.scenePhase) private var scenePhase
     @EnvironmentObject private var definitionManager: DefinitionManager
 	@AppStorage("userWantsAds") private var userWantsAds: Bool = false
     @State var processedWords: [ProcessedWord] = []
@@ -94,8 +95,8 @@ struct NorwegianWordDefinitionView: View {
                                 .padding(25)
                             }
                             .background {
-                                RoundedRectangle(cornerRadius: 10)
-                                    .fill(Color(uiColor: .quaternarySystemFill))
+								RoundedRectangle(cornerRadius: 20)
+									.foregroundStyle(Color(uiColor: .secondarySystemBackground))
                             }
 							.overlay(alignment: .bottomTrailing) {
 								Text("ordbokene.no")
@@ -134,6 +135,12 @@ struct NorwegianWordDefinitionView: View {
 											.font(.title2).bold()
 											.padding(14)
 											.frame(maxWidth: .infinity)
+											.background {
+												if self.scenePhase == .background {
+													RoundedRectangle(cornerRadius: 15)
+														.foregroundStyle(Color(uiColor: .systemGreen))
+												}
+											}
 									}
 									.glassEffect(.regular.tint(.green).interactive(), in: .rect(cornerRadius: 15.0))
 									.simultaneousGesture(TapGesture().onEnded {
@@ -170,8 +177,8 @@ struct NorwegianWordDefinitionView: View {
                             
                         }
                         .background {
-                            RoundedRectangle(cornerRadius: 10)
-                                .fill(Color(uiColor: .quaternarySystemFill))
+                            RoundedRectangle(cornerRadius: 20)
+								.foregroundStyle(Color(uiColor: .secondarySystemBackground))
                         }
                         .padding(.horizontal, 15)
                         .padding(.top, 20)

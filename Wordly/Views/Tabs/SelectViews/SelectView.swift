@@ -10,6 +10,7 @@ import SwiftUI
 struct SelectView: View {
     @Environment(\.modelContext) var modelContext
 	@Environment(\.colorScheme) private var colorScheme
+	@Environment(\.scenePhase) private var scenePhase
 	@Environment(AdManager.self) private var adManager: AdManager
     @StateObject var appManager = AppManager()
 	@StateObject var reviewManager = ReviewManager()
@@ -29,8 +30,11 @@ struct SelectView: View {
     @State var didTapPlayNormalButton: Bool = false
     @State var didTapInfoButton: Bool = false
     @State var isShowingAlreadyPlayedAlert: Bool = false
+	@State var didTapChangeOfGame: Bool = false
 	@Binding var selection: TabSelection
-    
+	@State var currentGameSettings: CurrentGameSettings = CurrentGameSettings(numberOfLetters: 5, selectedLanguage: .english)
+	@State var shouldNotAllowChangeGameSettings: Bool = true
+	@State var isAllowedToPlayDailyWordAgain: Bool = true
     
     var body: some View {
         GeometryReader { geometry in
@@ -143,17 +147,33 @@ struct SelectView: View {
 										.padding()
 										.foregroundStyle(.white)
 										.frame(maxWidth: .infinity)
+										.background {
+											if self.scenePhase == .background {
+												RoundedRectangle(cornerRadius: 15)
+													.foregroundStyle(Color(uiColor: .systemGreen))
+												
+											}
+										}
 								} else {
 									Text("Play Unlimited")
 										.font(.title2).bold()
 										.padding()
 										.foregroundStyle(.white)
 										.frame(maxWidth: .infinity)
+										.background {
+											if self.scenePhase == .background {
+												RoundedRectangle(cornerRadius: 15)
+													.foregroundStyle(Color(uiColor: .systemGreen))
+												
+											}
+										}
 								}
 							}
 							.simultaneousGesture(TapGesture().onEnded {
 								self.didTapPlayNormalButton.toggle()
 								appManager.selectedGameMode = .normal
+								self.currentGameSettings = appManager.getCurrentGameSettings()
+								self.shouldNotAllowChangeGameSettings = true
 								Task {
 									await HintTip.gamesPlayedEvent.donate()
 								}
@@ -206,6 +226,8 @@ struct SelectView: View {
 							.simultaneousGesture(TapGesture().onEnded {
 								self.didTapPlayNormalButton.toggle()
 								appManager.selectedGameMode = .normal
+								self.currentGameSettings = appManager.getCurrentGameSettings()
+								self.shouldNotAllowChangeGameSettings = true
 								Task {
 									await HintTip.gamesPlayedEvent.donate()
 								}
@@ -220,10 +242,10 @@ struct SelectView: View {
                     
 					if #available(iOS 26.0, *) {
 						VStack {
-							if appManager.checkIfDailyWordIsAlreadyPlayed() {
+							if appManager.checkIfDailyWordIsAlreadyPlayed() && !self.isAllowedToPlayDailyWordAgain {
 								if let streakEntity = appManager.getStreakEntity(), streakEntity.streak.currentStreak >= 3, streakEntity.streak.isAlive {
 									VStack {
-										Text("Play Daily Word\n\(streakEntity.streak.currentStreak)🔥")
+										Text("Play Daily Wordly\n\(streakEntity.streak.currentStreak)🔥")
 											.contentTransition(.numericText(value: Double(streakEntity.streak.currentStreak)))
 											.multilineTextAlignment(.center)
 											.lineSpacing(5)
@@ -233,24 +255,23 @@ struct SelectView: View {
 											.frame(maxWidth: .infinity)
 											.foregroundStyle(.white)
 											.background {
-												ConditionalButtonBackground()
+												ConditionalButtonBackground(opacity: 0.3)
 													.environmentObject(appManager)
-													.opacity(0.3)
+												
 											}
+										
 											.onTapGesture {
 												self.didTapFakePlayDailyWordButton.toggle()
 												self.isShowingAlreadyPlayedAlert = true
+												print("Tapped2: \(self.isShowingAlreadyPlayedAlert)")
 											}
 											.sensoryFeedback(.error, trigger: self.didTapFakePlayDailyWordButton)
-											.alert(isPresented: self.$isShowingAlreadyPlayedAlert) {
-												Alert(title: Text("You can't play this"), message: Text("You have already played this exact Word today. Try again tomorrow or play with a different Number of Letters."), dismissButton: .cancel(Text("Got it!")))
-											}
 										
 									}
 									.glassEffect(.regular.interactive(), in: .rect(cornerRadius: 15.0))
 								} else {
 									VStack {
-										Text("Play Daily Word")
+										Text("Play Daily Wordly")
 											.multilineTextAlignment(.center)
 										
 											.font(.title2).bold()
@@ -258,19 +279,16 @@ struct SelectView: View {
 											.frame(maxWidth: .infinity)
 											.foregroundStyle(.white)
 											.background {
-												ConditionalButtonBackground()
+												ConditionalButtonBackground(opacity: 0.3)
 													.environmentObject(appManager)
-													.opacity(0.3)
 											}
 											.onTapGesture {
 												self.didTapFakePlayDailyWordButton.toggle()
 												self.isShowingAlreadyPlayedAlert = true
+												print("Tapped3: \(self.isShowingAlreadyPlayedAlert)")
 												
 											}
 											.sensoryFeedback(.error, trigger: self.didTapFakePlayDailyWordButton)
-											.alert(isPresented: self.$isShowingAlreadyPlayedAlert) {
-												Alert(title: Text("You can't play this"), message: Text("You have already played this exact Word today. Try again tomorrow or play with a different Number of Letters."), dismissButton: .cancel(Text("Got it!")))
-											}
 									}
 									.glassEffect(.regular.interactive(), in: .rect(cornerRadius: 15.0))
 								}
@@ -279,13 +297,12 @@ struct SelectView: View {
 							} else {
 								NavigationLink(destination: GameView().environmentObject(appManager)) {
 									if let streakEntity = appManager.getStreakEntity(), streakEntity.streak.currentStreak >= 3, streakEntity.streak.isAlive {
-										Text("Play Daily Word\n\(streakEntity.streak.currentStreak)🔥")
+										Text("Play Daily Wordly\n\(streakEntity.streak.currentStreak)🔥")
 											.contentTransition(.numericText(value: Double(streakEntity.streak.currentStreak)))
 											.multilineTextAlignment(.center)
 											.lineSpacing(5)
 											.font(.title2).bold()
 											.padding()
-										
 											.frame(maxWidth: .infinity)
 											.foregroundStyle(.white)
 											.background {
@@ -293,11 +310,10 @@ struct SelectView: View {
 													.environmentObject(appManager)
 											}
 									} else {
-										Text("Play Daily Word")
+										Text("Play Daily Wordly")
 											.multilineTextAlignment(.center)
 											.font(.title2).bold()
 											.padding()
-										
 											.frame(maxWidth: .infinity)
 											.foregroundStyle(.white)
 											.background {
@@ -309,6 +325,8 @@ struct SelectView: View {
 								.simultaneousGesture(TapGesture().onEnded {
 									self.didTapPlayDailyWordButton.toggle()
 									appManager.selectedGameMode = .dailyWord
+									self.currentGameSettings = appManager.getCurrentGameSettings()
+									self.shouldNotAllowChangeGameSettings = true
 									Task {
 										await HintTip.gamesPlayedEvent.donate()
 									}
@@ -324,10 +342,10 @@ struct SelectView: View {
 						.padding(.bottom, 10)
 					} else {
 						VStack {
-							if appManager.checkIfDailyWordIsAlreadyPlayed() {
+							if appManager.checkIfDailyWordIsAlreadyPlayed() && !self.isAllowedToPlayDailyWordAgain {
 								if let streakEntity = appManager.getStreakEntity(), streakEntity.streak.currentStreak >= 3, streakEntity.streak.isAlive {
 									VStack {
-										Text("Play Daily Word\n\(streakEntity.streak.currentStreak)🔥")
+										Text("Play Daily Wordly\n\(streakEntity.streak.currentStreak)🔥")
 											.contentTransition(.numericText(value: Double(streakEntity.streak.currentStreak)))
 											.multilineTextAlignment(.center)
 											.lineSpacing(5)
@@ -337,9 +355,8 @@ struct SelectView: View {
 											.frame(maxWidth: .infinity)
 											.foregroundStyle(.white)
 											.background {
-												ConditionalButtonBackground()
+												ConditionalButtonBackground(opacity: 0.3)
 													.environmentObject(appManager)
-													.opacity(0.3)
 											}
 											.padding(.horizontal, 30)
 											.onTapGesture {
@@ -347,14 +364,11 @@ struct SelectView: View {
 												self.isShowingAlreadyPlayedAlert = true
 											}
 											.sensoryFeedback(.error, trigger: self.didTapFakePlayDailyWordButton)
-											.alert(isPresented: self.$isShowingAlreadyPlayedAlert) {
-												Alert(title: Text("You can't play this"), message: Text("You have already played this exact Word today. Try again tomorrow or play with a different Number of Letters."), dismissButton: .cancel(Text("Got it!")))
-											}
 										
 									}
 								} else {
 									VStack {
-										Text("Play Daily Word")
+										Text("Play Daily Wordly")
 											.multilineTextAlignment(.center)
 										
 											.font(.title2).bold()
@@ -362,20 +376,17 @@ struct SelectView: View {
 											.frame(maxWidth: .infinity)
 											.foregroundStyle(.white)
 											.background {
-												ConditionalButtonBackground()
+												ConditionalButtonBackground(opacity: 0.3)
 													.environmentObject(appManager)
-													.opacity(0.3)
 											}
 											.padding(.horizontal, 30)
 											.onTapGesture {
 												self.didTapFakePlayDailyWordButton.toggle()
 												self.isShowingAlreadyPlayedAlert = true
+												print("Tapped: \(self.isShowingAlreadyPlayedAlert)")
 												
 											}
 											.sensoryFeedback(.error, trigger: self.didTapFakePlayDailyWordButton)
-											.alert(isPresented: self.$isShowingAlreadyPlayedAlert) {
-												Alert(title: Text("You can't play this"), message: Text("You have already played this exact Word today. Try again tomorrow or play with a different Number of Letters."), dismissButton: .cancel(Text("Got it!")))
-											}
 									}
 								}
 								
@@ -383,7 +394,7 @@ struct SelectView: View {
 							} else {
 								NavigationLink(destination: GameView().environmentObject(appManager)) {
 									if let streakEntity = appManager.getStreakEntity(), streakEntity.streak.currentStreak >= 3, streakEntity.streak.isAlive {
-										Text("Play Daily Word\n\(streakEntity.streak.currentStreak)🔥")
+										Text("Play Daily Wordly\n\(streakEntity.streak.currentStreak)🔥")
 											.contentTransition(.numericText(value: Double(streakEntity.streak.currentStreak)))
 											.multilineTextAlignment(.center)
 											.lineSpacing(5)
@@ -398,7 +409,7 @@ struct SelectView: View {
 											}
 											.padding(.horizontal, 30)
 									} else {
-										Text("Play Daily Word")
+										Text("Play Daily Wordly")
 											.multilineTextAlignment(.center)
 											.font(.title2).bold()
 											.padding()
@@ -415,10 +426,11 @@ struct SelectView: View {
 								.simultaneousGesture(TapGesture().onEnded {
 									self.didTapPlayDailyWordButton.toggle()
 									appManager.selectedGameMode = .dailyWord
+									self.currentGameSettings = appManager.getCurrentGameSettings()
+									self.shouldNotAllowChangeGameSettings = true
 									Task {
 										await HintTip.gamesPlayedEvent.donate()
 									}
-									
 								})
 								.sensoryFeedback(.impact, trigger: self.didTapPlayDailyWordButton)
 								.buttonStyle(GrowingButton())
@@ -428,6 +440,22 @@ struct SelectView: View {
 						.padding(.bottom, 10)
 					}
                 }
+				.alert(isPresented: self.$didTapChangeOfGame) {
+					Alert(title: Text("Discard current Word?"), message: Text("Are you sure that you want to discard your current Word?"), primaryButton: .cancel({
+						self.shouldNotAllowChangeGameSettings = false
+						appManager.resetGameToPreviousSettings(settings: self.currentGameSettings)
+						DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
+							self.shouldNotAllowChangeGameSettings = true
+						}
+					}), secondaryButton: .destructive(Text("I'm Sure!"), action: {
+						self.shouldNotAllowChangeGameSettings = false
+					}))
+				}
+				.alert(isPresented: self.$isShowingAlreadyPlayedAlert) {
+					Alert(title: Text("You have already played this Word!"), message: Text("You have already played this exact Word today. Are you sure you want to play the same Word again?"), primaryButton: .cancel(Text("Got it!")), secondaryButton: .default(Text("I'm Sure!"), action: {
+						self.isAllowedToPlayDailyWordAgain = true
+					}))
+				}
                 .padding(20)
                 .background {
                     RoundedRectangle(cornerRadius: 25)
@@ -479,9 +507,20 @@ struct SelectView: View {
 				adManager.shouldShowAds = true
 			}
 		}
+		.onChange(of: appManager.selectedLanguage) { oldValue, newValue in
+			if appManager.hasGameStarted() && self.shouldNotAllowChangeGameSettings {
+				self.didTapChangeOfGame = true
+			}
+		}
+		.onChange(of: appManager.numberOfLetters) { oldValue, newValue in
+			if appManager.hasGameStarted() && self.shouldNotAllowChangeGameSettings {
+				self.didTapChangeOfGame = true
+			}
+		}
         .onAppear {
 			appManager.message = ""
-			
+			self.currentGameSettings = appManager.getCurrentGameSettings()
+			self.isAllowedToPlayDailyWordAgain = false
             if !self.hasFixedContextAndFetched {
                 appManager.modelContext = modelContext
                 appManager.streakManager = StreakManager(context: modelContext)
@@ -550,22 +589,25 @@ struct ConditionalButtonBackground: View {
     @Environment(\.colorScheme) private var colorScheme
     @EnvironmentObject var appManager: AppManager
     @AppStorage("userWantsNormalTheme") private var userWantsNormalTheme: Bool = true
+	var opacity: Double = 1.0
+	
     
     var body: some View {
         if !self.userWantsNormalTheme && self.colorScheme == .dark {
             RoundedRectangle(cornerRadius: 15)
-                .foregroundStyle(appManager.gradient)
+                .foregroundStyle(appManager.gradient.opacity(self.opacity))
                 .gradientShadow(gradient: appManager.shadowGradient, radius: 3, x: 0, y: 0)
             
         } else {
             RoundedRectangle(cornerRadius: 15)
-                .foregroundStyle(Color.green)
+				.foregroundStyle(Color.green.opacity(self.opacity))
         }
     }
 }
 
 struct ConditionalButtonBackground2: View {
 	@Environment(\.colorScheme) private var colorScheme
+	@Environment(\.scenePhase) private var scenePhase
 	@EnvironmentObject var appManager: AppManager
 	@AppStorage("userWantsNormalTheme") private var userWantsNormalTheme: Bool = true
 	
@@ -575,8 +617,9 @@ struct ConditionalButtonBackground2: View {
 				.foregroundStyle(appManager.gradient)
 				.gradientShadow(gradient: appManager.shadowGradient, radius: 3, x: 0, y: 0)
 			
-		} else {
-//			RoundedRectangle(cornerRadius: 15)
+		} else if self.scenePhase == .background {
+			RoundedRectangle(cornerRadius: 15)
+				.foregroundStyle(Color(uiColor: .systemGreen))
 			
 		}
 	}

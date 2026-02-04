@@ -9,7 +9,7 @@ import SwiftUI
 import SwiftData
 
 struct HistoryView: View {
-//    @Environment(\.modelContext) private var modelContext
+    @Environment(\.modelContext) private var modelContext
     @Environment(\.colorScheme) private var colorScheme
     @AppStorage("defaultStatLanguage") private var defaultStatLanguage: LanguageSelection = .all
     @AppStorage("defaultStatNumberOfLetters") private var defaultStatNumberOfLetters: Int = 9
@@ -41,7 +41,9 @@ struct HistoryView: View {
         NavigationStack {
             GeometryReader { geometry in
                 VStack {
-//                    FilterView(numberOfLetters: $numberOfLetters, selectedLanguage: $selectedLanguage, gameMode: $gameMode, showsWhenHintsUsed: $showsWhenHintsUsed)
+					if #unavailable(iOS 26.0) {
+						FilterView(numberOfLetters: $numberOfLetters, selectedLanguage: $selectedLanguage, gameMode: $gameMode, showsWhenHintsUsed: $showsWhenHintsUsed)
+					}
                     if self.searchResults.isEmpty && !self.searchedWord.isEmpty {
                         ContentUnavailableView.search(text: self.searchedWord)
                     } else if self.searchResults.isEmpty {
@@ -104,15 +106,18 @@ struct HistoryView: View {
                                                 }
                                                 Spacer()
                                             }
-                                        })
+										})
                                         
                                     }
-                                    //                                .onDelete { indexSet in
-                                    //                                    withAnimation {
-                                    //                                        let toDelete = indexSet.map { groupedWords[date]![$0] }
-                                    //                                        toDelete.forEach { modelContext.delete($0) }
-                                    //                                    }
-                                    //                                }
+//									.onDelete { indexSet in
+//										withAnimation {
+//											let toDelete = indexSet.map { groupedWords[date]![$0] }
+//											toDelete.forEach { modelContext.delete($0) }
+//											try? modelContext.save()
+//										}
+//										#warning("Need to update the groupedWords and sectionKeys after deletion")
+//									}
+
                                 } header: {
                                     SectionHeaderView(letter: date)
                                 }
@@ -126,7 +131,9 @@ struct HistoryView: View {
                 .navigationTitle("History")
 				.navigationBarTitleDisplayMode(.inline)
 				.safeAreaInset(edge: .top) {
-					FilterView(numberOfLetters: $numberOfLetters, selectedLanguage: $selectedLanguage, gameMode: $gameMode, showsWhenHintsUsed: $showsWhenHintsUsed)
+					if #available(iOS 26.0, *) {
+						FilterView(numberOfLetters: $numberOfLetters, selectedLanguage: $selectedLanguage, gameMode: $gameMode, showsWhenHintsUsed: $showsWhenHintsUsed)
+					}
 				}
                 .onChange(of: self.searchedWord) {
                     self.filterGameRecords()
@@ -229,30 +236,6 @@ struct GradientShadowView: View {
         }
     }
 }
-
-//struct GradientShadowText: View {
-//    let text: String
-//    let gradient: LinearGradient
-//    
-//    var body: some View {
-////        ZStack(alignment: .leading) {
-//            // 1) the “shadow” behind, masked to the text’s shape
-//            gradient
-//                .mask(
-//                    Text(text)
-//                )
-//                .blur(radius: 3)
-//                .overlay(
-//                    Text(text)
-//                        .foregroundStyle(gradient)
-//                )
-//            
-//            // 2) the actual, sharp text on top
-////            Text(text)
-////                .foregroundStyle(gradient)
-////        }
-//    }
-//}
 
 
 #Preview {

@@ -13,6 +13,7 @@ import GoogleMobileAds
 final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
     @AppStorage("defaultLanguage") private var defaultLanguage: LanguageSelection = .norwegian
     @AppStorage("defaultNumberOfLetters") private var defaultNumberOfLetters: Int = 5
+	@AppStorage("userWantsThePhraseNameBack") private var userWantsThePhraseNameBack = false
     
     @Published var streaks: [StreakEntity] = []
     @Published var normalStreaks: [NormalStreakEntity] = []
@@ -58,7 +59,11 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
     @Published var isFilteringIncludedLetters: Bool = false
     @Published var selectedExcludedLetters: [String] = []
     @Published var selectedIncludedLetters: [String] = []
-    
+	
+	private let valid5LetterNames: [String] = ["SIMEN", "LUKAS", "JONAS", "HELLE", "MARTE", "ROHIN", "HILDE", "TROND", "JOMAR", "DAHLE", "SYVER", "BØRGE", "ØLARS", "HSFKJ"]
+	private let valid6LetterNames: [String] = ["MARTIN", "MARIUS", "TOBIAS", "DANIEL", "HENRIK", "KRISTIN"]
+	private let valid8LetterNames: [String] = ["JOHANNES", "LEONARDO", "TORBJØRN"]
+     
     let gradient = LinearGradient(colors: [.orange, .yellow, .yellow, .yellow, .yellow, .white], startPoint: .bottomLeading, endPoint: .topTrailing)
     let shadowGradient = LinearGradient(colors: [.orange, .yellow, .yellow, .yellow, .yellow], startPoint: .bottomLeading, endPoint: .topTrailing)
     
@@ -69,14 +74,18 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
     func getWords() {
         if let words = WordleDataManager.shared.loadWordsFromJSONFile(selectedLanguage: selectedLanguage) {
             self.words = words
+			if self.numberOfLetters == 5 && self.userWantsThePhraseNameBack {
+				self.words?.wordGroups["5"]?.append(contentsOf: self.valid5LetterNames)
+			} else if self.numberOfLetters == 6 && self.userWantsThePhraseNameBack {
+				self.words?.wordGroups["6"]?.append(contentsOf: self.valid6LetterNames)
+			} else if self.numberOfLetters == 8 && self.userWantsThePhraseNameBack {
+				self.words?.wordGroups["8"]?.append(contentsOf: self.valid8LetterNames)
+			}
             
-            if let dailyWords = WordleDataManager.shared.loadDailyWordsFromJSONFile(selectedLanguage: selectedLanguage) {
-                self.dailyWords = dailyWords
-                self.resetBoard()
-                
-            } else {
-                self.resetBoard()
-            }
+			if let dailyWords = WordleDataManager.shared.loadDailyWordsFromJSONFile(selectedLanguage: selectedLanguage) {
+				self.dailyWords = dailyWords
+			}
+			self.resetBoard()
         }
     }
     
@@ -120,18 +129,21 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
         return utcDate.timeIntervalSince1970
         
     }
+	
+	func hasGameStarted() -> Bool {
+		return self.currentRow > 0 && !self.isGameOver
+	}
     
     
     func getRandomWord() {
         if selectedGameMode == .normal {
             self.word = self.words?.wordGroups["\(numberOfLetters)"]?.randomElement() ?? "PIANO"
-            print("Ordet er \(self.word)")
-        } else {
-            self.word = self.getDailyWord()
-            print("Ordet2 er \(self.word)")
-            
-        }
+		} else {
+			self.word = self.getDailyWord()
+		}
+		print("Ordet er \(self.word)")
     }
+	
     
     func getDailyWord() -> String {
         let calendar = Calendar.current
@@ -206,6 +218,9 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
     
     func getWordFromCurrentRow() -> String {
         var word = ""
+		if self.board.isEmpty || self.currentRow >= self.board.count {
+			return word
+		}
         for letter in self.board[self.currentRow] {
             word += letter.letter
         }
@@ -225,6 +240,15 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
         }
         return nil
     }
+	
+	func getCurrentGameSettings() -> CurrentGameSettings {
+		return CurrentGameSettings(numberOfLetters: self.numberOfLetters, selectedLanguage: self.selectedLanguage)
+	}
+	
+	func resetGameToPreviousSettings(settings: CurrentGameSettings) {
+		self.numberOfLetters = settings.numberOfLetters
+		self.selectedLanguage = settings.selectedLanguage
+	}
     
     
     
@@ -242,13 +266,10 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
                 self.board[self.currentRow][i].isCorrectPosition = true
                 self.keyboard[keyBoardPosition.row][keyBoardPosition.col].isCorrectPosition = true
                 if let index = changableWord.firstIndex(of: Character(letter)) {
-                    //                    print("changanbleWord55: \(changableWord), i: \(i), index: \(index)")
                     changableWord.remove(at: index)
-                    //                    print("changanbleWord: \(changableWord), i: \(i), index: \(index)")
                     
                 } else {
                     changableWord = changableWord.replacingOccurrences(of: self.board[self.currentRow][i].letter, with: "")
-                    //                    print("changanbleWord2: \(changableWord), i: \(i)")
                 }
             }
         }
@@ -276,14 +297,12 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
                     
                 } else {
                     changableWord = changableWord.replacingOccurrences(of: self.board[self.currentRow][i].letter, with: "")
-                    //                    print("changanbleWord3: \(changableWord), i: \(i)")
                 }
                 
                 
             } else {
                 self.board[self.currentRow][i].isUsedButNotCorrect = true
                 self.keyboard[keyBoardPosition.row][keyBoardPosition.col].isUsedButNotCorrect = true
-                //                print("wrong letter: \(self.board[self.currentRow][i].letter), i: \(i), letterIndex: \(letterIndex.utf16Offset(in: self.word)), letter: \(letter), changeableWord: \(changableWord)")
                 
                 if let index = changableWord.firstIndex(of: Character(self.board[self.currentRow][i].letter)) {
                     print("index2: \(index.utf16Offset(in: self.word)), letter: \(self.board[self.currentRow][i].letter)")
@@ -294,28 +313,22 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
                     
                 } else {
                     changableWord = changableWord.replacingOccurrences(of: self.board[self.currentRow][i].letter, with: "")
-                    //                    print("changanbleWord9: \(changableWord), i: \(i)")
                 }
             }
             
         }
         
-        // Enter the dispatch group for `goThroughBoard`
         dispatchGroup.enter()
-        DispatchQueue.global().async {
-            self.goThroughBoard() { success in
-                if success {
-                    print("goThroughBoard completed successfully.")
-                } else {
-                    print("goThroughBoard failed.")
-                }
-                dispatchGroup.leave()
-                
-            }
-            
-        }
-        
-        // Notify when both tasks are finished
+		self.goThroughBoard() { success in
+			if success {
+				print("goThroughBoard completed successfully.")
+			} else {
+				print("goThroughBoard failed.")
+			}
+			dispatchGroup.leave()
+			
+		}
+		
         dispatchGroup.notify(queue: .main) {
             print("Both goThroughBoard and goThroughKeyboard are finished.")
             completion(true)
@@ -522,7 +535,9 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
                     if success {
                         if self.word == guessedWord {
                             print("Du vant!!")
-                            self.isGameOver = true
+							withAnimation {
+								self.isGameOver = true
+							}
                             self.didWinGame = .won
                             self.endDate = Date()
                             self.addGameRecord(gameRecord: GameRecord(date: self.startDate, state: .won, mode: self.selectedGameMode, word: self.word, language: self.selectedLanguage, numberOfLetters: self.numberOfLetters, numberOfGuesses: self.currentRow, hintsUsed: self.hintsUsed, board: self.board, endDate: self.endDate))
@@ -539,7 +554,9 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
                         } else {
                             if self.currentRow == self.board.count {
                                 print("Du tapte: \(guessedWord), ordet var \(self.word)")
-                                self.isGameOver = true
+								withAnimation {
+									self.isGameOver = true
+								}
                                 self.didWinGame = .lost
                                 self.endDate = Date()
                                 self.addGameRecord(gameRecord: GameRecord(date: self.startDate, state: .lost, mode: self.selectedGameMode, word: self.word, language: self.selectedLanguage, numberOfLetters: self.numberOfLetters, numberOfGuesses: self.currentRow, hintsUsed: self.hintsUsed, board: self.board, endDate: self.endDate))
@@ -591,6 +608,10 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
         if self.isGameOver {
             return true
         }
+		
+		if self.userWantsThePhraseNameBack && self.numberOfLetters == 5 && self.valid5LetterNames.contains(self.getWordFromCurrentRow()) {
+			return true
+		}
         let wordIsValid = self.words?.wordGroups["\(self.numberOfLetters)"]?.contains(self.getWordFromCurrentRow()) ?? false
         if wordIsValid {
             return true
@@ -687,7 +708,9 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
         self.currentIndex = 0
         self.hintsUsed = 0
 		self.message = ""
-        self.isGameOver = false
+		withAnimation {
+			self.isGameOver = false
+		}
         self.hasSharedResult = false
         self.didWinGame = .lost
         self.language = self.selectedLanguage
@@ -797,8 +820,17 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
     }
     
     func addGameRecord(gameRecord: GameRecord) {
+		var cetCalendar = Calendar(identifier: .gregorian)
+		cetCalendar.timeZone = TimeZone(identifier: "CET")!
         if let gameRecordManager = self.gameRecordManager {
+			for record in self.gameRecords {
+				if cetCalendar.isDate(record.gameRecord.date, inSameDayAs: gameRecord.date) && record.gameRecord.mode == gameRecord.mode && record.gameRecord.language == gameRecord.language && record.gameRecord.numberOfLetters == gameRecord.numberOfLetters && record.gameRecord.word == gameRecord.word {
+					print("Game record for this date, mode, language, and number of letters already exists. Not adding duplicate.")
+					return
+				}
+			}
             gameRecordManager.addGameRecord(gameRecord: gameRecord)
+				
             self.gameRecords = gameRecordManager.fetchGameRecords()
         }
     }
@@ -864,7 +896,7 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
     // MARK: - ADS
     func loadAd() async {
         do {
-			#warning("Replace the ad unit ID with your own ad unit ID when deploying to production.")
+//			#warning("Replace the ad unit ID with your own ad unit ID when deploying to production.")
             
 #if targetEnvironment(simulator) // DEBUG
 			self.rewardedAd = try await RewardedAd.load(
@@ -873,13 +905,13 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
 			self.rewardedAd = try await RewardedAd.load(
 				with: "ca-app-pub-7619403750703078/7682260846", request: Request()) // ca-app-pub-3940256099942544/1712485313
 #endif
-//            self.rewardedAd = try await RewardedAd.load(
-//                with: "ca-app-pub-3940256099942544/1712485313", request: Request())
             self.rewardedAd?.fullScreenContentDelegate = self
 			await MainActor.run {
-//				withAnimation(.easeInOut) {
-					self.shouldShowAdButton = true
-//				}
+				DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+					withAnimation {
+						self.shouldShowAdButton = true
+					}
+				}
 			}
 			print("Rewarded ad loaded.")
         } catch {

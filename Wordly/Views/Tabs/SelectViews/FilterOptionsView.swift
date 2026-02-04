@@ -311,14 +311,19 @@ struct FilterOptionsView: View {
 
 struct ThePhraseTextFieldStyle: TextFieldStyle {
     func _body(configuration: TextField<Self._Label>) -> some View {
-        configuration
-            .padding(10)
-            .background(.background)
-            .cornerRadius(8)
-            .overlay(
-                RoundedRectangle(cornerRadius: 8)
-                    .stroke(.primary)
-            )
+		if #available(iOS 26.0, *) {
+			configuration
+				.padding(10)
+		} else {
+			configuration
+				.padding(10)
+				.background(.background)
+				.cornerRadius(8)
+				.overlay(
+					RoundedRectangle(cornerRadius: 8)
+						.stroke(.primary)
+				)
+		}
     }
 }
 

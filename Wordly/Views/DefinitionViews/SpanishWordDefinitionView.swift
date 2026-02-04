@@ -192,8 +192,8 @@ struct SpanishWordDefinitionView: View {
 							}
 						}
 						.background {
-							RoundedRectangle(cornerRadius: 10)
-								.fill(Color(uiColor: .quaternarySystemFill))
+							RoundedRectangle(cornerRadius: 20)
+								.foregroundStyle(Color(uiColor: .secondarySystemBackground))
 						}
 						.overlay(alignment: .bottomTrailing) {
 							Link("wiktionary.org", destination: URL(string: "\(spanishDefinition.source.url)")!)
@@ -224,8 +224,8 @@ struct SpanishWordDefinitionView: View {
 							.padding(25)
 						}
 						.background {
-							RoundedRectangle(cornerRadius: 10)
-								.fill(Color(uiColor: .quaternarySystemFill))
+							RoundedRectangle(cornerRadius: 20)
+								.foregroundStyle(Color(uiColor: .secondarySystemBackground))
 						}
 						.padding(.horizontal, 15)
 						.padding(.top, 20)

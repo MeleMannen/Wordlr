@@ -39,16 +39,33 @@ final class NotificationManager {
 		}
 	}
 	
+	private static func requestId(for reminder: DailyWordReminder, on date: Date) -> String {
+		let comps = Calendar.current.dateComponents([.year, .month, .day], from: date)
+		let y = comps.year ?? 0, m = comps.month ?? 0, d = comps.day ?? 0
+		return "daily-word-reminder-\(reminder.id.uuidString)-\(y)-\(m)-\(d)"
+	}
+	
 	static func scheduleDailyWordReminder(reminder: DailyWordReminder, daysAhead: Int = 7) {
 		let center = UNUserNotificationCenter.current()
+		
 		center.getPendingNotificationRequests { requests in
-			let existingDates = requests.compactMap { request -> Date? in
-				(request.trigger as? UNCalendarNotificationTrigger)?.nextTriggerDate()
-			}
+			let existingIds = Set(
+				requests
+					.filter { $0.identifier.contains(reminder.id.uuidString) }
+					.map { $0.identifier }
+			)
+			
+			let title = NSLocalizedString("Daily Wordly Reminder", comment: "Title for Daily Wordly reminder notification")
+			let body = String(
+				format: NSLocalizedString("Don't forget to complete today's %d Letter, %@ Daily Wordly!", comment: "Body for Daily Wordly reminder notification"),
+				reminder.numberOfLetters,
+				reminder.language.localizedName
+			)
+			
 			
 			let content = UNMutableNotificationContent()
-			content.title = "Daily Word Reminder"
-			content.body = "Don't forget to complete today's \(reminder.numberOfLetters) Letter \(reminder.language.localizedName) Daily Word!"
+			content.title = title
+			content.body = body
 			content.sound = .default
 			content.userInfo = [
 				PayloadKeys.reminderId: reminder.id.uuidString,
@@ -56,87 +73,77 @@ final class NotificationManager {
 				PayloadKeys.numberOfLetters: reminder.numberOfLetters
 			]
 			
-			var datesToAdd: [Date] = []
+			var requestsToAdd: [UNNotificationRequest] = []
 			
 			for day in 0...daysAhead {
-				if let date = Calendar.current.date(byAdding: .day, value: day, to: Date()) {
-					let triggerDate2 = Calendar.current.dateComponents([.hour, .minute], from: reminder.timeToFire)
-					guard let hour = triggerDate2.hour, let minute = triggerDate2.minute else { continue }
-					guard let triggerDate = Calendar.current.date(bySettingHour: hour,
-																  minute: minute,
-																  second: 0,
-																  of: date) else { continue }
-					if !existingDates.contains(where: { Calendar.current.isDate($0, inSameDayAs: triggerDate) }) {
-						datesToAdd.append(triggerDate)
+				guard let baseDate = Calendar.current.date(byAdding: .day, value: day, to: Date()) else { continue }
+				let timeComps = Calendar.current.dateComponents([.hour, .minute], from: reminder.timeToFire)
+				guard let hour = timeComps.hour, let minute = timeComps.minute else { continue }
+				
+				guard let fireDate = Calendar.current.date(bySettingHour: hour, minute: minute, second: 0, of: baseDate) else { continue }
+				
+				let id = requestId(for: reminder, on: fireDate)
+				// Skip if already scheduled for this reminder on that day.
+				if existingIds.contains(id) { continue }
+				
+				let comps = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: fireDate)
+				let trigger = UNCalendarNotificationTrigger(dateMatching: comps, repeats: false)
+				
+				let req = UNNotificationRequest(identifier: id, content: content, trigger: trigger)
+				requestsToAdd.append(req)
+			}
+			
+			for req in requestsToAdd {
+				center.add(req) { error in
+					if let error = error { print("Error scheduling notification: \(error)") }
+				}
+			}
+			
+			center.getPendingNotificationRequests { after in
+				print("Pending notifications after scheduling:")
+				for r in after {
+					if let trigger = r.trigger as? UNCalendarNotificationTrigger,
+					   let date = trigger.nextTriggerDate() {
+						print("ID: \(r.identifier), Date: \(date)")
 					}
 				}
 			}
-			
-			for date in datesToAdd {
-				let dateComponents = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: date)
-				let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: false)
-				
-				guard let year = dateComponents.year, let month = dateComponents.month, let day = dateComponents.day  else { continue }
-				
-				let request = UNNotificationRequest(
-					identifier: "daily-word-reminder-\(reminder.id.uuidString)-\(year)-\(month)-\(day)",
-					content: content,
-					trigger: trigger
-				)
-				
-				center.add(request) { error in
-					if let error = error { print("Error scheduling notification: \(error)") }
-				}
-				
-			}
 		}
-		
-		center.getPendingNotificationRequests() { requests in
-			print("Pending notifications after scheduling:")
-			for request in requests {
-				if let trigger = request.trigger as? UNCalendarNotificationTrigger,
-				   let date = trigger.nextTriggerDate() {
-					print("ID: \(request.identifier), Date: \(date)")
-				}
-			}
-		}
-		
 	}
 	
 	static func cancelTodayNotification(reminder: DailyWordReminder) {
+		let id = requestId(for: reminder, on: Date())
 		let center = UNUserNotificationCenter.current()
-		center.getPendingNotificationRequests { requests in
-			let today = Calendar.current.startOfDay(for: Date())
-			let ids = requests.filter {
-				if let trigger = $0.trigger as? UNCalendarNotificationTrigger,
-				   let date = trigger.nextTriggerDate(), $0.identifier.contains("\(reminder.id.uuidString)") {
-					return Calendar.current.isDate(date, inSameDayAs: today)
-				}
-				return false
-			}.map { $0.identifier }
-			print("Cancelling today's notifications with IDs: \(ids)")
-			
-			center.removePendingNotificationRequests(withIdentifiers: ids)
-		}
+		center.removePendingNotificationRequests(withIdentifiers: [id])
 	}
 	
 	static func cancelDailyWordReminder(reminder: DailyWordReminder) {
 		let center = UNUserNotificationCenter.current()
 		center.getPendingNotificationRequests { requests in
-			let ids = requests.filter {
-				if $0.identifier.contains("\(reminder.id.uuidString)") {
-					return true
-				}
-				return false
-			}.map { $0.identifier }
-			print("Cancelling notifications with IDs: \(ids)")
+			let ids = requests
+				.filter { $0.identifier.contains(reminder.id.uuidString) }
+				.map { $0.identifier }
 			
+			print("Cancelling notifications with IDs: \(ids)")
 			center.removePendingNotificationRequests(withIdentifiers: ids)
 		}
-//		UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
-//		UNUserNotificationCenter.current().getPendingNotificationRequests { requests in
+//		center.removeAllPendingNotificationRequests()
+//		center.getPendingNotificationRequests { requests in
 //			print("Pending notifications after cancel: \(requests)")
 //		}
+	}
+	
+	static func cancelDailyWordReminder(reminder: DailyWordReminder, withCompletionHandler completion: @escaping () -> Void) {
+		let center = UNUserNotificationCenter.current()
+		center.getPendingNotificationRequests { requests in
+			let ids = requests
+				.filter { $0.identifier.contains(reminder.id.uuidString) }
+				.map { $0.identifier }
+			
+			print("Cancelling notifications with IDs: \(ids)")
+			center.removePendingNotificationRequests(withIdentifiers: ids)
+			completion()
+		}
 	}
 }
 

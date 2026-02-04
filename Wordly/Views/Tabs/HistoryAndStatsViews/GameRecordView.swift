@@ -9,6 +9,7 @@ import SwiftUI
 
 struct GameRecordView: View {
     @Environment(\.colorScheme) private var colorScheme
+	@Environment(\.scenePhase) private var scenePhase
     @AppStorage("userWantsNormalTheme") private var userWantsNormalTheme: Bool = true
 	@AppStorage("userWantsAds") private var userWantsAds: Bool = false
 	@AppStorage("userWantsThePhraseNameBack") private var userWantsThePhraseNameBack = false
@@ -66,12 +67,13 @@ struct GameRecordView: View {
 									.foregroundStyle(.white)
 									.conditionalShadow(color: .black.opacity(0.4), radius: 2, x: 2, y: 2)
 									.padding(12)
-//									.background {
-//										Circle()
-////											.foregroundStyle(gameRecord.state == .won ? .green : .red)
-//											.conditionalShadow(color: .black.opacity(0.3), radius: 3, x: 4, y: 4)
-//									}
-									.glassEffect(.regular.tint(gameRecord.state == .won ? .green : .red).interactive())
+									.background {
+										if self.scenePhase == .background {
+											Circle()
+												.foregroundStyle(gameRecord.state == .won ? Color(uiColor: .systemGreen) : Color(uiColor: .systemRed))
+										}
+									}
+									.glassEffect(.regular.tint(gameRecord.state == .won ? Color(uiColor: .systemGreen) : Color(uiColor: .systemRed)).interactive())
 									.font(.largeTitle).bold()
 									.conditionalShadow(color: .black.opacity(0.3), radius: 3, x: 4, y: 4)
 									.onTapGesture(count: 10) {
@@ -267,10 +269,12 @@ struct GameRecordView: View {
 								.font(.title2).bold()
 								.padding(14)
 								.frame(maxWidth: .infinity)
-//								.background {
-//									RoundedRectangle(cornerRadius: 15)
-//										.fill(Color.green)
-//								}
+								.background {
+									if self.scenePhase == .background {
+										RoundedRectangle(cornerRadius: 15)
+											.foregroundStyle(Color(uiColor: .systemGreen))
+									}
+								}
 						}
 						.glassEffect(.regular.tint(.green).interactive(), in: .rect(cornerRadius: 15.0))
 						.glassEffectID("definition", in: self.namespace)
@@ -298,11 +302,15 @@ struct GameRecordView: View {
 											RoundedRectangle(cornerRadius: 15)
 												.foregroundStyle(self.gradient)
 												.gradientShadow(gradient: self.shadowGradient, radius: 3, x: 0, y: 0)
+										} else if self.scenePhase == .background {
+											RoundedRectangle(cornerRadius: 15)
+												.foregroundStyle(Color.orange)
+											
 										}
 									}
 									
 							}
-							.glassEffect(self.userWantsNormalTheme || !self.userWantsNormalTheme && self.colorScheme == .dark && gameRecord.mode == .dailyWord && gameRecord.state == .won ? .regular.tint(.orange).interactive() : .regular.interactive(), in: .rect(cornerRadius: 15.0))
+							.glassEffect(!self.userWantsNormalTheme && self.colorScheme == .dark && gameRecord.mode == .dailyWord && gameRecord.state == .won ? .regular.interactive() : .regular.tint(.orange).interactive(), in: .rect(cornerRadius: 15.0))
 							.glassEffectID("board", in: self.namespace)
 							.simultaneousGesture(TapGesture().onEnded {
 								self.didTap.toggle()
@@ -310,7 +318,6 @@ struct GameRecordView: View {
 							.padding(.vertical, 10)
 							.padding(.horizontal, 40)
 							.sensoryFeedback(.impact, trigger: self.didTap)
-//							.buttonStyle(GrowingButton())
 							.conditionalShadow(color: .black.opacity(0.5), radius: 4, x: 4, y: 4)
 						}
 					} else {
@@ -391,7 +398,6 @@ struct GameRecordView: View {
                             }
                             .padding(.vertical, 15)
                             .sensoryFeedback(.impact, trigger: self.didTap)
-							.keyboardShortcut("c", modifiers: .command)
                             
                             Spacer()
                             

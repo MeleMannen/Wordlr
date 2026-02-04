@@ -14,6 +14,7 @@ struct GameView26: View {
 	@Environment(AdManager.self) private var adManager: AdManager
     @Environment(\.dismiss) var dismiss
     @Environment(\.colorScheme) private var colorScheme
+	@Environment(\.scenePhase) private var scenePhase
     @AppStorage("userWantsNormalTheme") private var userWantsNormalTheme: Bool = true
 	@AppStorage("userWantsAds") var userWantsAds: Bool = true
     
@@ -37,6 +38,17 @@ struct GameView26: View {
                 return .primary
 			@unknown default:
 				return .primary
+		}
+	}
+	
+	var colorForWhenAppInBackground: Color {
+		switch colorScheme {
+			case .light:
+				return Color(UIColor.lightGray)
+			case .dark:
+				return .white
+			@unknown default:
+				return .white
 		}
 	}
 	
@@ -162,12 +174,16 @@ struct GameView26: View {
 															.font(.title2).bold()
 															.foregroundStyle(keyBoardKey.state == .notUsed ? AnyShapeStyle(.black) : AnyShapeStyle(Color.white))
 															.frame(minWidth: geometry2.size.width / CGFloat(14), maxWidth: geometry2.size.width / CGFloat(12), minHeight: geometry2.size.height / CGFloat(10), idealHeight: geometry2.size.height / CGFloat(8), maxHeight: geometry2.size.height / CGFloat(6))
-															.glassEffect(.regular.tint(keyBoardKey.state == .correctPosition ? .green : (keyBoardKey.state == .correctLetter ? .orange : (keyBoardKey.state == .usedButNotCorrect ? Color(UIColor.darkGray) : self.colorForUnused))).interactive(), in: .rect(cornerRadius: 5.0))
-															.glassEffectID("\(keyBoardKey.letter)", in: self.namespace)
+															.background {
+																if self.scenePhase == .background {
+																	RoundedRectangle(cornerRadius: 5)
+																		.foregroundStyle(keyBoardKey.state == .correctPosition ? Color(uiColor: .systemGreen) : (keyBoardKey.state == .correctLetter ? .orange : (keyBoardKey.state == .usedButNotCorrect ? Color(UIColor.darkGray) : self.colorForWhenAppInBackground)))
+																}
+															}
 													})
-													.keyboardShortcut(KeyEquivalent(Character(keyBoardKey.letter.lowercased())), modifiers: [])
 													.sensoryFeedback(.impact, trigger: keyBoardKey.didTapButton)
-													
+													.glassEffect(.regular.tint(keyBoardKey.state == .correctPosition ? .green : (keyBoardKey.state == .correctLetter ? .orange : (keyBoardKey.state == .usedButNotCorrect ? Color(UIColor.darkGray) : self.colorForUnused))).interactive(), in: .rect(cornerRadius: 5.0))
+													.glassEffectID("\(keyBoardKey.letter)", in: self.namespace)
 													
 													
 													
@@ -219,9 +235,18 @@ struct GameView26: View {
 													   minHeight: geometry2.size.height / CGFloat(10),
 													   idealHeight: geometry2.size.height / CGFloat(8),
 													   maxHeight: geometry2.size.height / CGFloat(6))
+												.background {
+													if self.scenePhase == .background {
+														RoundedRectangle(cornerRadius: 10)
+															.foregroundStyle(self.colorForWhenAppInBackground)
+															.opacity(appManager.selectedGameMode == .dailyWord ? 0.4 : 1.0)
+														
+													}
+												}
 										})
-										.keyboardShortcut("r", modifiers: .command)
 										.sensoryFeedback(.impact, trigger: self.didTapResetButton)
+										.glassEffect(.regular.tint(self.colorForUnused.opacity(appManager.selectedGameMode == .dailyWord ? 0.4 : 1.0)).interactive(), in: .rect(cornerRadius: 10.0))
+										.glassEffectID("reset", in: self.namespace)
 										.alert(item: self.$alertItem) { item in
 											if let dismissButton = item.dismissButton {
 												Alert(title: item.title, message: item.message, dismissButton: dismissButton)
@@ -232,8 +257,6 @@ struct GameView26: View {
 											}
 											
 										}
-										.glassEffect(.regular.tint(self.colorForUnused.opacity(appManager.selectedGameMode == .dailyWord ? 0.4 : 1.0)).interactive(), in: .rect(cornerRadius: 10.0))
-										.glassEffectID("reset", in: self.namespace)
 										.sensoryFeedback(.warning, trigger: self.alertItem?.title)
 										.sensoryFeedback(.warning, trigger: self.didTapResetButton)
 										
@@ -259,13 +282,17 @@ struct GameView26: View {
 															.foregroundStyle(appManager.gradient)
 															.gradientShadow(gradient: appManager.shadowGradient, radius: 3, x: 0, y: 0)
 															.opacity(appManager.submitOpacity)
+													} else if self.scenePhase == .background {
+														RoundedRectangle(cornerRadius: 10)
+															.foregroundStyle(Color(uiColor: .systemGreen))
+															.opacity(appManager.submitOpacity)
+														
 													}
 													
 												}
 										})
-										.keyboardShortcut(.defaultAction)
 										.glassEffectID("submit", in: self.namespace)
-										.glassEffect(self.userWantsNormalTheme || !self.userWantsNormalTheme && self.colorScheme == .dark && appManager.selectedGameMode == .normal ? .regular.tint(.green.opacity(appManager.submitOpacity)).interactive() : .regular.interactive(), in: .rect(cornerRadius: 10.0))
+										.glassEffect(!self.userWantsNormalTheme && self.colorScheme == .dark && appManager.selectedGameMode == .dailyWord ? .regular.interactive() : .regular.tint(.green.opacity(appManager.submitOpacity)).interactive(), in: .rect(cornerRadius: 10.0))
 										.animation(.easeInOut(duration: 0.2), value: appManager.submitOpacity)
 										.sensoryFeedback(.alignment, trigger: appManager.submitOpacity)
 										.onChange(of: appManager.wordIsValidForSubmitButton()) { _, newValue in
@@ -299,17 +326,24 @@ struct GameView26: View {
 												.font(.title2).bold()
 												.foregroundStyle(.black)
 												.frame(minWidth: geometry2.size.width / CGFloat(9), maxWidth: geometry2.size.width / CGFloat(7), minHeight: geometry2.size.height / CGFloat(10), idealHeight: geometry2.size.height / CGFloat(8), maxHeight: geometry2.size.height / CGFloat(6))
-											
+												.background {
+													if self.scenePhase == .background {
+														RoundedRectangle(cornerRadius: 10)
+															.foregroundStyle(self.colorForWhenAppInBackground)
+													}
+												}
 										})
-										.keyboardShortcut(.delete, modifiers: [])
+										.buttonRepeatBehavior(.enabled)
 										.glassEffect(.regular.tint(self.colorForUnused).interactive(), in: .rect(cornerRadius: 10.0))
 										.glassEffectID("delete", in: self.namespace)
-										.buttonRepeatBehavior(.enabled)
 										.sensoryFeedback(.impact, trigger: self.didTapBackButton)
+										
+										
 										
 									}
 									.padding(.top, 5)
 									.padding(.bottom, 5)
+									
 								}
 							}
 							.opacity((appManager.isGameOver && !appManager.isAnimating) ? 0 : 1)
@@ -341,8 +375,14 @@ struct GameView26: View {
 										.font(.title2).bold()
 										.frame(maxWidth: .infinity, minHeight: 40, idealHeight: 45, maxHeight: 50)
 										.foregroundStyle(.white)
+										.background {
+											if self.scenePhase == .background {
+												RoundedRectangle(cornerRadius: 15)
+													.foregroundStyle(Color(uiColor: .systemGreen))
+												
+											}
+										}
 								})
-								.keyboardShortcut("n", modifiers: .command)
 								.glassEffect(.regular.tint(.green).interactive(), in: .rect(cornerRadius: 10.0))
 								.glassEffectID("new", in: self.namespace)
 								.padding(.horizontal, 20)
@@ -352,24 +392,23 @@ struct GameView26: View {
 								Spacer()
 								
 								NavigationLink(destination: WordDefinitionView(word: appManager.word, language: appManager.selectedLanguage), label: {
-									if !self.userWantsNormalTheme && self.colorScheme == .dark && appManager.selectedGameMode == .dailyWord {
-										Text("Show Definition")
-											.conditionalShadow(color: .black.opacity(0.2), radius: 2, x: 4, y: 4)
-											.font(.title2).bold()
-											.frame(maxWidth: .infinity, minHeight: 40, idealHeight: 45, maxHeight: 50)
-											.foregroundStyle(.white)
-											.background {
+									Text("Show Definition")
+										.conditionalShadow(color: .black.opacity(0.2), radius: 2, x: 4, y: 4)
+										.font(.title2).bold()
+										.frame(maxWidth: .infinity, minHeight: 40, idealHeight: 45, maxHeight: 50)
+										.foregroundStyle(.white)
+										.background {
+											if !self.userWantsNormalTheme && self.colorScheme == .dark && appManager.selectedGameMode == .dailyWord {
 												RoundedRectangle(cornerRadius: 10)
 													.foregroundStyle(appManager.gradient)
 													.gradientShadow(gradient: appManager.shadowGradient, radius: 3, x: 0, y: 0)
+											} else if self.scenePhase == .background {
+												RoundedRectangle(cornerRadius: 15)
+													.foregroundStyle(Color(uiColor: .systemGreen))
+												
 											}
-									} else {
-										Text("Show Definition")
-											.conditionalShadow(color: .black.opacity(0.2), radius: 2, x: 4, y: 4)
-											.font(.title2).bold()
-											.frame(maxWidth: .infinity, minHeight: 40, idealHeight: 45, maxHeight: 50)
-											.foregroundStyle(.white)
-									}
+										}
+									
 								})
 								.simultaneousGesture(TapGesture().onEnded {
 									self.didTapShowDefinitionButton.toggle()
@@ -389,8 +428,6 @@ struct GameView26: View {
 											appManager.hasSharedResult = true
 											self.didTapBackButton.toggle()
 											UIPasteboard.general.string = appManager.getShareResult(row: appManager.currentRow, numberOfLetters: appManager.numberOfLetters, date: appManager.startDate, board: appManager.board, timeUsedString: appManager.getTimeUsedString(startDate: appManager.startDate, endDate: appManager.endDate))
-											
-											
 										}
 									} label: {
 										Label("Copy Result", systemImage: appManager.hasSharedResult ? "doc.on.doc.fill" : "doc.on.doc")
@@ -399,7 +436,6 @@ struct GameView26: View {
 											.conditionalShadow(color: .black.opacity(0.5), radius: 4, x: 4, y: 4)
 											.tint(.primary)
 									}
-									.keyboardShortcut("c", modifiers: .command)
 									
 									Spacer()
 								}
@@ -412,6 +448,72 @@ struct GameView26: View {
 							
 						}
 						.padding(.horizontal, 5)
+						.background(
+							hardwareKeyCommands(
+								onInsertLetter: { ch in
+									guard !appManager.isAnimating,
+										  appManager.currentIndex < appManager.numberOfLetters else { return }
+									appManager.board[appManager.currentRow][appManager.currentIndex].letter = ch
+									appManager.currentIndex += 1
+								},
+								onDelete: {
+									guard !appManager.isAnimating, appManager.currentIndex > 0 else { return }
+									appManager.currentIndex -= 1
+									appManager.board[appManager.currentRow][appManager.currentIndex].letter = ""
+								},
+								onReturn: {
+									guard !appManager.isAnimating else { return }
+									appManager.didTapSubmit()
+								},
+								onCommandR: {
+									self.didTapResetButton.toggle()
+									if appManager.selectedGameMode == .normal {
+										self.alertItem = AlertItem(
+											title: Text("Are you sure you want to Restart?"),
+											message: Text("You will lose your word and you cannot undo this action!"),
+											primaryButton: .destructive(Text("Restart")) {
+												self.alertItem = AlertItem(
+													title: Text("The Word Was: \(appManager.word)!"),
+													message: Text("Do you want to see the definition?"),
+													primaryButton: .default(Text("Show Definition")) {
+														self.isShowingCurrentDefinition = true
+														
+														DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
+															print("reseting...")
+															appManager.resetBoard()
+														}
+													},
+													secondaryButton: .cancel(Text("Dismiss")) {
+														print("reseting...")
+														appManager.resetBoard()
+													})
+											}, secondaryButton: .cancel())
+									}
+								},
+								onCommandN: {
+									if !appManager.isAnimating && appManager.isGameOver {
+										if appManager.selectedGameMode == .normal {
+											self.didTapNewGameButton.toggle()
+											appManager.resetBoard()
+											Task {
+												await HintTip.getHintEvent.donate()
+											}
+										} else {
+											dismiss()
+										}
+									}
+								},
+								onCommandC: {
+									if !appManager.isAnimating && appManager.isGameOver {
+										withAnimation {
+											appManager.hasSharedResult = true
+											self.didTapBackButton.toggle()
+											UIPasteboard.general.string = appManager.getShareResult(row: appManager.currentRow, numberOfLetters: appManager.numberOfLetters, date: appManager.startDate, board: appManager.board, timeUsedString: appManager.getTimeUsedString(startDate: appManager.startDate, endDate: appManager.endDate))
+										}
+									}
+								}
+							)
+						)
 					}
 					.frame(maxWidth: .infinity, maxHeight: (geometry.size.height*3) / 5)
 				}
@@ -423,10 +525,9 @@ struct GameView26: View {
 				.navigationBarTitleDisplayMode(.inline)
 				.toolbar {
 					ToolbarItemGroup(placement: .topBarTrailing) {
-						if appManager.isHintAvailable() && appManager.shouldShowAdButton {
+						if appManager.isHintAvailable() && appManager.shouldShowAdButton && !appManager.isGameOver {
 							AdButton()
 								.environmentObject(appManager)
-								.keyboardShortcut("h", modifiers: .command)
 							
 							SearchToolbarItem()
 								.environmentObject(appManager)
@@ -437,7 +538,7 @@ struct GameView26: View {
 						}
 					}
 				}
-				.animation(.default, value: appManager.isHintAvailable() && appManager.shouldShowAdButton)
+				.animation(.default, value: appManager.isHintAvailable() && appManager.shouldShowAdButton && !appManager.isGameOver)
 			}
 			.onAppear {
 				if appManager.word.isEmpty || appManager.selectedLanguage != appManager.language || appManager.gameMode != appManager.selectedGameMode || appManager.message == "" && appManager.isGameOver {

@@ -167,7 +167,6 @@ struct GameView18: View {
 														.fill(keyBoardKey.state == .correctPosition ? .green : (keyBoardKey.state == .correctLetter ? .orange : (keyBoardKey.state == .usedButNotCorrect ? Color(UIColor.darkGray) : self.colorForUnused)))
 												}
 										})
-										.keyboardShortcut(KeyEquivalent(Character(keyBoardKey.letter.lowercased())), modifiers: [])
 										.buttonStyle(ScalingButton())
 										.sensoryFeedback(.impact, trigger: keyBoardKey.didTapButton)
 										
@@ -226,7 +225,6 @@ struct GameView18: View {
 												.foregroundStyle(self.colorForUnused)
 										}
 								})
-								.keyboardShortcut("r", modifiers: .command)
 								.sensoryFeedback(.impact, trigger: self.didTapResetButton)
 								.alert(item: self.$alertItem) { item in
 									if let dismissButton = item.dismissButton {
@@ -295,7 +293,6 @@ struct GameView18: View {
 											
 										}
 								})
-								.keyboardShortcut(.defaultAction)
 								.sensoryFeedback(trigger: self.didTapSubmitButton) {
 									if appManager.isAnimating {
 										return .impact
@@ -328,7 +325,6 @@ struct GameView18: View {
 										}
 									
 								})
-								.keyboardShortcut(.delete, modifiers: [])
 								.buttonRepeatBehavior(.enabled)
 								.sensoryFeedback(.impact, trigger: self.didTapBackButton)
 								.buttonStyle(ScalingButton())
@@ -372,7 +368,6 @@ struct GameView18: View {
 											.foregroundStyle(.green)
 									}
 							})
-							.keyboardShortcut("n", modifiers: .command)
 							.padding(.horizontal, 20)
 							.sensoryFeedback(.impact, trigger: self.didTapNewGameButton)
 							.buttonStyle(GrowingButton())
@@ -431,7 +426,6 @@ struct GameView18: View {
 										.conditionalShadow(color: .black.opacity(0.5), radius: 4, x: 4, y: 4)
 										.tint(.primary)
 								}
-								.keyboardShortcut("c", modifiers: .command)
 								Spacer()
 							}
 						}
@@ -440,6 +434,72 @@ struct GameView18: View {
 						
 					}
 					.padding(.horizontal, 5)
+					.background(
+						hardwareKeyCommands(
+							onInsertLetter: { ch in
+								guard !appManager.isAnimating,
+									  appManager.currentIndex < appManager.numberOfLetters else { return }
+								appManager.board[appManager.currentRow][appManager.currentIndex].letter = ch
+								appManager.currentIndex += 1
+							},
+							onDelete: {
+								guard !appManager.isAnimating, appManager.currentIndex > 0 else { return }
+								appManager.currentIndex -= 1
+								appManager.board[appManager.currentRow][appManager.currentIndex].letter = ""
+							},
+							onReturn: {
+								guard !appManager.isAnimating else { return }
+								appManager.didTapSubmit()
+							},
+							onCommandR: {
+								self.didTapResetButton.toggle()
+								if appManager.selectedGameMode == .normal {
+									self.alertItem = AlertItem(
+										title: Text("Are you sure you want to Restart?"),
+										message: Text("You will lose your word and you cannot undo this action!"),
+										primaryButton: .destructive(Text("Restart")) {
+											self.alertItem = AlertItem(
+												title: Text("The Word Was: \(appManager.word)!"),
+												message: Text("Do you want to see the definition?"),
+												primaryButton: .default(Text("Show Definition")) {
+													self.isShowingCurrentDefinition = true
+													
+													DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
+														print("reseting...")
+														appManager.resetBoard()
+													}
+												},
+												secondaryButton: .cancel(Text("Dismiss")) {
+													print("reseting...")
+													appManager.resetBoard()
+												})
+										}, secondaryButton: .cancel())
+								}
+							},
+							onCommandN: {
+								if !appManager.isAnimating && appManager.isGameOver {
+									if appManager.selectedGameMode == .normal {
+										self.didTapNewGameButton.toggle()
+										appManager.resetBoard()
+										Task {
+											await HintTip.getHintEvent.donate()
+										}
+									} else {
+										dismiss()
+									}
+								}
+							},
+							onCommandC: {
+								if !appManager.isAnimating && appManager.isGameOver {
+									withAnimation {
+										appManager.hasSharedResult = true
+										self.didTapBackButton.toggle()
+										UIPasteboard.general.string = appManager.getShareResult(row: appManager.currentRow, numberOfLetters: appManager.numberOfLetters, date: appManager.startDate, board: appManager.board, timeUsedString: appManager.getTimeUsedString(startDate: appManager.startDate, endDate: appManager.endDate))
+									}
+								}
+							}
+						)
+					)
 				}
 				.frame(maxWidth: .infinity, maxHeight: (geometry.size.height*3) / 5)
 			}
@@ -454,24 +514,12 @@ struct GameView18: View {
 					ToolbarItem(placement: .topBarTrailing) {
 						AdButton()
 							.environmentObject(appManager)
-							.keyboardShortcut("h", modifiers: .command)
 					}
 				}
 				
 				ToolbarItem(placement: .topBarTrailing) {
-					NavigationLink(destination: SearchView().environmentObject(appManager), label: {
-						Image(systemName: "magnifyingglass")
-							.contentShape(Rectangle())
-					})
-					.simultaneousGesture(TapGesture().onEnded {
-						self.didTapSearchButton.toggle()
-						Task {
-							await SearchTip.searchEvent.donate()
-						}
-					})
-					.sensoryFeedback(.selection, trigger: self.didTapSearchButton)
-					.popoverTip(self.searchTip)
-					.keyboardShortcut("s", modifiers: .command)
+					SearchToolbarItem()
+						.environmentObject(appManager)
 				}
 			}
 		}

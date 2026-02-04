@@ -214,8 +214,8 @@ struct EnglishWordDefinitionView: View {
                                 }
                             }
                             .background {
-                                RoundedRectangle(cornerRadius: 10)
-                                    .fill(Color(uiColor: .quaternarySystemFill))
+								RoundedRectangle(cornerRadius: 20)
+									.foregroundStyle(Color(uiColor: .secondarySystemBackground))
                             }
                             .padding(.horizontal, 15)
                             .padding(.top, 20)
@@ -238,8 +238,8 @@ struct EnglishWordDefinitionView: View {
                             .padding(25)
                         }
                         .background {
-                            RoundedRectangle(cornerRadius: 10)
-                                .fill(Color(uiColor: .quaternarySystemFill))
+							RoundedRectangle(cornerRadius: 20)
+								.foregroundStyle(Color(uiColor: .secondarySystemBackground))
                         }
                         .padding(.horizontal, 15)
                         .padding(.top, 20)

@@ -14,7 +14,6 @@ class ReviewManager: ObservableObject {
 	@AppStorage("firstLaunchTime") private var firstLaunchTime: TimeInterval = 0
 	
 	init() {
-		// Initialize first launch timestamp if not set yet
 		if firstLaunchTime == 0 {
 			firstLaunchTime = Date().timeIntervalSince1970
 		}
@@ -24,7 +23,6 @@ class ReviewManager: ObservableObject {
 		let now = Date().timeIntervalSince1970
 		let day: TimeInterval = 24 * 60 * 60
 		
-		// Ensure we have a first launch time; if not, set it and do not prompt immediately
 		if firstLaunchTime == 0 {
 			firstLaunchTime = now
 			return
@@ -37,11 +35,11 @@ class ReviewManager: ObservableObject {
 		
 		switch numberOfTimesAskedBefore {
 		case 0:
-			// Never prompted before: at least 7 days of app age
-			shouldPrompt = appAge >= 7 * day
+			// Never prompted before: at least 14 days of app age
+			shouldPrompt = appAge >= 14 * day
 		case 1:
-			// Prompted once before: at least 30 days of app age
-			shouldPrompt = appAge >= 30 * day
+			// Prompted once before: at least 40 days of app age
+			shouldPrompt = appAge >= 50 * day
 		case 2:
 			// Prompted twice before: at least 180 days of app age
 			shouldPrompt = appAge >= 180 * day
