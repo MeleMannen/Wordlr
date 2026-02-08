@@ -410,7 +410,7 @@ struct GameView18: View {
 							
 							Spacer()
 							
-							if appManager.selectedGameMode == .dailyWord {
+							if appManager.selectedGameMode == .dailyWord && !appManager.dailyWordHasBeenPlayed {
 								Button {
 									withAnimation {
 										appManager.hasSharedResult = true

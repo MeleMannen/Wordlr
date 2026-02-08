@@ -59,6 +59,7 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
     @Published var isFilteringIncludedLetters: Bool = false
     @Published var selectedExcludedLetters: [String] = []
     @Published var selectedIncludedLetters: [String] = []
+	@Published var dailyWordHasBeenPlayed: Bool = false
 	
 	private let valid5LetterNames: [String] = ["SIMEN", "LUKAS", "JONAS", "HELLE", "MARTE", "ROHIN", "HILDE", "TROND", "JOMAR", "DAHLE", "SYVER", "BØRGE", "ØLARS", "HSFKJ"]
 	private let valid6LetterNames: [String] = ["MARTIN", "MARIUS", "TOBIAS", "DANIEL", "HENRIK", "KRISTIN"]
@@ -113,7 +114,7 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
         cetCalendar.timeZone = TimeZone(identifier: "CET")!
         let currentDate = Date()
         for gameRecord in self.gameRecords {
-            if gameRecord.gameRecord.mode == .dailyWord && gameRecord.gameRecord.language == self.selectedLanguage && gameRecord.gameRecord.numberOfLetters == self.numberOfLetters {
+			if gameRecord.gameRecord.mode == .dailyWord && gameRecord.gameRecord.language == self.selectedLanguage && gameRecord.gameRecord.numberOfLetters == self.numberOfLetters {
                 if cetCalendar.isDate(gameRecord.gameRecord.date, inSameDayAs: currentDate) {
                     return true
                 }
@@ -142,6 +143,7 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
 			self.word = self.getDailyWord()
 		}
 		print("Ordet er \(self.word)")
+		self.dailyWordHasBeenPlayed = self.checkIfDailyWordIsAlreadyPlayed()
     }
 	
     
@@ -240,15 +242,6 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
         }
         return nil
     }
-	
-	func getCurrentGameSettings() -> CurrentGameSettings {
-		return CurrentGameSettings(numberOfLetters: self.numberOfLetters, selectedLanguage: self.selectedLanguage)
-	}
-	
-	func resetGameToPreviousSettings(settings: CurrentGameSettings) {
-		self.numberOfLetters = settings.numberOfLetters
-		self.selectedLanguage = settings.selectedLanguage
-	}
     
     
     

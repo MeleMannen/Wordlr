@@ -408,6 +408,9 @@
         }
       }
     },
+    "Back" : {
+
+    },
     "Both" : {
       "localizations" : {
         "en" : {
@@ -1427,23 +1430,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Jeg er Sikker"
-          }
-        }
-      }
-    },
-    "I'm Sure!" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "¡Seguro!"
-          }
-        },
-        "nb" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Jeg er Sikker!"
           }
         }
       }
@@ -3056,23 +3042,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Du har allerede spillt dette Ordet"
-          }
-        }
-      }
-    },
-    "You have already played this Word!" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "¡Ya has jugado esta Palabra!"
-          }
-        },
-        "nb" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Du har allerede spillt dette Ordet!"
           }
         }
       }

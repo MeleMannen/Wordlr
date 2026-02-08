@@ -16,11 +16,6 @@ enum CurrentSelectView {
 	case infoView
 }
 
-struct CurrentGameSettings {
-	var numberOfLetters: Int
-	var selectedLanguage: LanguageSelection
-}
-
 
 enum AppTheme: String {
     case system, dark, light

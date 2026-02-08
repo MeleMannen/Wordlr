@@ -21,8 +21,8 @@ struct TabsView: View {
 	@AppStorage("notificationsEnabled") private var notificationsEnabled: Bool = false
 	@AppStorage("userWantsThePhraseNameBack") private var userWantsThePhraseNameBack = false
 	@State var selection: TabSelection = .home
-//	@State private var bannerReloadID = UUID()
 	@State var adManager: AdManager = AdManager()
+	@State var tintColor: Color = .green
 	
 	var body: some View {
 		GeometryReader { geometry in
@@ -41,6 +41,7 @@ struct TabsView: View {
 //											try? Tips.resetDatastore()
 					try? Tips.configure([.datastoreLocation(.applicationDefault)])
 				}
+				.tint(.primary)
 				
 				
 				StatsView()
@@ -52,6 +53,7 @@ struct TabsView: View {
 							Label("Stats", systemImage: "chart.bar.xaxis")
 						}
 					}
+					.tint(.primary)
 				
 				HistoryView()
 					.tag(TabSelection.history)
@@ -62,6 +64,7 @@ struct TabsView: View {
 							Label("History", systemImage: "clock")
 						}
 					}
+					.tint(.primary)
 				
 				SettingsView()
 					.tag(TabSelection.settings)
@@ -69,43 +72,26 @@ struct TabsView: View {
 						Label("Settings", systemImage: "gear")
 					}
 					.environment(adManager)
+					.tint(.primary)
 				
 			}
+			.tint(self.tintColor)
 			.onChange(of: self.scenePhase) { _, newPhase in
 				if newPhase == .active, self.userWantsAds {
 					print("App became active, reloading banner ad")
-//					self.bannerReloadID = UUID()
 				}
 			}
 			.safeAreaInset(edge: .bottom) { bottomAd(for: geometry) }
-//			.safeAreaInset(edge: .bottom) {
-//				if self.userWantsAds && (self.selection != .home || (self.selection == .home && adManager.shouldShowAds && (adManager.currentSelectView == .selectView || adManager.currentSelectView == .searchView || adManager.currentSelectView == .filterOptionsView || adManager.currentSelectView == .infoView))) && adManager.canRequestAds {
-//					if #available(iOS 26.0, *), UIDevice.current.userInterfaceIdiom == .phone {
-//						let adSize = currentOrientationAnchoredAdaptiveBanner(width: geometry.size.width - (geometry.size.width / 11))
-//						BannerViewContainer(adSize)
-//							.frame(width: adSize.size.width < 0 ? 0 : adSize.size.width, height: adSize.size.height < 0 ? 0 : adSize.size.height)
-//							.padding(.bottom, 54)
-//							.id(bannerReloadID)
-//					} else if #available(iOS 18.0, *), UIDevice.current.userInterfaceIdiom == .pad || UIDevice.current.userInterfaceIdiom == .mac {
-//						let adSize = currentOrientationAnchoredAdaptiveBanner(width: geometry.size.width)
-//						BannerViewContainer(adSize)
-//							.frame(width: adSize.size.width < 0 ? 0 : adSize.size.width, height: adSize.size.height < 0 ? 0 : adSize.size.height)
-//							.id(bannerReloadID)
-//					} else {
-//						let adSize = currentOrientationAnchoredAdaptiveBanner(width: geometry.size.width)
-//						BannerViewContainer(adSize)
-//							.frame(width: adSize.size.width < 0 ? 0 : adSize.size.width, height: adSize.size.height < 0 ? 0 : adSize.size.height)
-//							.padding(.bottom, 49)
-//							.id(bannerReloadID)
-//					}
-//				}
-//			}
-			.tint(.primary)
 			.preferredColorScheme(appTheme == .system ? nil : (appTheme == .light ? .light : .dark))
 			.onAppear {
 				if !self.hasTurnedOnAds {
 					self.userWantsAds = true
 					self.hasTurnedOnAds = true
+				}
+				if #available(iOS 26.0, *) {
+					self.tintColor = .green
+				} else {
+					self.tintColor = .primary
 				}
 			}
 			.task(id: notificationsEnabled) {
