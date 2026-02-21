@@ -28,8 +28,10 @@ final class NotificationManager {
 	}
 	
 	static func requestPermission(completion: @escaping (Result<Bool, Error>) -> Void) {
+		AnalyticsManager.shared.logDidTapActivateNotificationsEvent()
 		UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { granted, error in
 			if granted || error == nil {
+				AnalyticsManager.shared.logDidActivateNotificationsEvent()
 				completion(.success(true))
 			} else {
 				print(granted ? "Notification permission granted" : "Notification permission denied: \(error?.localizedDescription ?? "No error info")")

@@ -44,8 +44,10 @@ struct NotificationView: View {
 						.onChange(of: reminder.isEnabled) {
 							if !reminder.isEnabled {
 								NotificationManager.cancelDailyWordReminder(reminder: reminder)
+								AnalyticsManager.shared.logDidDeactivateAReminderEvent()
 							} else {
 								NotificationManager.scheduleDailyWordReminder(reminder: reminder)
+								AnalyticsManager.shared.logDidActivateAReminderEvent()
 							}
 						}
 					}

@@ -188,12 +188,10 @@ struct NorwegianWordDefinitionView: View {
                 }
                 .refreshable {
                     definitionManager.getDefinition(for: self.word) { processedWords in
-                        if !processedWords.isEmpty {
-                            self.processedWords = processedWords
-                            //                        self.isLoading = false
-                            print("ProcessedWord: \(String(describing: self.processedWords))")
-                            dump(self.processedWords)
-                        }
+						self.processedWords = processedWords
+						self.isLoading = false
+						print("ProcessedWord: \(String(describing: self.processedWords))")
+						dump(self.processedWords)
                     }
                 }
 				.safeAreaPadding(.bottom, (UIDevice.current.userInterfaceIdiom == .pad || UIDevice.current.userInterfaceIdiom == .mac) && self.userWantsAds ? 80 : (self.userWantsAds ? 54 : 0))
@@ -212,6 +210,7 @@ struct NorwegianWordDefinitionView: View {
                 self.isLoading = false
                 print("ProcessedWord: \(String(describing: self.processedWords))")
                 dump(self.processedWords)
+				AnalyticsManager.shared.logDidViewWordDefinitionEvent(word: self.word, language: .norwegian, numberOfLetters: self.word.count, viewSuccess: !self.processedWords.isEmpty)
             }
         }
     }

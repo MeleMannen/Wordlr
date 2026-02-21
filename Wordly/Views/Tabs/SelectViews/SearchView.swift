@@ -142,6 +142,7 @@ struct SearchView: View {
 							Task {
 								await FilterTip.filterEvent.donate()
 							}
+							AnalyticsManager.shared.logDidUseSearchFiltersEvent(word: appManager.word, language: appManager.selectedLanguage, numberOfLetters: appManager.numberOfLetters, gameMode: appManager.gameMode)
 						}) {
 							Label("Filter Options", systemImage: "slider.horizontal.3")
 						}
@@ -159,6 +160,7 @@ struct SearchView: View {
 							Task {
 								await FilterTip.filterEvent.donate()
 							}
+							AnalyticsManager.shared.logDidUseSearchFiltersEvent(word: appManager.word, language: appManager.selectedLanguage, numberOfLetters: appManager.numberOfLetters, gameMode: appManager.gameMode)
 						}) {
 							Label("Filter Options", systemImage: "slider.horizontal.3")
 						}
@@ -189,6 +191,7 @@ struct SearchView: View {
 			}
 			.onChange(of: appManager.searchedWord) {
 				self.filterGameRecords()
+				AnalyticsManager.shared.logDidUseSearchEvent(word: appManager.word, language: appManager.selectedLanguage, numberOfLetters: appManager.numberOfLetters, gameMode: appManager.gameMode)
 			}
 			.onChange(of: appManager.isFilteringSearchWord) {
 				self.filterGameRecords()

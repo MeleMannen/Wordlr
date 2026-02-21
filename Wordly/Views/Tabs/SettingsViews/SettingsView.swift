@@ -67,6 +67,10 @@ struct SettingsView: View {
 						.modifier(ConditionalPadding())
 						.pickerStyle(.menu)
 						.sensoryFeedback(.selection, trigger: appTheme)
+						.onChange(of: appTheme) { oldValue, newValue in
+							AnalyticsManager.shared.logDidChangeThemeEvent(newTheme: newValue, oldTheme: oldValue)
+						}
+							
 						
 						if self.colorScheme == .dark {
 							Picker("Daily Wordly Theme", selection: $userWantsNormalTheme) {
@@ -78,6 +82,9 @@ struct SettingsView: View {
 							.modifier(ConditionalPadding())
 							.pickerStyle(.menu)
 							.sensoryFeedback(.selection, trigger: userWantsNormalTheme)
+							.onChange(of: userWantsNormalTheme) {
+								AnalyticsManager.shared.logDidChangeDailyWordThemeEvent(newTheme: userWantsNormalTheme ? "Standard" : "Gold")
+							}
 						}
 					} header: {
 						Text("General")

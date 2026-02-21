@@ -221,8 +221,7 @@ struct EnglishWordDefinitionView: View {
                             .padding(.top, 20)
                             
                         }
-                    }
-                    else {
+                    } else {
                         VStack {
                             VStack(alignment: .leading) {
                                 Text(self.word.uppercased())
@@ -268,6 +267,7 @@ struct EnglishWordDefinitionView: View {
                 self.isLoading = false
                 print("EnglishDefinition: \(String(describing: self.englishDefinition))")
                 dump(self.englishDefinition)
+				AnalyticsManager.shared.logDidViewWordDefinitionEvent(word: self.word, language: .english, numberOfLetters: self.word.count, viewSuccess: !self.englishDefinition.isEmpty)
             }
         }
     }

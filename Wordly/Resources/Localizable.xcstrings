@@ -409,7 +409,20 @@
       }
     },
     "Back" : {
-
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Atrás"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tilbake"
+          }
+        }
+      }
     },
     "Both" : {
       "localizations" : {

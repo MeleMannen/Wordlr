@@ -254,6 +254,11 @@ struct SpanishWordDefinitionView: View {
 				self.isLoading = false
 				print("SpanishDefinition: \(String(describing: self.spanishDefinition))")
 				dump(self.spanishDefinition)
+				if let spanishDefinition = spanishDefinition {
+					AnalyticsManager.shared.logDidViewWordDefinitionEvent(word: self.word, language: .spanish, numberOfLetters: self.word.count, viewSuccess: !spanishDefinition.entries.isEmpty)
+				} else {
+					AnalyticsManager.shared.logDidViewWordDefinitionEvent(word: self.word, language: .spanish, numberOfLetters: self.word.count, viewSuccess: false)
+				}
 			}
 		}
 	}
@@ -272,127 +277,3 @@ struct SpanishWordDefinitionView: View {
 	SpanishWordDefinitionView(word: "World")
 		.environmentObject(DefinitionManager())
 }
-
-//struct CompactConjugationView: View {
-//	let word: String
-//	let forms: [Form]
-//	
-//	var body: some View {
-//		GeometryReader { geometry in
-//			
-//			ScrollView(.horizontal) {
-//				VStack(spacing: 0) {
-//					// Header with verb name
-//					Text("Conjugation of \(self.word)")
-//						.font(.headline)
-//						.padding(.bottom, 8)
-//					
-//					// Main conjugation table
-//					LazyVGrid(columns: createColumns(), spacing: 1) {
-//						// Headers
-//						headerCell("")
-//						headerCell("first singular\nyo")
-//						headerCell("second singular\ntú")
-//						headerCell("third singular\nél/ella")
-//						headerCell("first plural\nnosotros/nós")
-//						headerCell("second plural\nvosotros/vós")
-//						headerCell("third plural\nellos")
-//						
-//						
-//						
-//						// Present tense
-//						sectionCell("present")
-//						conjugationCell(getForm(tense: "present", person: "first", number: "singular"))
-//						conjugationCell(getForm(tense: "present", person: "second", number: "singular"))
-//						conjugationCell(getForm(tense: "present", person: "third", number: "singular"))
-//						conjugationCell(getForm(tense: "present", person: "first", number: "plural"))
-//						conjugationCell(getForm(tense: "present", person: "second", number: "plural"))
-//						conjugationCell(getForm(tense: "present", person: "third", number: "plural"))
-//						
-//						// Imperfect tense
-//						sectionCell("imperfect")
-//						conjugationCell(getForm(tense: "imperfect", person: "first", number: "singular"))
-//						conjugationCell(getForm(tense: "imperfect", person: "second", number: "singular"))
-//						conjugationCell(getForm(tense: "imperfect", person: "third", number: "singular"))
-//						conjugationCell(getForm(tense: "imperfect", person: "first", number: "plural"))
-//						conjugationCell(getForm(tense: "imperfect", person: "second", number: "plural"))
-//						conjugationCell(getForm(tense: "imperfect", person: "third", number: "plural"))
-//						
-//						// Preterite tense
-//						sectionCell("preterite")
-//						conjugationCell(getForm(tense: "preterite", person: "first", number: "singular"))
-//						conjugationCell(getForm(tense: "preterite", person: "second", number: "singular"))
-//						conjugationCell(getForm(tense: "preterite", person: "third", number: "singular"))
-//						conjugationCell(getForm(tense: "preterite", person: "first", number: "plural"))
-//						conjugationCell(getForm(tense: "preterite", person: "second", number: "plural"))
-//						conjugationCell(getForm(tense: "preterite", person: "third", number: "plural"))
-//						
-//						// Future tense
-//						sectionCell("future")
-//						conjugationCell(getForm(tense: "future", person: "first", number: "singular"))
-//						conjugationCell(getForm(tense: "future", person: "second", number: "singular"))
-//						conjugationCell(getForm(tense: "future", person: "third", number: "singular"))
-//						conjugationCell(getForm(tense: "future", person: "first", number: "plural"))
-//						conjugationCell(getForm(tense: "future", person: "second", number: "plural"))
-//						conjugationCell(getForm(tense: "future", person: "third", number: "plural"))
-//						
-//						// Conditional tense
-//						sectionCell("conditional")
-//						conjugationCell(getForm(tense: "conditional", person: "first", number: "singular"))
-//						conjugationCell(getForm(tense: "conditional", person: "second", number: "singular"))
-//						conjugationCell(getForm(tense: "conditional", person: "third", number: "singular"))
-//						conjugationCell(getForm(tense: "conditional", person: "first", number: "plural"))
-//						conjugationCell(getForm(tense: "conditional", person: "second", number: "plural"))
-//						conjugationCell(getForm(tense: "conditional", person: "third", number: "plural"))
-//					}
-//				}
-//				.padding(.horizontal, 8)
-//				.frame(width: geometry.size.width*2)
-//			}
-//			Spacer()
-//		}
-////		.navigationTitle("Conjugation of \(self.word)")
-//	}
-//	
-//	private func createColumns() -> [GridItem] {
-//		Array(repeating: GridItem(.flexible(), spacing: 1), count: 7)
-//	}
-//	
-//	private func headerCell(_ text: String) -> some View {
-//		Text(text)
-//			.font(.caption)
-//			.fontWeight(.semibold)
-//			.frame(maxWidth: .infinity, minHeight: 50)
-//			.background(Color.gray.opacity(0.3))
-//			.foregroundColor(.primary)
-//			.multilineTextAlignment(.center)
-//	}
-//	
-//	private func sectionCell(_ text: String) -> some View {
-//		Text(text)
-//			.font(.caption2)
-//			.fontWeight(.medium)
-//			.frame(maxWidth: .infinity, minHeight: 50)
-//			.background(Color.blue.opacity(0.2))
-//			.foregroundColor(.primary)
-//	}
-//	
-//	private func conjugationCell(_ text: String) -> some View {
-//		Text(text)
-//			.font(.caption2)
-//			.frame(maxWidth: .infinity, minHeight: 50)
-//			.background(Color.gray.opacity(0.1))
-//			.foregroundColor(.primary)
-//	}
-//	
-//	private func getForm(tense: String, person: String, number: String) -> String {
-//		let matchingForms = self.forms.filter { form in
-//			form.tags.contains(tense) &&
-//			form.tags.contains("\(person)-person") &&
-//			form.tags.contains(number) &&
-//			form.tags.contains("indicative")
-//		}
-//		return matchingForms.first?.word ?? "-"
-//	}
-//}
-

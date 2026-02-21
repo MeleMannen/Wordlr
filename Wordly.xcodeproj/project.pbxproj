@@ -52,6 +52,9 @@
 		63B9B4402EA58ED2008483FB /* dailyEnglishWords.json in Resources */ = {isa = PBXBuildFile; fileRef = 63B9B3E02EA58ED2008483FB /* dailyEnglishWords.json */; };
 		63B9B4412EA58ED2008483FB /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 63B9B3E42EA58ED2008483FB /* Localizable.xcstrings */; };
 		63B9B4422EA58ED2008483FB /* shortedNorwegainWords.json in Resources */ = {isa = PBXBuildFile; fileRef = 63B9B3E62EA58ED2008483FB /* shortedNorwegainWords.json */; };
+		63BF73DA2F4477E80065D40B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 63BF73D92F4477E80065D40B /* GoogleService-Info.plist */; };
+		63BF73DD2F4479CB0065D40B /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 63BF73DC2F4479CB0065D40B /* FirebaseAnalytics */; };
+		63BF73DF2F447CD50065D40B /* AnalyticsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63BF73DE2F447CCA0065D40B /* AnalyticsManager.swift */; };
 		63F225952E53B24100248D30 /* GoogleUserMessagingPlatform in Frameworks */ = {isa = PBXBuildFile; productRef = 63F225942E53B24100248D30 /* GoogleUserMessagingPlatform */; };
 		63F697CB2E05A328008B0B6E /* GoogleMobileAds in Frameworks */ = {isa = PBXBuildFile; productRef = 63F697CA2E05A328008B0B6E /* GoogleMobileAds */; };
 /* End PBXBuildFile section */
@@ -106,6 +109,8 @@
 		63B9B4112EA58ED2008483FB /* StreakManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreakManager.swift; sourceTree = "<group>"; };
 		63B9B4122EA58ED2008483FB /* Tips.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tips.swift; sourceTree = "<group>"; };
 		63B9B4132EA58ED2008483FB /* Wordly.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Wordly.entitlements; sourceTree = "<group>"; };
+		63BF73D92F4477E80065D40B /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		63BF73DE2F447CCA0065D40B /* AnalyticsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -115,6 +120,7 @@
 			files = (
 				63F225952E53B24100248D30 /* GoogleUserMessagingPlatform in Frameworks */,
 				63F697CB2E05A328008B0B6E /* GoogleMobileAds in Frameworks */,
+				63BF73DD2F4479CB0065D40B /* FirebaseAnalytics in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -166,6 +172,7 @@
 				63B9B3E62EA58ED2008483FB /* shortedNorwegainWords.json */,
 				63B9B3E72EA58ED2008483FB /* spanishWords.json */,
 				63B9B3DF2EA58ED2008483FB /* Assets.xcassets */,
+				63BF73D92F4477E80065D40B /* GoogleService-Info.plist */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -245,6 +252,7 @@
 		63B9B4142EA58ED2008483FB /* Wordly */ = {
 			isa = PBXGroup;
 			children = (
+				63BF73DE2F447CCA0065D40B /* AnalyticsManager.swift */,
 				63B9B4092EA58ED2008483FB /* AppObjects.swift */,
 				63B9B4082EA58ED2008483FB /* AppManager.swift */,
 				63B9B40A2EA58ED2008483FB /* DefinitionManager.swift */,
@@ -283,6 +291,7 @@
 			packageProductDependencies = (
 				63F697CA2E05A328008B0B6E /* GoogleMobileAds */,
 				63F225942E53B24100248D30 /* GoogleUserMessagingPlatform */,
+				63BF73DC2F4479CB0065D40B /* FirebaseAnalytics */,
 			);
 			productName = Wordle;
 			productReference = 6382E3BC2D12FE0500B61353 /* Wordly.app */;
@@ -317,6 +326,7 @@
 			packageReferences = (
 				63F697C92E05A328008B0B6E /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */,
 				63F225932E53B24100248D30 /* XCRemoteSwiftPackageReference "swift-package-manager-google-user-messaging-platform" */,
+				63BF73DB2F4479CB0065D40B /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 6382E3BD2D12FE0500B61353 /* Products */;
@@ -338,6 +348,7 @@
 				63B9B4382EA58ED2008483FB /* norwegianWords.json in Resources */,
 				63B9B4392EA58ED2008483FB /* spanishWords.json in Resources */,
 				63B9B43A2EA58ED2008483FB /* englishWords.json in Resources */,
+				63BF73DA2F4477E80065D40B /* GoogleService-Info.plist in Resources */,
 				63B9B43B2EA58ED2008483FB /* dailySpanishWords.json in Resources */,
 				63B9B43C2EA58ED2008483FB /* Assets.xcassets in Resources */,
 				63B9B43F2EA58ED2008483FB /* PrivacyInfo.xcprivacy in Resources */,
@@ -376,6 +387,7 @@
 				63B9B4272EA58ED2008483FB /* NAOBView.swift in Sources */,
 				63B9B4282EA58ED2008483FB /* GameView.swift in Sources */,
 				63B9B4292EA58ED2008483FB /* AppManager.swift in Sources */,
+				63BF73DF2F447CD50065D40B /* AnalyticsManager.swift in Sources */,
 				63B9B42A2EA58ED2008483FB /* NormalStreakManager.swift in Sources */,
 				63B9B42B2EA58ED2008483FB /* AppObjects.swift in Sources */,
 				63B9B42C2EA58ED2008483FB /* TabsView.swift in Sources */,
@@ -553,7 +565,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 15.0;
-				MARKETING_VERSION = 2.0.2;
+				MARKETING_VERSION = 2.0.3;
 				PRODUCT_BUNDLE_IDENTIFIER = SwoshEB.ThePhrase;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
@@ -600,7 +612,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 15.0;
-				MARKETING_VERSION = 2.0.2;
+				MARKETING_VERSION = 2.0.3;
 				PRODUCT_BUNDLE_IDENTIFIER = SwoshEB.ThePhrase;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
@@ -636,6 +648,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		63BF73DB2F4479CB0065D40B /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 12.9.0;
+			};
+		};
 		63F225932E53B24100248D30 /* XCRemoteSwiftPackageReference "swift-package-manager-google-user-messaging-platform" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/googleads/swift-package-manager-google-user-messaging-platform.git";
@@ -655,6 +675,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		63BF73DC2F4479CB0065D40B /* FirebaseAnalytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 63BF73DB2F4479CB0065D40B /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalytics;
+		};
 		63F225942E53B24100248D30 /* GoogleUserMessagingPlatform */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 63F225932E53B24100248D30 /* XCRemoteSwiftPackageReference "swift-package-manager-google-user-messaging-platform" */;

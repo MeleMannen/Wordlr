@@ -137,13 +137,14 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
     
     
     func getRandomWord() {
-        if selectedGameMode == .normal {
+		if self.selectedGameMode == .normal {
             self.word = self.words?.wordGroups["\(numberOfLetters)"]?.randomElement() ?? "PIANO"
 		} else {
 			self.word = self.getDailyWord()
 		}
 		print("Ordet er \(self.word)")
 		self.dailyWordHasBeenPlayed = self.checkIfDailyWordIsAlreadyPlayed()
+		AnalyticsManager.shared.logGameStartedEvent(word: self.word, language: self.selectedLanguage, numberOfLetters: self.numberOfLetters, gameMode: self.selectedGameMode)
     }
 	
     
@@ -538,11 +539,14 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
                                 print("updating daily word streak")
                                 self.setStreak(state: .won)
 								self.fixReminderForDailyWord()
+								AnalyticsManager.shared.logGameEndedEvent(word: self.word, language: self.selectedLanguage, numberOfLetters: self.numberOfLetters, gameMode: self.selectedGameMode, won: true, attemptsNeeded: self.currentRow, gameDurationSeconds: Int(self.endDate.timeIntervalSince(self.startDate)), currentStreak: self.getStreakEntity()?.streak.currentStreak ?? 0)
                             } else {
                                 print("updating normal streak")
                                 self.setNormalStreak(state: .won)
+								AnalyticsManager.shared.logGameEndedEvent(word: self.word, language: self.selectedLanguage, numberOfLetters: self.numberOfLetters, gameMode: self.selectedGameMode, won: true, attemptsNeeded: self.currentRow, gameDurationSeconds: Int(self.endDate.timeIntervalSince(self.startDate)), currentStreak: self.getNormalStreakEntity()?.streak.currentStreak ?? 0)
                             }
                             self.message = String(format: NSLocalizedString("success_message", comment: "Success message with a word"), self.word)
+							
                             return
                         } else {
                             if self.currentRow == self.board.count {
@@ -562,6 +566,8 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
                                     self.setNormalStreak(state: .lost)
                                 }
                                 self.message = String(format: NSLocalizedString("almost_message", comment: "Almost got the word message"), self.word)
+								AnalyticsManager.shared.logGameEndedEvent(word: self.word, language: self.selectedLanguage, numberOfLetters: self.numberOfLetters, gameMode: self.selectedGameMode, won: false, attemptsNeeded: self.currentRow, gameDurationSeconds: Int(self.endDate.timeIntervalSince(self.startDate)), currentStreak: 0)
+								
                             } else {
                                 print("Feil ord: \(guessedWord)")
                             }
@@ -898,6 +904,7 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
 			self.rewardedAd = try await RewardedAd.load(
 				with: "ca-app-pub-7619403750703078/7682260846", request: Request()) // ca-app-pub-3940256099942544/1712485313
 #endif
+			AnalyticsManager.shared.logDidLoadRewardedAdEvent(word: self.word, language: self.selectedLanguage, numberOfLetters: self.numberOfLetters, gameMode: self.gameMode)
             self.rewardedAd?.fullScreenContentDelegate = self
 			await MainActor.run {
 				DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
@@ -919,9 +926,10 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
     
     func showAd() {
         guard let rewardedAd = rewardedAd else {
-            return print("Ad wasn't ready.")
+			print("Ad wasn't ready.")
+            return
         }
-        
+		AnalyticsManager.shared.logDidTapWatchRewardedAdEvent(word: self.word, language: self.selectedLanguage, numberOfLetters: self.numberOfLetters, gameMode: self.gameMode)
         rewardedAd.present(from: nil) {
             let reward = rewardedAd.adReward
             print("Reward amount: \(reward.amount)")

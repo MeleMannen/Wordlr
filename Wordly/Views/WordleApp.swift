@@ -7,6 +7,8 @@
 
 import SwiftUI
 import SwiftData
+import FirebaseCore
+import FirebaseAnalytics
 
 @main
 struct WordleApp: App {
@@ -14,6 +16,10 @@ struct WordleApp: App {
     @AppStorage("appTheme") private var appTheme: AppTheme = .dark
 	@AppStorage("hasSeenOnboarding") private var hasSeenOnboarding: Bool = false
 	@State private var showingOnboardingSheet: Bool = false
+	
+	init() {
+		FirebaseApp.configure()
+	}
 	
 	
 	var body: some Scene {
