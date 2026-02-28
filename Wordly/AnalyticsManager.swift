@@ -27,10 +27,11 @@ final class AnalyticsManager {
 			"language": language.rawValue,
 			"number_of_letters": numberOfLetters,
 			"game_mode": gameMode.rawValue,
-			"won": won,
+			"won": won ? "true" : "false",
+			"won_numeric" : won ? 1 : 0,
 			"attempts_needed": attemptsNeeded,
 			"game_duration_seconds": gameDurationSeconds,
-			"currentStreak": currentStreak
+			"current_streak": currentStreak
 		])
 	}
 	
