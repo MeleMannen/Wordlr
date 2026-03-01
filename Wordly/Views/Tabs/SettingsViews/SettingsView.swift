@@ -10,6 +10,7 @@ import GoogleMobileAds
 import SwiftData
 
 struct SettingsView: View {
+	@Environment(\.modelContext) private var context
 	@Environment(\.colorScheme) private var colorScheme
 	@Environment(AdManager.self) private var adManager: AdManager
 	@AppStorage("appTheme") private var appTheme: AppTheme = .dark
@@ -27,6 +28,11 @@ struct SettingsView: View {
 	@State private var showingNotificationSettingsAlert: Bool = false
 	
 	@Query(sort: \DailyWordReminder.timeToFire) private var dailyWordReminders: [DailyWordReminder]
+	
+	private var notificationTime: Date = {
+		let calendar = Calendar.current
+		return calendar.date(from: DateComponents(year: 2025, month: 9, day: 1, hour: 18, minute: 0)) ?? Date()
+	}()
 
 	
 	var body: some View {
@@ -113,9 +119,17 @@ struct SettingsView: View {
 										
 									}
 									UNUserNotificationCenter.current().delegate = NotificationsDelegate.shared
-									for reminder in dailyWordReminders {
-										if reminder.isEnabled {
-											scheduleNotification(reminder: reminder)
+									if dailyWordReminders.isEmpty {
+										let reminder = DailyWordReminder(language: self.defaultLanguage, numberOfLetters: self.defaultNumberOfLetters, timeToFire: self.notificationTime)
+										context.insert(reminder)
+										scheduleNotification(reminder: reminder)
+										try? context.save()
+										
+									} else {
+										for reminder in dailyWordReminders {
+											if reminder.isEnabled {
+												scheduleNotification(reminder: reminder)
+											}
 										}
 									}
 								} else {
