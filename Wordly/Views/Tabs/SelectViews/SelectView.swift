@@ -20,7 +20,7 @@ struct SelectView: View {
     @AppStorage("hasAddedNormalStreaks") private var hasAddedNormalStreaks: Bool = false
 	@AppStorage("hasAddedSpanishNormalStreaks") private var hasAddedSpanishNormalStreaks: Bool = false
     @AppStorage("hasFixedLanguage") private var hasFixedLanguage: Bool = false
-	@AppStorage("userWantsAds") private var userWantsAds: Bool = false
+	@AppStorage("userWantsAds") private var userWantsAds: Bool = true
 	@AppStorage("userWantsNormalTheme") private var userWantsNormalTheme: Bool = true
 	@AppStorage("userWantsThePhraseNameBack") private var userWantsThePhraseNameBack = false
     @State var hasFixedDefualtValues: Bool = false
@@ -669,6 +669,7 @@ struct SelectView: View {
 			DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
 				reviewManager.checkForReviewPrompt()
 			}
+			AnalyticsManager.shared.logScreenViewed(screenName: "SelectView")
         }
     }
 	

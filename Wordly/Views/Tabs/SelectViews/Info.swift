@@ -94,6 +94,7 @@ struct Info: View {
 			dismiss()
 		}
 		.onAppear {
+			AnalyticsManager.shared.logScreenViewed(screenName: "Info")
 			adManager.currentSelectView = .infoView
 			DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
 				adManager.shouldShowAds = true

@@ -118,30 +118,7 @@ struct TabsView: View {
 				}
 			}
 			.task {
-				adManager.gatherConsent() { result in
-					if let error = result {
-						print("Error gathering consent: \(error)")
-					} else {
-						print("Consent gathered successfully.")
-						ATTrackingManager.requestTrackingAuthorization { status in
-							switch status {
-								case .notDetermined, .restricted, .denied, .authorized:
-									Task { @MainActor in
-										if userWantsAds {
-											adManager.startGoogleMobileAdsSDK()
-										}
-									}
-								@unknown default:
-									Task { @MainActor in
-										if userWantsAds {
-											adManager.startGoogleMobileAdsSDK()
-										}
-									}
-							}
-							
-						}
-					}
-				}
+				await adManager.prepareAds()
 			}
 		}
 	}
@@ -155,7 +132,8 @@ struct TabsView: View {
 			   adManager.currentSelectView == .searchView ||
 			   adManager.currentSelectView == .filterOptionsView ||
 			   adManager.currentSelectView == .infoView))) &&
-			adManager.canRequestAds {
+			adManager.canRequestAds &&
+			adManager.isAdsReady {
 			
 			if #available(iOS 26.0, *), UIDevice.current.userInterfaceIdiom == .phone {
 				let adSize = currentOrientationAnchoredAdaptiveBanner(width: geometry.size.width - (geometry.size.width / 11))
@@ -186,50 +164,77 @@ final class AdManager {
 	var currentSelectView: CurrentSelectView = .selectView
 	var shouldShowAds: Bool = true
 	var isMobileAdsStartCalled = false
+	var isAdsReady = false
 	
 	var canRequestAds: Bool {
 		return ConsentInformation.shared.canRequestAds
 	}
 	
-	/// Helper method to call the UMP SDK methods to request consent information and load/present a
-	/// consent form if necessary.
-	func gatherConsent(consentGatheringComplete: @escaping (Error?) -> Void) {
-		// ConsentInformation.shared.reset()
-		let parameters = RequestParameters()
-		
-		// For testing purposes, you can use UMPDebugGeography to simulate a location.
-		let debugSettings = DebugSettings()
-		// debugSettings.geography = DebugGeography.EEA
-		parameters.debugSettings = debugSettings
-		
-		// Requesting an update to consent information should be called on every app launch.
-		ConsentInformation.shared.requestConsentInfoUpdate(with: parameters) {
-			requestConsentError in
-			guard requestConsentError == nil else {
-				return consentGatheringComplete(requestConsentError)
+	var shouldShowPrivacyOptionsButton: Bool {
+		ConsentInformation.shared.privacyOptionsRequirementStatus == .required
+	}
+	
+	func prepareAds() async {
+		isAdsReady = false
+		do {
+			try await gatherConsent()
+			
+			guard canRequestAds else {
+				print("Ads cannot be requested yet.")
+				return
 			}
 			
-			Task { @MainActor in
-				do {
-					try await ConsentForm.loadAndPresentIfRequired(from: nil)
-					consentGatheringComplete(nil)
-				} catch {
-					consentGatheringComplete(error)
+			let status = await requestTrackingAuthorizationIfNeeded()
+			print("ATT status: \(status.rawValue)")
+			
+			startGoogleMobileAdsSDK()
+			
+			isAdsReady = isMobileAdsStartCalled
+			
+		} catch {
+			print("Consent flow error: \(error)")
+		}
+	}
+	
+	func gatherConsent() async throws {
+		let parameters = RequestParameters()
+		
+		let debugSettings = DebugSettings()
+		parameters.debugSettings = debugSettings
+		
+		try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
+			ConsentInformation.shared.requestConsentInfoUpdate(with: parameters) { error in
+				if let error {
+					continuation.resume(throwing: error)
+				} else {
+					continuation.resume()
 				}
 			}
 		}
+		
+		try await ConsentForm.loadAndPresentIfRequired(from: nil)
 	}
 	
-	/// Helper method to call the UMP SDK method to present the privacy options form.
-	@MainActor func presentPrivacyOptionsForm() async throws {
-		try await ConsentForm.presentPrivacyOptionsForm(from: nil)
+	func requestTrackingAuthorizationIfNeeded() async -> ATTrackingManager.AuthorizationStatus {
+		guard #available(iOS 14, *) else {
+			return .authorized
+		}
+		
+		let currentStatus = ATTrackingManager.trackingAuthorizationStatus
+		guard currentStatus == .notDetermined else { return currentStatus }
+		return await withCheckedContinuation { continuation in
+		     ATTrackingManager.requestTrackingAuthorization { status in
+		         continuation.resume(returning: status)
+		     }
+		}
 	}
 	
-	/// Method to initialize the Google Mobile Ads SDK. The SDK should only be initialized once.
 	func startGoogleMobileAdsSDK() {
+		print("this happens now!")
 		guard canRequestAds, !isMobileAdsStartCalled else {
 			return
 		}
+		
 #if targetEnvironment(simulator)
 		let testDeviceIdentifiers = ["AC276EF4-3093-42DF-8DE1-84C495BF8585"]
 		MobileAds.shared.requestConfiguration.testDeviceIdentifiers = testDeviceIdentifiers
@@ -237,11 +242,12 @@ final class AdManager {
 		
 		MobileAds.shared.start()
 		isMobileAdsStartCalled = true
-		
 	}
 	
-	/// Method to present the Google AdMob Ad Inspector for debugging ads
-	@MainActor
+	func presentPrivacyOptionsForm() async throws {
+		try await ConsentForm.presentPrivacyOptionsForm(from: nil)
+	}
+	
 	func presentAdInspector(from viewController: UIViewController? = nil) {
 		guard isMobileAdsStartCalled else {
 			print("Google Mobile Ads SDK not started yet")
@@ -249,7 +255,7 @@ final class AdManager {
 		}
 		
 		MobileAds.shared.presentAdInspector(from: viewController) { error in
-			if let error = error {
+			if let error {
 				print("Ad Inspector presentation failed: \(error.localizedDescription)")
 			} else {
 				print("Ad Inspector presented successfully")

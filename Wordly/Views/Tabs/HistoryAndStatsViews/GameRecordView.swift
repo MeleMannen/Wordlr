@@ -419,6 +419,7 @@ struct GameRecordView: View {
             .navigationBarTitleDisplayMode(.inline)
 			.safeAreaPadding(.bottom, (UIDevice.current.userInterfaceIdiom == .pad || UIDevice.current.userInterfaceIdiom == .mac) && self.userWantsAds ? 80 : (self.userWantsAds ? 60 : 0))
             .onAppear {
+				AnalyticsManager.shared.logScreenViewed(screenName: "GameRecordView")
                 if let endDate = gameRecord.endDate {
                     self.timeUsedString = self.getTimeUsedString(startDate: self.gameRecord.date, endDate: endDate).trimmingCharacters(in: .whitespaces)
                 }

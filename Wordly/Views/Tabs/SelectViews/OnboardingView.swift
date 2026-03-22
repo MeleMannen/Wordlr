@@ -102,12 +102,15 @@ struct OnboardingView: View {
                     }
                 }
             }
-            .navigationTitle("Welcome to \(self.userWantsThePhraseNameBack ? "The Phrase" : "Wordly")")
-            .navigationBarTitleDisplayMode(.inline)
+			.navigationTitle("Welcome to \(self.userWantsThePhraseNameBack ? "The Phrase" : "Wordly")")
+			.navigationBarTitleDisplayMode(.inline)
 			.presentationDragIndicator(.hidden)
 			.interactiveDismissDisabled(true)
-        }
-    }
+			.onAppear {
+				AnalyticsManager.shared.logScreenViewed(screenName: "OnboardingView")
+			}
+		}
+	}
 }
 
 #Preview {

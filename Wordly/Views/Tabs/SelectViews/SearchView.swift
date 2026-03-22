@@ -318,6 +318,7 @@ struct SearchView: View {
 //				
 //			}
 			.onAppear {
+				AnalyticsManager.shared.logScreenViewed(screenName: "SearchView")
 				self.filterGameRecords()
 				adManager.currentSelectView = .searchView
 				DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {

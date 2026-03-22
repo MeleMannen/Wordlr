@@ -223,6 +223,7 @@ struct StatsView: View {
             }
             
             self.filterGameRecords()
+			AnalyticsManager.shared.logScreenViewed(screenName: "StatsView")
         }
     }
     

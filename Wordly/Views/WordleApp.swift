@@ -8,7 +8,6 @@
 import SwiftUI
 import SwiftData
 import FirebaseCore
-import FirebaseAnalytics
 
 @main
 struct WordleApp: App {

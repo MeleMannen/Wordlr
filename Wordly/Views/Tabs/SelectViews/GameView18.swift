@@ -524,6 +524,7 @@ struct GameView18: View {
 			}
 		}
 		.onAppear {
+			AnalyticsManager.shared.logScreenViewed(screenName: "GameView18")
 			if appManager.word.isEmpty || appManager.selectedLanguage != appManager.language || appManager.gameMode != appManager.selectedGameMode || appManager.message == "" && appManager.isGameOver {
 				appManager.getWords()
 			} else if appManager.word.count != appManager.numberOfLetters {

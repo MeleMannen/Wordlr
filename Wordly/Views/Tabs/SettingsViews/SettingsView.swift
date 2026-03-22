@@ -362,6 +362,9 @@ struct SettingsView: View {
 				.navigationTitle("Settings")
 				.safeAreaPadding(.bottom, (UIDevice.current.userInterfaceIdiom == .pad || UIDevice.current.userInterfaceIdiom == .mac) && self.userWantsAds ? 80 : (self.userWantsAds ? 54 : 0))
 				.tint(.secondary)
+				.onAppear {
+					AnalyticsManager.shared.logScreenViewed(screenName: "SettingsView")
+				}
 			}
 		}
 	}

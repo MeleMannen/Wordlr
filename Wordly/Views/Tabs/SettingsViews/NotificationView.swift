@@ -98,6 +98,9 @@ struct NotificationView: View {
 			}
 			
 		}
+		.onAppear {
+			AnalyticsManager.shared.logScreenViewed(screenName: "NotificationView")
+		}
 	}
 	
 	private func deleteReminder(at offsets: IndexSet) {

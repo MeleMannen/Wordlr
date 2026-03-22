@@ -156,6 +156,7 @@ struct HistoryView: View {
                         self.hasFixedDefualtValues = true
                     }
                     self.filterGameRecords()
+					AnalyticsManager.shared.logScreenViewed(screenName: "HistoryView")
                 }
             }
         }

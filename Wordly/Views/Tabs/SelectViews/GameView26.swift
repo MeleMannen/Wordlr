@@ -541,6 +541,7 @@ struct GameView26: View {
 				.animation(.default, value: appManager.isHintAvailable() && appManager.shouldShowAdButton && !appManager.isGameOver)
 			}
 			.onAppear {
+				AnalyticsManager.shared.logScreenViewed(screenName: "GameView26")
 				if appManager.word.isEmpty || appManager.selectedLanguage != appManager.language || appManager.gameMode != appManager.selectedGameMode || appManager.message == "" && appManager.isGameOver {
 					appManager.getWords()
 				} else if appManager.word.count != appManager.numberOfLetters {
@@ -648,4 +649,3 @@ struct ScalingButton: ButtonStyle {
     GameView26()
         .environmentObject(AppManager())
 }
-

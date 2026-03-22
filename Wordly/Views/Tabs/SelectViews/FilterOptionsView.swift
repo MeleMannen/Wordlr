@@ -288,26 +288,13 @@ struct FilterOptionsView: View {
 							self.isShowingFilterOptions = false
 						}
 						.sensoryFeedback(.selection, trigger: self.didTap)
-//						.tint(.red)
 					}
 				}
 			}
 		}
-//        .scrollDisabled(true)
-//		.safeAreaPadding(.bottom, (UIDevice.current.userInterfaceIdiom == .pad || UIDevice.current.userInterfaceIdiom == .mac) && self.userWantsAds ? 80 : (self.userWantsAds ? 54 : 0))
-//		.onAppear {
-//			adManager.currentSelectView = .filterOptionsView
-//			DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
-//				adManager.shouldShowAds = true
-//			}
-//		}
-//        .onDisappear {
-//            withAnimation {
-//                DispatchQueue.main.async {
-//                    self.focusedField = nil
-//                }
-//            }
-//        }
+		.onAppear {
+			AnalyticsManager.shared.logScreenViewed(screenName: "FilterOptionsView")
+		}
 		.onChange(of: self.focusedField) {
 			if self.focusedField == nil {
 				adManager.shouldShowAds = true
@@ -315,7 +302,7 @@ struct FilterOptionsView: View {
 				adManager.shouldShowAds = false
 			}
 		}
-    }
+	}
     
     func focusNextField() {
         guard let currentField = focusedField else { return }
@@ -328,8 +315,6 @@ struct FilterOptionsView: View {
                 focusedField = nil
         }
     }
-    
-    
 }
 
 struct ThePhraseTextFieldStyle: TextFieldStyle {

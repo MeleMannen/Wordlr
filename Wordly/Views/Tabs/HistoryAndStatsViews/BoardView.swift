@@ -81,6 +81,9 @@ struct BoardView: View {
         }
         .navigationTitle("The Board")
         .navigationBarTitleDisplayMode(.inline)
+		.onAppear {
+			AnalyticsManager.shared.logScreenViewed(screenName: "BoardView")
+		}
     }
 }
 

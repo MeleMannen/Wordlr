@@ -108,4 +108,11 @@ final class AnalyticsManager {
 			"viewSuccess": viewSuccess
 		])
 	}
+	
+	func logScreenViewed(screenName: String) {
+		Analytics.logEvent(AnalyticsEventScreenView, parameters: [
+			AnalyticsParameterScreenName: screenName,
+			AnalyticsParameterScreenClass: screenName
+		])
+	}
 }
