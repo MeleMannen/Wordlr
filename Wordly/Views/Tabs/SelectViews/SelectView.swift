@@ -143,6 +143,7 @@ struct SelectView: View {
 					
 					Spacer()
 					Spacer()
+					
 					if #available(iOS 26.0, *) {
 						VStack {
 							if appManager.hasGameStarted() && appManager.selectedGameMode != .normal && !self.isAllowedToChooseGameModeAgain {

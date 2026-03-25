@@ -229,22 +229,6 @@
         }
       }
     },
-    "Ad Inspector" : {
-      "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ad Inspector"
-          }
-        },
-        "nb" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Reklame Inspektør"
-          }
-        }
-      }
-    },
     "Add Reminder" : {
       "localizations" : {
         "es" : {
@@ -2801,7 +2785,7 @@
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Prøv å spille et spill først eller endre valgene."
+            "value" : "Prøv å gjette et ord først eller endre valgene."
           }
         }
       }
@@ -2823,7 +2807,7 @@
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Prøv å spille et spill først."
+            "value" : "Prøv å gjette et ord først."
           }
         }
       }
