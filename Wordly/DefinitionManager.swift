@@ -8,18 +8,20 @@
 import Foundation
 import AVFoundation
 
+enum DefinitionFetchResult<Value> {
+    case success(Value)
+    case notFound
+    case networkError
+}
+
 final class DefinitionManager: NSObject, ObservableObject {
     private var audioPlayer: AVPlayer?
     
     
-    func getEnglishDefinition(for word: String, completion: @escaping ([EnglishDefinition]) -> Void) {
-        WordleDataManager.shared.fetchEnglishDefinition(for: word) { definition in
-            guard let definition = definition else {
-                completion([])
-                return
-            }
+    func getEnglishDefinition(for word: String, completion: @escaping (DefinitionFetchResult<[EnglishDefinition]>) -> Void) {
+        WordleDataManager.shared.fetchEnglishDefinition(for: word) { result in
             DispatchQueue.main.async {
-                completion(definition)
+                completion(result)
             }
         }
     }
@@ -39,48 +41,20 @@ final class DefinitionManager: NSObject, ObservableObject {
     }
     
     
-    func getDefinition(for word: String, completion: @escaping ([ProcessedWord]) -> Void) {
-        var processedWords: [ProcessedWord] = []
-        WordleDataManager.shared.fetchArticleIDs(for: word) { articleIDs in
-            guard let articleIDs = articleIDs else {
-                DispatchQueue.main.async {
-                    completion(processedWords)
-                }
-                return
-            }
-            
-            let dispatchGroup = DispatchGroup()
-            
-            for articleID in articleIDs {
-                dispatchGroup.enter()
-                WordleDataManager.shared.fetchArticleDetails(articleID: articleID) { fetchedProcessedWord in
-                    if let fetchedProcessedWord {
-                        DispatchQueue.main.async {
-                            processedWords.append(fetchedProcessedWord)
-                        }
-                    }
-                    dispatchGroup.leave()
-                }
-                
-            }
-            
-            dispatchGroup.notify(queue: .main) {
-                completion(processedWords)
-                
+    func getDefinition(for word: String, completion: @escaping (DefinitionFetchResult<[ProcessedWord]>) -> Void) {
+        WordleDataManager.shared.fetchNorwegianDefinition(for: word) { result in
+            DispatchQueue.main.async {
+                completion(result)
             }
         }
     }
 	
-	func getSpanishDefinition(for word: String, completion: @escaping (SpanishDefinition?) -> Void) {
-		WordleDataManager.shared.fetchSpanishDefinition(for: word) { definition in
-			guard let definition = definition else {
-				completion(nil)
-				return
-			}
-			DispatchQueue.main.async {
-				completion(definition)
-			}
-		}
+	func getSpanishDefinition(for word: String, completion: @escaping (DefinitionFetchResult<SpanishDefinition>) -> Void) {
+		WordleDataManager.shared.fetchSpanishDefinition(for: word) { result in
+            DispatchQueue.main.async {
+                completion(result)
+            }
+        }
 	}
     
     

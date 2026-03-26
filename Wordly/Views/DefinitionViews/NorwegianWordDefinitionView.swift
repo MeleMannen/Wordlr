@@ -15,187 +15,170 @@ struct NorwegianWordDefinitionView: View {
     @State var word: String
     @State var isLoading: Bool = true
     @State var didTap: Bool = false
+    @State private var fetchResult: DefinitionFetchResult<[ProcessedWord]>?
     
     var body: some View {
         VStack {
             if !self.isLoading {
-                ScrollView {
-                    if !self.processedWords.isEmpty {
-                        ForEach(self.processedWords) { processedWord in
-                            VStack {
-                                VStack(alignment: .leading) {
-                                    if let words = processedWord.words {
-                                        Text(words.joined(separator: ", ").uppercased())
-                                            .font(.largeTitle)
-                                            .bold()
-                                    } else {
-                                        Text(self.word.uppercased())
-                                            .font(.largeTitle)
-                                            .bold()
-                                    }
-                                    
-                                    
-                                    HStack {
-                                        if let wordClass = processedWord.wordClass {
-                                            Text("\(wordClass)  ")
-                                                .font(.subheadline)
+                GeometryReader { geometry in
+                    ScrollView {
+                        if !self.processedWords.isEmpty {
+                            ForEach(self.processedWords) { processedWord in
+                                VStack {
+                                    VStack(alignment: .leading) {
+                                        if let words = processedWord.words {
+                                            Text(words.joined(separator: ", ").uppercased())
+                                                .font(.largeTitle)
+                                                .bold()
+                                        } else {
+                                            Text(self.word.uppercased())
+                                                .font(.largeTitle)
+                                                .bold()
                                         }
                                         
-                                        if let gender = processedWord.gender {
-                                            Text(gender.capitalized)
-                                                .font(.subheadline)
-                                                .italic()
-                                                .foregroundColor(.gray)
-                                        }
                                         
-                                        Spacer()
-                                    }
-                                    .padding(.top, 2)
-                                    .padding(.bottom, 10)
-                                    
-                                    
-                                    
-                                    if let pronunciation = processedWord.pronunciation {
-                                        HStack(alignment: .top) {
-                                            Text("PRONUNCIATION   ")
-                                                .font(.headline)
+                                        HStack {
+                                            if let wordClass = processedWord.wordClass {
+                                                Text("\(wordClass)  ")
+                                                    .font(.subheadline)
+                                            }
                                             
-                                            
-                                            Text(pronunciation)
-                                                .italic()
-                                                .foregroundColor(.gray)
+                                            if let gender = processedWord.gender {
+                                                Text(gender.capitalized)
+                                                    .font(.subheadline)
+                                                    .italic()
+                                                    .foregroundColor(.gray)
+                                            }
                                             
                                             Spacer()
                                         }
-                                        .padding(.vertical, 10)
-                                        
-                                    }
-                                    
-                                    if let etymology = processedWord.etymology {
-                                        HStack(alignment: .top) {
-                                            Text("ORIGIN   ")
-                                                .font(.headline)
-                                            
-                                            
-                                            Text(etymology.joined(separator: ", "))
-                                                .italic()
-                                                .foregroundColor(.gray)
-                                        }
-                                        .padding(.vertical, 10)
+                                        .padding(.top, 2)
                                         .padding(.bottom, 10)
                                         
-                                    }
-                                    
-                                    if let definitions = processedWord.definitions {
-                                        ForEach(definitions, id: \.id) { definition in
-                                            DefinitionView(definition: definition, isNested: false, index: 1)
+                                        
+                                        
+                                        if let pronunciation = processedWord.pronunciation {
+                                            HStack(alignment: .top) {
+                                                Text("PRONUNCIATION   ")
+                                                    .font(.headline)
+                                                
+                                                
+                                                Text(pronunciation)
+                                                    .italic()
+                                                    .foregroundColor(.gray)
+                                                
+                                                Spacer()
+                                            }
+                                            .padding(.vertical, 10)
+                                            
+                                        }
+                                        
+                                        if let etymology = processedWord.etymology {
+                                            HStack(alignment: .top) {
+                                                Text("ORIGIN   ")
+                                                    .font(.headline)
+                                                
+                                                
+                                                Text(etymology.joined(separator: ", "))
+                                                    .italic()
+                                                    .foregroundColor(.gray)
+                                            }
+                                            .padding(.vertical, 10)
+                                            .padding(.bottom, 10)
+                                            
+                                        }
+                                        
+                                        if let definitions = processedWord.definitions {
+                                            ForEach(definitions, id: \.id) { definition in
+                                                DefinitionView(definition: definition, isNested: false, index: 1)
+                                            }
                                         }
                                     }
+                                    .padding(25)
                                 }
-                                .padding(25)
-                            }
-                            .background {
-								RoundedRectangle(cornerRadius: 20)
-									.foregroundStyle(Color(uiColor: .secondarySystemBackground))
-                            }
-							.overlay(alignment: .bottomTrailing) {
-								Text("ordbokene.no")
-									.font(.body)
-									.fontWeight(.semibold)
-									.foregroundColor(.secondary)
-									.padding(.trailing, 10)
-									.padding(.bottom, 8)
-							}
-                            .padding(.horizontal, 15)
-                            .padding(.top, 20)
-                        }
-                    }
-                    else {
-                        VStack {
-                            VStack(alignment: .leading) {
-                                Text(self.word.uppercased())
-                                    .font(.largeTitle)
-                                    .bold()
-                                    .padding(.bottom, 10)
-                                
-                                HStack {
-                                    Text("We couldn't find a definition for this Word. That might be because it is a name or a place name.")
-                                        .font(.title3)
-                                    
-                                    Spacer()
+                                .background {
+                                    RoundedRectangle(cornerRadius: 20)
+                                        .foregroundStyle(Color(uiColor: .secondarySystemBackground))
                                 }
-								Text("You could try to search in the Dictionary NAOB: ")
-									.font(.headline)
-									.padding(.top, 10)
-								
-								if #available(iOS 26.0, *) {
-									NavigationLink(destination: NAOBView(word: self.word)) {
-										Text("Search \(self.word.uppercased())")
-											.foregroundColor(.white)
-											.font(.title2).bold()
-											.padding(14)
-											.frame(maxWidth: .infinity)
-											.background {
-												if self.scenePhase == .background {
-													RoundedRectangle(cornerRadius: 15)
-														.foregroundStyle(Color(uiColor: .systemGreen))
-												}
-											}
-									}
-									.glassEffect(.regular.tint(.green).interactive(), in: .rect(cornerRadius: 15.0))
-									.simultaneousGesture(TapGesture().onEnded {
-										self.didTap.toggle()
-									})
-									.padding(.top, 10)
-									
-									.padding(.horizontal, 40)
-									.sensoryFeedback(.impact, trigger: self.didTap)
-								} else {
-									NavigationLink(destination: NAOBView(word: self.word)) {
-										Text("Search \(self.word.uppercased())")
-											.foregroundColor(.white)
-											.font(.title2).bold()
-											.padding(14)
-											.frame(maxWidth: .infinity)
-											.background {
-												RoundedRectangle(cornerRadius: 15)
-													.fill(Color.green)
-											}
-											.padding(.horizontal, 40)
-										
-										
-									}
-									.simultaneousGesture(TapGesture().onEnded {
-										self.didTap.toggle()
-									})
-									.padding(.top, 10)
-									.sensoryFeedback(.impact, trigger: self.didTap)
-									.buttonStyle(GrowingButton())
-								}
+                                .overlay(alignment: .bottomTrailing) {
+                                    if let sourceURL = self.sourceURL {
+                                        Link("ordbokene.no", destination: sourceURL)
+                                            .font(.body)
+                                            .fontWeight(.semibold)
+                                            .padding(.trailing, 16)
+                                            .padding(.bottom, 14)
+                                    }
+                                }
+                                .padding(.horizontal, 15)
+                                .padding(.top, 20)
                             }
-                            .padding(25)
-                            
+                        } else if self.isNetworkError {
+                            self.centeredUnavailableContent(minHeight: geometry.size.height) {
+                                ContentUnavailableView(
+                                    "No Internet Connection",
+                                    systemImage: "wifi.slash",
+                                    description: Text("We couldn't load the definition right now. Check your connection and try again.")
+                                )
+                            }
+                        } else {
+                            self.centeredUnavailableContent(minHeight: geometry.size.height) {
+                                ContentUnavailableView {
+                                    Label("No Definition Found", systemImage: "book.closed")
+                                } description: {
+                                    Text("We couldn't find a definition for this word. It might be a name or a place name.")
+                                } actions: {
+                                    if #available(iOS 26.0, *) {
+                                        NavigationLink(destination: NAOBView(word: self.word)) {
+                                            Text("Search \(self.word.uppercased())")
+                                                .foregroundColor(.white)
+                                                .font(.title2).bold()
+                                                .padding(14)
+                                                .frame(maxWidth: .infinity)
+                                                .background {
+                                                    if self.scenePhase == .background {
+                                                        RoundedRectangle(cornerRadius: 15)
+                                                            .foregroundStyle(Color(uiColor: .systemGreen))
+                                                    }
+                                                }
+                                        }
+                                        .glassEffect(.regular.tint(.green).interactive(), in: .rect(cornerRadius: 15.0))
+                                        .simultaneousGesture(TapGesture().onEnded {
+                                            self.didTap.toggle()
+                                        })
+                                        .padding(.top, 10)
+                                        .padding(.horizontal, 40)
+                                        .sensoryFeedback(.impact, trigger: self.didTap)
+                                    } else {
+                                        NavigationLink(destination: NAOBView(word: self.word)) {
+                                            Text("Search \(self.word.uppercased())")
+                                                .foregroundColor(.white)
+                                                .font(.title2).bold()
+                                                .padding(14)
+                                                .frame(maxWidth: .infinity)
+                                                .background {
+                                                    RoundedRectangle(cornerRadius: 15)
+                                                        .fill(Color.green)
+                                                }
+                                                .padding(.horizontal, 40)
+                                        }
+                                        .simultaneousGesture(TapGesture().onEnded {
+                                            self.didTap.toggle()
+                                        })
+                                        .padding(.top, 10)
+                                        .sensoryFeedback(.impact, trigger: self.didTap)
+                                        .buttonStyle(GrowingButton())
+                                    }
+                                }
+                            }
                         }
-                        .background {
-                            RoundedRectangle(cornerRadius: 20)
-								.foregroundStyle(Color(uiColor: .secondarySystemBackground))
+                    }
+                    .refreshable {
+                        definitionManager.getDefinition(for: self.word) { result in
+                            self.apply(result)
                         }
-                        .padding(.horizontal, 15)
-                        .padding(.top, 20)
-                        
                     }
-                    
+                    .safeAreaPadding(.bottom, (UIDevice.current.userInterfaceIdiom == .pad || UIDevice.current.userInterfaceIdiom == .mac) && self.userWantsAds ? 80 : (self.userWantsAds ? 54 : 0))
                 }
-                .refreshable {
-                    definitionManager.getDefinition(for: self.word) { processedWords in
-						self.processedWords = processedWords
-						self.isLoading = false
-						print("ProcessedWord: \(String(describing: self.processedWords))")
-						dump(self.processedWords)
-                    }
-                }
-				.safeAreaPadding(.bottom, (UIDevice.current.userInterfaceIdiom == .pad || UIDevice.current.userInterfaceIdiom == .mac) && self.userWantsAds ? 80 : (self.userWantsAds ? 54 : 0))
-                
             } else {
                 ProgressView()
                     .progressViewStyle(CircularProgressViewStyle())
@@ -205,13 +188,48 @@ struct NorwegianWordDefinitionView: View {
         }
         .navigationTitle("\(self.word)")
         .onAppear {
-            definitionManager.getDefinition(for: self.word) { processedWords in
+            definitionManager.getDefinition(for: self.word) { result in
+                self.apply(result)
+                AnalyticsManager.shared.logDidViewWordDefinitionEvent(word: self.word, language: .norwegian, numberOfLetters: self.word.count, viewSuccess: !self.processedWords.isEmpty)
+            }
+        }
+    }
+    
+    private var sourceURL: URL? {
+        let encodedWord = self.word.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? self.word
+        return URL(string: "https://ordbokene.no/nob/bm,nn/\(encodedWord)")
+    }
+
+    private func centeredUnavailableContent<Content: View>(
+        minHeight: CGFloat,
+        @ViewBuilder content: () -> Content
+    ) -> some View {
+        VStack {
+            Spacer(minLength: 0)
+            content()
+            Spacer(minLength: 0)
+        }
+        .frame(maxWidth: .infinity, minHeight: minHeight)
+    }
+    
+    private var isNetworkError: Bool {
+        if case .networkError = self.fetchResult {
+            return true
+        }
+        return false
+    }
+    
+    private func apply(_ result: DefinitionFetchResult<[ProcessedWord]>) {
+        self.fetchResult = result
+        self.isLoading = false
+        
+        switch result {
+            case .success(let processedWords):
                 self.processedWords = processedWords
-                self.isLoading = false
                 print("ProcessedWord: \(String(describing: self.processedWords))")
                 dump(self.processedWords)
-				AnalyticsManager.shared.logDidViewWordDefinitionEvent(word: self.word, language: .norwegian, numberOfLetters: self.word.count, viewSuccess: !self.processedWords.isEmpty)
-            }
+            case .notFound, .networkError:
+                self.processedWords = []
         }
     }
     

@@ -8,6 +8,22 @@
 import SwiftUI
 import SwiftData
 
+func rowCount(for numberOfLetters: Int) -> Int {
+    numberOfLetters > 6 ? 7 : 6
+}
+
+func legacyRowCount(for numberOfLetters: Int) -> Int {
+    if numberOfLetters > 7 {
+        return 9
+    } else if numberOfLetters > 6 {
+        return 8
+    } else if numberOfLetters == 6 {
+        return 7
+    } else {
+        return 6
+    }
+}
+
 enum CurrentSelectView {
 	case selectView
 	case gameView
@@ -49,11 +65,12 @@ class GameRecord: Identifiable {
     var language: LanguageSelection
     var numberOfLetters: Int
     var numberOfGuesses: Int
+    var maxRows: Int?
     var hintsUsed: Int?
     var board: [[Letter]]?
     var endDate: Date?
     
-    init(date: Date = Date(), state: GameEndState, mode: GameMode, word: String, language: LanguageSelection, numberOfLetters: Int, numberOfGuesses: Int, hintsUsed: Int = 0, board: [[Letter]]? = nil, endDate: Date? = nil) {
+    init(date: Date = Date(), state: GameEndState, mode: GameMode, word: String, language: LanguageSelection, numberOfLetters: Int, numberOfGuesses: Int, maxRows: Int? = nil, hintsUsed: Int = 0, board: [[Letter]]? = nil, endDate: Date? = nil) {
         self.id = UUID()
         self.date = date
         self.state = state
@@ -62,9 +79,14 @@ class GameRecord: Identifiable {
         self.language = language
         self.numberOfLetters = numberOfLetters
         self.numberOfGuesses = numberOfGuesses
+        self.maxRows = maxRows
         self.hintsUsed = hintsUsed
         self.board = board
         self.endDate = endDate
+    }
+    
+    var effectiveMaxRows: Int {
+        self.maxRows ?? legacyRowCount(for: self.numberOfLetters)
     }
     
 }
@@ -278,6 +300,23 @@ struct ShortedContent: Codable {
 
 struct Words: Decodable {
     var wordGroups: [String: [String]]
+    var blockedWords: [String]
+
+    init(wordGroups: [String: [String]], blockedWords: [String] = []) {
+        self.wordGroups = wordGroups
+        self.blockedWords = blockedWords
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case wordGroups
+        case blockedWords
+    }
+
+    init(from decoder: any Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.wordGroups = try container.decode([String: [String]].self, forKey: .wordGroups)
+        self.blockedWords = try container.decodeIfPresent([String].self, forKey: .blockedWords) ?? []
+    }
 }
 
 enum LetterState: Codable {
@@ -640,6 +679,38 @@ struct Phonetic: Codable, Identifiable {
     }
 }
 
+struct EnglishFallbackDefinition: Codable {
+    let word: String
+    let entries: [EnglishFallbackEntry]
+    let source: Source
+}
+
+struct EnglishFallbackEntry: Codable {
+    let language: Language
+    let partOfSpeech: String
+    let pronunciations: [EnglishFallbackPronunciation]
+    let forms: [Form]
+    let senses: [EnglishFallbackSense]
+    let synonyms: [String]
+    let antonyms: [String]
+}
+
+struct EnglishFallbackPronunciation: Codable {
+    let type: String
+    let text: String
+    let tags: [String]
+}
+
+struct EnglishFallbackSense: Codable {
+    let definition: String
+    let tags: [String]
+    let examples: [String]
+    let quotes: [Quote2]
+    let synonyms: [String]
+    let antonyms: [String]
+    let subsenses: [EnglishFallbackSense]?
+}
+
 
 // MARK: - SpanishDefinition
 struct SpanishDefinition: Codable, Identifiable {
@@ -777,17 +848,17 @@ extension WordleDataManager {
         }
     }
     
-    func fetchArticleIDs(for word: String, completion: @escaping ([Int]?) -> Void) {
+    func fetchArticleIDs(for word: String, completion: @escaping (DefinitionFetchResult<[Int]>) -> Void) {
         let urlString = "https://ord.uib.no/api/articles?w=\(word)&dict=bm&scope=ei"
         print("urlString: \(urlString)")
         guard let url = URL(string: urlString) else {
-            completion(nil)
+            completion(.notFound)
             return
         }
         
         URLSession.shared.dataTask(with: url) { data, response, error in
             guard let data = data, error == nil else {
-                completion(nil)
+                completion(.networkError)
                 return
             }
             
@@ -797,10 +868,14 @@ extension WordleDataManager {
                     print(jsonDict)
                 }
                 let result = try JSONDecoder().decode(ArticleSearchResult.self, from: data)
-                completion(result.articles.bm)
+                if result.articles.bm.isEmpty {
+                    completion(.notFound)
+                } else {
+                    completion(.success(result.articles.bm))
+                }
             } catch {
                 print("Error decoding article IDs: \(error)")
-                completion(nil)
+                completion(.notFound)
             }
         }.resume()
     }
@@ -1150,7 +1225,7 @@ extension WordleDataManager {
         return words
     }
     
-    func fetchArticleDetails(articleID: Int, completion: @escaping (ProcessedWord?) -> Void) {
+    func fetchArticleDetails(articleID: Int, completion: @escaping (DefinitionFetchResult<ProcessedWord>) -> Void) {
         let request = NSMutableURLRequest(url: NSURL(string: "https://ord.uib.no/bm/article/\(articleID).json")! as URL,
                                           cachePolicy: .useProtocolCachePolicy,
                                           timeoutInterval: 20)
@@ -1161,7 +1236,7 @@ extension WordleDataManager {
         session.configuration.timeoutIntervalForRequest = 120
         let dataTask = session.dataTask(with: request as URLRequest, completionHandler: { (data, response, error) -> Void in
             if let error = error {
-                completion(nil)
+                completion(.networkError)
                 print(error)
                 print("noooo")
                 return
@@ -1170,7 +1245,7 @@ extension WordleDataManager {
 //            print("Response: \(String(describing: httpResponse))")
             
             guard let data = data else {
-                completion(nil)
+                completion(.networkError)
                 print("noooooooooooo")
                 return
             }
@@ -1220,12 +1295,12 @@ extension WordleDataManager {
                                                                   etymology: etymology,
                                                                   definitions: processedDefinitions)
                 
-                completion(prosessedWords)
+                completion(.success(prosessedWords))
                 print("yay!! Successfully parsed the json data!")
                 
                 
             } catch {
-                completion(nil)
+                completion(.notFound)
                 print("error: \(error)")
                 print("noooooooooooooooooooooo!!")
             }
@@ -1237,19 +1312,37 @@ extension WordleDataManager {
         dataTask.resume()
     }
     
-    func fetchEnglishDefinition(for word: String, completion: @escaping ([EnglishDefinition]?) -> Void) {
-        let urlString = "https://api.dictionaryapi.dev/api/v2/entries/en/\(word)"
+    func fetchEnglishDefinition(for word: String, completion: @escaping (DefinitionFetchResult<[EnglishDefinition]>) -> Void) {
+        let fallbackWords = [word, word.lowercased(), word.capitalized]
+        let requests: [(urlString: String, usesFallbackSchema: Bool)] = [
+            ("https://api.dictionaryapi.dev/api/v2/entries/en/\(word)", false),
+            ("https://freedictionaryapi.com/api/v1/entries/en/\(fallbackWords[1])", true),
+            ("https://freedictionaryapi.com/api/v1/entries/en/\(fallbackWords[2])", true)
+        ]
+        
+        self.fetchEnglishDefinition(from: requests, index: 0, hadReachableResponse: false, completion: completion)
+    }
+    
+    private func fetchEnglishDefinition(from requests: [(urlString: String, usesFallbackSchema: Bool)], index: Int, hadReachableResponse: Bool, completion: @escaping (DefinitionFetchResult<[EnglishDefinition]>) -> Void) {
+        guard index < requests.count else {
+            completion(hadReachableResponse ? .notFound : .networkError)
+            return
+        }
+        
+        let request = requests[index]
+        let urlString = request.urlString
         print("urlString: \(urlString)")
         guard let url = URL(string: urlString) else {
-            completion(nil)
+            self.fetchEnglishDefinition(from: requests, index: index + 1, hadReachableResponse: hadReachableResponse, completion: completion)
             return
         }
         
         URLSession.shared.dataTask(with: url) { data, response, error in
             guard let data = data, error == nil else {
-                completion(nil)
+                self.fetchEnglishDefinition(from: requests, index: index + 1, hadReachableResponse: hadReachableResponse, completion: completion)
                 return
             }
+            
             print("data: \(data)")
             do {
                 let jsonObject = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers)
@@ -1257,28 +1350,148 @@ extension WordleDataManager {
                 if let jsonDict = jsonObject as? [NSDictionary] {
                     print("jsonDict: \(jsonDict)")
                 }
-                let result = try JSONDecoder().decode([EnglishDefinition].self, from: data)
+                
+                let result: [EnglishDefinition]
+                if request.usesFallbackSchema {
+                    let fallbackDefinition = try JSONDecoder().decode(EnglishFallbackDefinition.self, from: data)
+                    result = self.convertEnglishFallbackDefinition(fallbackDefinition)
+                } else {
+                    result = try JSONDecoder().decode([EnglishDefinition].self, from: data)
+                }
+                
                 dump(result)
-                completion(result)
+                
+                if !self.hasUsableEnglishDefinition(result) {
+                    self.fetchEnglishDefinition(from: requests, index: index + 1, hadReachableResponse: true, completion: completion)
+                } else {
+                    completion(.success(result))
+                }
             } catch {
                 print("Error decoding English Definition: \(error)")
-                completion(nil)
+                self.fetchEnglishDefinition(from: requests, index: index + 1, hadReachableResponse: true, completion: completion)
             }
         }.resume()
     }
+    
+    private func convertEnglishFallbackDefinition(_ definition: EnglishFallbackDefinition) -> [EnglishDefinition] {
+        definition.entries.map { entry in
+            let phonetics = entry.pronunciations.map { pronunciation in
+                Phonetic(
+                    audio: "",
+                    sourceURL: nil,
+                    license: nil,
+                    text: pronunciation.text
+                )
+            }
+            .reduce(into: [Phonetic]()) { result, phonetic in
+                if !result.contains(where: { $0.text == phonetic.text && $0.audio == phonetic.audio }) {
+                    result.append(phonetic)
+                }
+            }
+            
+            return EnglishDefinition(
+                word: definition.word,
+                phonetic: phonetics.first?.text,
+                phonetics: phonetics,
+                meanings: [
+                    Meaning(
+                        partOfSpeech: entry.partOfSpeech,
+                        definitions: self.convertEnglishFallbackSenses(entry.senses),
+                        synonyms: entry.synonyms,
+                        antonyms: entry.antonyms
+                    )
+                ],
+                license: License(name: definition.source.license.name, url: definition.source.license.url),
+                sourceUrls: [definition.source.url]
+            )
+        }
+    }
+    
+    private func convertEnglishFallbackSenses(_ senses: [EnglishFallbackSense]) -> [Definition] {
+        senses.flatMap { sense in
+            var definitions: [Definition] = [
+                Definition(
+                    definition: sense.definition,
+                    synonyms: sense.synonyms,
+                    antonyms: sense.antonyms,
+                    example: sense.examples.isEmpty ? nil : sense.examples.joined(separator: "; ")
+                )
+            ]
+            
+            if let subsenses = sense.subsenses, !subsenses.isEmpty {
+                definitions.append(contentsOf: self.convertEnglishFallbackSenses(subsenses))
+            }
+            
+            return definitions
+        }
+    }
+    
+    private func hasUsableEnglishDefinition(_ definitions: [EnglishDefinition]) -> Bool {
+        definitions.contains { definition in
+            definition.meanings.contains { meaning in
+                !meaning.definitions.isEmpty
+            }
+        }
+    }
 	
 	
-	func fetchSpanishDefinition(for word: String, completion: @escaping (SpanishDefinition?) -> Void) {
+    func fetchNorwegianDefinition(for word: String, completion: @escaping (DefinitionFetchResult<[ProcessedWord]>) -> Void) {
+        var processedWords: [ProcessedWord] = []
+        self.fetchArticleIDs(for: word) { articleIDsResult in
+            switch articleIDsResult {
+                case .networkError:
+                    DispatchQueue.main.async {
+                        completion(.networkError)
+                    }
+                case .notFound:
+                    DispatchQueue.main.async {
+                        completion(.notFound)
+                    }
+                case .success(let articleIDs):
+                    let dispatchGroup = DispatchGroup()
+                    var hadNetworkError = false
+                    
+                    for articleID in articleIDs {
+                        dispatchGroup.enter()
+                        self.fetchArticleDetails(articleID: articleID) { result in
+                            switch result {
+                                case .success(let processedWord):
+                                    DispatchQueue.main.async {
+                                        processedWords.append(processedWord)
+                                    }
+                                case .networkError:
+                                    hadNetworkError = true
+                                case .notFound:
+                                    break
+                            }
+                            dispatchGroup.leave()
+                        }
+                    }
+                    
+                    dispatchGroup.notify(queue: .main) {
+                        if !processedWords.isEmpty {
+                            completion(.success(processedWords))
+                        } else if hadNetworkError {
+                            completion(.networkError)
+                        } else {
+                            completion(.notFound)
+                        }
+                    }
+            }
+        }
+    }
+	
+	func fetchSpanishDefinition(for word: String, completion: @escaping (DefinitionFetchResult<SpanishDefinition>) -> Void) {
 		let urlString = "https://freedictionaryapi.com/api/v1/entries/es/\(word.lowercased())"
 		print("urlString: \(urlString)")
 		guard let url = URL(string: urlString) else {
-			completion(nil)
+			completion(.notFound)
 			return
 		}
 		
 		URLSession.shared.dataTask(with: url) { data, response, error in
 			guard let data = data, error == nil else {
-				completion(nil)
+				completion(.networkError)
 				return
 			}
 			print("data: \(data)")
@@ -1290,10 +1503,14 @@ extension WordleDataManager {
 				}
 				let result = try JSONDecoder().decode(SpanishDefinition.self, from: data)
 				dump(result)
-				completion(result)
+                if result.entries.isEmpty {
+                    completion(.notFound)
+                } else {
+                    completion(.success(result))
+                }
 			} catch {
 				print("Error decoding Spanish Definition: \(error)")
-				completion(nil)
+				completion(.notFound)
 			}
 		}.resume()
 	}
@@ -1306,4 +1523,3 @@ extension Date {
         return self.addingTimeInterval(-timezoneOffset)
     }
 }
-

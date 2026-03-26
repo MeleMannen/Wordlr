@@ -335,7 +335,7 @@ struct SearchView: View {
     }
     
     func filterGameRecords() {
-        var filteredWords = appManager.words?.wordGroups["\(appManager.numberOfLetters)"] ?? []
+        var filteredWords = appManager.searchableWords()
 //		let shuffledWords = filteredWords.shuffled()
 //		DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
 //			print("[")

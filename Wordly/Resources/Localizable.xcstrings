@@ -1692,6 +1692,38 @@
         }
       }
     },
+    "No Definition Found" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No se encontró definición"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ingen Definisjon Funnet"
+          }
+        }
+      }
+    },
+    "No Internet Connection" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sin conexión a Internet"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ingen Internett-tilkobling"
+          }
+        }
+      }
+    },
     "No Reminders" : {
       "localizations" : {
         "es" : {
@@ -2909,18 +2941,34 @@
         }
       }
     },
-    "We couldn't find a definition for this Word. That might be because it is a name or a place name." : {
+    "We couldn't find a definition for this word. It might be a name or a place name." : {
       "localizations" : {
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "No pudimos encontrar una definición para esta Palabra. Esto podría deberse a que es un nombre propio o un nombre de lugar."
+            "value" : "No pudimos encontrar una definición para esta palabra. Podría ser un nombre o el nombre de un lugar."
           }
         },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Vi kunne ikke finne en definisjon for dette Ordet. Det kan være fordi det er et navn eller stedsnavn. "
+            "value" : "Vi kunne ikke finne en definisjon for dette Ordet. Det kan være et navn eller stedsnavn. "
+          }
+        }
+      }
+    },
+    "We couldn't load the definition right now. Check your connection and try again." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No pudimos cargar la definición en este momento. Comprueba tu conexión y vuelve a intentarlo."
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vi kunne ikke laste inn definisjonen akkurat nå. Sjekk tilkoblingen din og prøv igjen."
           }
         }
       }
@@ -2985,28 +3033,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Wordly"
-          }
-        }
-      }
-    },
-    "You could try to search in the Dictionary NAOB: " : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "You could try to search in the Dictionary NAOB: "
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Podrías intentar buscar en el Diccionario NAOB:"
-          }
-        },
-        "nb" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Du kan prøve å søke i Ordboken NAOB:"
           }
         }
       }

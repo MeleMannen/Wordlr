@@ -139,20 +139,18 @@ struct TabsView: View {
 				let adSize = currentOrientationAnchoredAdaptiveBanner(width: geometry.size.width - (geometry.size.width / 11))
 				BannerViewContainer(adSize)
 					.frame(width: max(0, adSize.size.width), height: max(0, adSize.size.height))
-					.padding(.bottom, 54)
-//					.id(bannerReloadID)
+					.padding(.bottom, 55)
+				
 			} else if #available(iOS 18.0, *),
 					  UIDevice.current.userInterfaceIdiom == .pad || UIDevice.current.userInterfaceIdiom == .mac {
 				let adSize = currentOrientationAnchoredAdaptiveBanner(width: geometry.size.width)
 				BannerViewContainer(adSize)
 					.frame(width: max(0, adSize.size.width), height: max(0, adSize.size.height))
-//					.id(bannerReloadID)
 			} else {
 				let adSize = currentOrientationAnchoredAdaptiveBanner(width: geometry.size.width)
 				BannerViewContainer(adSize)
 					.frame(width: max(0, adSize.size.width), height: max(0, adSize.size.height))
 					.padding(.bottom, 49)
-//					.id(bannerReloadID)
 			}
 		}
 	}

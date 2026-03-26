@@ -120,12 +120,6 @@ struct StatsView: View {
 								Text("Played")
 							}
 							
-							//							Section {
-							//
-							//							} header: {
-							//								Text("Win Rate")
-							//							}
-							
 							Section {
 								VStack(alignment: .leading) {
 									Text("Number of Guesses Needed")
@@ -188,13 +182,6 @@ struct StatsView: View {
 					}
 				}
                 .onChange(of: self.numberOfLetters) {
-                    if self.numberOfLetters > 7 {
-                        self.maxNumberOfRows = 8
-                    } else if self.numberOfLetters == 6 {
-                        self.maxNumberOfRows = 7
-                    } else {
-                        self.maxNumberOfRows = 6
-                    }
                     self.filterGameRecords()
                 }
                 .onChange(of: self.selectedLanguage) {
@@ -212,13 +199,6 @@ struct StatsView: View {
         .onAppear {
             if !self.hasFixedDefualtValues {
                 self.setDefaultValues()
-                if self.numberOfLetters > 7 {
-                    self.maxNumberOfRows = 8
-                } else if self.numberOfLetters == 6 {
-                    self.maxNumberOfRows = 7
-                } else {
-                    self.maxNumberOfRows = 6
-                }
                 self.hasFixedDefualtValues = true
             }
             
@@ -248,6 +228,7 @@ struct StatsView: View {
             filteredRecords = filteredRecords.filter { $0.gameRecord.hintsUsed ?? 0 > 0 }
         }
         self.filteredGameRecords = filteredRecords
+        self.maxNumberOfRows = max(rowCount(for: self.numberOfLetters == 9 ? 0 : self.numberOfLetters), filteredRecords.map { $0.gameRecord.effectiveMaxRows }.max() ?? 0)
         print("Selected game records: \(self.filteredGameRecords.count)")
         self.wonCount = self.filteredGameRecords.filter { $0.gameRecord.state == .won }.count
         self.lostCount = self.filteredGameRecords.filter { $0.gameRecord.state == .lost }.count

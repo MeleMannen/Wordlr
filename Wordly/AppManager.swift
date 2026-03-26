@@ -97,14 +97,8 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
             let letter = Letter()
             listOfEmtpyStrings.append(letter)
         }
-        if self.numberOfLetters > 5 {
-            for _ in 0...self.numberOfLetters {
-                self.board.append(listOfEmtpyStrings)
-            }
-        } else {
-            for _ in 0...5 {
-                self.board.append(listOfEmtpyStrings)
-            }
+        for _ in 0..<rowCount(for: self.numberOfLetters) {
+            self.board.append(listOfEmtpyStrings)
         }
     }
 	
@@ -137,13 +131,13 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
     
     
     func getRandomWord() {
-		if self.selectedGameMode == .normal {
-            self.word = self.words?.wordGroups["\(numberOfLetters)"]?.randomElement() ?? "PIANO"
-		} else {
-			self.word = self.getDailyWord()
-		}
-		print("Ordet er \(self.word)")
-		self.dailyWordHasBeenPlayed = self.checkIfDailyWordIsAlreadyPlayed()
+			if self.selectedGameMode == .normal {
+            self.word = self.getRandomNormalModeWord()
+			} else {
+				self.word = self.getDailyWord()
+			}
+			print("Ordet er \(self.word)")
+			self.dailyWordHasBeenPlayed = self.checkIfDailyWordIsAlreadyPlayed()
 		AnalyticsManager.shared.logGameStartedEvent(word: self.word, language: self.selectedLanguage, numberOfLetters: self.numberOfLetters, gameMode: self.selectedGameMode)
     }
 	
@@ -156,42 +150,45 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
         
         if let count = dailyWords?.wordGroups["\(numberOfLetters)"]?.count {
             let dailyWordIndex = daysSinceStart % count
-            return self.dailyWords?.wordGroups["\(numberOfLetters)"]?[dailyWordIndex] ?? "PIANO"
+            return self.dailyWords?.wordGroups["\(numberOfLetters)"]?[dailyWordIndex] ?? "MELEN"
         } else {
-            return "PIANO"
+            return "MELEN"
         }
+    }
+
+    func searchableWords() -> [String] {
+        let wordsForLength = self.words?.wordGroups["\(self.numberOfLetters)"] ?? []
+        let blockedWords = Set(self.words?.blockedWords ?? [])
+		print("blockedWords: \(blockedWords)")
+
+        guard !blockedWords.isEmpty else {
+            return wordsForLength
+        }
+
+        return wordsForLength.filter { !blockedWords.contains($0) }
+    }
+
+    private func getRandomNormalModeWord() -> String {
+        let availableWords = self.searchableWords()
+        if let randomWord = availableWords.randomElement() {
+            return randomWord
+        }
+
+        return self.words?.wordGroups["\(numberOfLetters)"]?.randomElement() ?? "MELEN"
     }
     
     
         
     
     func getDefinition(for word: String, completion: @escaping ([ProcessedWord]) -> Void) {
-        var processedWords: [ProcessedWord] = []
-        WordleDataManager.shared.fetchArticleIDs(for: word) { articleIDs in
-            guard let articleIDs = articleIDs else {
-                DispatchQueue.main.async {
-                    completion(processedWords)
+        WordleDataManager.shared.fetchNorwegianDefinition(for: word) { result in
+            DispatchQueue.main.async {
+                switch result {
+                    case .success(let processedWords):
+                        completion(processedWords)
+                    case .notFound, .networkError:
+                        completion([])
                 }
-                return
-            }
-            
-            let dispatchGroup = DispatchGroup()
-            
-            for articleID in articleIDs {
-                dispatchGroup.enter()
-                WordleDataManager.shared.fetchArticleDetails(articleID: articleID) { fetchedProcessedWord in
-                    if let fetchedProcessedWord {
-                        DispatchQueue.main.async {
-                            processedWords.append(fetchedProcessedWord)
-                        }
-                    }
-                    dispatchGroup.leave()
-                }
-            }
-            
-            dispatchGroup.notify(queue: .main) {
-                completion(processedWords)
-                
             }
         }
     }
@@ -534,7 +531,7 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
 							}
                             self.didWinGame = .won
                             self.endDate = Date()
-                            self.addGameRecord(gameRecord: GameRecord(date: self.startDate, state: .won, mode: self.selectedGameMode, word: self.word, language: self.selectedLanguage, numberOfLetters: self.numberOfLetters, numberOfGuesses: self.currentRow, hintsUsed: self.hintsUsed, board: self.board, endDate: self.endDate))
+                            self.addGameRecord(gameRecord: GameRecord(date: self.startDate, state: .won, mode: self.selectedGameMode, word: self.word, language: self.selectedLanguage, numberOfLetters: self.numberOfLetters, numberOfGuesses: self.currentRow, maxRows: rowCount(for: self.numberOfLetters), hintsUsed: self.hintsUsed, board: self.board, endDate: self.endDate))
                             if self.selectedGameMode == .dailyWord {
                                 print("updating daily word streak")
                                 self.setStreak(state: .won)
@@ -556,7 +553,7 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
 								}
                                 self.didWinGame = .lost
                                 self.endDate = Date()
-                                self.addGameRecord(gameRecord: GameRecord(date: self.startDate, state: .lost, mode: self.selectedGameMode, word: self.word, language: self.selectedLanguage, numberOfLetters: self.numberOfLetters, numberOfGuesses: self.currentRow, hintsUsed: self.hintsUsed, board: self.board, endDate: self.endDate))
+                                self.addGameRecord(gameRecord: GameRecord(date: self.startDate, state: .lost, mode: self.selectedGameMode, word: self.word, language: self.selectedLanguage, numberOfLetters: self.numberOfLetters, numberOfGuesses: self.currentRow, maxRows: rowCount(for: self.numberOfLetters), hintsUsed: self.hintsUsed, board: self.board, endDate: self.endDate))
                                 if self.selectedGameMode == .dailyWord {
                                     print("updating daily word streak")
                                     self.setStreak(state: .lost)
@@ -624,12 +621,7 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
         dateFormatter.timeStyle = .none
         dateFormatter.timeZone = TimeZone(identifier: "CET")
         
-        var numberOfRows = 6
-        if numberOfLetters > 6 {
-            numberOfRows = 8
-        } else if numberOfLetters == 6 {
-            numberOfRows = 7
-        }
+        let numberOfRows = rowCount(for: numberOfLetters)
         
         var letterString = String(format: NSLocalizedString("share_letter", comment: "Letter"), numberOfLetters)
         if numberOfLetters > 1 {
@@ -967,4 +959,3 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
     }
     
 }
-

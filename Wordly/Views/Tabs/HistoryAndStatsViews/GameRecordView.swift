@@ -381,9 +381,9 @@ struct GameRecordView: View {
                             Button {
                                 withAnimation {
                                     if let endDate = gameRecord.endDate {
-                                        UIPasteboard.general.string = self.getShareResult(row: gameRecord.numberOfGuesses, numberOfLetters: gameRecord.numberOfLetters, date: gameRecord.date, board: board, timeUsedString: self.getTimeUsedString(startDate: self.gameRecord.date, endDate: endDate))
+                                        UIPasteboard.general.string = self.getShareResult(row: gameRecord.numberOfGuesses, numberOfLetters: gameRecord.numberOfLetters, maxRows: gameRecord.effectiveMaxRows, date: gameRecord.date, board: board, timeUsedString: self.getTimeUsedString(startDate: self.gameRecord.date, endDate: endDate))
                                     } else {
-                                        UIPasteboard.general.string = self.getShareResult(row: gameRecord.numberOfGuesses, numberOfLetters: gameRecord.numberOfLetters, date: gameRecord.date, board: board)
+                                        UIPasteboard.general.string = self.getShareResult(row: gameRecord.numberOfGuesses, numberOfLetters: gameRecord.numberOfLetters, maxRows: gameRecord.effectiveMaxRows, date: gameRecord.date, board: board)
                                     }
                                     self.hasSharedResult = true
                                     self.didTap.toggle()
@@ -428,13 +428,8 @@ struct GameRecordView: View {
         }
     }
     
-    func getShareResult(row: Int, numberOfLetters: Int, date: Date, board: [[Letter]], timeUsedString: String = "") -> String {
-        var numberOfRows = 6
-        if numberOfLetters > 6 {
-            numberOfRows = 8
-        } else if numberOfLetters == 6 {
-            numberOfRows = 7
-        }
+    func getShareResult(row: Int, numberOfLetters: Int, maxRows: Int, date: Date, board: [[Letter]], timeUsedString: String = "") -> String {
+        let numberOfRows = maxRows
         
         var letterString = String(format: NSLocalizedString("share_letter", comment: "Letter"), numberOfLetters)
         if numberOfLetters > 1 {
@@ -519,5 +514,5 @@ struct GameRecordView: View {
 
 
 #Preview {
-    GameRecordView(gameRecord: GameRecord(date: Date(), state: .won, mode: .dailyWord, word: "Word", language: .english, numberOfLetters: 4, numberOfGuesses: 2, hintsUsed: 0, board: [[Letter(letter: "W", state: .correctPosition), Letter(letter: "O", state: .correctPosition), Letter(letter: "R", state: .correctPosition), Letter(letter: "D", state: .correctPosition)], [Letter(letter: "W", state: .correctPosition), Letter(letter: "O", state: .correctPosition), Letter(letter: "R", state: .correctPosition), Letter(letter: "D", state: .correctPosition)]]))
+    GameRecordView(gameRecord: GameRecord(date: Date(), state: .won, mode: .dailyWord, word: "Word", language: .english, numberOfLetters: 4, numberOfGuesses: 2, maxRows: 6, hintsUsed: 0, board: [[Letter(letter: "W", state: .correctPosition), Letter(letter: "O", state: .correctPosition), Letter(letter: "R", state: .correctPosition), Letter(letter: "D", state: .correctPosition)], [Letter(letter: "W", state: .correctPosition), Letter(letter: "O", state: .correctPosition), Letter(letter: "R", state: .correctPosition), Letter(letter: "D", state: .correctPosition)]]))
 }
