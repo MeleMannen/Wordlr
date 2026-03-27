@@ -15,12 +15,8 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
     @AppStorage("defaultNumberOfLetters") private var defaultNumberOfLetters: Int = 5
 	@AppStorage("userWantsThePhraseNameBack") private var userWantsThePhraseNameBack = false
     
-    @Published var streaks: [StreakEntity] = []
-    @Published var normalStreaks: [NormalStreakEntity] = []
     var gameRecords: [GameRecordEntity] = []
     var modelContext: ModelContext?
-    var streakManager: StreakManager?
-    var normalStreakManager: NormalStreakManager?
     var gameRecordManager: GameRecordManager?
     
     
@@ -426,75 +422,22 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
 	
 	
     
-    func setStreak(state: GameEndState) {
-        switch state {
-            case .won:
-                if let streakEntity = self.getStreakEntity(), let streakManager = self.streakManager {
-                    switch streakEntity.streak {
-                        case .none, .dead:
-                            streakManager.updateStreak(streakEntity, with: .alive(startDate: self.startDate, lastWonDate: self.startDate))
-                        case .alive(let startDate, _):
-                            if streakEntity.streak.isAlive {
-                                streakManager.updateStreak(streakEntity, with: .alive(startDate: startDate, lastWonDate: self.startDate))
-                            } else {
-                                streakManager.updateStreak(streakEntity, with: .alive(startDate: self.startDate, lastWonDate: self.startDate))
-                            }
-                    }
-                    print("Du vant, oppdaterer streak: \( streakEntity.streak)")
-                    
-                }
-                
-            case .lost:
-                if let streakEntity = self.getStreakEntity(), let streakManager = self.streakManager {
-                    switch streakEntity.streak {
-                        case .none:
-                            streakManager.updateStreak(streakEntity, with: .none)
-                        case .dead(let startDate, _):
-                            streakManager.updateStreak(streakEntity, with: .dead(startDeadDate: startDate, lastDiedAt: self.startDate))
-                        case .alive:
-                            streakManager.updateStreak(streakEntity, with: .dead(startDeadDate: self.startDate, lastDiedAt: self.startDate))
-                    }
-                    print("Du tapte, ingen streak: \( streakEntity.streak)")
-                }
-                
-        }
+    func getStreakEntity() -> DerivedStreakSummary? {
+        let summary = GameRecordStreakCalculator.dailySummary(
+            records: self.gameRecords,
+            language: self.selectedLanguage,
+            numberOfLetters: self.numberOfLetters
+        )
+        return summary.longestStreak > 0 || summary.currentStreak > 0 ? summary : nil
     }
-    
-    func setNormalStreak(state: GameEndState) {
-        switch state {
-            case .won:
-                if let streakEntity = self.getNormalStreakEntity(), let normalStreakManager = self.normalStreakManager {
-                    switch streakEntity.streak {
-                        case .none, .dead:
-                            normalStreakManager.updateStreak(streakEntity, with: .alive(currentStreak: 1))
-                        case .alive(let currentStreak):
-                            normalStreakManager.updateStreak(streakEntity, with: .alive(currentStreak: currentStreak + 1))
-                    }
-                    print("Du vant, oppdaterer normal streak: \( streakEntity.streak)")
-                    
-                }
-                
-            case .lost:
-                if let streakEntity = self.getNormalStreakEntity(), let normalStreakManager = self.normalStreakManager {
-                    switch streakEntity.streak {
-                        case .none:
-                            normalStreakManager.updateStreak(streakEntity, with: .none)
-                        case .dead, .alive:
-                            normalStreakManager.updateStreak(streakEntity, with: .dead)
-                    }
-                    print("Du tapte, ingen normal streak: \( streakEntity.streak)")
-                }
-                
-        }
-    }
-    
-    
-    func getStreakEntity() -> StreakEntity? {
-        return self.streaks.first { $0.id == "streak: \(self.numberOfLetters), \(self.selectedLanguage.rawValue)" } ?? nil
-    }
-    
-    func getNormalStreakEntity() -> NormalStreakEntity? {
-        return self.normalStreaks.first { $0.id == "streak: \(self.numberOfLetters), \(self.selectedLanguage.rawValue)" } ?? nil
+
+    func getNormalStreakEntity() -> DerivedStreakSummary? {
+        let summary = GameRecordStreakCalculator.normalSummary(
+            records: self.gameRecords,
+            language: self.selectedLanguage,
+            numberOfLetters: self.numberOfLetters
+        )
+        return summary.longestStreak > 0 || summary.currentStreak > 0 ? summary : nil
     }
     
     func fixLanguageBasedOnLocale() {
@@ -533,14 +476,10 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
                             self.endDate = Date()
                             self.addGameRecord(gameRecord: GameRecord(date: self.startDate, state: .won, mode: self.selectedGameMode, word: self.word, language: self.selectedLanguage, numberOfLetters: self.numberOfLetters, numberOfGuesses: self.currentRow, maxRows: rowCount(for: self.numberOfLetters), hintsUsed: self.hintsUsed, board: self.board, endDate: self.endDate))
                             if self.selectedGameMode == .dailyWord {
-                                print("updating daily word streak")
-                                self.setStreak(state: .won)
-								self.fixReminderForDailyWord()
-								AnalyticsManager.shared.logGameEndedEvent(word: self.word, language: self.selectedLanguage, numberOfLetters: self.numberOfLetters, gameMode: self.selectedGameMode, won: true, attemptsNeeded: self.currentRow, gameDurationSeconds: Int(self.endDate.timeIntervalSince(self.startDate)), currentStreak: self.getStreakEntity()?.streak.currentStreak ?? 0)
+                                self.fixReminderForDailyWord()
+                                AnalyticsManager.shared.logGameEndedEvent(word: self.word, language: self.selectedLanguage, numberOfLetters: self.numberOfLetters, gameMode: self.selectedGameMode, won: true, attemptsNeeded: self.currentRow, gameDurationSeconds: Int(self.endDate.timeIntervalSince(self.startDate)), currentStreak: self.getStreakEntity()?.currentStreak ?? 0)
                             } else {
-                                print("updating normal streak")
-                                self.setNormalStreak(state: .won)
-								AnalyticsManager.shared.logGameEndedEvent(word: self.word, language: self.selectedLanguage, numberOfLetters: self.numberOfLetters, gameMode: self.selectedGameMode, won: true, attemptsNeeded: self.currentRow, gameDurationSeconds: Int(self.endDate.timeIntervalSince(self.startDate)), currentStreak: self.getNormalStreakEntity()?.streak.currentStreak ?? 0)
+                                AnalyticsManager.shared.logGameEndedEvent(word: self.word, language: self.selectedLanguage, numberOfLetters: self.numberOfLetters, gameMode: self.selectedGameMode, won: true, attemptsNeeded: self.currentRow, gameDurationSeconds: Int(self.endDate.timeIntervalSince(self.startDate)), currentStreak: self.getNormalStreakEntity()?.currentStreak ?? 0)
                             }
                             self.message = String(format: NSLocalizedString("success_message", comment: "Success message with a word"), self.word)
 							
@@ -555,15 +494,10 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
                                 self.endDate = Date()
                                 self.addGameRecord(gameRecord: GameRecord(date: self.startDate, state: .lost, mode: self.selectedGameMode, word: self.word, language: self.selectedLanguage, numberOfLetters: self.numberOfLetters, numberOfGuesses: self.currentRow, maxRows: rowCount(for: self.numberOfLetters), hintsUsed: self.hintsUsed, board: self.board, endDate: self.endDate))
                                 if self.selectedGameMode == .dailyWord {
-                                    print("updating daily word streak")
-                                    self.setStreak(state: .lost)
-									self.fixReminderForDailyWord()
-                                } else {
-                                    print("updating normal streak")
-                                    self.setNormalStreak(state: .lost)
+                                    self.fixReminderForDailyWord()
                                 }
                                 self.message = String(format: NSLocalizedString("almost_message", comment: "Almost got the word message"), self.word)
-								AnalyticsManager.shared.logGameEndedEvent(word: self.word, language: self.selectedLanguage, numberOfLetters: self.numberOfLetters, gameMode: self.selectedGameMode, won: false, attemptsNeeded: self.currentRow, gameDurationSeconds: Int(self.endDate.timeIntervalSince(self.startDate)), currentStreak: 0)
+                                AnalyticsManager.shared.logGameEndedEvent(word: self.word, language: self.selectedLanguage, numberOfLetters: self.numberOfLetters, gameMode: self.selectedGameMode, won: false, attemptsNeeded: self.currentRow, gameDurationSeconds: Int(self.endDate.timeIntervalSince(self.startDate)), currentStreak: 0)
 								
                             } else {
                                 print("Feil ord: \(guessedWord)")
@@ -727,32 +661,6 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
         }
     }
     
-    func fetchStreaks() {
-        if let streakManager = self.streakManager {
-            self.streaks = streakManager.fetchStreaks()
-            print("Fetched streaks: \(self.streaks)")
-            for streak in self.streaks {
-                print("Streak ID: \(streak.id), Streak: \(streak.streak), LongestStreak: \(streak.longestStreak), CurrentStreak: \(streak.streak.currentStreak)")
-            }
-        } else {
-            print("StreakManager is not initialized")
-            
-        }
-    }
-    
-    func fetchNormalStreaks() {
-        if let normalStreakManager = self.normalStreakManager {
-            self.normalStreaks = normalStreakManager.fetchStreaks()
-            print("Fetched normal streaks: \(self.normalStreaks)")
-            for streak in self.normalStreaks {
-				print("NormalStreak ID: \(streak.id), Streak: \(streak.streak), LongestStreak: \(streak.longestStreak), CurrentStreak: \(streak.streak.currentStreak)")
-            }
-        } else {
-            print("NormalStreakManager is not initialized")
-            
-        }
-    }
-    
     func fetchGameRecords() {
         if let gameRecordManager = self.gameRecordManager {
             self.gameRecords = gameRecordManager.fetchGameRecords()
@@ -762,51 +670,6 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
             }
         } else {
             print("GameRecordManager is not initialized")
-        }
-    }
-    
-    
-    func addStreaks() {
-        for i in 1...8 {
-            self.addStreak(id: "streak: \(i), norwegian", streak: .none)
-            self.addStreak(id: "streak: \(i), english", streak: .none)
-			self.addStreak(id: "streak: \(i), spanish", streak: .none)
-            
-        }
-    }
-    
-    func addNormalStreaks() {
-        for i in 1...8 {
-            self.addNormalStreak(id: "streak: \(i), norwegian", streak: .none)
-            self.addNormalStreak(id: "streak: \(i), english", streak: .none)
-			self.addNormalStreak(id: "streak: \(i), spanish", streak: .none)
-            
-        }
-    }
-	
-	func addSpanishStreaks() {
-		for i in 1...8 {
-			self.addStreak(id: "streak: \(i), spanish", streak: .none)
-			
-		}
-	}
-	
-	func addSpanishNormalStreaks() {
-		for i in 1...8 {
-			self.addNormalStreak(id: "streak: \(i), spanish", streak: .none)
-			
-		}
-	}
-    
-    func addStreak(id: String, streak: Streak) {
-        if let streakManager = self.streakManager {
-            streakManager.addStreak(id: id, streak: streak)
-        }
-    }
-    
-    func addNormalStreak(id: String, streak: NormalStreak) {
-        if let normalStreakManager = self.normalStreakManager {
-            normalStreakManager.addStreak(id: id, streak: streak)
         }
     }
     

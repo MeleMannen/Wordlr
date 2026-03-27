@@ -29,13 +29,11 @@
 		63B9B4272EA58ED2008483FB /* NAOBView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B9B3EB2EA58ED2008483FB /* NAOBView.swift */; };
 		63B9B4282EA58ED2008483FB /* GameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B9B3F92EA58ED2008483FB /* GameView.swift */; };
 		63B9B4292EA58ED2008483FB /* AppManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B9B4082EA58ED2008483FB /* AppManager.swift */; };
-		63B9B42A2EA58ED2008483FB /* NormalStreakManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B9B40D2EA58ED2008483FB /* NormalStreakManager.swift */; };
 		63B9B42B2EA58ED2008483FB /* AppObjects.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B9B4092EA58ED2008483FB /* AppObjects.swift */; };
 		63B9B42C2EA58ED2008483FB /* TabsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B9B4052EA58ED2008483FB /* TabsView.swift */; };
 		63B9B42D2EA58ED2008483FB /* StatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B9B3F42EA58ED2008483FB /* StatsView.swift */; };
 		63B9B42E2EA58ED2008483FB /* SelectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B9B3FF2EA58ED2008483FB /* SelectView.swift */; };
 		63B9B42F2EA58ED2008483FB /* HistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B9B3F32EA58ED2008483FB /* HistoryView.swift */; };
-		63B9B4302EA58ED2008483FB /* StreakManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B9B4112EA58ED2008483FB /* StreakManager.swift */; };
 		63B9B4312EA58ED2008483FB /* FilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B9B3F12EA58ED2008483FB /* FilterView.swift */; };
 		63B9B4322EA58ED2008483FB /* Info.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B9B3FC2EA58ED2008483FB /* Info.swift */; };
 		63B9B4332EA58ED2008483FB /* Tips.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B9B4122EA58ED2008483FB /* Tips.swift */; };
@@ -102,11 +100,9 @@
 		63B9B40A2EA58ED2008483FB /* DefinitionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefinitionManager.swift; sourceTree = "<group>"; };
 		63B9B40B2EA58ED2008483FB /* GameRecordManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameRecordManager.swift; sourceTree = "<group>"; };
 		63B9B40C2EA58ED2008483FB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		63B9B40D2EA58ED2008483FB /* NormalStreakManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NormalStreakManager.swift; sourceTree = "<group>"; };
 		63B9B40E2EA58ED2008483FB /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
 		63B9B40F2EA58ED2008483FB /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		63B9B4102EA58ED2008483FB /* ReviewManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewManager.swift; sourceTree = "<group>"; };
-		63B9B4112EA58ED2008483FB /* StreakManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreakManager.swift; sourceTree = "<group>"; };
 		63B9B4122EA58ED2008483FB /* Tips.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tips.swift; sourceTree = "<group>"; };
 		63B9B4132EA58ED2008483FB /* Wordly.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Wordly.entitlements; sourceTree = "<group>"; };
 		63BF73D92F4477E80065D40B /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -257,10 +253,8 @@
 				63B9B4082EA58ED2008483FB /* AppManager.swift */,
 				63B9B40A2EA58ED2008483FB /* DefinitionManager.swift */,
 				63B9B40B2EA58ED2008483FB /* GameRecordManager.swift */,
-				63B9B40D2EA58ED2008483FB /* NormalStreakManager.swift */,
 				63B9B40E2EA58ED2008483FB /* NotificationManager.swift */,
 				63B9B4102EA58ED2008483FB /* ReviewManager.swift */,
-				63B9B4112EA58ED2008483FB /* StreakManager.swift */,
 				63B9B4122EA58ED2008483FB /* Tips.swift */,
 				63B9B4072EA58ED2008483FB /* Views */,
 				63B9B3E92EA58ED2008483FB /* Resources */,
@@ -388,13 +382,11 @@
 				63B9B4282EA58ED2008483FB /* GameView.swift in Sources */,
 				63B9B4292EA58ED2008483FB /* AppManager.swift in Sources */,
 				63BF73DF2F447CD50065D40B /* AnalyticsManager.swift in Sources */,
-				63B9B42A2EA58ED2008483FB /* NormalStreakManager.swift in Sources */,
 				63B9B42B2EA58ED2008483FB /* AppObjects.swift in Sources */,
 				63B9B42C2EA58ED2008483FB /* TabsView.swift in Sources */,
 				63B9B42D2EA58ED2008483FB /* StatsView.swift in Sources */,
 				63B9B42E2EA58ED2008483FB /* SelectView.swift in Sources */,
 				63B9B42F2EA58ED2008483FB /* HistoryView.swift in Sources */,
-				63B9B4302EA58ED2008483FB /* StreakManager.swift in Sources */,
 				63B9B4312EA58ED2008483FB /* FilterView.swift in Sources */,
 				63B9B4322EA58ED2008483FB /* Info.swift in Sources */,
 				63B9B4332EA58ED2008483FB /* Tips.swift in Sources */,
@@ -538,7 +530,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = Wordly/Wordly.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Wordly/Preview Content\"";
 				ENABLE_APP_SANDBOX = YES;
@@ -585,7 +577,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = Wordly/Wordly.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Wordly/Preview Content\"";
 				ENABLE_APP_SANDBOX = YES;

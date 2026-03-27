@@ -92,95 +92,117 @@ class GameRecord: Identifiable {
 }
 
 
-@Model
-final class StreakEntity {
-    var id: String
-    var streak: Streak
-    var longestStreak: Int
-    
-    init(id: String, streak: Streak) {
-        self.id = id
-        self.streak = streak
-        self.longestStreak = streak.currentStreak
-    }
+struct DerivedStreakSummary {
+    let currentStreak: Int
+    let longestStreak: Int
+    let isAlive: Bool
+
+    static let none = DerivedStreakSummary(currentStreak: 0, longestStreak: 0, isAlive: false)
 }
 
-enum Streak: Codable {
-    case none
-    case dead(startDeadDate: Date, lastDiedAt: Date)
-    case alive(startDate: Date, lastWonDate: Date)
-    
-    var currentStreak: Int {
-        switch self {
-            case .none, .dead: return 0
-            case .alive(let startDate, let lastWonDate):
-                var cetCalendar = Calendar(identifier: .gregorian)
-                cetCalendar.timeZone = TimeZone(identifier: "CET")!
-                
-                let lastWonDate = cetCalendar.startOfDay(for: lastWonDate)
-                let startDate = cetCalendar.startOfDay(for: startDate)
-                let daysSinceStart = cetCalendar.dateComponents([.day], from: startDate, to: lastWonDate).day ?? 0
-                return daysSinceStart
+enum GameRecordStreakCalculator {
+    static func dailySummary(records: [GameRecordEntity], language: LanguageSelection, numberOfLetters: Int, now: Date = Date()) -> DerivedStreakSummary {
+        let filteredRecords = deduplicatedDailyRecords(records: records, language: language, numberOfLetters: numberOfLetters)
+        guard !filteredRecords.isEmpty else {
+            return .none
         }
-    }
-    
-    var isAlive: Bool {
-        switch self {
-            case .none, .dead: return false
-            case .alive(_, let lastWonDate):
-                var cetCalendar = Calendar(identifier: .gregorian)
-                cetCalendar.timeZone = TimeZone(identifier: "CET")!
-                
-                let today = cetCalendar.startOfDay(for: Date())
-                let lastWonDate = cetCalendar.startOfDay(for: lastWonDate)
-                let daysSinceLastWon = cetCalendar.dateComponents([.day], from: lastWonDate, to: today).day ?? 0
-                return daysSinceLastWon <= 1
-        }
-    }
-    
-    var hasPlayedDailyWord: Bool {
-        switch self {
-            case .none: return false
-            case .dead(let startDeadDate, _):
-                var cetCalendar = Calendar(identifier: .gregorian)
-                cetCalendar.timeZone = TimeZone(identifier: "CET")!
-                
-                let currentDate = Date()
-                return cetCalendar.isDate(startDeadDate, inSameDayAs: currentDate)
-            case .alive(_, let lastWonDate):
-                var cetCalendar = Calendar(identifier: .gregorian)
-                cetCalendar.timeZone = TimeZone(identifier: "CET")!
-                
-                let currentDate = Date()
-                return cetCalendar.isDate(lastWonDate, inSameDayAs: currentDate)
-        }
-    }
-}
 
-@Model
-final class NormalStreakEntity {
-    var id: String
-    var streak: NormalStreak
-    var longestStreak: Int
-    
-    init(id: String, streak: NormalStreak) {
-        self.id = id
-        self.streak = streak
-        self.longestStreak = streak.currentStreak
-    }
-}
+        let calendar = cetCalendar
+        var longestStreak = 0
+        var runningStreak = 0
+        var previousDay: Date?
 
-enum NormalStreak: Codable {
-    case none
-    case dead
-    case alive(currentStreak: Int)
-    
-    var currentStreak: Int {
-        switch self {
-            case .none, .dead: return 0
-            case .alive(let currentStreak):
-                return currentStreak
+        for record in filteredRecords {
+            let recordDay = calendar.startOfDay(for: record.gameRecord.date)
+            let isConsecutiveDay = previousDay.map { calendar.dateComponents([.day], from: $0, to: recordDay).day == 1 } ?? false
+
+            if record.gameRecord.state == .won {
+                runningStreak = isConsecutiveDay ? (runningStreak + 1) : 1
+                longestStreak = max(longestStreak, runningStreak)
+            } else {
+                runningStreak = 0
+            }
+
+            previousDay = recordDay
         }
+
+        guard let lastRecord = filteredRecords.last else {
+            return .none
+        }
+
+        let lastRecordDay = calendar.startOfDay(for: lastRecord.gameRecord.date)
+        let today = calendar.startOfDay(for: now)
+        let daysSinceLastRecord = calendar.dateComponents([.day], from: lastRecordDay, to: today).day ?? .max
+        let isAlive = lastRecord.gameRecord.state == .won && daysSinceLastRecord <= 1
+
+        return DerivedStreakSummary(
+            currentStreak: isAlive ? runningStreak : 0,
+            longestStreak: longestStreak,
+            isAlive: isAlive
+        )
+    }
+
+    static func normalSummary(records: [GameRecordEntity], language: LanguageSelection, numberOfLetters: Int) -> DerivedStreakSummary {
+        let filteredRecords = records
+            .filter {
+                $0.gameRecord.mode == .normal &&
+                $0.gameRecord.language == language &&
+                $0.gameRecord.numberOfLetters == numberOfLetters
+            }
+            .sorted { lhs, rhs in
+                let lhsDate = lhs.gameRecord.endDate ?? lhs.gameRecord.date
+                let rhsDate = rhs.gameRecord.endDate ?? rhs.gameRecord.date
+                return lhsDate < rhsDate
+            }
+
+        guard !filteredRecords.isEmpty else {
+            return .none
+        }
+
+        var longestStreak = 0
+        var runningStreak = 0
+
+        for record in filteredRecords {
+            if record.gameRecord.state == .won {
+                runningStreak += 1
+                longestStreak = max(longestStreak, runningStreak)
+            } else {
+                runningStreak = 0
+            }
+        }
+
+        return DerivedStreakSummary(
+            currentStreak: runningStreak,
+            longestStreak: longestStreak,
+            isAlive: runningStreak > 0
+        )
+    }
+
+    private static func deduplicatedDailyRecords(records: [GameRecordEntity], language: LanguageSelection, numberOfLetters: Int) -> [GameRecordEntity] {
+        let calendar = cetCalendar
+        let filteredRecords = records
+            .filter {
+                $0.gameRecord.mode == .dailyWord &&
+                $0.gameRecord.language == language &&
+                $0.gameRecord.numberOfLetters == numberOfLetters
+            }
+            .sorted { $0.gameRecord.date < $1.gameRecord.date }
+
+        var recordsByDay: [Date: GameRecordEntity] = [:]
+        for record in filteredRecords {
+            let day = calendar.startOfDay(for: record.gameRecord.date)
+            recordsByDay[day] = record
+        }
+
+        return recordsByDay
+            .sorted { $0.key < $1.key }
+            .map(\.value)
+    }
+
+    private static var cetCalendar: Calendar {
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = TimeZone(identifier: "CET")!
+        return calendar
     }
 }
 

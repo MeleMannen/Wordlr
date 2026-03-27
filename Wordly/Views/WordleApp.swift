@@ -35,9 +35,8 @@ struct WordleApp: App {
 			.tint(.primary)
 			.preferredColorScheme(appTheme == .system ? nil : (appTheme == .light ? .light : .dark))
 		}
-		.modelContainer(for: [StreakEntity.self, NormalStreakEntity.self, GameRecordEntity.self, GameRecord.self, DailyWordReminder.self])
+			.modelContainer(for: [GameRecordEntity.self, GameRecord.self, DailyWordReminder.self])
+		}
 	}
-}
-
 
 

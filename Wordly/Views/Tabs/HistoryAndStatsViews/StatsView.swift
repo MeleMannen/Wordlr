@@ -35,8 +35,6 @@ struct StatsView: View {
 	@State private var maxNormalStreakLength: Double = 0.0
     
     @Query private var gameRecords: [GameRecordEntity]
-	@Query private var streaks: [StreakEntity]
-	@Query private var normalStreaks: [NormalStreakEntity]
     
     var body: some View {
         NavigationStack {
@@ -245,52 +243,66 @@ struct StatsView: View {
 		self.maxStreakLength = 0
 		var i = 0
 		for longestStreak in self.longestStreakPerLetters {
-			self.longestStreakPerLetters[i].streaks.removeAll()
-			for streak in self.streaks {
-				if streak.longestStreak > 0 && streak.id.contains("\(longestStreak.language)") {
-					let index = Int(streak.id.prefix(9).suffix(1))
-					if self.numberOfLetters != 9 && self.numberOfLetters != index {
-						continue
-					}
-					
-					if self.selectedLanguage != .all && self.selectedLanguage != longestStreak.language {
-						continue
-					}
-					let currentStreak = streak.streak.isAlive ? streak.streak.currentStreak : 0
-					self.longestStreakPerLetters[i].streaks.append((index: index, currentStreak: currentStreak, longestStreak: streak.longestStreak) as! (Int, Int, Int))
-					let longestDouble = Double(streak.longestStreak)
-					if longestDouble > self.maxStreakLength {
-						self.maxStreakLength = longestDouble
-					}
-				}
-			}
-			i += 1
-		}
-		
-		i = 0
-		self.maxNormalStreakLength = 0
-		for longestStreak in self.longestNormalStreakPerLetters {
-			self.longestNormalStreakPerLetters[i].streaks.removeAll()
-			for streak in self.normalStreaks {
-				if streak.longestStreak > 0 && streak.id.contains("\(longestStreak.language)") {
-					let index = Int(streak.id.prefix(9).suffix(1))
-					if self.numberOfLetters != 9 && self.numberOfLetters != index {
-						continue
-					}
-					
-					if self.selectedLanguage != .all && self.selectedLanguage != longestStreak.language {
-						continue
-					}
-					
-					self.longestNormalStreakPerLetters[i].streaks.append((index: index, currentStreak: streak.streak.currentStreak, longestStreak: streak.longestStreak) as! (Int, Int, Int))
-					let longestDouble = Double(streak.longestStreak)
-					if longestDouble > self.maxNormalStreakLength {
-						self.maxNormalStreakLength = longestDouble
-					}
-				}
-			}
-			i += 1
-		}
+            self.longestStreakPerLetters[i].streaks.removeAll()
+            for index in 1...8 {
+                if self.numberOfLetters != 9 && self.numberOfLetters != index {
+                    continue
+                }
+
+                if self.selectedLanguage != .all && self.selectedLanguage != longestStreak.language {
+                    continue
+                }
+
+                let summary = GameRecordStreakCalculator.dailySummary(
+                    records: self.gameRecords,
+                    language: longestStreak.language,
+                    numberOfLetters: index
+                )
+
+                guard summary.longestStreak > 0 else {
+                    continue
+                }
+
+                self.longestStreakPerLetters[i].streaks.append((index: index, currentStreak: summary.currentStreak, longestStreak: summary.longestStreak))
+                let longestDouble = Double(summary.longestStreak)
+                if longestDouble > self.maxStreakLength {
+                    self.maxStreakLength = longestDouble
+                }
+            }
+            i += 1
+        }
+        
+        i = 0
+        self.maxNormalStreakLength = 0
+        for longestStreak in self.longestNormalStreakPerLetters {
+            self.longestNormalStreakPerLetters[i].streaks.removeAll()
+            for index in 1...8 {
+                if self.numberOfLetters != 9 && self.numberOfLetters != index {
+                    continue
+                }
+
+                if self.selectedLanguage != .all && self.selectedLanguage != longestStreak.language {
+                    continue
+                }
+
+                let summary = GameRecordStreakCalculator.normalSummary(
+                    records: self.gameRecords,
+                    language: longestStreak.language,
+                    numberOfLetters: index
+                )
+
+                guard summary.longestStreak > 0 else {
+                    continue
+                }
+
+                self.longestNormalStreakPerLetters[i].streaks.append((index: index, currentStreak: summary.currentStreak, longestStreak: summary.longestStreak))
+                let longestDouble = Double(summary.longestStreak)
+                if longestDouble > self.maxNormalStreakLength {
+                    self.maxNormalStreakLength = longestDouble
+                }
+            }
+            i += 1
+        }
     }
     
     func setDefaultValues() {
