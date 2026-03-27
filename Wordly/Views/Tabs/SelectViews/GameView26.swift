@@ -10,32 +10,30 @@ import GoogleMobileAds
 import TipKit
 
 struct GameView26: View {
-    @EnvironmentObject var appManager: AppManager
+	@EnvironmentObject var appManager: AppManager
 	@Environment(AdManager.self) private var adManager: AdManager
-    @Environment(\.dismiss) var dismiss
-    @Environment(\.colorScheme) private var colorScheme
+	@Environment(\.dismiss) var dismiss
+	@Environment(\.colorScheme) private var colorScheme
 	@Environment(\.scenePhase) private var scenePhase
-    @AppStorage("userWantsNormalTheme") private var userWantsNormalTheme: Bool = true
-	@AppStorage("userWantsAds") var userWantsAds: Bool = true
-    
-    @State var didTapSubmitButton: Bool = false
-    @State var didTapBackButton: Bool = false
-    @State var didTapResetButton: Bool = false
-    @State var didTapNewGameButton: Bool = false
-    @State var didTapShowDefinitionButton: Bool = false
-    @State var isShowingCurrentDefinition: Bool = false
-    @State var alertItem: AlertItem?
+	@AppStorage("userWantsNormalTheme") private var userWantsNormalTheme: Bool = true
+	@State var didTapSubmitButton: Bool = false
+	@State var didTapBackButton: Bool = false
+	@State var didTapResetButton: Bool = false
+	@State var didTapNewGameButton: Bool = false
+	@State var didTapShowDefinitionButton: Bool = false
+	@State var isShowingCurrentDefinition: Bool = false
+	@State var alertItem: AlertItem?
 	
 	@Namespace private var namespace
-    
-    private var device : UIUserInterfaceIdiom { UIDevice.current.userInterfaceIdiom }
-    
-    var colorForUnused: Color {
-        switch colorScheme {
-            case .light:
-                return Color(UIColor.lightGray)
-            case .dark:
-                return .primary
+	
+	private var device : UIUserInterfaceIdiom { UIDevice.current.userInterfaceIdiom }
+	
+	var colorForUnused: Color {
+		switch colorScheme {
+			case .light:
+				return Color(UIColor.lightGray)
+			case .dark:
+				return .primary
 			@unknown default:
 				return .primary
 		}
@@ -557,25 +555,22 @@ struct GameView26: View {
 				adManager.currentSelectView = .selectView
 			}
 			.task {
-				if userWantsAds {
-					await appManager.loadAd()
-					appManager.hasLoadedAd = true
-				}
+				await appManager.loadAd()
+				appManager.hasLoadedAd = true
 			}
 		}
 		
-    }
+	}
 }
 
 struct AdButton: View {
-    @EnvironmentObject var appManager: AppManager
-    @AppStorage("userWantsAds") var userWantsAds: Bool = true
-    @State private var didTap: Bool = false
+	@EnvironmentObject var appManager: AppManager
+	@State private var didTap: Bool = false
 	let hintTip = HintTip()
-    
-    var body: some View {
-        Button(action: {
-            self.didTap.toggle()
+	
+	var body: some View {
+		Button(action: {
+			self.didTap.toggle()
 			self.hintTip.invalidate(reason: .actionPerformed)
 			Task {
 				await HintTip.getHintEvent.donate()
@@ -591,19 +586,19 @@ struct AdButton: View {
 					}
 				}
 			}
-        }, label: {
-            Image(systemName: "lightbulb.max.fill")
-                .contentShape(Rectangle())
-        })
-        .task {
-			if userWantsAds && !appManager.hasLoadedAd {
-                await appManager.loadAd()
+		}, label: {
+			Image(systemName: "lightbulb.max.fill")
+				.contentShape(Rectangle())
+		})
+		.task {
+			if !appManager.hasLoadedAd {
+				await appManager.loadAd()
 				appManager.hasLoadedAd = true
-            }
-        }
-        .sensoryFeedback(.selection, trigger: self.didTap)
+			}
+		}
+		.sensoryFeedback(.selection, trigger: self.didTap)
 		.popoverTip(self.hintTip)
-    }
+	}
 }
 
 struct SearchToolbarItem: View {
@@ -628,24 +623,24 @@ struct SearchToolbarItem: View {
 }
 
 struct GrowingButton: ButtonStyle {
-    func makeBody(configuration: Configuration) -> some View {
-        configuration.label
-            .scaleEffect(configuration.isPressed ? 1.05 : 1)
-            .animation(.easeInOut(duration: 0.1), value: configuration.isPressed)
-    }
+	func makeBody(configuration: Configuration) -> some View {
+		configuration.label
+			.scaleEffect(configuration.isPressed ? 1.05 : 1)
+			.animation(.easeInOut(duration: 0.1), value: configuration.isPressed)
+	}
 }
 
 struct ScalingButton: ButtonStyle {
-    func makeBody(configuration: Configuration) -> some View {
-        configuration.label
-            .scaleEffect(configuration.isPressed ? 1.1 : 1)
-            .animation(.easeInOut(duration: 0.1), value: configuration.isPressed)
-    }
+	func makeBody(configuration: Configuration) -> some View {
+		configuration.label
+			.scaleEffect(configuration.isPressed ? 1.1 : 1)
+			.animation(.easeInOut(duration: 0.1), value: configuration.isPressed)
+	}
 }
 
 
 
 #Preview {
-    GameView26()
-        .environmentObject(AppManager())
+	GameView26()
+		.environmentObject(AppManager())
 }

@@ -10,20 +10,20 @@ import SwiftUI
 struct SearchView: View {
 	@Environment(\.dismiss) var dismiss
 	@Environment(\.scenePhase) private var scenePhase
-    @EnvironmentObject var appManager: AppManager
+	@EnvironmentObject var appManager: AppManager
 	@Environment(AdManager.self) private var adManager: AdManager
-	@AppStorage("userWantsAds") var userWantsAds: Bool = true
-    @Namespace private var namespace
-    @State private var isShowingFilterOptions: Bool = false
+	@Namespace private var namespace
+	@State private var isShowingFilterOptions: Bool = false
 	@State private var didTap: Bool = false
-    @State private var searchResults: [String] = []
-    @State private var groupedWords: [String: [String]] = [:]
-    @State private var sectionKeys: [String] = []
+	@State private var searchResults: [String] = []
+	@State private var groupedWords: [String: [String]] = [:]
+	@State private var sectionKeys: [String] = []
 	@State private var filterButtonID = UUID()
+	@State private var selectedDetent: PresentationDetent = .large
 	
 	private let filterTip = FilterTip()
-    
-    var body: some View {
+	
+	var body: some View {
 		if #available(iOS 17.1, *) {
 			VStack {
 				if self.searchResults.isEmpty && !appManager.searchedWord.isEmpty {
@@ -65,7 +65,7 @@ struct SearchView: View {
 								}
 							}
 							.listSectionIndexVisibility(.visible)
-							.safeAreaPadding(.bottom, (UIDevice.current.userInterfaceIdiom == .pad || UIDevice.current.userInterfaceIdiom == .mac) && self.userWantsAds ? 80 : (self.userWantsAds ? 54 : 0))
+							.safeAreaPadding(.bottom, adManager.isAdsReady ? (UIDevice.current.userInterfaceIdiom == .pad || UIDevice.current.userInterfaceIdiom == .mac ? 80 : 54) : 0)
 						} else {
 							List {
 								ForEach(self.sectionKeys, id: \.self) { letter in
@@ -99,7 +99,7 @@ struct SearchView: View {
 									.id(letter)
 								}
 							}
-							.safeAreaPadding(.bottom, (UIDevice.current.userInterfaceIdiom == .pad || UIDevice.current.userInterfaceIdiom == .mac) && self.userWantsAds ? 80 : (self.userWantsAds ? 54 : 0))
+							.safeAreaPadding(.bottom, adManager.isAdsReady ? (UIDevice.current.userInterfaceIdiom == .pad || UIDevice.current.userInterfaceIdiom == .mac ? 80 : 54) : 0)
 						}
 					}
 				}
@@ -108,32 +108,32 @@ struct SearchView: View {
 			.searchPresentationToolbarBehavior(.avoidHidingContent)
 			.navigationTitle("Search")
 			.toolbar {
-//				ToolbarItem(placement: .topBarTrailing) {
-//					if #available(iOS 26.0, *) {
-//						NavigationLink(destination: FilterOptionsView().environmentObject(appManager).navigationTransition(.zoom(sourceID: "filter", in: namespace)), label: {
-//							Image(systemName: "slider.horizontal.3")
-//								.foregroundColor(.white)
-//								.matchedTransitionSource(id: "filter", in: namespace)
-//						})
-////						.transition(.scale)
-//						.simultaneousGesture(
-//							LongPressGesture(minimumDuration: 1.2)
-//								.onEnded { _ in
-//									appManager.resetFilters()
-//									self.isShowingFilterOptions.toggle()
-//								}
-//						)
-//						.simultaneousGesture(TapGesture().onEnded {
-//							self.isShowingFilterOptions.toggle()
-//							Task {
-//								await FilterTip.filterEvent.donate()
-//							}
-//						})
-//						.popoverTip(self.filterTip, arrowEdge: .top)
-//						.sensoryFeedback(.selection, trigger: self.isShowingFilterOptions)
-//						.id(filterButtonID)
-//					}
-//				}
+				//				ToolbarItem(placement: .topBarTrailing) {
+				//					if #available(iOS 26.0, *) {
+				//						NavigationLink(destination: FilterOptionsView().environmentObject(appManager).navigationTransition(.zoom(sourceID: "filter", in: namespace)), label: {
+				//							Image(systemName: "slider.horizontal.3")
+				//								.foregroundColor(.white)
+				//								.matchedTransitionSource(id: "filter", in: namespace)
+				//						})
+				////						.transition(.scale)
+				//						.simultaneousGesture(
+				//							LongPressGesture(minimumDuration: 1.2)
+				//								.onEnded { _ in
+				//									appManager.resetFilters()
+				//									self.isShowingFilterOptions.toggle()
+				//								}
+				//						)
+				//						.simultaneousGesture(TapGesture().onEnded {
+				//							self.isShowingFilterOptions.toggle()
+				//							Task {
+				//								await FilterTip.filterEvent.donate()
+				//							}
+				//						})
+				//						.popoverTip(self.filterTip, arrowEdge: .top)
+				//						.sensoryFeedback(.selection, trigger: self.isShowingFilterOptions)
+				//						.id(filterButtonID)
+				//					}
+				//				}
 				if #available(iOS 26.0, *) {
 					ToolbarItem(placement: .navigationBarTrailing) {
 						Button(action: {
@@ -175,7 +175,8 @@ struct SearchView: View {
 				if #available(iOS 26.0, *) {
 					FilterOptionsView(isShowingFilterOptions: self.$isShowingFilterOptions)
 						.environmentObject(appManager)
-						.presentationDetents([.fraction(0.8), .large])
+						.presentationDetents([.large, .fraction(0.8)], selection: $selectedDetent)
+					
 						.navigationTransition(.zoom(sourceID: "filter", in: self.namespace))
 				} else {
 					FilterOptionsView(isShowingFilterOptions: self.$isShowingFilterOptions)
@@ -220,103 +221,103 @@ struct SearchView: View {
 			.onChange(of: appManager.isFilteringExcludeLetters) {
 				self.filterGameRecords()
 			}
-//			.overlay(alignment: .bottomTrailing) {
-//				if #available(iOS 26.0, *) {
-//					NavigationLink(destination: FilterOptionsView().environmentObject(appManager).navigationTransition(.zoom(sourceID: "filter", in: namespace)), label: {
-//						Image(systemName: "slider.horizontal.3")
-//							.font(.title)
-//							.foregroundColor(.white)
-//							.padding()
-//							.matchedTransitionSource(id: "filter", in: namespace)
-//							.background {
-//								if self.scenePhase == .background {
-//									Circle()
-//										.foregroundStyle(Color(uiColor: .systemGreen))
-//									
-//								}
-//							}
-//					})
-//					.glassEffect(.regular.tint(.green).interactive(), in: .circle)
-//					.padding(.trailing, 25)
-//					.padding(.bottom, UIDevice.current.userInterfaceIdiom == .pad || UIDevice.current.userInterfaceIdiom == .mac ? 100 : (self.userWantsAds && adManager.shouldShowAds ? 75 : 25))
-//					.transition(.scale)
-//					.simultaneousGesture(
-//						LongPressGesture(minimumDuration: 1.2)
-//							.onEnded { _ in
-//								appManager.resetFilters()
-//								self.isShowingFilterOptions.toggle()
-//							}
-//					)
-//					.simultaneousGesture(TapGesture().onEnded {
-//						self.isShowingFilterOptions.toggle()
-//						Task {
-//							await FilterTip.filterEvent.donate()
-//						}
-//					})
-//					.popoverTip(self.filterTip, arrowEdge: .top)
-//					.sensoryFeedback(.selection, trigger: self.isShowingFilterOptions)
-//					.id(filterButtonID)
-//					
-//				} else if #available(iOS 18.0, *) {
-//					NavigationLink(destination: FilterOptionsView().environmentObject(appManager).navigationTransition(.zoom(sourceID: "filter", in: namespace)), label: {
-//						Image(systemName: "slider.horizontal.3")
-//							.font(.title)
-//							.foregroundColor(.white)
-//							.padding()
-//							.background(Color.green)
-//							.clipShape(Circle())
-//							.sensoryFeedback(.selection, trigger: self.isShowingFilterOptions)
-//							.matchedTransitionSource(id: "filter", in: namespace)
-//							.simultaneousGesture(
-//								LongPressGesture(minimumDuration: 1.2)
-//									.onEnded { _ in
-//										appManager.resetFilters()
-//										self.isShowingFilterOptions.toggle()
-//									}
-//							)
-//					})
-//					.padding(.trailing, 25)
-//					.padding(.bottom, UIDevice.current.userInterfaceIdiom == .pad || UIDevice.current.userInterfaceIdiom == .mac ? 100 : (self.userWantsAds && adManager.shouldShowAds ? 75 : 25))
-//					.transition(.scale)
-//					.simultaneousGesture(TapGesture().onEnded {
-//						self.isShowingFilterOptions.toggle()
-//						Task {
-//							await FilterTip.filterEvent.donate()
-//						}
-//					})
-//					.popoverTip(self.filterTip, arrowEdge: .top)
-//					.id(filterButtonID)
-//				} else {
-//					NavigationLink(destination: FilterOptionsView().environmentObject(appManager), label: {
-//						Image(systemName: "slider.horizontal.3")
-//							.font(.title)
-//							.foregroundColor(.white)
-//							.padding()
-//							.background(Color.green)
-//							.clipShape(Circle())
-//							.sensoryFeedback(.selection, trigger: self.isShowingFilterOptions)
-//							.simultaneousGesture(
-//								LongPressGesture(minimumDuration: 1.2)
-//									.onEnded { _ in
-//										appManager.resetFilters()
-//										self.isShowingFilterOptions.toggle()
-//									}
-//							)
-//					})
-//					.padding(.trailing, 25)
-//					.padding(.bottom, UIDevice.current.userInterfaceIdiom == .pad || UIDevice.current.userInterfaceIdiom == .mac ? 100 : (self.userWantsAds && adManager.shouldShowAds ? 75 : 25))
-//					.simultaneousGesture(TapGesture().onEnded {
-//						self.isShowingFilterOptions.toggle()
-//						Task {
-//							await FilterTip.filterEvent.donate()
-//						}
-//					})
-//					.popoverTip(self.filterTip, arrowEdge: .top)
-//					
-//					
-//				}
-//				
-//			}
+			//			.overlay(alignment: .bottomTrailing) {
+			//				if #available(iOS 26.0, *) {
+			//					NavigationLink(destination: FilterOptionsView().environmentObject(appManager).navigationTransition(.zoom(sourceID: "filter", in: namespace)), label: {
+			//						Image(systemName: "slider.horizontal.3")
+			//							.font(.title)
+			//							.foregroundColor(.white)
+			//							.padding()
+			//							.matchedTransitionSource(id: "filter", in: namespace)
+			//							.background {
+			//								if self.scenePhase == .background {
+			//									Circle()
+			//										.foregroundStyle(Color(uiColor: .systemGreen))
+			//									
+			//								}
+			//							}
+			//					})
+			//					.glassEffect(.regular.tint(.green).interactive(), in: .circle)
+			//					.padding(.trailing, 25)
+			//					.padding(.bottom, UIDevice.current.userInterfaceIdiom == .pad || UIDevice.current.userInterfaceIdiom == .mac ? 100 : (adManager.shouldShowAds ? 75 : 25))
+			//					.transition(.scale)
+			//					.simultaneousGesture(
+			//						LongPressGesture(minimumDuration: 1.2)
+			//							.onEnded { _ in
+			//								appManager.resetFilters()
+			//								self.isShowingFilterOptions.toggle()
+			//							}
+			//					)
+			//					.simultaneousGesture(TapGesture().onEnded {
+			//						self.isShowingFilterOptions.toggle()
+			//						Task {
+			//							await FilterTip.filterEvent.donate()
+			//						}
+			//					})
+			//					.popoverTip(self.filterTip, arrowEdge: .top)
+			//					.sensoryFeedback(.selection, trigger: self.isShowingFilterOptions)
+			//					.id(filterButtonID)
+			//					
+			//				} else if #available(iOS 18.0, *) {
+			//					NavigationLink(destination: FilterOptionsView().environmentObject(appManager).navigationTransition(.zoom(sourceID: "filter", in: namespace)), label: {
+			//						Image(systemName: "slider.horizontal.3")
+			//							.font(.title)
+			//							.foregroundColor(.white)
+			//							.padding()
+			//							.background(Color.green)
+			//							.clipShape(Circle())
+			//							.sensoryFeedback(.selection, trigger: self.isShowingFilterOptions)
+			//							.matchedTransitionSource(id: "filter", in: namespace)
+			//							.simultaneousGesture(
+			//								LongPressGesture(minimumDuration: 1.2)
+			//									.onEnded { _ in
+			//										appManager.resetFilters()
+			//										self.isShowingFilterOptions.toggle()
+			//									}
+			//							)
+			//					})
+			//					.padding(.trailing, 25)
+			//					.padding(.bottom, UIDevice.current.userInterfaceIdiom == .pad || UIDevice.current.userInterfaceIdiom == .mac ? 100 : (adManager.shouldShowAds ? 75 : 25))
+			//					.transition(.scale)
+			//					.simultaneousGesture(TapGesture().onEnded {
+			//						self.isShowingFilterOptions.toggle()
+			//						Task {
+			//							await FilterTip.filterEvent.donate()
+			//						}
+			//					})
+			//					.popoverTip(self.filterTip, arrowEdge: .top)
+			//					.id(filterButtonID)
+			//				} else {
+			//					NavigationLink(destination: FilterOptionsView().environmentObject(appManager), label: {
+			//						Image(systemName: "slider.horizontal.3")
+			//							.font(.title)
+			//							.foregroundColor(.white)
+			//							.padding()
+			//							.background(Color.green)
+			//							.clipShape(Circle())
+			//							.sensoryFeedback(.selection, trigger: self.isShowingFilterOptions)
+			//							.simultaneousGesture(
+			//								LongPressGesture(minimumDuration: 1.2)
+			//									.onEnded { _ in
+			//										appManager.resetFilters()
+			//										self.isShowingFilterOptions.toggle()
+			//									}
+			//							)
+			//					})
+			//					.padding(.trailing, 25)
+			//					.padding(.bottom, UIDevice.current.userInterfaceIdiom == .pad || UIDevice.current.userInterfaceIdiom == .mac ? 100 : (adManager.shouldShowAds ? 75 : 25))
+			//					.simultaneousGesture(TapGesture().onEnded {
+			//						self.isShowingFilterOptions.toggle()
+			//						Task {
+			//							await FilterTip.filterEvent.donate()
+			//						}
+			//					})
+			//					.popoverTip(self.filterTip, arrowEdge: .top)
+			//					
+			//					
+			//				}
+			//				
+			//			}
 			.onAppear {
 				AnalyticsManager.shared.logScreenViewed(screenName: "SearchView")
 				self.filterGameRecords()
@@ -329,77 +330,75 @@ struct SearchView: View {
 					self.filterButtonID = UUID()
 				}
 			}
-		} else {
-			// Fallback on earlier versions
 		}
-    }
-    
-    func filterGameRecords() {
-        var filteredWords = appManager.searchableWords()
-//		let shuffledWords = filteredWords.shuffled()
-//		DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
-//			print("[")
-//			for word in shuffledWords {
-//				if word == shuffledWords.last {
-//					print("\"\(word)\"")
-//					print("]")
-//				} else {
-//					print("\"\(word)\",")
-//				}
-//			}
-//		}
+	}
+	
+	func filterGameRecords() {
+		var filteredWords = appManager.searchableWords()
+		//		let shuffledWords = filteredWords.shuffled()
+		//		DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+		//			print("[")
+		//			for word in shuffledWords {
+		//				if word == shuffledWords.last {
+		//					print("\"\(word)\"")
+		//					print("]")
+		//				} else {
+		//					print("\"\(word)\",")
+		//				}
+		//			}
+		//		}
 		
-        if appManager.isFilteringSearchWord && !appManager.searchedWord.isEmpty {
-            filteredWords = filteredWords.filter { $0.contains(appManager.searchedWord.replacingOccurrences(of: " ", with: "").uppercased()) }
-        }
-        if appManager.isFilteringStartWith && !appManager.startsWithFilter.isEmpty {
-            filteredWords = filteredWords.filter { $0.hasPrefix(appManager.startsWithFilter.replacingOccurrences(of: " ", with: "").uppercased()) }
-        }
-        if appManager.isFilteringEndsWith && !appManager.endsWithFilter.isEmpty {
+		if appManager.isFilteringSearchWord && !appManager.searchedWord.isEmpty {
+			filteredWords = filteredWords.filter { $0.contains(appManager.searchedWord.replacingOccurrences(of: " ", with: "").uppercased()) }
+		}
+		if appManager.isFilteringStartWith && !appManager.startsWithFilter.isEmpty {
+			filteredWords = filteredWords.filter { $0.hasPrefix(appManager.startsWithFilter.replacingOccurrences(of: " ", with: "").uppercased()) }
+		}
+		if appManager.isFilteringEndsWith && !appManager.endsWithFilter.isEmpty {
 			filteredWords = filteredWords.filter { $0.hasSuffix(appManager.endsWithFilter.replacingOccurrences(of: " ", with: "").uppercased()) }
-        }
-        
-        if appManager.isFilteringIncludedLetters && !appManager.selectedIncludedLetters.isEmpty {
-            let includedCharacters = Set(appManager.selectedIncludedLetters.joined())
+		}
+		
+		if appManager.isFilteringIncludedLetters && !appManager.selectedIncludedLetters.isEmpty {
+			let includedCharacters = Set(appManager.selectedIncludedLetters.joined())
 			filteredWords = filteredWords.filter { word in
 				includedCharacters.isSubset(of: Set(word.uppercased()))
 			}
-        }
-        
-        if appManager.isFilteringExcludeLetters && !appManager.selectedExcludedLetters.isEmpty {
-            let excludedCharacters = Set(appManager.selectedExcludedLetters.joined())
-            filteredWords = filteredWords.filter { word in
-                excludedCharacters.isDisjoint(with: word.uppercased())
-            }
-        }
-        self.searchResults = filteredWords
-        self.groupedWords = Dictionary(grouping: self.searchResults.sorted(), by: { String($0.prefix(1)).uppercased() })
+		}
+		
+		if appManager.isFilteringExcludeLetters && !appManager.selectedExcludedLetters.isEmpty {
+			let excludedCharacters = Set(appManager.selectedExcludedLetters.joined())
+			filteredWords = filteredWords.filter { word in
+				excludedCharacters.isDisjoint(with: word.uppercased())
+			}
+		}
+		self.searchResults = filteredWords
+		self.groupedWords = Dictionary(grouping: self.searchResults.sorted(), by: { String($0.prefix(1)).uppercased() })
 		self.sectionKeys = self.groupedWords.keys.sorted(using: String.Comparator(options: .caseInsensitive, locale: Locale(identifier: "nb"), order: .forward))
-    }
+	}
 }
 
 
 struct SectionHeaderView: View {
-    let letter: String
-    
-    var body: some View {
-        VStack {
-            HStack {
-                Text(letter)
-                    .font(.headline)
-                    .fontWeight(.semibold)
-                    .foregroundColor(.gray)
-                    .padding(.leading, 16)
-                Spacer()
-            }
-        }
-        .padding(.vertical, 8)
-        .frame(height: 35)
-        .listRowInsets(EdgeInsets())
-    }
+	let letter: String
+	
+	var body: some View {
+		VStack {
+			HStack {
+				Text(letter)
+					.font(.headline)
+					.fontWeight(.semibold)
+					.foregroundColor(.gray)
+					.padding(.leading, 16)
+				Spacer()
+			}
+		}
+		.padding(.vertical, 8)
+		.frame(height: 35)
+		.listRowInsets(EdgeInsets())
+	}
 }
 
 #Preview {
-    SearchView()
-        .environmentObject(AppManager())
+	SearchView()
+		.environmentObject(AppManager())
 }

@@ -12,13 +12,12 @@ import UserMessagingPlatform
 import AppTrackingTransparency
 import TipKit
 import FirebaseAnalytics
+import Network
 
 struct TabsView: View {
 	@Environment(\.scenePhase) private var scenePhase
 	@Environment(\.modelContext) var modelContext
 	@AppStorage("appTheme") private var appTheme: AppTheme = .dark
-	@AppStorage("userWantsAds") var userWantsAds: Bool = true
-	@AppStorage("hasTurnedOnAds") private var hasTurnedOnAds: Bool = false
 	@AppStorage("notificationsEnabled") private var notificationsEnabled: Bool = false
 	@AppStorage("userWantsThePhraseNameBack") private var userWantsThePhraseNameBack = false
 	@State var selection: TabSelection = .home
@@ -39,11 +38,10 @@ struct TabsView: View {
 				.environment(adManager)
 				.task {
 					//						#warning("Resetting the datastore is only for testing purposes, remove this in production!")
-//											try? Tips.resetDatastore()
+					//											try? Tips.resetDatastore()
 					try? Tips.configure([.datastoreLocation(.applicationDefault)])
 				}
 				.tint(.primary)
-				
 				
 				StatsView()
 					.tag(TabSelection.stats)
@@ -54,6 +52,7 @@ struct TabsView: View {
 							Label("Stats", systemImage: "chart.bar.xaxis")
 						}
 					}
+					.environment(adManager)
 					.tint(.primary)
 				
 				HistoryView()
@@ -65,6 +64,7 @@ struct TabsView: View {
 							Label("History", systemImage: "clock")
 						}
 					}
+					.environment(adManager)
 					.tint(.primary)
 				
 				SettingsView()
@@ -78,17 +78,16 @@ struct TabsView: View {
 			}
 			.tint(self.tintColor)
 			.onChange(of: self.scenePhase) { _, newPhase in
-				if newPhase == .active, self.userWantsAds {
+				if newPhase == .active {
 					print("App became active, reloading banner ad")
+					Task {
+						await adManager.prepareAdsIfNeeded()
+					}
 				}
 			}
 			.safeAreaInset(edge: .bottom) { bottomAd(for: geometry) }
 			.preferredColorScheme(appTheme == .system ? nil : (appTheme == .light ? .light : .dark))
 			.onAppear {
-				if !self.hasTurnedOnAds {
-					self.userWantsAds = true
-					self.hasTurnedOnAds = true
-				}
 				if #available(iOS 26.0, *) {
 					self.tintColor = .green
 				} else {
@@ -99,24 +98,27 @@ struct TabsView: View {
 				if notificationsEnabled {
 					NotificationManager.requestPermission() { result in
 						switch result {
-						case .success(let granted):
-							if granted {
-								print("Notification permission granted.")
-								UNUserNotificationCenter.current().delegate = NotificationsDelegate.shared
-								let reminders = NotificationManager.fetchReminders(context: modelContext)
-								for reminder in reminders {
-									NotificationManager.scheduleDailyWordReminder(reminder: reminder)
+							case .success(let granted):
+								if granted {
+									print("Notification permission granted.")
+									UNUserNotificationCenter.current().delegate = NotificationsDelegate.shared
+									let reminders = NotificationManager.fetchReminders(context: modelContext)
+									for reminder in reminders {
+										NotificationManager.scheduleDailyWordReminder(reminder: reminder)
+									}
+								} else {
+									print("Notification permission denied.")
+									UserDefaults.standard.set(false, forKey: "notificationsEnabled")
 								}
-							} else {
-								print("Notification permission denied.")
+							case .failure(let error):
+								print("Error requesting notification permission: \(error)")
 								UserDefaults.standard.set(false, forKey: "notificationsEnabled")
-							}
-						case .failure(let error):
-							print("Error requesting notification permission: \(error)")
-							UserDefaults.standard.set(false, forKey: "notificationsEnabled")
 						}
 					}
 				}
+			}
+			.task {
+				adManager.startMonitoringConnectivity()
 			}
 			.task {
 				await adManager.prepareAds()
@@ -126,13 +128,13 @@ struct TabsView: View {
 	
 	@ViewBuilder
 	private func bottomAd(for geometry: GeometryProxy) -> some View {
-		if self.userWantsAds &&
-			(self.selection != .home ||
-			 (self.selection == .home && adManager.shouldShowAds &&
-			  (adManager.currentSelectView == .selectView ||
-			   adManager.currentSelectView == .searchView ||
-			   adManager.currentSelectView == .filterOptionsView ||
-			   adManager.currentSelectView == .infoView))) &&
+		let _ = print("Checking ad display conditions: selection: \(self.selection), shouldShowAds: \(adManager.shouldShowAds), currentSelectView: \(adManager.currentSelectView), canRequestAds: \(adManager.canRequestAds), isAdsReady: \(adManager.isAdsReady)")
+		if (self.selection != .home ||
+			(self.selection == .home && adManager.shouldShowAds &&
+			 (adManager.currentSelectView == .selectView ||
+			  adManager.currentSelectView == .searchView ||
+			  adManager.currentSelectView == .filterOptionsView ||
+			  adManager.currentSelectView == .infoView))) &&
 			adManager.canRequestAds &&
 			adManager.isAdsReady {
 			
@@ -141,6 +143,7 @@ struct TabsView: View {
 				BannerViewContainer(adSize)
 					.frame(width: max(0, adSize.size.width), height: max(0, adSize.size.height))
 					.padding(.bottom, 55)
+				let _ = print("iOS 26 or later on iPhone, ad width: \(adSize.size.width), geometry width: \(geometry.size.width)")
 				
 			} else if #available(iOS 18.0, *),
 					  UIDevice.current.userInterfaceIdiom == .pad || UIDevice.current.userInterfaceIdiom == .mac {
@@ -164,6 +167,9 @@ final class AdManager {
 	var shouldShowAds: Bool = true
 	var isMobileAdsStartCalled = false
 	var isAdsReady = false
+	private var isPreparingAds = false
+	private let pathMonitor = NWPathMonitor()
+	private var hasStartedPathMonitor = false
 	
 	var canRequestAds: Bool {
 		return ConsentInformation.shared.canRequestAds
@@ -171,6 +177,18 @@ final class AdManager {
 	
 	var shouldShowPrivacyOptionsButton: Bool {
 		ConsentInformation.shared.privacyOptionsRequirementStatus == .required
+	}
+	
+	func startMonitoringConnectivity() {
+		guard !hasStartedPathMonitor else { return }
+		hasStartedPathMonitor = true
+		pathMonitor.pathUpdateHandler = { [weak self] path in
+			guard path.status == .satisfied else { return }
+			Task { @MainActor in
+				await self?.prepareAdsIfNeeded()
+			}
+		}
+		pathMonitor.start(queue: DispatchQueue(label: "Wordly.AdManager.NetworkMonitor"))
 	}
 	
 	func updateFirebaseAnalyticsConsent() {
@@ -188,7 +206,12 @@ final class AdManager {
 	}
 	
 	func prepareAds() async {
+		guard !isPreparingAds else { return }
+		isPreparingAds = true
 		isAdsReady = false
+		defer {
+			isPreparingAds = false
+		}
 		do {
 			try await gatherConsent()
 			
@@ -209,6 +232,11 @@ final class AdManager {
 		} catch {
 			print("Consent flow error: \(error)")
 		}
+	}
+	
+	func prepareAdsIfNeeded() async {
+		guard !isAdsReady else { return }
+		await prepareAds()
 	}
 	
 	func gatherConsent() async throws {
@@ -240,9 +268,9 @@ final class AdManager {
 		let currentStatus = ATTrackingManager.trackingAuthorizationStatus
 		guard currentStatus == .notDetermined else { return currentStatus }
 		return await withCheckedContinuation { continuation in
-		     ATTrackingManager.requestTrackingAuthorization { status in
-		         continuation.resume(returning: status)
-		     }
+			ATTrackingManager.requestTrackingAuthorization { status in
+				continuation.resume(returning: status)
+			}
 		}
 	}
 	
@@ -280,9 +308,12 @@ final class AdManager {
 			}
 		}
 	}
+	
+	deinit {
+		pathMonitor.cancel()
+	}
 }
 
 #Preview {
-    TabsView()
+	TabsView()
 }
-

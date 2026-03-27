@@ -11,29 +11,28 @@ struct Info: View {
 	@Environment(\.dismiss) var dismiss
 	@Environment(AdManager.self) private var adManager: AdManager
 	@EnvironmentObject var appState: AppState
-	@AppStorage("userWantsAds") var userWantsAds: Bool = true
 	@AppStorage("userWantsThePhraseNameBack") private var userWantsThePhraseNameBack = false
 	
 	
-    var body: some View {
-        List {
-            VStack(alignment: .leading) {
-                Text(self.userWantsThePhraseNameBack ? "The Phrase" : "Wordly")
-                    .font(.largeTitle).bold()
-                    .padding(.bottom, 5)
-                
-                Text("\(self.userWantsThePhraseNameBack ? "The Phrase" : "Wordly") is a word game where you guess a secret word. The game provides feedback on your guesses, indicating correct letters and their positions.")
-                    .font(.body)
-                    .padding(.bottom, 15)
-                
-                Text("How to Play?")
-                    .font(.title3).bold()
-                    .padding(.bottom, 2)
-                
-                Text("To play the game, just enter a valid word and submit your guess. After each guess, the colors of the tiles will show how close you were.")
-                    .font(.body)
-                    .padding(.bottom, 15)
-                
+	var body: some View {
+		List {
+			VStack(alignment: .leading) {
+				Text(self.userWantsThePhraseNameBack ? "The Phrase" : "Wordly")
+					.font(.largeTitle).bold()
+					.padding(.bottom, 5)
+				
+				Text("\(self.userWantsThePhraseNameBack ? "The Phrase" : "Wordly") is a word game where you guess a secret word. The game provides feedback on your guesses, indicating correct letters and their positions.")
+					.font(.body)
+					.padding(.bottom, 15)
+				
+				Text("How to Play?")
+					.font(.title3).bold()
+					.padding(.bottom, 2)
+				
+				Text("To play the game, just enter a valid word and submit your guess. After each guess, the colors of the tiles will show how close you were.")
+					.font(.body)
+					.padding(.bottom, 15)
+				
 				VStack(alignment: .leading, spacing: 30) {
 					VStack(alignment: .leading, spacing: 10) {
 						Text("Correct position")
@@ -84,11 +83,11 @@ struct Info: View {
 							.foregroundStyle(.secondary)
 					}
 				}
-            }
-        }
-        .navigationTitle("Info")
-        .navigationBarTitleDisplayMode(.inline)
-		.safeAreaPadding(.bottom, (UIDevice.current.userInterfaceIdiom == .pad || UIDevice.current.userInterfaceIdiom == .mac) && self.userWantsAds ? 80 : (self.userWantsAds ? 54 : 0))
+			}
+		}
+		.navigationTitle("Info")
+		.navigationBarTitleDisplayMode(.inline)
+		.safeAreaPadding(.bottom, adManager.isAdsReady ? (UIDevice.current.userInterfaceIdiom == .pad || UIDevice.current.userInterfaceIdiom == .mac ? 80 : 54) : 0)
 		.onChange(of: appState.navigateHomeTrigger) {
 			print("SelectView detected navigateHomeTrigger change")
 			dismiss()
@@ -103,9 +102,9 @@ struct Info: View {
 		.onDisappear {
 			adManager.currentSelectView = .selectView
 		}
-    }
+	}
 }
 
 #Preview {
-    Info()
+	Info()
 }

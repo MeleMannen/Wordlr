@@ -8,22 +8,21 @@
 import SwiftUI
 
 enum FilterOptionsFields: Hashable {
-    case search
-    case startsWith
-    case endsWith
+	case search
+	case startsWith
+	case endsWith
 }
 
 struct FilterOptionsView: View {
-    @EnvironmentObject var appManager: AppManager
+	@EnvironmentObject var appManager: AppManager
 	@Environment(AdManager.self) private var adManager: AdManager
-    @FocusState var focusedField: FilterOptionsFields?
-	@AppStorage("userWantsAds") var userWantsAds: Bool = true
+	@FocusState var focusedField: FilterOptionsFields?
 	@State private var didTap: Bool = false
 	@Binding var isShowingFilterOptions: Bool
-    
-    
-    
-    var body: some View {
+	
+	
+	
+	var body: some View {
 		NavigationStack {
 			List {
 				VStack {
@@ -264,7 +263,7 @@ struct FilterOptionsView: View {
 					.padding(.vertical, 5)
 				}
 			}
-			        .padding(.top, -20)
+			.padding(.top, -20)
 			.simultaneousGesture(
 				TapGesture()
 					.onEnded { _ in
@@ -303,22 +302,22 @@ struct FilterOptionsView: View {
 			}
 		}
 	}
-    
-    func focusNextField() {
-        guard let currentField = focusedField else { return }
-        switch currentField {
-            case .search:
-                focusedField = .startsWith
-            case .startsWith:
-                focusedField = .endsWith
-            case .endsWith:
-                focusedField = nil
-        }
-    }
+	
+	func focusNextField() {
+		guard let currentField = focusedField else { return }
+		switch currentField {
+			case .search:
+				focusedField = .startsWith
+			case .startsWith:
+				focusedField = .endsWith
+			case .endsWith:
+				focusedField = nil
+		}
+	}
 }
 
 struct ThePhraseTextFieldStyle: TextFieldStyle {
-    func _body(configuration: TextField<Self._Label>) -> some View {
+	func _body(configuration: TextField<Self._Label>) -> some View {
 		if #available(iOS 26.0, *) {
 			configuration
 				.padding(10)
@@ -332,7 +331,7 @@ struct ThePhraseTextFieldStyle: TextFieldStyle {
 						.stroke(.primary)
 				)
 		}
-    }
+	}
 }
 
 //#Preview {

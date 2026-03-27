@@ -14,7 +14,6 @@ struct SettingsView: View {
 	@Environment(\.colorScheme) private var colorScheme
 	@Environment(AdManager.self) private var adManager: AdManager
 	@AppStorage("appTheme") private var appTheme: AppTheme = .dark
-	@AppStorage("userWantsAds") var userWantsAds: Bool = true
 	@AppStorage("userWantsNormalTheme") private var userWantsNormalTheme: Bool = true
 	@AppStorage("defaultLanguage") private var defaultLanguage: LanguageSelection = .norwegian
 	@AppStorage("defaultNumberOfLetters") private var defaultNumberOfLetters: Int = 5
@@ -33,7 +32,7 @@ struct SettingsView: View {
 		let calendar = Calendar.current
 		return calendar.date(from: DateComponents(year: 2025, month: 9, day: 1, hour: 18, minute: 0)) ?? Date()
 	}()
-
+	
 	
 	var body: some View {
 		GeometryReader { geometry in
@@ -76,7 +75,7 @@ struct SettingsView: View {
 						.onChange(of: appTheme) { oldValue, newValue in
 							AnalyticsManager.shared.logDidChangeThemeEvent(newTheme: newValue, oldTheme: oldValue)
 						}
-							
+						
 						
 						if self.colorScheme == .dark {
 							Picker("Daily Wordly Theme", selection: $userWantsNormalTheme) {
@@ -331,27 +330,27 @@ struct SettingsView: View {
 						})
 						
 #if targetEnvironment(simulator)
-
-							Button(action: {
-								adManager.presentAdInspector()
-								print("Ad Inspector presented.")
-							}, label: {
-								HStack {
-									Image(systemName: "hammer")
-										.font(.title2)
-										.foregroundStyle(.primary)
-									
-									Text("Ad Inspector")
-										.foregroundStyle(.primary)
-									
-									
-									Spacer(minLength: 0)
-									
-									Image(systemName: "arrow.up.right")
-										.font(.caption).bold()
-										.foregroundStyle(.secondary)
-								}
-							})
+						
+						Button(action: {
+							adManager.presentAdInspector()
+							print("Ad Inspector presented.")
+						}, label: {
+							HStack {
+								Image(systemName: "hammer")
+									.font(.title2)
+									.foregroundStyle(.primary)
+								
+								Text("Ad Inspector")
+									.foregroundStyle(.primary)
+								
+								
+								Spacer(minLength: 0)
+								
+								Image(systemName: "arrow.up.right")
+									.font(.caption).bold()
+									.foregroundStyle(.secondary)
+							}
+						})
 #endif
 						
 					} header: {
@@ -360,7 +359,7 @@ struct SettingsView: View {
 				}
 				.fontWeight(.medium)
 				.navigationTitle("Settings")
-				.safeAreaPadding(.bottom, (UIDevice.current.userInterfaceIdiom == .pad || UIDevice.current.userInterfaceIdiom == .mac) && self.userWantsAds ? 80 : (self.userWantsAds ? 54 : 0))
+				.safeAreaPadding(.bottom, adManager.isAdsReady ? (UIDevice.current.userInterfaceIdiom == .pad || UIDevice.current.userInterfaceIdiom == .mac ? 80 : 54) : 0)
 				.tint(.secondary)
 				.onAppear {
 					AnalyticsManager.shared.logScreenViewed(screenName: "SettingsView")
@@ -379,52 +378,52 @@ struct SettingsView: View {
 
 
 struct BannerViewContainer: UIViewRepresentable {
-    typealias UIViewType = BannerView
-    let adSize: AdSize
-    
-    init(_ adSize: AdSize) {
-        self.adSize = adSize
-    }
-    
-    func makeUIView(context: Context) -> BannerView {
-        let banner = BannerView(adSize: adSize)
-//		#warning("Replace the ad unit ID with your own ad unit ID when deploying to production.")
+	typealias UIViewType = BannerView
+	let adSize: AdSize
+	
+	init(_ adSize: AdSize) {
+		self.adSize = adSize
+	}
+	
+	func makeUIView(context: Context) -> BannerView {
+		let banner = BannerView(adSize: adSize)
+		//		#warning("Replace the ad unit ID with your own ad unit ID when deploying to production.")
 #if targetEnvironment(simulator)
-        banner.adUnitID = "ca-app-pub-3940256099942544/2435281174" // ca-app-pub-7619403750703078/6852604335
+		banner.adUnitID = "ca-app-pub-3940256099942544/2435281174" // ca-app-pub-7619403750703078/6852604335
 #else
 		banner.adUnitID = "ca-app-pub-7619403750703078/6852604335" // ca-app-pub-3940256099942544/2435281174
 #endif
 		
-        banner.load(Request())
-        banner.delegate = context.coordinator
-        return banner
-    }
-    
-    func updateUIView(_ uiView: BannerView, context: Context) {}
-    
-    func makeCoordinator() -> BannerCoordinator {
-        return BannerCoordinator(self)
-    }
-    
-    class BannerCoordinator: NSObject, BannerViewDelegate {
-        let parent: BannerViewContainer
-        
-        init(_ parent: BannerViewContainer) {
-            self.parent = parent
-        }
-        
-        // MARK: - GADBannerViewDelegate methods
-        
-        func bannerViewDidReceiveAd(_ bannerView: BannerView) {
-            print("DID RECEIVE AD.")
-            bannerView.alpha = 0
-            UIView.animate(withDuration: 1, animations: {
-                bannerView.alpha = 1
-            })
-        }
-
-        func bannerView(_ bannerView: BannerView, didFailToReceiveAdWithError error: Error) {
-//			print("FAILED TO RECEIVE AD: \(error.localizedDescription), error code: \(error._code), error: \(error)")
+		banner.load(Request())
+		banner.delegate = context.coordinator
+		return banner
+	}
+	
+	func updateUIView(_ uiView: BannerView, context: Context) {}
+	
+	func makeCoordinator() -> BannerCoordinator {
+		return BannerCoordinator(self)
+	}
+	
+	class BannerCoordinator: NSObject, BannerViewDelegate {
+		let parent: BannerViewContainer
+		
+		init(_ parent: BannerViewContainer) {
+			self.parent = parent
+		}
+		
+		// MARK: - GADBannerViewDelegate methods
+		
+		func bannerViewDidReceiveAd(_ bannerView: BannerView) {
+			print("DID RECEIVE AD.")
+			bannerView.alpha = 0
+			UIView.animate(withDuration: 1, animations: {
+				bannerView.alpha = 1
+			})
+		}
+		
+		func bannerView(_ bannerView: BannerView, didFailToReceiveAdWithError error: Error) {
+			//			print("FAILED TO RECEIVE AD: \(error.localizedDescription), error code: \(error._code), error: \(error)")
 			let errorDomain = error._domain
 			let errorCode = error._code
 			let errorMessage = error.localizedDescription
@@ -435,7 +434,7 @@ struct BannerViewContainer: UIViewRepresentable {
 					  + "message: \(errorMessage), responseInfo: \(responseInfo), "
 					  + "underlyingError: \(underlyingError?.localizedDescription ?? "nil")")
 			}
-        }
+		}
 		
 		func bannerViewDidRecordClick(_ bannerView: BannerView) {
 			print("Banner ad clicked.")
@@ -456,9 +455,9 @@ struct BannerViewContainer: UIViewRepresentable {
 		func bannerViewWillPresentScreen(_ bannerView: BannerView) {
 			print("Banner ad will present screen.")
 		}
-    }
+	}
 }
 
 #Preview {
-    SettingsView()
+	SettingsView()
 }

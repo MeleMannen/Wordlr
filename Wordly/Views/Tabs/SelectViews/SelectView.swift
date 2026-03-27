@@ -8,36 +8,35 @@
 import SwiftUI
 
 struct SelectView: View {
-    @Environment(\.modelContext) var modelContext
+	@Environment(\.modelContext) var modelContext
 	@Environment(\.colorScheme) private var colorScheme
 	@Environment(\.scenePhase) private var scenePhase
 	@Environment(AdManager.self) private var adManager: AdManager
-    @StateObject var appManager = AppManager()
+	@StateObject var appManager = AppManager()
 	@StateObject var reviewManager = ReviewManager()
 	@StateObject var appState = AppState.shared
-    @AppStorage("hasFixedLanguage") private var hasFixedLanguage: Bool = false
-	@AppStorage("userWantsAds") private var userWantsAds: Bool = true
+	@AppStorage("hasFixedLanguage") private var hasFixedLanguage: Bool = false
 	@AppStorage("userWantsNormalTheme") private var userWantsNormalTheme: Bool = true
 	@AppStorage("userWantsThePhraseNameBack") private var userWantsThePhraseNameBack = false
-    @State var hasFixedDefualtValues: Bool = false
-    @State var hasFixedContextAndFetched: Bool = false
-    @State var didTapPlayDailyWordButton: Bool = false
-    @State var didTapFakePlayDailyWordButton: Bool = false
-    @State var didTapPlayNormalButton: Bool = false
-    @State var didTapInfoButton: Bool = false
-    @State var isShowingAlreadyPlayedAlert: Bool = false
+	@State var hasFixedDefualtValues: Bool = false
+	@State var hasFixedContextAndFetched: Bool = false
+	@State var didTapPlayDailyWordButton: Bool = false
+	@State var didTapFakePlayDailyWordButton: Bool = false
+	@State var didTapPlayNormalButton: Bool = false
+	@State var didTapInfoButton: Bool = false
+	@State var isShowingAlreadyPlayedAlert: Bool = false
 	@State var didTapChangeOfGame: Bool = false
 	@Binding var selection: TabSelection
 	@State var isAllowedToPlayDailyWordAgain: Bool = true
 	@State var isAllowedToChooseGameModeAgain: Bool = true
 	@State var alertItem: AlertItem?
-    
-    var body: some View {
-        GeometryReader { geometry in
-            ScrollView {
-                VStack {
-                    Spacer()
-                    VStack {
+	
+	var body: some View {
+		GeometryReader { geometry in
+			ScrollView {
+				VStack {
+					Spacer()
+					VStack {
 						Text("Number of Letters")
 							.font(.title2).bold()
 							.conditionalShadow(color: .black.opacity(0.4), radius: 4, x: 4, y: 4)
@@ -192,9 +191,9 @@ struct SelectView: View {
 							} else {
 								VStack {
 									NavigationLink(destination: GameView().environmentObject(appManager)) {
-											if let streakEntity = appManager.getNormalStreakEntity(), streakEntity.currentStreak >= 3 {
-												Text("Play Unlimited\n\(streakEntity.currentStreak)🔥")
-													.contentTransition(.numericText(value: Double(streakEntity.currentStreak)))
+										if let streakEntity = appManager.getNormalStreakEntity(), streakEntity.currentStreak >= 3 {
+											Text("Play Unlimited\n\(streakEntity.currentStreak)🔥")
+												.contentTransition(.numericText(value: Double(streakEntity.currentStreak)))
 												.multilineTextAlignment(.center)
 												.lineSpacing(5)
 												.font(.title2).bold()
@@ -246,7 +245,7 @@ struct SelectView: View {
 						if appManager.hasGameStarted() && appManager.selectedGameMode != .normal && !self.isAllowedToChooseGameModeAgain {
 							if let streakEntity = appManager.getNormalStreakEntity(), streakEntity.currentStreak >= 3 {
 								VStack {
-										Text("Play Unlimited\n\(streakEntity.currentStreak)🔥")
+									Text("Play Unlimited\n\(streakEntity.currentStreak)🔥")
 										.multilineTextAlignment(.center)
 										.lineSpacing(5)
 										.font(.title2).bold()
@@ -296,7 +295,7 @@ struct SelectView: View {
 							VStack {
 								NavigationLink(destination: GameView().environmentObject(appManager)) {
 									if let streakEntity = appManager.getNormalStreakEntity(), streakEntity.currentStreak >= 3 {
-											Text("Play Unlimited\n\(streakEntity.currentStreak)🔥")
+										Text("Play Unlimited\n\(streakEntity.currentStreak)🔥")
 											.contentTransition(.numericText(value: Double(streakEntity.currentStreak)))
 											.multilineTextAlignment(.center)
 											.lineSpacing(5)
@@ -340,9 +339,9 @@ struct SelectView: View {
 							}
 							.padding(.bottom, 25)
 						}
-//						.padding(.bottom, 25)
+						//						.padding(.bottom, 25)
 					}
-                    
+					
 					if #available(iOS 26.0, *) {
 						VStack {
 							if appManager.checkIfDailyWordIsAlreadyPlayed() && !self.isAllowedToPlayDailyWordAgain || appManager.hasGameStarted() && appManager.selectedGameMode != .dailyWord && !self.isAllowedToChooseGameModeAgain {
@@ -405,7 +404,7 @@ struct SelectView: View {
 							} else {
 								NavigationLink(destination: GameView().environmentObject(appManager)) {
 									if let streakEntity = appManager.getStreakEntity(), streakEntity.currentStreak >= 3, streakEntity.isAlive {
-											Text("Play Daily Wordly\n\(streakEntity.currentStreak)🔥")
+										Text("Play Daily Wordly\n\(streakEntity.currentStreak)🔥")
 											.multilineTextAlignment(.center)
 											.lineSpacing(5)
 											.font(.title2).bold()
@@ -448,9 +447,9 @@ struct SelectView: View {
 					} else {
 						VStack {
 							if appManager.checkIfDailyWordIsAlreadyPlayed() && !self.isAllowedToPlayDailyWordAgain || appManager.hasGameStarted() && appManager.selectedGameMode != .dailyWord && !self.isAllowedToChooseGameModeAgain {
-										if let streakEntity = appManager.getStreakEntity(), streakEntity.currentStreak >= 3, streakEntity.isAlive {
+								if let streakEntity = appManager.getStreakEntity(), streakEntity.currentStreak >= 3, streakEntity.isAlive {
 									VStack {
-											Text("Play Daily Wordly\n\(streakEntity.currentStreak)🔥")
+										Text("Play Daily Wordly\n\(streakEntity.currentStreak)🔥")
 											.multilineTextAlignment(.center)
 											.lineSpacing(5)
 											.font(.title2).bold()
@@ -548,7 +547,7 @@ struct SelectView: View {
 						}
 						.padding(.bottom, 10)
 					}
-                }
+				}
 				.alert(item: self.$alertItem) { item in
 					if let primaryButton = item.primaryButton, let secondaryButton = item.secondaryButton {
 						Alert(title: item.title, message: item.message, primaryButton: primaryButton, secondaryButton: secondaryButton)
@@ -556,15 +555,15 @@ struct SelectView: View {
 						Alert(title: item.title)
 					}
 				}
-                .padding(20)
-                .background {
-                    RoundedRectangle(cornerRadius: 25)
-                        .foregroundStyle(Color(uiColor: .secondarySystemBackground))
-                }
-                .padding(.horizontal)
-            }
-			.safeAreaPadding(.bottom, (UIDevice.current.userInterfaceIdiom == .pad || UIDevice.current.userInterfaceIdiom == .mac) && self.userWantsAds ? 80 : (self.userWantsAds ? 54 : 0))
-            .toolbar {
+				.padding(20)
+				.background {
+					RoundedRectangle(cornerRadius: 25)
+						.foregroundStyle(Color(uiColor: .secondarySystemBackground))
+				}
+				.padding(.horizontal)
+			}
+			.safeAreaPadding(.bottom, adManager.isAdsReady ? (UIDevice.current.userInterfaceIdiom == .pad || UIDevice.current.userInterfaceIdiom == .mac ? 80 : 54) : 0)
+			.toolbar {
 				ToolbarItem(placement: .navigationBarTrailing) {
 					NavigationLink(destination: Info().environmentObject(appManager).environmentObject(appState)) {
 						Image(systemName: "info")
@@ -576,8 +575,8 @@ struct SelectView: View {
 					})
 					.sensoryFeedback(.selection, trigger: self.didTapInfoButton)
 				}
-            }
-        }
+			}
+		}
 		.navigationTitle(self.userWantsThePhraseNameBack ? "The Phrase" : "Wordly")
 		.onChange(of: appState.navigateHomeTrigger) {
 			if appState.selectedLanguageName != nil {
@@ -618,25 +617,25 @@ struct SelectView: View {
 		.onChange(of: appManager.numberOfLetters) {
 			self.isAllowedToChooseGameModeAgain = true
 		}
-        .onAppear {
+		.onAppear {
 			appManager.message = ""
 			self.isAllowedToPlayDailyWordAgain = false
-            if !self.hasFixedContextAndFetched {
-                appManager.modelContext = modelContext
-                appManager.gameRecordManager = GameRecordManager(context: modelContext)
-                appManager.fetchGameRecords()
-                self.hasFixedContextAndFetched = true
-            }
-            
-            if !self.hasFixedDefualtValues {
-                appManager.setDefaultValues()
-                self.hasFixedDefualtValues = true
-            }
-            
-            if !self.hasFixedLanguage {
-                appManager.fixLanguageBasedOnLocale()
-                self.hasFixedLanguage = true
-            }
+			if !self.hasFixedContextAndFetched {
+				appManager.modelContext = modelContext
+				appManager.gameRecordManager = GameRecordManager(context: modelContext)
+				appManager.fetchGameRecords()
+				self.hasFixedContextAndFetched = true
+			}
+			
+			if !self.hasFixedDefualtValues {
+				appManager.setDefaultValues()
+				self.hasFixedDefualtValues = true
+			}
+			
+			if !self.hasFixedLanguage {
+				appManager.fixLanguageBasedOnLocale()
+				self.hasFixedLanguage = true
+			}
 			
 			DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
 				adManager.shouldShowAds = true
@@ -645,8 +644,8 @@ struct SelectView: View {
 				reviewManager.checkForReviewPrompt()
 			}
 			AnalyticsManager.shared.logScreenViewed(screenName: "SelectView")
-        }
-    }
+		}
+	}
 	
 	func setGameAlert() {
 		self.alertItem = AlertItem(title: Text("Discard current Word?"), message: Text("Are you sure that you want to discard your current Word?"), primaryButton: .cancel({
@@ -680,23 +679,23 @@ final class AppState: ObservableObject {
 
 
 struct ConditionalButtonBackground: View {
-    @Environment(\.colorScheme) private var colorScheme
-    @EnvironmentObject var appManager: AppManager
-    @AppStorage("userWantsNormalTheme") private var userWantsNormalTheme: Bool = true
+	@Environment(\.colorScheme) private var colorScheme
+	@EnvironmentObject var appManager: AppManager
+	@AppStorage("userWantsNormalTheme") private var userWantsNormalTheme: Bool = true
 	var opacity: Double = 1.0
 	
-    
-    var body: some View {
-        if !self.userWantsNormalTheme && self.colorScheme == .dark {
-            RoundedRectangle(cornerRadius: 15)
-                .foregroundStyle(appManager.gradient.opacity(self.opacity))
-                .gradientShadow(gradient: appManager.shadowGradient, radius: 3, x: 0, y: 0)
-            
-        } else {
-            RoundedRectangle(cornerRadius: 15)
+	
+	var body: some View {
+		if !self.userWantsNormalTheme && self.colorScheme == .dark {
+			RoundedRectangle(cornerRadius: 15)
+				.foregroundStyle(appManager.gradient.opacity(self.opacity))
+				.gradientShadow(gradient: appManager.shadowGradient, radius: 3, x: 0, y: 0)
+			
+		} else {
+			RoundedRectangle(cornerRadius: 15)
 				.foregroundStyle(Color.green.opacity(self.opacity))
-        }
-    }
+		}
+	}
 }
 
 struct ConditionalButtonBackground2: View {
@@ -721,16 +720,16 @@ struct ConditionalButtonBackground2: View {
 
 
 struct ConditionalGlassEffect: ViewModifier {
-    func body(content: Content) -> some View {
-        if #available(iOS 26.0, *) {
-            content
+	func body(content: Content) -> some View {
+		if #available(iOS 26.0, *) {
+			content
 				.tint(.primary)
-                .glassEffect(.regular.interactive())
-        } else {
-            content
+				.glassEffect(.regular.interactive())
+		} else {
+			content
 				.tint(.primary)
-        }
-    }
+		}
+	}
 }
 
 struct ConditionalPadding: ViewModifier {
@@ -745,41 +744,41 @@ struct ConditionalPadding: ViewModifier {
 }
 
 struct ConditionalShadow: ViewModifier {
-    @Environment(\.colorScheme) var colorScheme: ColorScheme
-    @AppStorage("appTheme") private var appTheme: AppTheme = .dark
-    let color: Color
-    let radius: CGFloat
-    let x: CGFloat
-    let y: CGFloat
-    
-    func body(content: Content) -> some View {
-        Group {
-            if appTheme == .dark || colorScheme == .dark {
-                content
-                    .shadow(color: color, radius: radius, x: x, y: y)
-            } else {
-                content
-            }
-        }
-    }
+	@Environment(\.colorScheme) var colorScheme: ColorScheme
+	@AppStorage("appTheme") private var appTheme: AppTheme = .dark
+	let color: Color
+	let radius: CGFloat
+	let x: CGFloat
+	let y: CGFloat
+	
+	func body(content: Content) -> some View {
+		Group {
+			if appTheme == .dark || colorScheme == .dark {
+				content
+					.shadow(color: color, radius: radius, x: x, y: y)
+			} else {
+				content
+			}
+		}
+	}
 }
 
 extension View {
-    func conditionalShadow(
-        color: Color = .black.opacity(0.33),
-        radius: CGFloat = 4,
-        x: CGFloat = 4,
-        y: CGFloat = 4
-    ) -> some View {
-        modifier(
-            ConditionalShadow(
-                color: color,
-                radius: radius,
-                x: x,
-                y: y
-            )
-        )
-    }
+	func conditionalShadow(
+		color: Color = .black.opacity(0.33),
+		radius: CGFloat = 4,
+		x: CGFloat = 4,
+		y: CGFloat = 4
+	) -> some View {
+		modifier(
+			ConditionalShadow(
+				color: color,
+				radius: radius,
+				x: x,
+				y: y
+			)
+		)
+	}
 }
 
 

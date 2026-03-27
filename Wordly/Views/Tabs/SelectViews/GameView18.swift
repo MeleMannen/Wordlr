@@ -15,8 +15,6 @@ struct GameView18: View {
 	@Environment(\.dismiss) var dismiss
 	@Environment(\.colorScheme) private var colorScheme
 	@AppStorage("userWantsNormalTheme") private var userWantsNormalTheme: Bool = true
-	@AppStorage("userWantsAds") var userWantsAds: Bool = true
-	
 	@State var didTapSubmitButton: Bool = false
 	@State var didTapBackButton: Bool = false
 	@State var didTapResetButton: Bool = false
@@ -540,10 +538,8 @@ struct GameView18: View {
 			adManager.currentSelectView = .selectView
 		}
 		.task {
-			if userWantsAds {
-				await appManager.loadAd()
-				appManager.hasLoadedAd = true
-			}
+			await appManager.loadAd()
+			appManager.hasLoadedAd = true
 		}
 	}
 }
