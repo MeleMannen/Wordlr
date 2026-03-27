@@ -11,6 +11,7 @@ import GoogleMobileAds
 import UserMessagingPlatform
 import AppTrackingTransparency
 import TipKit
+import FirebaseAnalytics
 
 struct TabsView: View {
 	@Environment(\.scenePhase) private var scenePhase
@@ -172,10 +173,26 @@ final class AdManager {
 		ConsentInformation.shared.privacyOptionsRequirementStatus == .required
 	}
 	
+	func updateFirebaseAnalyticsConsent() {
+		let purposeConsents = UserDefaults.standard.string(forKey: "IABTCF_PurposeConsents") ?? ""
+		let hasConsentForPurpose1 = purposeConsents.first == "1"
+		let status = ConsentInformation.shared.consentStatus
+		
+		if status == .notRequired || hasConsentForPurpose1 {
+			Analytics.setAnalyticsCollectionEnabled(true)
+			print("Analytics enabled")
+		} else {
+			Analytics.setAnalyticsCollectionEnabled(false)
+			print("Analytics disabled")
+		}
+	}
+	
 	func prepareAds() async {
 		isAdsReady = false
 		do {
 			try await gatherConsent()
+			
+			updateFirebaseAnalyticsConsent()
 			
 			guard canRequestAds else {
 				print("Ads cannot be requested yet.")
@@ -207,10 +224,12 @@ final class AdManager {
 				} else {
 					continuation.resume()
 				}
+				print("Done with consent")
 			}
 		}
 		
 		try await ConsentForm.loadAndPresentIfRequired(from: nil)
+		print("Done with consent2")
 	}
 	
 	func requestTrackingAuthorizationIfNeeded() async -> ATTrackingManager.AuthorizationStatus {
@@ -244,6 +263,7 @@ final class AdManager {
 	
 	func presentPrivacyOptionsForm() async throws {
 		try await ConsentForm.presentPrivacyOptionsForm(from: nil)
+		updateFirebaseAnalyticsConsent()
 	}
 	
 	func presentAdInspector(from viewController: UIViewController? = nil) {

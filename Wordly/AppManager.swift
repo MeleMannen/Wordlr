@@ -150,9 +150,9 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
         
         if let count = dailyWords?.wordGroups["\(numberOfLetters)"]?.count {
             let dailyWordIndex = daysSinceStart % count
-            return self.dailyWords?.wordGroups["\(numberOfLetters)"]?[dailyWordIndex] ?? "MELEN"
+            return self.dailyWords?.wordGroups["\(numberOfLetters)"]?[dailyWordIndex] ?? "PIANO"
         } else {
-            return "MELEN"
+            return "PIANO"
         }
     }
 
@@ -174,7 +174,7 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
             return randomWord
         }
 
-        return self.words?.wordGroups["\(numberOfLetters)"]?.randomElement() ?? "MELEN"
+        return self.words?.wordGroups["\(numberOfLetters)"]?.randomElement() ?? "PIANO"
     }
     
     

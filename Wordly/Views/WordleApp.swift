@@ -8,6 +8,7 @@
 import SwiftUI
 import SwiftData
 import FirebaseCore
+import FirebaseAnalytics
 
 @main
 struct WordleApp: App {
@@ -18,6 +19,7 @@ struct WordleApp: App {
 	
 	init() {
 		FirebaseApp.configure()
+		Analytics.setAnalyticsCollectionEnabled(false)
 	}
 	
 	
