@@ -33,7 +33,7 @@ struct FilterOptionsView: View {
 					.tint(.green)
 					
 					TextField("Search for a Word", text: $appManager.searchedWord)
-						.textFieldStyle(ThePhraseTextFieldStyle())
+						.textFieldStyle(WordlyTextFieldStyle())
 						.focused($focusedField, equals: .search)
 						.simultaneousGesture(
 							TapGesture()
@@ -60,7 +60,7 @@ struct FilterOptionsView: View {
 					.tint(.green)
 					
 					TextField("Enter Starting Letters", text: $appManager.startsWithFilter)
-						.textFieldStyle(ThePhraseTextFieldStyle())
+						.textFieldStyle(WordlyTextFieldStyle())
 						.focused($focusedField, equals: .startsWith)
 						.simultaneousGesture(
 							TapGesture()
@@ -89,7 +89,7 @@ struct FilterOptionsView: View {
 					.tint(.green)
 					
 					TextField("Enter Ending Letters", text: $appManager.endsWithFilter)
-						.textFieldStyle(ThePhraseTextFieldStyle())
+						.textFieldStyle(WordlyTextFieldStyle())
 						.focused($focusedField, equals: .endsWith)
 						.simultaneousGesture(
 							TapGesture()
@@ -316,7 +316,7 @@ struct FilterOptionsView: View {
 	}
 }
 
-struct ThePhraseTextFieldStyle: TextFieldStyle {
+struct WordlyTextFieldStyle: TextFieldStyle {
 	func _body(configuration: TextField<Self._Label>) -> some View {
 		if #available(iOS 26.0, *) {
 			configuration
