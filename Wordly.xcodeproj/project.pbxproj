@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		6344F4FF2EB9502300948552 /* KeyPress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6344F4FE2EB9500D00948552 /* KeyPress.swift */; };
+		63B1E1362F795EA500F36987 /* AdManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B1E1352F795EA500F36987 /* AdManager.swift */; };
 		63B9B4152EA58ED2008483FB /* FilterOptionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B9B3F72EA58ED2008483FB /* FilterOptionsView.swift */; };
 		63B9B4162EA58ED2008483FB /* GameTile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B9B3F82EA58ED2008483FB /* GameTile.swift */; };
 		63B9B4172EA58ED2008483FB /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B9B40E2EA58ED2008483FB /* NotificationManager.swift */; };
@@ -61,6 +62,7 @@
 		6344F4FE2EB9500D00948552 /* KeyPress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyPress.swift; sourceTree = "<group>"; };
 		6382E3BC2D12FE0500B61353 /* Wordly.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Wordly.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		63B0C6502E056A710047E4E9 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS26.0.sdk/System/Library/Frameworks/WebKit.framework; sourceTree = DEVELOPER_DIR; };
+		63B1E1352F795EA500F36987 /* AdManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdManager.swift; sourceTree = "<group>"; };
 		63B9B3DD2EA58ED2008483FB /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		63B9B3DF2EA58ED2008483FB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		63B9B3E02EA58ED2008483FB /* dailyEnglishWords.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = dailyEnglishWords.json; sourceTree = "<group>"; };
@@ -251,6 +253,7 @@
 				63BF73DE2F447CCA0065D40B /* AnalyticsManager.swift */,
 				63B9B4092EA58ED2008483FB /* AppObjects.swift */,
 				63B9B4082EA58ED2008483FB /* AppManager.swift */,
+				63B1E1352F795EA500F36987 /* AdManager.swift */,
 				63B9B40A2EA58ED2008483FB /* DefinitionManager.swift */,
 				63B9B40B2EA58ED2008483FB /* GameRecordManager.swift */,
 				63B9B40E2EA58ED2008483FB /* NotificationManager.swift */,
@@ -385,6 +388,7 @@
 				63B9B42B2EA58ED2008483FB /* AppObjects.swift in Sources */,
 				63B9B42C2EA58ED2008483FB /* TabsView.swift in Sources */,
 				63B9B42D2EA58ED2008483FB /* StatsView.swift in Sources */,
+				63B1E1362F795EA500F36987 /* AdManager.swift in Sources */,
 				63B9B42E2EA58ED2008483FB /* SelectView.swift in Sources */,
 				63B9B42F2EA58ED2008483FB /* HistoryView.swift in Sources */,
 				63B9B4312EA58ED2008483FB /* FilterView.swift in Sources */,

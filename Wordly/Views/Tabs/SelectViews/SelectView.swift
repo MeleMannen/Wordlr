@@ -190,7 +190,7 @@ struct SelectView: View {
 								
 							} else {
 								VStack {
-									NavigationLink(destination: GameView().environmentObject(appManager)) {
+									NavigationLink(destination: GameView().environmentObject(appManager).environment(adManager)) {
 										if let streakEntity = appManager.getNormalStreakEntity(), streakEntity.currentStreak >= 3 {
 											Text("Play Unlimited\n\(streakEntity.currentStreak)🔥")
 												.contentTransition(.numericText(value: Double(streakEntity.currentStreak)))
@@ -293,7 +293,7 @@ struct SelectView: View {
 							
 						} else {
 							VStack {
-								NavigationLink(destination: GameView().environmentObject(appManager)) {
+								NavigationLink(destination: GameView().environmentObject(appManager).environment(adManager)) {
 									if let streakEntity = appManager.getNormalStreakEntity(), streakEntity.currentStreak >= 3 {
 										Text("Play Unlimited\n\(streakEntity.currentStreak)🔥")
 											.contentTransition(.numericText(value: Double(streakEntity.currentStreak)))
@@ -402,7 +402,7 @@ struct SelectView: View {
 								
 								
 							} else {
-								NavigationLink(destination: GameView().environmentObject(appManager)) {
+								NavigationLink(destination: GameView().environmentObject(appManager).environment(adManager)) {
 									if let streakEntity = appManager.getStreakEntity(), streakEntity.currentStreak >= 3, streakEntity.isAlive {
 										Text("Play Daily Wordly\n\(streakEntity.currentStreak)🔥")
 											.multilineTextAlignment(.center)
@@ -505,7 +505,7 @@ struct SelectView: View {
 								
 								
 							} else {
-								NavigationLink(destination: GameView().environmentObject(appManager)) {
+								NavigationLink(destination: GameView().environmentObject(appManager).environment(adManager)) {
 									if let streakEntity = appManager.getStreakEntity(), streakEntity.currentStreak >= 3, streakEntity.isAlive {
 										Text("Play Daily Wordly\n\(streakEntity.currentStreak)🔥")
 											.multilineTextAlignment(.center)
