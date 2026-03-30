@@ -16,13 +16,58 @@ final class NotificationManager {
 		static let languageName = "languageName"
 		static let numberOfLetters = "numberOfLetters"
 	}
+
+	private struct ReminderSnapshot {
+		let id: UUID
+		let language: LanguageSelection
+		let numberOfLetters: Int
+		let timeToFire: Date
+	}
+
+	private struct ReminderSchedulingContext {
+		let playedDayIdentifiers: Set<String>
+		let currentStreak: Int
+	}
+
+	private static var dailyWordCalendar: Calendar {
+		var calendar = Calendar(identifier: .gregorian)
+		calendar.timeZone = TimeZone(identifier: "CET")!
+		return calendar
+	}
+
+	private static func performOnMain<T>(_ work: @MainActor () throws -> T) rethrows -> T {
+		if Thread.isMainThread {
+			return try MainActor.assumeIsolated {
+				try work()
+			}
+		}
+
+		return try DispatchQueue.main.sync {
+			try MainActor.assumeIsolated {
+				try work()
+			}
+		}
+	}
 	
 	static func fetchReminders(context: ModelContext) -> [DailyWordReminder] {
 		do {
-			let reminders = try context.fetch(FetchDescriptor<DailyWordReminder>())
+			let reminders = try performOnMain {
+				try context.fetch(FetchDescriptor<DailyWordReminder>())
+			}
 			return reminders
 		} catch let error {
 			print("Error fetching reminders: \(error.localizedDescription)")
+		}
+		return []
+	}
+
+	static func fetchGameRecords(context: ModelContext) -> [GameRecordEntity] {
+		do {
+			return try performOnMain {
+				try context.fetch(FetchDescriptor<GameRecordEntity>())
+			}
+		} catch let error {
+			print("Error fetching game records: \(error.localizedDescription)")
 		}
 		return []
 	}
@@ -30,69 +75,133 @@ final class NotificationManager {
 	static func requestPermission(completion: @escaping (Result<Bool, Error>) -> Void) {
 		AnalyticsManager.shared.logDidTapActivateNotificationsEvent()
 		UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { granted, error in
-			if granted || error == nil {
-				AnalyticsManager.shared.logDidActivateNotificationsEvent()
-				completion(.success(true))
-			} else {
-				print(granted ? "Notification permission granted" : "Notification permission denied: \(error?.localizedDescription ?? "No error info")")
-				completion(.failure(error ?? NSError(domain: "NotificationPermission", code: 1, userInfo: [NSLocalizedDescriptionKey: "Notification permission denied"])))
+			DispatchQueue.main.async {
+				if granted || error == nil {
+					AnalyticsManager.shared.logDidActivateNotificationsEvent()
+					completion(.success(true))
+				} else {
+					print(granted ? "Notification permission granted" : "Notification permission denied: \(error?.localizedDescription ?? "No error info")")
+					completion(.failure(error ?? NSError(domain: "NotificationPermission", code: 1, userInfo: [NSLocalizedDescriptionKey: "Notification permission denied"])))
+				}
 			}
-			
 		}
 	}
 	
-	private static func requestId(for reminder: DailyWordReminder, on date: Date) -> String {
+	private static func reminderSnapshot(for reminder: DailyWordReminder) -> ReminderSnapshot {
+		performOnMain {
+			ReminderSnapshot(
+				id: reminder.id,
+				language: reminder.language,
+				numberOfLetters: reminder.numberOfLetters,
+				timeToFire: reminder.timeToFire
+			)
+		}
+	}
+
+	private static func requestId(for reminderId: UUID, on date: Date) -> String {
 		let comps = Calendar.current.dateComponents([.year, .month, .day], from: date)
 		let y = comps.year ?? 0, m = comps.month ?? 0, d = comps.day ?? 0
-		return "daily-word-reminder-\(reminder.id.uuidString)-\(y)-\(m)-\(d)"
+		return "daily-word-reminder-\(reminderId.uuidString)-\(y)-\(m)-\(d)"
+	}
+
+	private static func makeSchedulingContext(for reminder: ReminderSnapshot, context: ModelContext) -> ReminderSchedulingContext {
+		let calendar = dailyWordCalendar
+		let gameRecords = fetchGameRecords(context: context)
+		let playedDayIdentifiers = Set<String>(
+			gameRecords.compactMap { record in
+				guard
+					record.gameRecord.mode == .dailyWord,
+					record.gameRecord.language == reminder.language,
+					record.gameRecord.numberOfLetters == reminder.numberOfLetters
+				else {
+					return nil
+				}
+
+				return dayIdentifier(for: record.gameRecord.date, calendar: calendar)
+			}
+		)
+		let currentStreak = GameRecordStreakCalculator.dailySummary(
+			records: gameRecords,
+			language: reminder.language,
+			numberOfLetters: reminder.numberOfLetters
+		).currentStreak
+		return ReminderSchedulingContext(
+			playedDayIdentifiers: playedDayIdentifiers,
+			currentStreak: currentStreak
+		)
+	}
+
+	private static func dayIdentifier(for date: Date, calendar: Calendar) -> String {
+		let comps = calendar.dateComponents([.year, .month, .day], from: date)
+		let year = comps.year ?? 0
+		let month = comps.month ?? 0
+		let day = comps.day ?? 0
+		return "\(year)-\(month)-\(day)"
+	}
+
+	private static func didPlayDailyWord(on date: Date, playedDayIdentifiers: Set<String>) -> Bool {
+		playedDayIdentifiers.contains(dayIdentifier(for: date, calendar: dailyWordCalendar))
+	}
+
+	private static func notificationBody(for reminder: ReminderSnapshot, streak: Int?) -> String {
+		if let streak, streak >= 3 {
+			return "Remember to play today's \(reminder.numberOfLetters) Letter, \(reminder.language.localizedName) Daily Wordly to not lose your \(streak)🔥 day streak."
+		}
+
+		return String(
+			format: NSLocalizedString("Don't forget to complete today's %d Letter, %@ Daily Wordly!", comment: "Body for Daily Wordly reminder notification"),
+			reminder.numberOfLetters,
+			reminder.language.localizedName
+		)
 	}
 	
-	static func scheduleDailyWordReminder(reminder: DailyWordReminder, daysAhead: Int = 7) {
+	static func scheduleDailyWordReminder(reminder: DailyWordReminder, context: ModelContext? = nil, daysAhead: Int = 7) {
+		let snapshot = reminderSnapshot(for: reminder)
+		let schedulingContext = context.map { makeSchedulingContext(for: snapshot, context: $0) }
+			?? ReminderSchedulingContext(playedDayIdentifiers: [], currentStreak: 0)
 		let center = UNUserNotificationCenter.current()
 		
 		center.getPendingNotificationRequests { requests in
-			let existingIds = Set(
-				requests
-					.filter { $0.identifier.contains(reminder.id.uuidString) }
-					.map { $0.identifier }
-			)
+			let now = Date()
+			let reminderRequests = requests.filter { $0.identifier.contains(snapshot.id.uuidString) }
+			let reminderRequestIds = reminderRequests.map(\.identifier)
+			if !reminderRequestIds.isEmpty {
+				center.removePendingNotificationRequests(withIdentifiers: reminderRequestIds)
+			}
 			
 			let title = NSLocalizedString("Daily Wordly Reminder", comment: "Title for Daily Wordly reminder notification")
-			let body = String(
-				format: NSLocalizedString("Don't forget to complete today's %d Letter, %@ Daily Wordly!", comment: "Body for Daily Wordly reminder notification"),
-				reminder.numberOfLetters,
-				reminder.language.localizedName
-			)
-			
-			
-			let content = UNMutableNotificationContent()
-			content.title = title
-			content.body = body
-			content.sound = .default
-			content.userInfo = [
-				PayloadKeys.reminderId: reminder.id.uuidString,
-				PayloadKeys.languageName: reminder.language.rawValue,
-				PayloadKeys.numberOfLetters: reminder.numberOfLetters
-			]
-			
 			var requestsToAdd: [UNNotificationRequest] = []
+			var didScheduleFirstEligibleReminder = false
 			
 			for day in 0...daysAhead {
 				guard let baseDate = Calendar.current.date(byAdding: .day, value: day, to: Date()) else { continue }
-				let timeComps = Calendar.current.dateComponents([.hour, .minute], from: reminder.timeToFire)
+				let timeComps = Calendar.current.dateComponents([.hour, .minute], from: snapshot.timeToFire)
 				guard let hour = timeComps.hour, let minute = timeComps.minute else { continue }
 				
 				guard let fireDate = Calendar.current.date(bySettingHour: hour, minute: minute, second: 0, of: baseDate) else { continue }
+				if fireDate <= now { continue }
+				if didPlayDailyWord(on: fireDate, playedDayIdentifiers: schedulingContext.playedDayIdentifiers) { continue }
 				
-				let id = requestId(for: reminder, on: fireDate)
-				// Skip if already scheduled for this reminder on that day.
-				if existingIds.contains(id) { continue }
+				let id = requestId(for: snapshot.id, on: fireDate)
+				let content = UNMutableNotificationContent()
+				content.title = title
+				content.body = notificationBody(
+					for: snapshot,
+					streak: (!didScheduleFirstEligibleReminder && schedulingContext.currentStreak >= 3) ? schedulingContext.currentStreak : nil
+				)
+				content.sound = .default
+				content.userInfo = [
+					PayloadKeys.reminderId: snapshot.id.uuidString,
+					PayloadKeys.languageName: snapshot.language.rawValue,
+					PayloadKeys.numberOfLetters: snapshot.numberOfLetters
+				]
 				
 				let comps = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: fireDate)
 				let trigger = UNCalendarNotificationTrigger(dateMatching: comps, repeats: false)
 				
 				let req = UNNotificationRequest(identifier: id, content: content, trigger: trigger)
 				requestsToAdd.append(req)
+				didScheduleFirstEligibleReminder = true
 			}
 			
 			for req in requestsToAdd {
@@ -114,16 +223,17 @@ final class NotificationManager {
 	}
 	
 	static func cancelTodayNotification(reminder: DailyWordReminder) {
-		let id = requestId(for: reminder, on: Date())
+		let id = requestId(for: reminder.id, on: Date())
 		let center = UNUserNotificationCenter.current()
 		center.removePendingNotificationRequests(withIdentifiers: [id])
 	}
 	
 	static func cancelDailyWordReminder(reminder: DailyWordReminder) {
+		let reminderId = reminder.id.uuidString
 		let center = UNUserNotificationCenter.current()
 		center.getPendingNotificationRequests { requests in
 			let ids = requests
-				.filter { $0.identifier.contains(reminder.id.uuidString) }
+				.filter { $0.identifier.contains(reminderId) }
 				.map { $0.identifier }
 			
 			print("Cancelling notifications with IDs: \(ids)")
@@ -136,10 +246,11 @@ final class NotificationManager {
 	}
 	
 	static func cancelDailyWordReminder(reminder: DailyWordReminder, withCompletionHandler completion: @escaping () -> Void) {
+		let reminderId = reminder.id.uuidString
 		let center = UNUserNotificationCenter.current()
 		center.getPendingNotificationRequests { requests in
 			let ids = requests
-				.filter { $0.identifier.contains(reminder.id.uuidString) }
+				.filter { $0.identifier.contains(reminderId) }
 				.map { $0.identifier }
 			
 			print("Cancelling notifications with IDs: \(ids)")

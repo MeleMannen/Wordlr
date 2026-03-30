@@ -370,7 +370,7 @@ struct SettingsView: View {
 	
 	private func scheduleNotification(reminder: DailyWordReminder) {
 		if notificationsEnabled {
-			NotificationManager.scheduleDailyWordReminder(reminder: reminder)
+			NotificationManager.scheduleDailyWordReminder(reminder: reminder, context: context)
 		}
 	}
 }

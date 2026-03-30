@@ -235,8 +235,8 @@ enum GameMode: String, Codable, CaseIterable, Identifiable {
     
     var localizedName: String {
         switch self {
-            case .dailyWord: return NSLocalizedString("game_mode_daily_word", comment: "Daily Word Mode")
-            case .normal: return NSLocalizedString("game_mode_unlimited", comment: "Unlimited Mode")
+            case .dailyWord: return NSLocalizedString("game_mode_daily_word", comment: "Daily Wordly Mode")
+            case .normal: return NSLocalizedString("game_mode_unlimited", comment: "Free Play Mode")
             case .both: return NSLocalizedString("game_mode_both", comment: "Both Modes")
         }
     }

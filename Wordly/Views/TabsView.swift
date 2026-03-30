@@ -97,13 +97,13 @@ struct TabsView: View {
 						switch result {
 							case .success(let granted):
 								if granted {
-									print("Notification permission granted.")
-									UNUserNotificationCenter.current().delegate = NotificationsDelegate.shared
-									let reminders = NotificationManager.fetchReminders(context: modelContext)
-									for reminder in reminders {
-										NotificationManager.scheduleDailyWordReminder(reminder: reminder)
-									}
-								} else {
+										print("Notification permission granted.")
+										UNUserNotificationCenter.current().delegate = NotificationsDelegate.shared
+										let reminders = NotificationManager.fetchReminders(context: modelContext)
+										for reminder in reminders {
+											NotificationManager.scheduleDailyWordReminder(reminder: reminder, context: modelContext)
+										}
+									} else {
 									print("Notification permission denied.")
 									UserDefaults.standard.set(false, forKey: "notificationsEnabled")
 								}

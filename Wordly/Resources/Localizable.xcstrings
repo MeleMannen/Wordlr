@@ -576,6 +576,38 @@
         }
       }
     },
+    "Daily Wordly" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Palabra Diaria"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dagens Ord"
+          }
+        }
+      }
+    },
+    "Daily Wordly - %lld🔥" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Palabra Diaria - %lld🔥"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dagens Ord - %lld🔥"
+          }
+        }
+      }
+    },
     "Daily Wordly Reminder" : {
       "comment" : "Title for Daily Wordly reminder notification",
       "localizations" : {
@@ -588,7 +620,7 @@
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Daglig Ord Påminnelse"
+            "value" : "Dagens Ord Påminnelse"
           }
         }
       }
@@ -604,7 +636,7 @@
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Daglig Ord Påminnelser"
+            "value" : "Dagens Ord Påminnelser"
           }
         }
       }
@@ -621,7 +653,7 @@
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Daglig Ord Streaks 🔥"
+            "value" : "Dagens Ord Streaks 🔥"
           }
         }
       }
@@ -637,7 +669,7 @@
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Daglig Ord Tema"
+            "value" : "Dagens Ord Tema"
           }
         }
       }
@@ -790,7 +822,7 @@
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ikke glem å spille dagens %1$d Bokstav, %2$@ Daglig Ord!"
+            "value" : "Ikke glem å spille dagens %1$d Bokstav, %2$@ Dagens Ord!"
           }
         }
       }
@@ -806,7 +838,7 @@
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Rediger Daglig Ord Påminnelser"
+            "value" : "Rediger Dagens Ord Påminnelser"
           }
         }
       }
@@ -990,6 +1022,55 @@
         }
       }
     },
+    "Free Play" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jugar Libre"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spill Fritt"
+          }
+        }
+      }
+    },
+    "Free Play - %lld🔥" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jugar Libre - %lld🔥"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spill Fritt - %lld🔥"
+          }
+        }
+      }
+    },
+    "Free Play Streaks 🔥" : {
+      "comment" : "Title for free play streaks chart in stats view",
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rachas de Jugar Libre 🔥"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spill Fritt Streaks 🔥"
+          }
+        }
+      }
+    },
     "Game (Default)" : {
       "localizations" : {
         "es" : {
@@ -1030,12 +1111,12 @@
       }
     },
     "game_mode_daily_word" : {
-      "comment" : "Daily Word Mode",
+      "comment" : "Daily Wordly Mode",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Daily Word"
+            "value" : "Daily Wordly"
           }
         },
         "es" : {
@@ -1047,30 +1128,30 @@
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Daglig Ord"
+            "value" : "Dagens Ord"
           }
         }
       }
     },
     "game_mode_unlimited" : {
-      "comment" : "Unlimited Mode",
+      "comment" : "Free Play Mode",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Unlimited"
+            "value" : "Free Play"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ilimitado"
+            "value" : "Jugar Libre"
           }
         },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ubegrenset"
+            "value" : "Spill Fritt"
           }
         }
       }
@@ -1173,6 +1254,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Grønn betyr at bokstaven er i ordet og at det på riktig plass."
+          }
+        }
+      }
+    },
+    "Guess the Letter" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Adivina la Letra"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gjett Bokstaven"
           }
         }
       }
@@ -2015,38 +2112,6 @@
         }
       }
     },
-    "Play Daily Wordly" : {
-      "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Jugar Palabra Diaria"
-          }
-        },
-        "nb" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Spill Daglig Ord"
-          }
-        }
-      }
-    },
-    "Play Daily Wordly\n%lld🔥" : {
-      "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Jugar Palabra Diaria\n%lld🔥"
-          }
-        },
-        "nb" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Spill Daglig Ord\n%lld🔥"
-          }
-        }
-      }
-    },
     "Play Something Else" : {
       "localizations" : {
         "en" : {
@@ -2065,38 +2130,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Spill Noe Annet"
-          }
-        }
-      }
-    },
-    "Play Unlimited" : {
-      "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Jugar Ilimitado"
-          }
-        },
-        "nb" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Spill Ubegrenset"
-          }
-        }
-      }
-    },
-    "Play Unlimited\n%lld🔥" : {
-      "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Jugar Ilimitado\n%lld🔥"
-          }
-        },
-        "nb" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Spill Ubegrenset\n%lld🔥"
           }
         }
       }
@@ -2840,23 +2873,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Prøv å gjette et ord først."
-          }
-        }
-      }
-    },
-    "Unlimited Streaks 🔥" : {
-      "comment" : "Title for daily word streaks chart in stats view",
-      "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ilimitado Rachas 🔥"
-          }
-        },
-        "nb" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ubegrenset Streaks 🔥"
           }
         }
       }

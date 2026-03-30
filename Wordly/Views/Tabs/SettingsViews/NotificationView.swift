@@ -43,13 +43,13 @@ struct NotificationView: View {
 						.opacity(reminder.isEnabled ? 1 : 0.5)
 						.onChange(of: reminder.isEnabled) {
 							if !reminder.isEnabled {
-								NotificationManager.cancelDailyWordReminder(reminder: reminder)
-								AnalyticsManager.shared.logDidDeactivateAReminderEvent()
-							} else {
-								NotificationManager.scheduleDailyWordReminder(reminder: reminder)
-								AnalyticsManager.shared.logDidActivateAReminderEvent()
+									NotificationManager.cancelDailyWordReminder(reminder: reminder)
+									AnalyticsManager.shared.logDidDeactivateAReminderEvent()
+								} else {
+									NotificationManager.scheduleDailyWordReminder(reminder: reminder, context: context)
+									AnalyticsManager.shared.logDidActivateAReminderEvent()
+								}
 							}
-						}
 					}
 					.onDelete(perform: deleteReminder)
 				}
@@ -250,24 +250,24 @@ struct AddReminderView: View {
 	
 	private func saveButtonAction() {
 		print("time to fire: \(self.notificationTime.timeIntervalSince1970)")
-		if self.isEditing, let reminder {
-			NotificationManager.cancelDailyWordReminder(reminder: reminder) {
-				reminder.language = self.notificationLanguage
-				reminder.numberOfLetters = self.notificationLetters
-				reminder.timeToFire = self.notificationTime
-				reminder.isEnabled = true
-				NotificationManager.scheduleDailyWordReminder(reminder: reminder)
-			}
+			if self.isEditing, let reminder {
+				NotificationManager.cancelDailyWordReminder(reminder: reminder) {
+					reminder.language = self.notificationLanguage
+					reminder.numberOfLetters = self.notificationLetters
+					reminder.timeToFire = self.notificationTime
+					reminder.isEnabled = true
+					NotificationManager.scheduleDailyWordReminder(reminder: reminder, context: context)
+				}
 			
 			
 		} else {
 			if self.checkIfReminderExists() {
 				return
+				}
+				let reminder = DailyWordReminder(language: self.notificationLanguage, numberOfLetters: self.notificationLetters, timeToFire: self.notificationTime)
+				context.insert(reminder)
+				NotificationManager.scheduleDailyWordReminder(reminder: reminder, context: context)
 			}
-			let reminder = DailyWordReminder(language: self.notificationLanguage, numberOfLetters: self.notificationLetters, timeToFire: self.notificationTime)
-			context.insert(reminder)
-			NotificationManager.scheduleDailyWordReminder(reminder: reminder)
-		}
 		try? context.save()
 		self.isPresented = false
 		DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {

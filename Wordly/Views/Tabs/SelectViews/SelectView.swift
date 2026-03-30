@@ -144,7 +144,7 @@ struct SelectView: View {
 							if appManager.hasGameStarted() && appManager.selectedGameMode != .normal && !self.isAllowedToChooseGameModeAgain {
 								if let streakEntity = appManager.getNormalStreakEntity(), streakEntity.currentStreak >= 3 {
 									VStack {
-										Text("Play Unlimited\n\(streakEntity.currentStreak)🔥")
+										Text("Free Play - \(streakEntity.currentStreak)🔥")
 											.multilineTextAlignment(.center)
 											.lineSpacing(5)
 											.font(.title2).bold()
@@ -166,7 +166,7 @@ struct SelectView: View {
 									.glassEffect(.regular.interactive(), in: .rect(cornerRadius: 15.0))
 								} else {
 									VStack {
-										Text("Play Unlimited")
+										Text("Free Play")
 											.multilineTextAlignment(.center)
 											.font(.title2).bold()
 											.padding()
@@ -190,9 +190,9 @@ struct SelectView: View {
 								
 							} else {
 								VStack {
-									NavigationLink(destination: GameView().environmentObject(appManager).environment(adManager)) {
+									NavigationLink(destination: GameView().environmentObject(appManager)) {
 										if let streakEntity = appManager.getNormalStreakEntity(), streakEntity.currentStreak >= 3 {
-											Text("Play Unlimited\n\(streakEntity.currentStreak)🔥")
+											Text("Free Play - \(streakEntity.currentStreak)🔥")
 												.contentTransition(.numericText(value: Double(streakEntity.currentStreak)))
 												.multilineTextAlignment(.center)
 												.lineSpacing(5)
@@ -208,7 +208,7 @@ struct SelectView: View {
 													}
 												}
 										} else {
-											Text("Play Unlimited")
+											Text("Free Play")
 												.font(.title2).bold()
 												.padding()
 												.foregroundStyle(.white)
@@ -245,7 +245,7 @@ struct SelectView: View {
 						if appManager.hasGameStarted() && appManager.selectedGameMode != .normal && !self.isAllowedToChooseGameModeAgain {
 							if let streakEntity = appManager.getNormalStreakEntity(), streakEntity.currentStreak >= 3 {
 								VStack {
-									Text("Play Unlimited\n\(streakEntity.currentStreak)🔥")
+									Text("Free Play - \(streakEntity.currentStreak)🔥")
 										.multilineTextAlignment(.center)
 										.lineSpacing(5)
 										.font(.title2).bold()
@@ -268,7 +268,7 @@ struct SelectView: View {
 								.padding(.bottom, 25)
 							} else {
 								VStack {
-									Text("Play Unlimited")
+									Text("Free Play")
 										.multilineTextAlignment(.center)
 										.font(.title2).bold()
 										.padding()
@@ -293,9 +293,9 @@ struct SelectView: View {
 							
 						} else {
 							VStack {
-								NavigationLink(destination: GameView().environmentObject(appManager).environment(adManager)) {
+								NavigationLink(destination: GameView().environmentObject(appManager)) {
 									if let streakEntity = appManager.getNormalStreakEntity(), streakEntity.currentStreak >= 3 {
-										Text("Play Unlimited\n\(streakEntity.currentStreak)🔥")
+										Text("Free Play - \(streakEntity.currentStreak)🔥")
 											.contentTransition(.numericText(value: Double(streakEntity.currentStreak)))
 											.multilineTextAlignment(.center)
 											.lineSpacing(5)
@@ -311,7 +311,7 @@ struct SelectView: View {
 											}
 											.padding(.horizontal, 30)
 									} else {
-										Text("Play Unlimited")
+										Text("Free Play")
 										//										.conditionalShadow(color: .black.opacity(0.05), radius: 1.5, x: 1, y: 1)
 										
 											.font(.title2).bold()
@@ -347,7 +347,7 @@ struct SelectView: View {
 							if appManager.checkIfDailyWordIsAlreadyPlayed() && !self.isAllowedToPlayDailyWordAgain || appManager.hasGameStarted() && appManager.selectedGameMode != .dailyWord && !self.isAllowedToChooseGameModeAgain {
 								if let streakEntity = appManager.getStreakEntity(), streakEntity.currentStreak >= 3, streakEntity.isAlive {
 									VStack {
-										Text("Play Daily Wordly\n\(streakEntity.currentStreak)🔥")
+										Text("Daily Wordly - \(streakEntity.currentStreak)🔥")
 											.multilineTextAlignment(.center)
 											.lineSpacing(5)
 											.font(.title2).bold()
@@ -374,7 +374,7 @@ struct SelectView: View {
 									.glassEffect(.regular.interactive(), in: .rect(cornerRadius: 15.0))
 								} else {
 									VStack {
-										Text("Play Daily Wordly")
+										Text("Daily Wordly")
 											.multilineTextAlignment(.center)
 											.font(.title2).bold()
 											.padding()
@@ -402,9 +402,9 @@ struct SelectView: View {
 								
 								
 							} else {
-								NavigationLink(destination: GameView().environmentObject(appManager).environment(adManager)) {
+								NavigationLink(destination: GameView().environmentObject(appManager)) {
 									if let streakEntity = appManager.getStreakEntity(), streakEntity.currentStreak >= 3, streakEntity.isAlive {
-										Text("Play Daily Wordly\n\(streakEntity.currentStreak)🔥")
+										Text("Daily Wordly - \(streakEntity.currentStreak)🔥")
 											.multilineTextAlignment(.center)
 											.lineSpacing(5)
 											.font(.title2).bold()
@@ -416,7 +416,7 @@ struct SelectView: View {
 													.environmentObject(appManager)
 											}
 									} else {
-										Text("Play Daily Wordly")
+										Text("Daily Wordly")
 											.multilineTextAlignment(.center)
 											.font(.title2).bold()
 											.padding()
@@ -449,7 +449,7 @@ struct SelectView: View {
 							if appManager.checkIfDailyWordIsAlreadyPlayed() && !self.isAllowedToPlayDailyWordAgain || appManager.hasGameStarted() && appManager.selectedGameMode != .dailyWord && !self.isAllowedToChooseGameModeAgain {
 								if let streakEntity = appManager.getStreakEntity(), streakEntity.currentStreak >= 3, streakEntity.isAlive {
 									VStack {
-										Text("Play Daily Wordly\n\(streakEntity.currentStreak)🔥")
+										Text("Daily Wordly - \(streakEntity.currentStreak)🔥")
 											.multilineTextAlignment(.center)
 											.lineSpacing(5)
 											.font(.title2).bold()
@@ -477,7 +477,7 @@ struct SelectView: View {
 									}
 								} else {
 									VStack {
-										Text("Play Daily Wordly")
+										Text("Daily Wordly")
 											.multilineTextAlignment(.center)
 											.font(.title2).bold()
 											.padding()
@@ -505,9 +505,9 @@ struct SelectView: View {
 								
 								
 							} else {
-								NavigationLink(destination: GameView().environmentObject(appManager).environment(adManager)) {
+								NavigationLink(destination: GameView().environmentObject(appManager)) {
 									if let streakEntity = appManager.getStreakEntity(), streakEntity.currentStreak >= 3, streakEntity.isAlive {
-										Text("Play Daily Wordly\n\(streakEntity.currentStreak)🔥")
+										Text("Daily Wordly - \(streakEntity.currentStreak)🔥")
 											.multilineTextAlignment(.center)
 											.lineSpacing(5)
 											.font(.title2).bold()
@@ -520,7 +520,7 @@ struct SelectView: View {
 											}
 											.padding(.horizontal, 30)
 									} else {
-										Text("Play Daily Wordly")
+										Text("Daily Wordly")
 											.multilineTextAlignment(.center)
 											.font(.title2).bold()
 											.padding()

@@ -519,7 +519,7 @@ struct GameView26: View {
 					WordDefinitionView(word: appManager.word)
 						.environmentObject(appManager)
 				})
-				.navigationTitle("Guess the Word")
+					.navigationTitle(appManager.numberOfLetters == 1 ? "Guess the Letter" : "Guess the Word")
 				.navigationBarTitleDisplayMode(.inline)
 				.toolbar {
 					ToolbarItemGroup(placement: .topBarTrailing) {

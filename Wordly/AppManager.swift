@@ -528,7 +528,7 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
 		let reminders = NotificationManager.fetchReminders(context: context)
 		for reminder in reminders {
 			if reminder.language == self.selectedLanguage && reminder.numberOfLetters == self.numberOfLetters && reminder.isEnabled {
-				NotificationManager.cancelTodayNotification(reminder: reminder)
+				NotificationManager.scheduleDailyWordReminder(reminder: reminder, context: context)
 			}
 		}
 	}
