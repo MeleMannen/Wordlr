@@ -102,7 +102,7 @@ struct OnboardingView: View {
                     }
                 }
             }
-			.navigationTitle("Welcome to \(self.userWantsThePhraseNameBack ? "The Phrase" : "Wordly")")
+			.navigationTitle("Welcome to \(self.userWantsThePhraseNameBack ? "The Phrase" : "Wordlr")")
 			.navigationBarTitleDisplayMode(.inline)
 			.presentationDragIndicator(.hidden)
 			.interactiveDismissDisabled(true)

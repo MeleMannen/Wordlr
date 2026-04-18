@@ -30,7 +30,7 @@ struct TabsView: View {
 				}
 				.tag(TabSelection.home)
 				.tabItem {
-					Label(self.userWantsThePhraseNameBack ? "The Phrase" : "Wordly", systemImage: self.userWantsThePhraseNameBack ? "p.square.fill" : "w.square.fill")
+					Label(self.userWantsThePhraseNameBack ? "The Phrase" : "Wordlr", systemImage: self.userWantsThePhraseNameBack ? "p.square.fill" : "w.square.fill")
 				}
 				.environment(adManager)
 				.task {

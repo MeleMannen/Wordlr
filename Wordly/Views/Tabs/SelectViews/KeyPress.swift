@@ -1,6 +1,6 @@
 //
 //  KeyPress.swift
-//  Wordly
+//  Wordlr
 //
 //  Created by Kristoffer Melen on 03/11/2025.
 //

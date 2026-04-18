@@ -1,6 +1,6 @@
 //
 //  AdManager.swift
-//  Wordly
+//  Wordlr
 //
 //  Created by Kristoffer Melen on 29/03/2026.
 //
@@ -39,7 +39,7 @@ final class AdManager {
 				await self?.prepareAdsIfNeeded()
 			}
 		}
-		pathMonitor.start(queue: DispatchQueue(label: "Wordly.AdManager.NetworkMonitor"))
+		pathMonitor.start(queue: DispatchQueue(label: "Wordlr.AdManager.NetworkMonitor"))
 	}
 	
 	func updateFirebaseAnalyticsConsent() {
@@ -47,10 +47,22 @@ final class AdManager {
 		let hasConsentForPurpose1 = purposeConsents.first == "1"
 		let status = ConsentInformation.shared.consentStatus
 		
-		if status == .notRequired || hasConsentForPurpose1 {
+		if status == .notRequired {
+			Analytics.setConsent([
+				.analyticsStorage: .granted
+			])
 			Analytics.setAnalyticsCollectionEnabled(true)
-			print("Analytics enabled")
+			print("Analytics enabled with explicit non-EU consent defaults")
+		} else if hasConsentForPurpose1 {
+			Analytics.setAnalyticsCollectionEnabled(true)
+			print("Analytics enabled using UMP-managed consent state")
 		} else {
+			Analytics.setConsent([
+				.analyticsStorage: .denied,
+				.adStorage: .denied,
+				.adUserData: .denied,
+				.adPersonalization: .denied
+			])
 			Analytics.setAnalyticsCollectionEnabled(false)
 			print("Analytics disabled")
 		}
@@ -94,6 +106,7 @@ final class AdManager {
 		let parameters = RequestParameters()
 		
 		let debugSettings = DebugSettings()
+//		debugSettings.geography = .other
 		parameters.debugSettings = debugSettings
 		
 		try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in

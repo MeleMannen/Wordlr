@@ -222,7 +222,42 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
 		
 		return word
 	}
-	
+
+	private func canAccessCurrentBoardCell(at index: Int? = nil) -> Bool {
+		guard self.board.indices.contains(self.currentRow) else {
+			return false
+		}
+		let columnIndex = index ?? self.currentIndex
+		return self.board[self.currentRow].indices.contains(columnIndex)
+	}
+
+	func insertLetterAtCurrentPosition(_ letter: String) {
+		guard !self.isAnimating,
+			  !self.isGameOver,
+			  self.currentIndex < self.numberOfLetters,
+			  self.canAccessCurrentBoardCell() else {
+			return
+		}
+
+		self.board[self.currentRow][self.currentIndex].letter = letter
+		self.currentIndex += 1
+	}
+
+	func deleteLetterAtCurrentPosition() {
+		guard !self.isAnimating,
+			  self.currentIndex > 0 else {
+			return
+		}
+
+		let previousIndex = self.currentIndex - 1
+		guard self.canAccessCurrentBoardCell(at: previousIndex) else {
+			return
+		}
+
+		self.currentIndex = previousIndex
+		self.board[self.currentRow][previousIndex].letter = ""
+	}
+
 	func isReadyToSubmit() -> Bool {
 		return self.board[self.currentRow].count == self.numberOfLetters
 	}
@@ -565,7 +600,7 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
 		let usedString = String(format: NSLocalizedString("share_used", comment: "Used"))
 		
 		
-		var shareText = "Wordly \(dateFormatter.string(from: date)), \(letterString), \(row)/\(numberOfRows) \(rowString)\(timeUsedString != "" ? ", \(timeUsedString) \(usedString)" : ""):\n"
+		var shareText = "Wordlr \(dateFormatter.string(from: date)), \(letterString), \(row)/\(numberOfRows) \(rowString)\(timeUsedString != "" ? ", \(timeUsedString) \(usedString)" : ""):\n"
 		
 		var shouldBreak: Bool = false
 		for row in board {
@@ -642,7 +677,30 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
 		self.resetFilters()
 		self.startDate = Date()
 	}
-	
+
+	func restartCurrentGame() {
+		if self.selectedGameMode == .normal && !self.isGameOver && (self.currentRow > 0 || self.currentIndex > 0) {
+			self.endDate = Date()
+			self.addGameRecord(
+				gameRecord: GameRecord(
+					date: self.startDate,
+					state: .lost,
+					mode: self.selectedGameMode,
+					word: self.word,
+					language: self.selectedLanguage,
+					numberOfLetters: self.numberOfLetters,
+					numberOfGuesses: self.currentRow,
+					maxRows: rowCount(for: self.numberOfLetters),
+					hintsUsed: self.hintsUsed,
+					board: self.board,
+					endDate: self.endDate
+				)
+			)
+		}
+
+		self.resetBoard()
+	}
+
 	func resetFilters() {
 		self.isFilteringSearchWord = true
 		self.searchedWord = ""

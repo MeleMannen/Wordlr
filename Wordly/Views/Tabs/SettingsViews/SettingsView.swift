@@ -78,7 +78,7 @@ struct SettingsView: View {
 						
 						
 						if self.colorScheme == .dark {
-							Picker("Daily Wordly Theme", selection: $userWantsNormalTheme) {
+							Picker("Daily Wordlr Theme", selection: $userWantsNormalTheme) {
 								Text("Standard")
 									.tag(true)
 								Text("Gold")
@@ -96,7 +96,7 @@ struct SettingsView: View {
 					}
 					
 					Section {
-						Toggle("Daily Wordly Reminders", isOn: $notificationsEnabled)
+						Toggle("Daily Wordlr Reminders", isOn: $notificationsEnabled)
 							.modifier(ConditionalPadding())
 							.tint(.green)
 							.onChange(of: notificationsEnabled) { _, newValue in
@@ -153,7 +153,7 @@ struct SettingsView: View {
 							NavigationLink {
 								NotificationView()
 							} label: {
-								Text("Edit Daily Wordly Reminders")
+								Text("Edit Daily Wordlr Reminders")
 									.foregroundStyle(.primary)
 									.modifier(ConditionalPadding())
 							}

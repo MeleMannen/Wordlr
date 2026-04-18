@@ -440,7 +440,7 @@ struct GameRecordView: View {
 		let usedString = String(format: NSLocalizedString("share_used", comment: "Used"))
 		
 		
-		var shareText = "Wordly \(formatter1.string(from: date)), \(letterString), \(row)/\(numberOfRows) \(rowString)\(timeUsedString != "" ? ", \(timeUsedString) \(usedString)" : ""):\n"
+		var shareText = "Wordlr \(formatter1.string(from: date)), \(letterString), \(row)/\(numberOfRows) \(rowString)\(timeUsedString != "" ? ", \(timeUsedString) \(usedString)" : ""):\n"
 		
 		var shouldBreak: Bool = false
 		for row in board {

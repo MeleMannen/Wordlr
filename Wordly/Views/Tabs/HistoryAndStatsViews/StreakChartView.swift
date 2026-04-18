@@ -93,5 +93,5 @@ struct StreakChartView: View {
 }
 
 #Preview {
-	StreakChartView(title: "Daily Wordly Streaks 🔥", longestStreakPerLetters:  .constant([(language: .english, streaks: [(5, 1, 1)]), (language: .spanish, streaks: []), (language: .norwegian, streaks: [])]), maxStreakLength: .constant(1.0))
+	StreakChartView(title: "Daily Wordlr Streaks 🔥", longestStreakPerLetters:  .constant([(language: .english, streaks: [(5, 1, 1)]), (language: .spanish, streaks: []), (language: .norwegian, streaks: [])]), maxStreakLength: .constant(1.0))
 }

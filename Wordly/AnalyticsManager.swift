@@ -1,6 +1,6 @@
 //
 //  AnalyticsManager.swift
-//  Wordly
+//  Wordlr
 //
 //  Created by Kristoffer Melen on 17/02/2026.
 //

@@ -17,11 +17,11 @@ struct Info: View {
 	var body: some View {
 		List {
 			VStack(alignment: .leading) {
-				Text(self.userWantsThePhraseNameBack ? "The Phrase" : "Wordly")
+				Text(self.userWantsThePhraseNameBack ? "The Phrase" : "Wordlr")
 					.font(.largeTitle).bold()
 					.padding(.bottom, 5)
 				
-				Text("\(self.userWantsThePhraseNameBack ? "The Phrase" : "Wordly") is a word game where you guess a secret word. The game provides feedback on your guesses, indicating correct letters and their positions.")
+				Text("\(self.userWantsThePhraseNameBack ? "The Phrase" : "Wordlr") is a word game where you guess a secret word. The game provides feedback on your guesses, indicating correct letters and their positions.")
 					.font(.body)
 					.padding(.bottom, 15)
 				

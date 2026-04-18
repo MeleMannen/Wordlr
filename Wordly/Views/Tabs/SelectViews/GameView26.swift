@@ -161,13 +161,10 @@ struct GameView26: View {
 															.frame(minWidth: geometry2.size.width / CGFloat(14), maxWidth: geometry2.size.width / CGFloat(12), minHeight: geometry2.size.height / CGFloat(10), idealHeight: geometry2.size.height / CGFloat(8), maxHeight: geometry2.size.height / CGFloat(6))
 														
 													}
-													Button(action: {
-														if appManager.currentIndex < appManager.numberOfLetters {
-															appManager.board[appManager.currentRow][appManager.currentIndex].letter = keyBoardKey.letter
-															appManager.currentIndex += 1
-														}
-														appManager.keyboard[rowIndex][colIndex].didTapButton.toggle()
-													}, label: {
+								Button(action: {
+									appManager.insertLetterAtCurrentPosition(keyBoardKey.letter)
+									appManager.keyboard[rowIndex][colIndex].didTapButton.toggle()
+								}, label: {
 														Text(keyBoardKey.letter)
 															.font(.title2).bold()
 															.foregroundStyle(keyBoardKey.state == .notUsed ? AnyShapeStyle(.black) : AnyShapeStyle(Color.white))
@@ -209,20 +206,20 @@ struct GameView26: View {
 														self.alertItem = AlertItem(
 															title: Text("The Word Was: \(appManager.word)!"),
 															message: Text("Do you want to see the definition?"),
-															primaryButton: .default(Text("Show Definition")) {
-																self.isShowingCurrentDefinition = true
-																
-																DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
-																	print("reseting...")
-																	appManager.resetBoard()
-																}
-															},
-															secondaryButton: .cancel(Text("Dismiss")) {
-																print("reseting...")
-																appManager.resetBoard()
-															})
-													}, secondaryButton: .cancel())
-											}
+											primaryButton: .default(Text("Show Definition")) {
+												self.isShowingCurrentDefinition = true
+												
+												DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
+													print("reseting...")
+													appManager.restartCurrentGame()
+												}
+											},
+											secondaryButton: .cancel(Text("Dismiss")) {
+												print("reseting...")
+												appManager.restartCurrentGame()
+											})
+										}, secondaryButton: .cancel())
+								}
 											
 										}, label: {
 											Image(systemName: "arrow.clockwise")
@@ -312,14 +309,11 @@ struct GameView26: View {
 										
 										Spacer()
 										
-										Button(action: {
-											self.didTapBackButton.toggle()
-											if !appManager.isAnimating && appManager.currentIndex > 0 {
-												appManager.currentIndex -= 1
-												appManager.board[appManager.currentRow][appManager.currentIndex].letter = ""
-											}
-											
-										}, label: {
+						Button(action: {
+							self.didTapBackButton.toggle()
+							appManager.deleteLetterAtCurrentPosition()
+							
+						}, label: {
 											Image(systemName: "delete.left")
 												.font(.title2).bold()
 												.foregroundStyle(.black)
@@ -447,18 +441,13 @@ struct GameView26: View {
 						}
 						.padding(.horizontal, 5)
 						.background(
-							hardwareKeyCommands(
-								onInsertLetter: { ch in
-									guard !appManager.isAnimating,
-										  appManager.currentIndex < appManager.numberOfLetters else { return }
-									appManager.board[appManager.currentRow][appManager.currentIndex].letter = ch
-									appManager.currentIndex += 1
-								},
-								onDelete: {
-									guard !appManager.isAnimating, appManager.currentIndex > 0 else { return }
-									appManager.currentIndex -= 1
-									appManager.board[appManager.currentRow][appManager.currentIndex].letter = ""
-								},
+								hardwareKeyCommands(
+									onInsertLetter: { ch in
+										appManager.insertLetterAtCurrentPosition(ch)
+									},
+									onDelete: {
+										appManager.deleteLetterAtCurrentPosition()
+									},
 								onReturn: {
 									guard !appManager.isAnimating else { return }
 									appManager.didTapSubmit()
@@ -473,18 +462,18 @@ struct GameView26: View {
 												self.alertItem = AlertItem(
 													title: Text("The Word Was: \(appManager.word)!"),
 													message: Text("Do you want to see the definition?"),
-													primaryButton: .default(Text("Show Definition")) {
-														self.isShowingCurrentDefinition = true
-														
-														DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
-															print("reseting...")
-															appManager.resetBoard()
-														}
-													},
-													secondaryButton: .cancel(Text("Dismiss")) {
+												primaryButton: .default(Text("Show Definition")) {
+													self.isShowingCurrentDefinition = true
+													
+													DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
 														print("reseting...")
-														appManager.resetBoard()
-													})
+														appManager.restartCurrentGame()
+													}
+												},
+												secondaryButton: .cancel(Text("Dismiss")) {
+													print("reseting...")
+													appManager.restartCurrentGame()
+												})
 											}, secondaryButton: .cancel())
 									}
 								},
@@ -516,7 +505,7 @@ struct GameView26: View {
 					.frame(maxWidth: .infinity, maxHeight: (geometry.size.height*3) / 5)
 				}
 				.navigationDestination(isPresented: self.$isShowingCurrentDefinition, destination: {
-					WordDefinitionView(word: appManager.word)
+					WordDefinitionView(word: appManager.word, language: appManager.language)
 						.environmentObject(appManager)
 				})
 					.navigationTitle(appManager.numberOfLetters == 1 ? "Guess the Letter" : "Guess the Word")

@@ -347,7 +347,7 @@ struct SelectView: View {
 							if appManager.checkIfDailyWordIsAlreadyPlayed() && !self.isAllowedToPlayDailyWordAgain || appManager.hasGameStarted() && appManager.selectedGameMode != .dailyWord && !self.isAllowedToChooseGameModeAgain {
 								if let streakEntity = appManager.getStreakEntity(), streakEntity.currentStreak >= 3, streakEntity.isAlive {
 									VStack {
-										Text("Daily Wordly - \(streakEntity.currentStreak)🔥")
+										Text("Daily Wordlr - \(streakEntity.currentStreak)🔥")
 											.multilineTextAlignment(.center)
 											.lineSpacing(5)
 											.font(.title2).bold()
@@ -374,7 +374,7 @@ struct SelectView: View {
 									.glassEffect(.regular.interactive(), in: .rect(cornerRadius: 15.0))
 								} else {
 									VStack {
-										Text("Daily Wordly")
+										Text("Daily Wordlr")
 											.multilineTextAlignment(.center)
 											.font(.title2).bold()
 											.padding()
@@ -404,7 +404,7 @@ struct SelectView: View {
 							} else {
 								NavigationLink(destination: GameView().environmentObject(appManager)) {
 									if let streakEntity = appManager.getStreakEntity(), streakEntity.currentStreak >= 3, streakEntity.isAlive {
-										Text("Daily Wordly - \(streakEntity.currentStreak)🔥")
+										Text("Daily Wordlr - \(streakEntity.currentStreak)🔥")
 											.multilineTextAlignment(.center)
 											.lineSpacing(5)
 											.font(.title2).bold()
@@ -416,7 +416,7 @@ struct SelectView: View {
 													.environmentObject(appManager)
 											}
 									} else {
-										Text("Daily Wordly")
+										Text("Daily Wordlr")
 											.multilineTextAlignment(.center)
 											.font(.title2).bold()
 											.padding()
@@ -449,7 +449,7 @@ struct SelectView: View {
 							if appManager.checkIfDailyWordIsAlreadyPlayed() && !self.isAllowedToPlayDailyWordAgain || appManager.hasGameStarted() && appManager.selectedGameMode != .dailyWord && !self.isAllowedToChooseGameModeAgain {
 								if let streakEntity = appManager.getStreakEntity(), streakEntity.currentStreak >= 3, streakEntity.isAlive {
 									VStack {
-										Text("Daily Wordly - \(streakEntity.currentStreak)🔥")
+										Text("Daily Wordlr - \(streakEntity.currentStreak)🔥")
 											.multilineTextAlignment(.center)
 											.lineSpacing(5)
 											.font(.title2).bold()
@@ -477,7 +477,7 @@ struct SelectView: View {
 									}
 								} else {
 									VStack {
-										Text("Daily Wordly")
+										Text("Daily Wordlr")
 											.multilineTextAlignment(.center)
 											.font(.title2).bold()
 											.padding()
@@ -507,7 +507,7 @@ struct SelectView: View {
 							} else {
 								NavigationLink(destination: GameView().environmentObject(appManager)) {
 									if let streakEntity = appManager.getStreakEntity(), streakEntity.currentStreak >= 3, streakEntity.isAlive {
-										Text("Daily Wordly - \(streakEntity.currentStreak)🔥")
+										Text("Daily Wordlr - \(streakEntity.currentStreak)🔥")
 											.multilineTextAlignment(.center)
 											.lineSpacing(5)
 											.font(.title2).bold()
@@ -520,7 +520,7 @@ struct SelectView: View {
 											}
 											.padding(.horizontal, 30)
 									} else {
-										Text("Daily Wordly")
+										Text("Daily Wordlr")
 											.multilineTextAlignment(.center)
 											.font(.title2).bold()
 											.padding()
@@ -577,7 +577,7 @@ struct SelectView: View {
 				}
 			}
 		}
-		.navigationTitle(self.userWantsThePhraseNameBack ? "The Phrase" : "Wordly")
+		.navigationTitle(self.userWantsThePhraseNameBack ? "The Phrase" : "Wordlr")
 		.onChange(of: appState.navigateHomeTrigger) {
 			if appState.selectedLanguageName != nil {
 				if appState.selectedLanguageName == LanguageSelection.english.rawValue {

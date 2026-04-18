@@ -158,7 +158,7 @@ struct StatsView: View {
 							if self.maxStreakLength > 0 || self.maxNormalStreakLength > 0 {
 								Section {
 									if self.maxStreakLength > 0 && (self.gameMode == .both || self.gameMode == .dailyWord) {
-										StreakChartView(title: NSLocalizedString("Daily Wordly Streaks 🔥", comment: "Title for daily word streaks chart in stats view"), longestStreakPerLetters: self.$longestStreakPerLetters, maxStreakLength: self.$maxStreakLength)
+										StreakChartView(title: NSLocalizedString("Daily Wordlr Streaks 🔥", comment: "Title for daily word streaks chart in stats view"), longestStreakPerLetters: self.$longestStreakPerLetters, maxStreakLength: self.$maxStreakLength)
 									}
 									if self.maxNormalStreakLength > 0 && (self.gameMode == .both || self.gameMode == .normal) {
 											StreakChartView(title: NSLocalizedString("Free Play Streaks 🔥", comment: "Title for free play streaks chart in stats view"), longestStreakPerLetters: self.$longestNormalStreakPerLetters, maxStreakLength: self.$maxNormalStreakLength)

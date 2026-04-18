@@ -57,7 +57,7 @@ struct NotificationView: View {
 			}
 		}
 		.navigationBarTitleDisplayMode(.inline)
-		.navigationTitle("Daily Wordly Reminders")
+		.navigationTitle("Daily Wordlr Reminders")
 		.toolbar {
 			if #available(iOS 26.0, *) {
 				ToolbarItem(placement: .navigationBarTrailing) {
