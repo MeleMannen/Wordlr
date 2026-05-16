@@ -142,7 +142,7 @@ struct SelectView: View {
 					if #available(iOS 26.0, *) {
 						VStack {
 							if appManager.hasGameStarted() && appManager.selectedGameMode != .normal && !self.isAllowedToChooseGameModeAgain {
-								if let streakEntity = appManager.getNormalStreakEntity(), streakEntity.currentStreak >= 3 {
+											if let streakEntity = appManager.getNormalStreakEntity(), streakEntity.currentStreak > 0 {
 									VStack {
 										Text("Free Play - \(streakEntity.currentStreak)🔥")
 											.multilineTextAlignment(.center)
@@ -191,7 +191,7 @@ struct SelectView: View {
 							} else {
 								VStack {
 									NavigationLink(destination: GameView().environmentObject(appManager)) {
-										if let streakEntity = appManager.getNormalStreakEntity(), streakEntity.currentStreak >= 3 {
+								if let streakEntity = appManager.getNormalStreakEntity(), streakEntity.currentStreak > 0 {
 											Text("Free Play - \(streakEntity.currentStreak)🔥")
 												.contentTransition(.numericText(value: Double(streakEntity.currentStreak)))
 												.multilineTextAlignment(.center)
@@ -243,7 +243,7 @@ struct SelectView: View {
 						.padding(.bottom, 25)
 					} else {
 						if appManager.hasGameStarted() && appManager.selectedGameMode != .normal && !self.isAllowedToChooseGameModeAgain {
-							if let streakEntity = appManager.getNormalStreakEntity(), streakEntity.currentStreak >= 3 {
+								if let streakEntity = appManager.getNormalStreakEntity(), streakEntity.currentStreak > 0 {
 								VStack {
 									Text("Free Play - \(streakEntity.currentStreak)🔥")
 										.multilineTextAlignment(.center)
@@ -294,7 +294,7 @@ struct SelectView: View {
 						} else {
 							VStack {
 								NavigationLink(destination: GameView().environmentObject(appManager)) {
-									if let streakEntity = appManager.getNormalStreakEntity(), streakEntity.currentStreak >= 3 {
+									if let streakEntity = appManager.getNormalStreakEntity(), streakEntity.currentStreak > 0 {
 										Text("Free Play - \(streakEntity.currentStreak)🔥")
 											.contentTransition(.numericText(value: Double(streakEntity.currentStreak)))
 											.multilineTextAlignment(.center)
@@ -345,7 +345,7 @@ struct SelectView: View {
 					if #available(iOS 26.0, *) {
 						VStack {
 							if appManager.checkIfDailyWordIsAlreadyPlayed() && !self.isAllowedToPlayDailyWordAgain || appManager.hasGameStarted() && appManager.selectedGameMode != .dailyWord && !self.isAllowedToChooseGameModeAgain {
-								if let streakEntity = appManager.getStreakEntity(), streakEntity.currentStreak >= 3, streakEntity.isAlive {
+								if let streakEntity = appManager.getStreakEntity(), streakEntity.currentStreak > 0, streakEntity.isAlive {
 									VStack {
 										Text("Daily Wordlr - \(streakEntity.currentStreak)🔥")
 											.multilineTextAlignment(.center)
@@ -403,7 +403,7 @@ struct SelectView: View {
 								
 							} else {
 								NavigationLink(destination: GameView().environmentObject(appManager)) {
-									if let streakEntity = appManager.getStreakEntity(), streakEntity.currentStreak >= 3, streakEntity.isAlive {
+									if let streakEntity = appManager.getStreakEntity(), streakEntity.currentStreak > 0, streakEntity.isAlive {
 										Text("Daily Wordlr - \(streakEntity.currentStreak)🔥")
 											.multilineTextAlignment(.center)
 											.lineSpacing(5)
@@ -446,13 +446,11 @@ struct SelectView: View {
 						.padding(.bottom, 10)
 					} else {
 						VStack {
-							if appManager.checkIfDailyWordIsAlreadyPlayed() && !self.isAllowedToPlayDailyWordAgain || appManager.hasGameStarted() && appManager.selectedGameMode != .dailyWord && !self.isAllowedToChooseGameModeAgain {
-								if let streakEntity = appManager.getStreakEntity(), streakEntity.currentStreak >= 3, streakEntity.isAlive {
-									VStack {
-										Text("Daily Wordlr - \(streakEntity.currentStreak)🔥")
-											.multilineTextAlignment(.center)
-											.lineSpacing(5)
-											.font(.title2).bold()
+								if appManager.checkIfDailyWordIsAlreadyPlayed() && !self.isAllowedToPlayDailyWordAgain || appManager.hasGameStarted() && appManager.selectedGameMode != .dailyWord && !self.isAllowedToChooseGameModeAgain {
+										VStack {
+											Text("Daily Wordlr")
+												.multilineTextAlignment(.center)
+												.font(.title2).bold()
 											.padding()
 											.frame(maxWidth: .infinity)
 											.foregroundStyle(.white)
@@ -471,42 +469,15 @@ struct SelectView: View {
 													self.setGameAlert()
 												}
 												
-											}
-											.sensoryFeedback(.error, trigger: self.didTapFakePlayDailyWordButton)
-										
-									}
-								} else {
-									VStack {
-										Text("Daily Wordlr")
-											.multilineTextAlignment(.center)
-											.font(.title2).bold()
-											.padding()
-											.frame(maxWidth: .infinity)
-											.foregroundStyle(.white)
-											.background {
-												ConditionalButtonBackground(opacity: 0.3)
-													.environmentObject(appManager)
-											}
-											.padding(.horizontal, 30)
-											.onTapGesture {
-												self.didTapFakePlayDailyWordButton.toggle()
-												if appManager.checkIfDailyWordIsAlreadyPlayed() && !self.isAllowedToPlayDailyWordAgain {
-													self.isShowingAlreadyPlayedAlert = true
-													self.setDailyWordAlreadyPlayedAlert()
-												} else if appManager.hasGameStarted() && appManager.selectedGameMode != .dailyWord && !self.isAllowedToChooseGameModeAgain {
-													self.didTapChangeOfGame = true
-													self.setGameAlert()
 												}
-												
-											}
-											.sensoryFeedback(.error, trigger: self.didTapFakePlayDailyWordButton)
-									}
-								}
+												.sensoryFeedback(.error, trigger: self.didTapFakePlayDailyWordButton)
+										}
+									
 								
 								
 							} else {
 								NavigationLink(destination: GameView().environmentObject(appManager)) {
-									if let streakEntity = appManager.getStreakEntity(), streakEntity.currentStreak >= 3, streakEntity.isAlive {
+									if let streakEntity = appManager.getStreakEntity(), streakEntity.currentStreak > 0, streakEntity.isAlive {
 										Text("Daily Wordlr - \(streakEntity.currentStreak)🔥")
 											.multilineTextAlignment(.center)
 											.lineSpacing(5)

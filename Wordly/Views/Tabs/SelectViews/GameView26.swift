@@ -12,10 +12,12 @@ import TipKit
 struct GameView26: View {
 	@EnvironmentObject var appManager: AppManager
 	@Environment(AdManager.self) private var adManager: AdManager
+	@Environment(\.modelContext) private var modelContext
 	@Environment(\.dismiss) var dismiss
 	@Environment(\.colorScheme) private var colorScheme
 	@Environment(\.scenePhase) private var scenePhase
 	@AppStorage("userWantsNormalTheme") private var userWantsNormalTheme: Bool = true
+	@AppStorage("notificationsEnabled") private var notificationsEnabled: Bool = false
 	@State var didTapSubmitButton: Bool = false
 	@State var didTapBackButton: Bool = false
 	@State var didTapResetButton: Bool = false
@@ -23,6 +25,7 @@ struct GameView26: View {
 	@State var didTapShowDefinitionButton: Bool = false
 	@State var isShowingCurrentDefinition: Bool = false
 	@State var alertItem: AlertItem?
+	@State private var hasQueuedNotificationPromptForCurrentWin: Bool = false
 	
 	@Namespace private var namespace
 	
@@ -239,21 +242,10 @@ struct GameView26: View {
 													}
 												}
 										})
-										.sensoryFeedback(.impact, trigger: self.didTapResetButton)
-										.glassEffect(.regular.tint(self.colorForUnused.opacity(appManager.selectedGameMode == .dailyWord ? 0.4 : 1.0)).interactive(), in: .rect(cornerRadius: 10.0))
-										.glassEffectID("reset", in: self.namespace)
-										.alert(item: self.$alertItem) { item in
-											if let dismissButton = item.dismissButton {
-												Alert(title: item.title, message: item.message, dismissButton: dismissButton)
-											} else if let primaryButton = item.primaryButton, let secondaryButton = item.secondaryButton {
-												Alert(title: item.title, message: item.message, primaryButton: primaryButton, secondaryButton: secondaryButton)
-											} else {
-												Alert(title: item.title)
-											}
-											
-										}
-										.sensoryFeedback(.warning, trigger: self.alertItem?.title)
-										.sensoryFeedback(.warning, trigger: self.didTapResetButton)
+											.sensoryFeedback(.impact, trigger: self.didTapResetButton)
+											.glassEffect(.regular.tint(self.colorForUnused.opacity(appManager.selectedGameMode == .dailyWord ? 0.4 : 1.0)).interactive(), in: .rect(cornerRadius: 10.0))
+											.glassEffectID("reset", in: self.namespace)
+											.sensoryFeedback(.warning, trigger: self.didTapResetButton)
 										
 										
 										
@@ -540,15 +532,88 @@ struct GameView26: View {
 				}
 				
 			}
-			.onDisappear {
-				adManager.currentSelectView = .selectView
-			}
-			.task {
-				await appManager.loadAd()
-				appManager.hasLoadedAd = true
-			}
+				.onDisappear {
+					adManager.currentSelectView = .selectView
+				}
+				.onChange(of: appManager.shouldPromptForNotificationsAfterFirstWin) { _, shouldPrompt in
+					guard shouldPrompt else { return }
+					presentNotificationPromptIfNeeded()
+				}
+				.onChange(of: appManager.isGameOver) { _, _ in
+					presentNotificationPromptIfNeeded()
+				}
+				.onChange(of: appManager.isAnimating) { _, _ in
+					presentNotificationPromptIfNeeded()
+				}
+				.alert(item: self.$alertItem) { item in
+					if let dismissButton = item.dismissButton {
+						Alert(title: item.title, message: item.message, dismissButton: dismissButton)
+					} else if let primaryButton = item.primaryButton, let secondaryButton = item.secondaryButton {
+						Alert(title: item.title, message: item.message, primaryButton: primaryButton, secondaryButton: secondaryButton)
+					} else {
+						Alert(title: item.title)
+					}
+				}
+				.sensoryFeedback(.warning, trigger: self.alertItem?.title)
+				.task {
+					await appManager.loadAd()
+					appManager.hasLoadedAd = true
+				}
 		}
 		
+	}
+
+	private func presentNotificationPromptIfNeeded() {
+		guard appManager.isGameOver,
+			  !appManager.isAnimating,
+			  appManager.didWinGame == .won,
+			  !notificationsEnabled,
+			  !hasQueuedNotificationPromptForCurrentWin,
+			  alertItem == nil else {
+			return
+		}
+
+		hasQueuedNotificationPromptForCurrentWin = true
+		alertItem = AlertItem(
+			title: Text("Keep your streak going?"),
+			message: Text("Turn on reminders so you don't miss the next daily word."),
+			primaryButton: .default(Text("Turn On")) {
+				notificationsEnabled = true
+				createReminderForCurrentDailyWord()
+				UserDefaults.standard.set(Int.max, forKey: "notificationPromptNextWinThreshold")
+				appManager.shouldPromptForNotificationsAfterFirstWin = false
+			},
+			secondaryButton: .cancel(Text("Not now")) {
+				let currentWins = UserDefaults.standard.integer(forKey: "notificationPromptWinCount")
+				let currentThreshold = UserDefaults.standard.object(forKey: "notificationPromptNextWinThreshold") as? Int ?? 1
+				let increment = currentThreshold <= 1 ? 25 : 50
+				UserDefaults.standard.set(currentWins + increment, forKey: "notificationPromptNextWinThreshold")
+				appManager.shouldPromptForNotificationsAfterFirstWin = false
+			}
+		)
+	}
+
+	private func createReminderForCurrentDailyWord() {
+		let reminders = NotificationManager.fetchReminders(context: modelContext)
+		let reminder = reminders.first {
+			$0.language == appManager.selectedLanguage && $0.numberOfLetters == appManager.numberOfLetters
+		} ?? DailyWordReminder(
+			language: appManager.selectedLanguage,
+			numberOfLetters: appManager.numberOfLetters,
+			timeToFire: defaultReminderTime()
+		)
+
+		reminder.isEnabled = true
+		if !reminders.contains(where: { $0.id == reminder.id }) {
+			modelContext.insert(reminder)
+		}
+
+		NotificationManager.scheduleDailyWordReminder(reminder: reminder, context: modelContext)
+		try? modelContext.save()
+	}
+
+	private func defaultReminderTime() -> Date {
+		Calendar.current.date(from: DateComponents(year: 2025, month: 9, day: 1, hour: 18, minute: 0)) ?? Date()
 	}
 }
 

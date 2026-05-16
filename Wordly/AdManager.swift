@@ -18,6 +18,7 @@ final class AdManager {
 	var shouldShowAds: Bool = true
 	var isMobileAdsStartCalled = false
 	var isAdsReady = false
+	var hasResolvedTrackingAuthorization = false
 	private var isPreparingAds = false
 	private let pathMonitor = NWPathMonitor()
 	private var hasStartedPathMonitor = false
@@ -70,6 +71,10 @@ final class AdManager {
 	
 	func prepareAds() async {
 		guard !isPreparingAds else { return }
+		guard hasResolvedTrackingAuthorization else {
+			print("Waiting for ATT before starting UMP flow.")
+			return
+		}
 		isPreparingAds = true
 		isAdsReady = false
 		defer {
@@ -85,10 +90,7 @@ final class AdManager {
 				return
 			}
 			
-			let status = await requestTrackingAuthorizationIfNeeded()
-			print("ATT status: \(status.rawValue)")
-			
-			startGoogleMobileAdsSDK()
+				startGoogleMobileAdsSDK()
 			
 			isAdsReady = isMobileAdsStartCalled
 			
@@ -124,13 +126,20 @@ final class AdManager {
 	
 	func requestTrackingAuthorizationIfNeeded() async -> ATTrackingManager.AuthorizationStatus {
 		guard #available(iOS 14, *) else {
+			hasResolvedTrackingAuthorization = true
 			return .authorized
 		}
 		
 		let currentStatus = ATTrackingManager.trackingAuthorizationStatus
-		guard currentStatus == .notDetermined else { return currentStatus }
+		guard currentStatus == .notDetermined else {
+			hasResolvedTrackingAuthorization = true
+			return currentStatus
+		}
 		return await withCheckedContinuation { continuation in
 			ATTrackingManager.requestTrackingAuthorization { status in
+				Task { @MainActor in
+					self.hasResolvedTrackingAuthorization = true
+				}
 				continuation.resume(returning: status)
 			}
 		}

@@ -41,9 +41,10 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
 	@Published var hasLoadedAd: Bool = false
 	var startDate: Date = Date()
 	var endDate: Date = Date()
-	@Published var hasSharedResult: Bool = false
-	@Published var didWinGame: GameEndState = .lost
-	@Published var searchedWord: String = ""
+		@Published var hasSharedResult: Bool = false
+		@Published var didWinGame: GameEndState = .lost
+		@Published var shouldPromptForNotificationsAfterFirstWin: Bool = false
+		@Published var searchedWord: String = ""
 	@Published var isSearching: Bool = false
 	
 	@Published var isFilteringSearchWord: Bool = true
@@ -506,10 +507,11 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
 							withAnimation {
 								self.isGameOver = true
 							}
-							self.didWinGame = .won
-							self.endDate = Date()
-							self.addGameRecord(gameRecord: GameRecord(date: self.startDate, state: .won, mode: self.selectedGameMode, word: self.word, language: self.selectedLanguage, numberOfLetters: self.numberOfLetters, numberOfGuesses: self.currentRow, maxRows: rowCount(for: self.numberOfLetters), hintsUsed: self.hintsUsed, board: self.board, endDate: self.endDate))
-							if self.selectedGameMode == .dailyWord {
+								self.didWinGame = .won
+								self.endDate = Date()
+								self.addGameRecord(gameRecord: GameRecord(date: self.startDate, state: .won, mode: self.selectedGameMode, word: self.word, language: self.selectedLanguage, numberOfLetters: self.numberOfLetters, numberOfGuesses: self.currentRow, maxRows: rowCount(for: self.numberOfLetters), hintsUsed: self.hintsUsed, board: self.board, endDate: self.endDate))
+								self.maybePromptForNotificationsAfterFirstWin()
+								if self.selectedGameMode == .dailyWord {
 								self.fixReminderForDailyWord()
 								AnalyticsManager.shared.logGameEndedEvent(word: self.word, language: self.selectedLanguage, numberOfLetters: self.numberOfLetters, gameMode: self.selectedGameMode, won: true, attemptsNeeded: self.currentRow, gameDurationSeconds: Int(self.endDate.timeIntervalSince(self.startDate)), currentStreak: self.getStreakEntity()?.currentStreak ?? 0)
 							} else {
@@ -670,9 +672,10 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
 		withAnimation {
 			self.isGameOver = false
 		}
-		self.hasSharedResult = false
-		self.didWinGame = .lost
-		self.language = self.selectedLanguage
+			self.hasSharedResult = false
+			self.didWinGame = .lost
+			self.shouldPromptForNotificationsAfterFirstWin = false
+			self.language = self.selectedLanguage
 		self.gameMode = self.selectedGameMode
 		self.resetFilters()
 		self.startDate = Date()
@@ -716,6 +719,21 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
 		if !selectedExcludedLetters.isEmpty {
 			self.selectedExcludedLetters.removeAll()
 		}
+	}
+
+	private func maybePromptForNotificationsAfterFirstWin() {
+		let notificationsEnabled = UserDefaults.standard.bool(forKey: "notificationsEnabled")
+		guard !notificationsEnabled else { return }
+
+		let winsKey = "notificationPromptWinCount"
+		let nextPromptKey = "notificationPromptNextWinThreshold"
+		let currentWins = UserDefaults.standard.integer(forKey: winsKey) + 1
+		UserDefaults.standard.set(currentWins, forKey: winsKey)
+
+		let nextPromptThreshold = UserDefaults.standard.object(forKey: nextPromptKey) as? Int ?? 1
+		guard currentWins >= nextPromptThreshold else { return }
+
+		self.shouldPromptForNotificationsAfterFirstWin = true
 	}
 	
 	func fetchGameRecords() {

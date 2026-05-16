@@ -540,7 +540,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = Wordly/Wordly.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Wordly/Preview Content\"";
 				ENABLE_APP_SANDBOX = YES;
@@ -552,7 +552,7 @@
 				INFOPLIST_FILE = Wordly/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Wordlr;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.word-games";
-				INFOPLIST_KEY_NSUserTrackingUsageDescription = "This will be used to deliver personalized ads to you. ";
+				INFOPLIST_KEY_NSUserTrackingUsageDescription = "We use your permission to support ads and measure ad performance while keeping gameplay free.";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -589,7 +589,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = Wordly/Wordly.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Wordly/Preview Content\"";
 				ENABLE_APP_SANDBOX = YES;
@@ -601,7 +601,7 @@
 				INFOPLIST_FILE = Wordly/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Wordlr;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.word-games";
-				INFOPLIST_KEY_NSUserTrackingUsageDescription = "This will be used to deliver personalized ads to you. ";
+				INFOPLIST_KEY_NSUserTrackingUsageDescription = "We use your permission to support ads and measure ad performance while keeping gameplay free.";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;

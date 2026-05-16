@@ -1583,6 +1583,9 @@
         }
       }
     },
+    "Keep your streak going?" : {
+
+    },
     "Language" : {
       "localizations" : {
         "es" : {
@@ -1890,6 +1893,9 @@
           }
         }
       }
+    },
+    "Not now" : {
+
     },
     "Number of Guesses" : {
       "localizations" : {
@@ -2876,6 +2882,12 @@
           }
         }
       }
+    },
+    "Turn On" : {
+
+    },
+    "Turn on reminders so you don't miss the next daily word." : {
+
     },
     "Use filters" : {
       "localizations" : {

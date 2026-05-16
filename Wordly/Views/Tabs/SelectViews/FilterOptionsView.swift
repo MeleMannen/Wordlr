@@ -34,6 +34,7 @@ struct FilterOptionsView: View {
 					
 					TextField("Search for a Word", text: $appManager.searchedWord)
 						.textFieldStyle(WordlrTextFieldStyle())
+						.autocorrectionDisabled()
 						.focused($focusedField, equals: .search)
 						.simultaneousGesture(
 							TapGesture()
@@ -61,6 +62,7 @@ struct FilterOptionsView: View {
 					
 					TextField("Enter Starting Letters", text: $appManager.startsWithFilter)
 						.textFieldStyle(WordlrTextFieldStyle())
+						.autocorrectionDisabled()
 						.focused($focusedField, equals: .startsWith)
 						.simultaneousGesture(
 							TapGesture()
@@ -90,6 +92,7 @@ struct FilterOptionsView: View {
 					
 					TextField("Enter Ending Letters", text: $appManager.endsWithFilter)
 						.textFieldStyle(WordlrTextFieldStyle())
+						.autocorrectionDisabled()
 						.focused($focusedField, equals: .endsWith)
 						.simultaneousGesture(
 							TapGesture()

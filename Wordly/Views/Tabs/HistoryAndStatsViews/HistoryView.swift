@@ -53,71 +53,63 @@ struct HistoryView: View {
 							ForEach(sectionKeys, id: \.self) { date in
 								Section {
 									ForEach(groupedWords[date] ?? [], id: \.id) { gameRecordEntity in
-										NavigationLink(destination: {
-											GameRecordView(gameRecord: gameRecordEntity.gameRecord)
-											
-										}, label: {
-											HStack {
-												if !self.userWantsNormalTheme && self.colorScheme == .dark && gameRecordEntity.gameRecord.mode == .dailyWord && gameRecordEntity.gameRecord.state == .won {
-													Image(systemName: "checkmark")
-														.foregroundStyle(.white)
-														.conditionalShadow(color: .black.opacity(0.3), radius: 2, x: 2, y: 2)
-														.padding(10)
-														.background {
-															Circle()
-																.foregroundStyle(LinearGradient(colors: [.orange, .yellow, .white], startPoint: .bottomLeading, endPoint: .topTrailing))
-															//                                        .padding(5)
-																.gradientShadow(gradient: self.shadowGradient, radius: 3, x: 0, y: 0)
-																.conditionalShadow(color: .black.opacity(0.5), radius: 3, x: 4, y: 4)
-														}
-														.font(.title2).bold()
-													
-												} else {
-													Image(systemName: gameRecordEntity.gameRecord.state == .won ? "checkmark" : "xmark")
-														.foregroundStyle(.white)
-														.conditionalShadow(color: .black.opacity(0.4), radius: 2, x: 2, y: 2)
-														.padding(10)
-														.background {
-															Circle()
-																.foregroundColor(gameRecordEntity.gameRecord.state == .won ? .green : .red)
-																.conditionalShadow(color: .black.opacity(0.3), radius: 3, x: 4, y: 4)
-														}
-														.font(.title2).bold()
-												}
+										LazyVStack(spacing: 0) {
+											NavigationLink(destination: {
+												GameRecordView(gameRecord: gameRecordEntity.gameRecord)
 												
-												VStack(alignment: .leading) {
-													Text(gameRecordEntity.gameRecord.word)
-														.font(.title3)
-														.foregroundStyle(.primary)
-														.conditionalShadow(color: .black.opacity(0.3), radius: 1.5, x: 4, y: 4)
-													
+											}, label: {
+												HStack {
 													if !self.userWantsNormalTheme && self.colorScheme == .dark && gameRecordEntity.gameRecord.mode == .dailyWord && gameRecordEntity.gameRecord.state == .won {
-														Text(gameRecordEntity.gameRecord.mode.localizedName + " - " + String(format: NSLocalizedString("number_letters", comment: "Daily Word Mode with number of letters"), gameRecordEntity.gameRecord.numberOfLetters))
-															.font(.caption)
-															.foregroundStyle(self.gradient)
-															.gradientShadow(gradient: self.shadowGradient, radius: 3, x: 0, y: 0)
-															.conditionalShadow(color: .black.opacity(0.5), radius: 4, x: 4, y: 4)
+														Image(systemName: "checkmark")
+															.foregroundStyle(.white)
+															.conditionalShadow(color: .black.opacity(0.3), radius: 2, x: 2, y: 2)
+															.padding(10)
+															.background {
+																Circle()
+																	.foregroundStyle(LinearGradient(colors: [.orange, .yellow, .white], startPoint: .bottomLeading, endPoint: .topTrailing))
+																//                                        .padding(5)
+																	.gradientShadow(gradient: self.shadowGradient, radius: 3, x: 0, y: 0)
+																	.conditionalShadow(color: .black.opacity(0.5), radius: 3, x: 4, y: 4)
+															}
+															.font(.title2).bold()
 														
-													} else if gameRecordEntity.gameRecord.mode == .dailyWord {
-														Text(gameRecordEntity.gameRecord.mode.localizedName + " - " + String(format: NSLocalizedString("number_letters", comment: "Daily Word Mode with number of letters"), gameRecordEntity.gameRecord.numberOfLetters))
-															.font(.caption)
-															.foregroundStyle(.secondary)
+													} else {
+														Image(systemName: gameRecordEntity.gameRecord.state == .won ? "checkmark" : "xmark")
+															.foregroundStyle(.white)
+															.conditionalShadow(color: .black.opacity(0.4), radius: 2, x: 2, y: 2)
+															.padding(10)
+															.background {
+																Circle()
+																	.foregroundColor(gameRecordEntity.gameRecord.state == .won ? .green : .red)
+																	.conditionalShadow(color: .black.opacity(0.3), radius: 3, x: 4, y: 4)
+															}
+															.font(.title2).bold()
 													}
+													
+													VStack(alignment: .leading) {
+														Text(gameRecordEntity.gameRecord.word)
+															.font(.title3)
+															.foregroundStyle(.primary)
+															.conditionalShadow(color: .black.opacity(0.3), radius: 1.5, x: 4, y: 4)
+														
+														if !self.userWantsNormalTheme && self.colorScheme == .dark && gameRecordEntity.gameRecord.mode == .dailyWord && gameRecordEntity.gameRecord.state == .won {
+															Text(gameRecordEntity.gameRecord.mode.localizedName + " - " + String(format: NSLocalizedString("number_letters", comment: "Daily Word Mode with number of letters"), gameRecordEntity.gameRecord.numberOfLetters))
+																.font(.caption)
+																.foregroundStyle(self.gradient)
+																.gradientShadow(gradient: self.shadowGradient, radius: 3, x: 0, y: 0)
+																.conditionalShadow(color: .black.opacity(0.5), radius: 4, x: 4, y: 4)
+															
+														} else if gameRecordEntity.gameRecord.mode == .dailyWord {
+															Text(gameRecordEntity.gameRecord.mode.localizedName + " - " + String(format: NSLocalizedString("number_letters", comment: "Daily Word Mode with number of letters"), gameRecordEntity.gameRecord.numberOfLetters))
+																.font(.caption)
+																.foregroundStyle(.secondary)
+														}
+													}
+													Spacer()
 												}
-												Spacer()
-											}
-										})
-										
+											})
+										}
 									}
-									//									.onDelete { indexSet in
-									//										withAnimation {
-									//											let toDelete = indexSet.map { groupedWords[date]![$0] }
-									//											toDelete.forEach { modelContext.delete($0) }
-									//											try? modelContext.save()
-									//										}
-									//										#warning("Need to update the groupedWords and sectionKeys after deletion")
-									//									}
-									
 								} header: {
 									SectionHeaderView(letter: date)
 								}
