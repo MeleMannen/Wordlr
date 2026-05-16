@@ -139,8 +139,8 @@ final class AdManager {
 			ATTrackingManager.requestTrackingAuthorization { status in
 				Task { @MainActor in
 					self.hasResolvedTrackingAuthorization = true
+					continuation.resume(returning: status)
 				}
-				continuation.resume(returning: status)
 			}
 		}
 	}

@@ -160,8 +160,7 @@ struct TabsView: View {
             let authorizationStatus = await adManager.requestTrackingAuthorizationIfNeeded()
             print("ATT status: \(authorizationStatus.rawValue)")
 
-            // Let the app return to the foreground cleanly before starting the UMP flow.
-            return
+            guard scenePhase == .active else { return }
         }
 
         await adManager.prepareAdsIfNeeded()

@@ -331,10 +331,10 @@ struct SettingsView: View {
 						
 #if targetEnvironment(simulator)
 						
-						Button(action: {
-							adManager.presentAdInspector()
-							print("Ad Inspector presented.")
-						}, label: {
+			Button(action: {
+				adManager.presentAdInspector()
+				print("Ad Inspector presented.")
+			}, label: {
 							HStack {
 								Image(systemName: "hammer")
 									.font(.title2)
