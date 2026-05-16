@@ -13,7 +13,6 @@ struct GameView18: View {
 	@EnvironmentObject var appManager: AppManager
 	@Environment(AdManager.self) private var adManager: AdManager
 	@Environment(\.modelContext) private var modelContext
-	@Environment(\.dismiss) var dismiss
 	@Environment(\.colorScheme) private var colorScheme
 	@AppStorage("userWantsNormalTheme") private var userWantsNormalTheme: Bool = true
 	@AppStorage("notificationsEnabled") private var notificationsEnabled: Bool = false
@@ -152,10 +151,10 @@ struct GameView18: View {
 											
 										}
 										
-						Button(action: {
-							appManager.insertLetterAtCurrentPosition(keyBoardKey.letter)
-							appManager.keyboard[rowIndex][colIndex].didTapButton.toggle()
-						}, label: {
+										Button(action: {
+											appManager.insertLetterAtCurrentPosition(keyBoardKey.letter)
+											appManager.keyboard[rowIndex][colIndex].didTapButton.toggle()
+										}, label: {
 											Text(keyBoardKey.letter)
 												.font(.title2).bold()
 												.foregroundStyle(keyBoardKey.state == .notUsed ? AnyShapeStyle(.black) : AnyShapeStyle(Color.white))
@@ -194,20 +193,20 @@ struct GameView18: View {
 												self.alertItem = AlertItem(
 													title: Text("The Word Was: \(appManager.word)!"),
 													message: Text("Do you want to see the definition?"),
-											primaryButton: .default(Text("Show Definition")) {
-												self.isShowingCurrentDefinition = true
-												
-												DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
-													print("reseting...")
-													appManager.restartCurrentGame()
-												}
-											},
-											secondaryButton: .cancel(Text("Dismiss")) {
-												print("reseting...")
-												appManager.restartCurrentGame()
-											})
-										}, secondaryButton: .cancel())
-								}
+													primaryButton: .default(Text("Show Definition")) {
+														self.isShowingCurrentDefinition = true
+														
+														DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
+															print("reseting...")
+															appManager.restartCurrentGame()
+														}
+													},
+													secondaryButton: .cancel(Text("Dismiss")) {
+														print("reseting...")
+														appManager.restartCurrentGame()
+													})
+											}, secondaryButton: .cancel())
+									}
 									
 								}, label: {
 									Image(systemName: "arrow.clockwise")
@@ -223,10 +222,10 @@ struct GameView18: View {
 												.foregroundStyle(self.colorForUnused)
 										}
 								})
-									.sensoryFeedback(.impact, trigger: self.didTapResetButton)
-									.sensoryFeedback(.warning, trigger: self.didTapResetButton)
-									.buttonStyle(ScalingButton())
-									.opacity(appManager.selectedGameMode == .dailyWord ? 0.7 : 1.0)
+								.sensoryFeedback(.impact, trigger: self.didTapResetButton)
+								.sensoryFeedback(.warning, trigger: self.didTapResetButton)
+								.buttonStyle(ScalingButton())
+								.opacity(appManager.selectedGameMode == .dailyWord ? 0.7 : 1.0)
 								
 								
 								Spacer()
@@ -294,11 +293,11 @@ struct GameView18: View {
 								
 								Spacer()
 								
-					Button(action: {
-						self.didTapBackButton.toggle()
-						appManager.deleteLetterAtCurrentPosition()
-						
-					}, label: {
+								Button(action: {
+									self.didTapBackButton.toggle()
+									appManager.deleteLetterAtCurrentPosition()
+									
+								}, label: {
 									Image(systemName: "delete.left")
 										.font(.title2).bold()
 										.foregroundStyle(.black)
@@ -332,17 +331,18 @@ struct GameView18: View {
 							Spacer()
 							
 							Button(action: {
+								self.didTapNewGameButton.toggle()
 								if appManager.selectedGameMode == .normal {
-									self.didTapNewGameButton.toggle()
 									appManager.resetBoard()
-									Task {
-										await HintTip.getHintEvent.donate()
-									}
 								} else {
-									dismiss()
+									appManager.getWords()
+									appManager.selectedGameMode = .normal
+								}
+								Task {
+									await HintTip.getHintEvent.donate()
 								}
 							}, label: {
-								Text(appManager.selectedGameMode == .normal ? "New Game" : "Play Something Else")
+								Text(appManager.selectedGameMode == .normal ? "New Game" : "Free Play")
 									.conditionalShadow(color: .black.opacity(0.2), radius: 2, x: 4, y: 4)
 									.font(.title2).bold()
 									.frame(maxWidth: .infinity, minHeight: 40, idealHeight: 45, maxHeight: 50)
@@ -419,13 +419,13 @@ struct GameView18: View {
 					}
 					.padding(.horizontal, 5)
 					.background(
-							hardwareKeyCommands(
-								onInsertLetter: { ch in
-									appManager.insertLetterAtCurrentPosition(ch)
-								},
-								onDelete: {
-									appManager.deleteLetterAtCurrentPosition()
-								},
+						hardwareKeyCommands(
+							onInsertLetter: { ch in
+								appManager.insertLetterAtCurrentPosition(ch)
+							},
+							onDelete: {
+								appManager.deleteLetterAtCurrentPosition()
+							},
 							onReturn: {
 								guard !appManager.isAnimating else { return }
 								appManager.didTapSubmit()
@@ -452,19 +452,20 @@ struct GameView18: View {
 													print("reseting...")
 													appManager.restartCurrentGame()
 												})
-											}, secondaryButton: .cancel())
-									}
+										}, secondaryButton: .cancel())
+								}
 							},
 							onCommandN: {
 								if !appManager.isAnimating && appManager.isGameOver {
+									self.didTapNewGameButton.toggle()
 									if appManager.selectedGameMode == .normal {
-										self.didTapNewGameButton.toggle()
 										appManager.resetBoard()
-										Task {
-											await HintTip.getHintEvent.donate()
-										}
 									} else {
-										dismiss()
+										appManager.getWords()
+										appManager.selectedGameMode = .normal
+									}
+									Task {
+										await HintTip.getHintEvent.donate()
 									}
 								}
 							},
@@ -486,7 +487,7 @@ struct GameView18: View {
 				WordDefinitionView(word: appManager.word)
 					.environmentObject(appManager)
 			})
-				.navigationTitle(appManager.numberOfLetters == 1 ? "Guess the Letter" : "Guess the Word")
+			.navigationTitle(appManager.numberOfLetters == 1 ? "Guess the Letter" : "Guess the Word")
 			.navigationBarTitleDisplayMode(.inline)
 			.toolbar {
 				if appManager.isHintAvailable() && appManager.shouldShowAdButton {
@@ -515,35 +516,35 @@ struct GameView18: View {
 			}
 			
 		}
-			.onDisappear {
-				adManager.currentSelectView = .selectView
-			}
-			.onChange(of: appManager.shouldPromptForNotificationsAfterFirstWin) { _, shouldPrompt in
-				guard shouldPrompt else { return }
-				presentNotificationPromptIfNeeded()
-			}
-			.onChange(of: appManager.isGameOver) { _, _ in
-				presentNotificationPromptIfNeeded()
-			}
-			.onChange(of: appManager.isAnimating) { _, _ in
-				presentNotificationPromptIfNeeded()
-			}
-			.alert(item: self.$alertItem) { item in
-				if let dismissButton = item.dismissButton {
-					Alert(title: item.title, message: item.message, dismissButton: dismissButton)
-				} else if let primaryButton = item.primaryButton, let secondaryButton = item.secondaryButton {
-					Alert(title: item.title, message: item.message, primaryButton: primaryButton, secondaryButton: secondaryButton)
-				} else {
-					Alert(title: item.title)
-				}
-			}
-			.sensoryFeedback(.warning, trigger: self.alertItem?.title)
-			.task {
-				await appManager.loadAd()
-				appManager.hasLoadedAd = true
+		.onDisappear {
+			adManager.currentSelectView = .selectView
+		}
+		.onChange(of: appManager.shouldPromptForNotificationsAfterFirstWin) { _, shouldPrompt in
+			guard shouldPrompt else { return }
+			presentNotificationPromptIfNeeded()
+		}
+		.onChange(of: appManager.isGameOver) { _, _ in
+			presentNotificationPromptIfNeeded()
+		}
+		.onChange(of: appManager.isAnimating) { _, _ in
+			presentNotificationPromptIfNeeded()
+		}
+		.alert(item: self.$alertItem) { item in
+			if let dismissButton = item.dismissButton {
+				Alert(title: item.title, message: item.message, dismissButton: dismissButton)
+			} else if let primaryButton = item.primaryButton, let secondaryButton = item.secondaryButton {
+				Alert(title: item.title, message: item.message, primaryButton: primaryButton, secondaryButton: secondaryButton)
+			} else {
+				Alert(title: item.title)
 			}
 		}
-
+		.sensoryFeedback(.warning, trigger: self.alertItem?.title)
+		.task {
+			await appManager.loadAd()
+			appManager.hasLoadedAd = true
+		}
+	}
+	
 	private func presentNotificationPromptIfNeeded() {
 		guard appManager.isGameOver,
 			  !appManager.isAnimating,
@@ -553,7 +554,7 @@ struct GameView18: View {
 			  alertItem == nil else {
 			return
 		}
-
+		
 		hasQueuedNotificationPromptForCurrentWin = true
 		alertItem = AlertItem(
 			title: Text("Keep your streak going?"),
@@ -573,7 +574,7 @@ struct GameView18: View {
 			}
 		)
 	}
-
+	
 	private func createReminderForCurrentDailyWord() {
 		let reminders = NotificationManager.fetchReminders(context: modelContext)
 		let reminder = reminders.first {
@@ -583,20 +584,20 @@ struct GameView18: View {
 			numberOfLetters: appManager.numberOfLetters,
 			timeToFire: defaultReminderTime()
 		)
-
+		
 		reminder.isEnabled = true
 		if !reminders.contains(where: { $0.id == reminder.id }) {
 			modelContext.insert(reminder)
 		}
-
+		
 		NotificationManager.scheduleDailyWordReminder(reminder: reminder, context: modelContext)
 		try? modelContext.save()
 	}
-
+	
 	private func defaultReminderTime() -> Date {
 		Calendar.current.date(from: DateComponents(year: 2025, month: 9, day: 1, hour: 18, minute: 0)) ?? Date()
 	}
-	}
+}
 
 #Preview {
 	GameView18()

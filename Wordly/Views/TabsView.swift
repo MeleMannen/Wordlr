@@ -119,21 +119,30 @@ struct TabsView: View {
             .task {
                 await resolveTrackingAndPrepareAdsIfNeeded()
             }
+            .task {
+                for await _ in NotificationCenter.default.notifications(named: UIResponder.keyboardWillShowNotification) {
+                    adManager.isKeyboardVisible = true
+                }
+            }
+            .task {
+                for await _ in NotificationCenter.default.notifications(named: UIResponder.keyboardWillHideNotification) {
+                    adManager.isKeyboardVisible = false
+                }
+            }
         }
     }
 
     @ViewBuilder
     private func bottomAd(for geometry: GeometryProxy) -> some View {
-        let _ = print("Checking ad display conditions: selection: \(self.selection), shouldShowAds: \(adManager.shouldShowAds), currentSelectView: \(adManager.currentSelectView), canRequestAds: \(adManager.canRequestAds), isAdsReady: \(adManager.isAdsReady)")
-        if adManager.canRequestAds && adManager.isAdsReady {
-
+        let canRequestAds = adManager.canRequestAds
+        let isAdsReady = adManager.isAdsReady
+        
+        if canRequestAds && isAdsReady {
             if #available(iOS 26.0, *), UIDevice.current.userInterfaceIdiom == .phone {
                 let adSize = currentOrientationAnchoredAdaptiveBanner(width: geometry.size.width - (geometry.size.width / 11))
                 BannerViewContainer(adSize)
                     .frame(width: max(0, adSize.size.width), height: max(0, adSize.size.height))
-                    .padding(.bottom, 55)
-                let _ = print("iOS 26 or later on iPhone, ad width: \(adSize.size.width), geometry width: \(geometry.size.width)")
-
+                    .padding(.bottom, adManager.isKeyboardVisible ? 6 : 55)
             } else if #available(iOS 18.0, *),
                       UIDevice.current.userInterfaceIdiom == .pad || UIDevice.current.userInterfaceIdiom == .mac {
                 let adSize = currentOrientationAnchoredAdaptiveBanner(width: geometry.size.width)
@@ -143,7 +152,7 @@ struct TabsView: View {
                 let adSize = currentOrientationAnchoredAdaptiveBanner(width: geometry.size.width)
                 BannerViewContainer(adSize)
                     .frame(width: max(0, adSize.size.width), height: max(0, adSize.size.height))
-                    .padding(.bottom, 49)
+                    .padding(.bottom, adManager.isKeyboardVisible ? 0 : 49)
             }
         }
     }

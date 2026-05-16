@@ -330,11 +330,10 @@ struct SettingsView: View {
 						})
 						
 #if targetEnvironment(simulator)
-						
-			Button(action: {
-				adManager.presentAdInspector()
-				print("Ad Inspector presented.")
-			}, label: {
+						Button(action: {
+							adManager.presentAdInspector()
+							print("Ad Inspector presented.")
+						}, label: {
 							HStack {
 								Image(systemName: "hammer")
 									.font(.title2)
@@ -387,7 +386,7 @@ struct BannerViewContainer: UIViewRepresentable {
 	
 	func makeUIView(context: Context) -> BannerView {
 		let banner = BannerView(adSize: adSize)
-		//		#warning("Replace the ad unit ID with your own ad unit ID when deploying to production.")
+//		#warning("Replace the ad unit ID with your own ad unit ID when deploying to production.")
 #if targetEnvironment(simulator)
 		banner.adUnitID = "ca-app-pub-3940256099942544/2435281174" // ca-app-pub-7619403750703078/6852604335
 #else
@@ -423,7 +422,7 @@ struct BannerViewContainer: UIViewRepresentable {
 		}
 		
 		func bannerView(_ bannerView: BannerView, didFailToReceiveAdWithError error: Error) {
-			//			print("FAILED TO RECEIVE AD: \(error.localizedDescription), error code: \(error._code), error: \(error)")
+//			print("FAILED TO RECEIVE AD: \(error.localizedDescription), error code: \(error._code), error: \(error)")
 			let errorDomain = error._domain
 			let errorCode = error._code
 			let errorMessage = error.localizedDescription

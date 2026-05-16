@@ -18,6 +18,7 @@ final class AdManager {
 	var shouldShowAds: Bool = true
 	var isMobileAdsStartCalled = false
 	var isAdsReady = false
+	var isKeyboardVisible = false
 	var hasResolvedTrackingAuthorization = false
 	private var isPreparingAds = false
 	private let pathMonitor = NWPathMonitor()

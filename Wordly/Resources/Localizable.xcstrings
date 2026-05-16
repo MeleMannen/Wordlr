@@ -2119,6 +2119,7 @@
       }
     },
     "Play Something Else" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
