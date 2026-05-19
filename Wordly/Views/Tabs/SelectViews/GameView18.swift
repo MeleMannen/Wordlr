@@ -52,76 +52,24 @@ struct GameView18: View {
 							HStack {
 								ForEach(appManager.board[rowIndex].indices, id: \.self) { colIndex in
 									let letter = appManager.board[rowIndex][colIndex]
-									if appManager.numberOfLetters < 5 {
-										Text(letter.letter)
-											.font(.largeTitle).bold()
-											.foregroundStyle(letter.state == .notUsed ? AnyShapeStyle(.black) : AnyShapeStyle(Color.white))
-											.frame(width: geometry2.size.height / CGFloat(6), height: geometry2.size.height / CGFloat(6))
-											.background {
-												if !self.userWantsNormalTheme && self.colorScheme == .dark && appManager.selectedGameMode == .dailyWord && appManager.didWinGame == .won && appManager.isGameOver && (rowIndex == appManager.currentRow - 1 || rowIndex == appManager.board.count) {
-													RoundedRectangle(cornerRadius: 5)
-														.foregroundStyle(appManager.gradient)
-														.gradientShadow(gradient: appManager.shadowGradient, radius: 3, x: 0, y: 0)
-												} else {
-													RoundedRectangle(cornerRadius: 5)
-														.fill(letter.state == .correctPosition ? .green : (letter.state == .correctLetter ? .orange : (letter.state == .usedButNotCorrect ? Color(UIColor.darkGray) : self.colorForUnused)))
-												}
-											}
-											.rotationEffect(.degrees(letter.degreee), anchor: .center)
-											.animation(.interpolatingSpring(mass: 0.7, stiffness: 100, damping: 8, initialVelocity: 1)
-												.speed(1)
-												.delay(0), value: letter.degreee)
-											.animation(.easeInOut(duration: 0.5), value: appManager.didWinGame)
-											.scaleEffect(letter.scale, anchor: .center)
-											.offset(x: rowIndex == appManager.currentRow ? (appManager.isShaking ? -15 : 0) : 0)
-											.onChange(of: letter.state) {
-												if letter.state != .notUsed {
-													appManager.flipCard(rowIndex: rowIndex, colIndex: colIndex)
-												}
-											}
-											.onChange(of: letter.letter) {
-												if !letter.letter.isEmpty {
-													appManager.animateTappedLetter(rowIndex: rowIndex, colIndex: colIndex)
-												} else {
-													appManager.animateRemovingLetter(rowIndex: rowIndex, colIndex: colIndex)
-												}
-											}
-										
-									} else {
-										Text(letter.letter)
-											.font(.largeTitle).bold()
-											.foregroundStyle(letter.state == .notUsed ? AnyShapeStyle(.black) : AnyShapeStyle(Color.white))
-											.frame(width: geometry2.size.height / CGFloat(appManager.numberOfLetters + 1), height: geometry2.size.height / CGFloat(appManager.numberOfLetters + 1))
-											.background {
-												if !self.userWantsNormalTheme && self.colorScheme == .dark && appManager.selectedGameMode == .dailyWord && appManager.didWinGame == .won && appManager.isGameOver && (rowIndex == appManager.currentRow - 1 || rowIndex == appManager.board.count) {
-													RoundedRectangle(cornerRadius: 5)
-														.foregroundStyle(appManager.gradient)
-														.gradientShadow(gradient: appManager.shadowGradient, radius: 3, x: 0, y: 0)
-												} else {
-													RoundedRectangle(cornerRadius: 5)
-														.fill(letter.state == .correctPosition ? .green : (letter.state == .correctLetter ? .orange : (letter.state == .usedButNotCorrect ? Color(UIColor.darkGray) : self.colorForUnused)))
-												}
-											}
-											.rotationEffect(.degrees(letter.degreee), anchor: .center)
-											.animation(.interpolatingSpring(mass: 0.7, stiffness: 100, damping: 8, initialVelocity: 1)
-												.speed(1)
-												.delay(0), value: letter.degreee)
-											.animation(.easeInOut(duration: 0.5), value: appManager.didWinGame)
-											.scaleEffect(letter.scale, anchor: .center)
-											.offset(x: rowIndex == appManager.currentRow ? (appManager.isShaking ? -15 : 0) : 0)
-											.onChange(of: letter.state) {
-												if letter.state != .notUsed {
-													appManager.flipCard(rowIndex: rowIndex, colIndex: colIndex)
-												}
-											}
-											.onChange(of: letter.letter) {
-												if !letter.letter.isEmpty {
-													appManager.animateTappedLetter(rowIndex: rowIndex, colIndex: colIndex)
-												} else {
-													appManager.animateRemovingLetter(rowIndex: rowIndex, colIndex: colIndex)
-												}
-											}
-									}
+									AnimatedGameTile(
+										letter: letter,
+										tileSize: geometry2.size.height / CGFloat(appManager.numberOfLetters < 5 ? 6 : appManager.numberOfLetters + 1),
+										colIndex: colIndex,
+										rowIndex: rowIndex,
+										currentRow: appManager.currentRow,
+										boardCount: appManager.board.count,
+										isShaking: appManager.isShaking,
+										isResettingBoard: appManager.isResettingBoard,
+										selectedGameMode: appManager.selectedGameMode,
+										didWinGame: appManager.didWinGame,
+										isGameOver: appManager.isGameOver,
+										userWantsNormalTheme: self.userWantsNormalTheme,
+										colorScheme: self.colorScheme,
+										colorForUnused: self.colorForUnused,
+										gradient: appManager.gradient,
+										shadowGradient: appManager.shadowGradient
+									)
 								}
 							}
 						}
@@ -332,12 +280,7 @@ struct GameView18: View {
 							
 							Button(action: {
 								self.didTapNewGameButton.toggle()
-								if appManager.selectedGameMode == .normal {
-									appManager.resetBoard()
-								} else {
-									appManager.getWords()
-									appManager.selectedGameMode = .normal
-								}
+								appManager.startNewGameFromGameOver()
 								Task {
 									await HintTip.getHintEvent.donate()
 								}
@@ -458,12 +401,7 @@ struct GameView18: View {
 							onCommandN: {
 								if !appManager.isAnimating && appManager.isGameOver {
 									self.didTapNewGameButton.toggle()
-									if appManager.selectedGameMode == .normal {
-										appManager.resetBoard()
-									} else {
-										appManager.getWords()
-										appManager.selectedGameMode = .normal
-									}
+									appManager.startNewGameFromGameOver()
 									Task {
 										await HintTip.getHintEvent.donate()
 									}

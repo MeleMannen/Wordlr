@@ -19,7 +19,6 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
 	var modelContext: ModelContext?
 	var gameRecordManager: GameRecordManager?
 	
-	
 	@Published var selectedLanguage: LanguageSelection = .norwegian
 	@Published var language: LanguageSelection = .norwegian
 	@Published var gameMode: GameMode = .normal
@@ -66,6 +65,7 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
 	let shadowGradient = LinearGradient(colors: [.orange, .yellow, .yellow, .yellow, .yellow], startPoint: .bottomLeading, endPoint: .topTrailing)
 	
 	private var hintsUsed: Int = 0
+	@Published var isResettingBoard: Bool = false
 	
 	private var rewardedAd: RewardedAd?
 	
@@ -88,14 +88,8 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
 	}
 	
 	func fixStartBoard() {
-		self.board = []
-		var listOfEmtpyStrings: [Letter] = []
-		for _ in 1...self.numberOfLetters {
-			let letter = Letter()
-			listOfEmtpyStrings.append(letter)
-		}
-		for _ in 0..<rowCount(for: self.numberOfLetters) {
-			self.board.append(listOfEmtpyStrings)
+		self.board = (0..<rowCount(for: self.numberOfLetters)).map { _ in
+			(0..<self.numberOfLetters).map { _ in Letter() }
 		}
 	}
 	
@@ -275,177 +269,127 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
 	
 	
 	func highlightBoardLetters(completion: @escaping (Bool) -> Void) {
-		let dispatchGroup = DispatchGroup()
+		guard self.board.indices.contains(self.currentRow) else {
+			completion(false)
+			return
+		}
+		
+		var updatedBoard = self.board
 		var changableWord = self.word
-		for i in 0..<self.board[self.currentRow].count {
+		for i in 0..<updatedBoard[self.currentRow].count {
 			let letterIndex = self.word.index(self.word.startIndex, offsetBy: i)
 			let letter = String(self.word[letterIndex])
-			guard let keyBoardPosition = self.findKeyPosition(letter: self.board[self.currentRow][i].letter) else {
+			let guessedLetter = updatedBoard[self.currentRow][i].letter
+			guard self.findKeyPosition(letter: guessedLetter) != nil else {
 				completion(false)
 				return
 			}
-			if self.board[self.currentRow][i].letter == letter {
-				self.board[self.currentRow][i].isCorrectPosition = true
-				self.keyboard[keyBoardPosition.row][keyBoardPosition.col].isCorrectPosition = true
+			if guessedLetter == letter {
+				updatedBoard[self.currentRow][i].isCorrectPosition = true
 				if let index = changableWord.firstIndex(of: Character(letter)) {
 					changableWord.remove(at: index)
 					
 				} else {
-					changableWord = changableWord.replacingOccurrences(of: self.board[self.currentRow][i].letter, with: "")
+					changableWord = changableWord.replacingOccurrences(of: guessedLetter, with: "")
 				}
 			}
 		}
 		
-		for i in 0..<self.board[self.currentRow].count {
+		for i in 0..<updatedBoard[self.currentRow].count {
 			let letterIndex = self.word.index(self.word.startIndex, offsetBy: i)
 			let letter = String(self.word[letterIndex])
-			guard let keyBoardPosition = self.findKeyPosition(letter: self.board[self.currentRow][i].letter) else {
+			let guessedLetter = updatedBoard[self.currentRow][i].letter
+			guard self.findKeyPosition(letter: guessedLetter) != nil else {
 				completion(false)
 				return
 			}
-			if self.board[self.currentRow][i].letter == letter {
-				print("Correct position: \(self.board[self.currentRow][i].letter), i: \(i), letterIndex: \(letterIndex.utf16Offset(in: self.word))")
-				
-			} else if changableWord.contains(self.board[self.currentRow][i].letter) {
-				print("Correct letter but wrong position: \(self.board[self.currentRow][i].letter), i: \(i), letterIndex: \(letterIndex.utf16Offset(in: self.word))")
-				self.board[self.currentRow][i].isCorrectLetter = true
-				self.keyboard[keyBoardPosition.row][keyBoardPosition.col].isCorrectLetter = true
-				if let index = changableWord.firstIndex(of: Character(self.board[self.currentRow][i].letter)) {
-					print("index1: \(index.utf16Offset(in: self.word)), letter: \(self.board[self.currentRow][i].letter)")
-					print("changanbleWord66: \(changableWord), i: \(i), index: \(index)")
-					let char = changableWord.remove(at: index)
-					
-					print("changanbleWord4: \(changableWord), i: \(i), index: \(index.utf16Offset(in: self.word)), char: \(char), letter: \(letter), letter2: \(self.board[self.currentRow][letterIndex.utf16Offset(in: self.word)].letter)")
-					
+			if guessedLetter == letter {
+				continue
+			} else if changableWord.contains(guessedLetter) {
+				updatedBoard[self.currentRow][i].isCorrectLetter = true
+				if let index = changableWord.firstIndex(of: Character(guessedLetter)) {
+					changableWord.remove(at: index)
 				} else {
-					changableWord = changableWord.replacingOccurrences(of: self.board[self.currentRow][i].letter, with: "")
+					changableWord = changableWord.replacingOccurrences(of: guessedLetter, with: "")
 				}
-				
-				
 			} else {
-				self.board[self.currentRow][i].isUsedButNotCorrect = true
-				self.keyboard[keyBoardPosition.row][keyBoardPosition.col].isUsedButNotCorrect = true
-				
-				if let index = changableWord.firstIndex(of: Character(self.board[self.currentRow][i].letter)) {
-					print("index2: \(index.utf16Offset(in: self.word)), letter: \(self.board[self.currentRow][i].letter)")
-					print("changanbleWord77: \(changableWord), i: \(i), index: \(index)")
-					let char = changableWord.remove(at: index)
-					
-					print("changanbleWord8: \(changableWord), i: \(i), index: \(index), char: \(char), letter: \(letter), letter2: \(self.board[self.currentRow][i].letter)")
-					
+				updatedBoard[self.currentRow][i].isUsedButNotCorrect = true
+				if let index = changableWord.firstIndex(of: Character(guessedLetter)) {
+					changableWord.remove(at: index)
 				} else {
-					changableWord = changableWord.replacingOccurrences(of: self.board[self.currentRow][i].letter, with: "")
+					changableWord = changableWord.replacingOccurrences(of: guessedLetter, with: "")
 				}
 			}
-			
 		}
 		
-		dispatchGroup.enter()
+		for i in updatedBoard[self.currentRow].indices {
+			if updatedBoard[self.currentRow][i].isCorrectPosition {
+				updatedBoard[self.currentRow][i].state = .correctPosition
+			} else if updatedBoard[self.currentRow][i].isCorrectLetter {
+				updatedBoard[self.currentRow][i].state = .correctLetter
+			} else {
+				updatedBoard[self.currentRow][i].state = .usedButNotCorrect
+			}
+		}
+		
+		self.board = updatedBoard
+		
 		self.goThroughBoard() { success in
-			if success {
-				print("goThroughBoard completed successfully.")
-			} else {
-				print("goThroughBoard failed.")
-			}
-			dispatchGroup.leave()
-			
-		}
-		
-		dispatchGroup.notify(queue: .main) {
-			print("Both goThroughBoard and goThroughKeyboard are finished.")
-			completion(true)
+			completion(success)
 		}
 	}
 	
 	
 	func goThroughBoard(completion: @escaping (Bool) -> Void) {
-		for i in 0...self.board[self.currentRow].count-1 {
-			DispatchQueue.main.asyncAfter(deadline: .now() + Double(i) * 0.3) {
-				let letter = self.board[self.currentRow][i]
-				print("letter: \(letter.letter)")
-				if letter.isCorrectPosition {
-					self.board[self.currentRow][i].state = .correctPosition
-				} else if letter.isCorrectLetter {
-					self.board[self.currentRow][i].state = .correctLetter
-				} else {
-					self.board[self.currentRow][i].state = .usedButNotCorrect
-				}
-				
-				
-				
-				if i == self.board[self.currentRow].count-1 {
-					DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-						self.goThroughKeyboard() { success in
-							if success {
-								print("goThroughKeyboard completed successfully.")
-							} else {
-								print("goThroughKeyboard failed.")
-							}
-							self.isAnimating = false
-							completion(true)
-							
-						}
-						
-					}
-				}
+		guard self.board.indices.contains(self.currentRow) else {
+			completion(false)
+			return
+		}
+		
+		let flipDuration = Double(self.board[self.currentRow].count) * 0.3
+		DispatchQueue.main.asyncAfter(deadline: .now() + flipDuration) {
+			self.goThroughKeyboard() { success in
+				self.isAnimating = false
+				completion(success)
 			}
 		}
 	}
 	
 	func goThroughKeyboard(completion: @escaping (Bool) -> Void) {
-		for i in 0...self.board[self.currentRow].count-1 {
+		guard self.board.indices.contains(self.currentRow) else {
+			completion(false)
+			return
+		}
+		
+		var updatedKeyboard = self.keyboard
+		for i in self.board[self.currentRow].indices {
 			guard let keyBoardPosition = self.findKeyPosition(letter: self.board[self.currentRow][i].letter) else {
+				completion(false)
 				return
 			}
-			DispatchQueue.main.async {
-				if self.keyboard[keyBoardPosition.row][keyBoardPosition.col].isCorrectPosition {
-					self.keyboard[keyBoardPosition.row][keyBoardPosition.col].state = .correctPosition
-				} else if self.keyboard[keyBoardPosition.row][keyBoardPosition.col].isCorrectLetter {
-					self.keyboard[keyBoardPosition.row][keyBoardPosition.col].state = .correctLetter
-				} else {
-					self.keyboard[keyBoardPosition.row][keyBoardPosition.col].state = .usedButNotCorrect
-				}
-				
-				if i == self.board[self.currentRow].count-1 {
-					self.currentRow += 1
-					self.currentIndex = 0
-					
-				}
+			let newState = self.board[self.currentRow][i].state
+			let oldState = updatedKeyboard[keyBoardPosition.row][keyBoardPosition.col].state
+			if keyboardStatePriority(newState) > keyboardStatePriority(oldState) {
+				updatedKeyboard[keyBoardPosition.row][keyBoardPosition.col].state = newState
 			}
-			
-			
 		}
+		self.keyboard = updatedKeyboard
+		self.currentRow += 1
+		self.currentIndex = 0
 		completion(true)
 	}
 	
-	func flipCard(rowIndex: Int, colIndex: Int) {
-		withAnimation(.interpolatingSpring(mass: 0.7, stiffness: 100, damping: 8, initialVelocity: 1)
-			.speed(1)
-			.delay(0)) {
-				self.board[rowIndex][colIndex].degreee = 360
-			}
-	}
-	
-	func animateTappedLetter(rowIndex: Int, colIndex: Int) {
-		self.board[rowIndex][colIndex].scale = 1.1
-		withAnimation(.interpolatingSpring(mass: 0.7, stiffness: 100, damping: 8, initialVelocity: 1)
-			.speed(1)
-			.delay(0)) {
-				self.board[rowIndex][colIndex].scale = 1.0
-				
-			}
-		
-	}
-	
-	func animateRemovingLetter(rowIndex: Int, colIndex: Int) {
-		self.board[rowIndex][colIndex].scale = 0.87
-		withAnimation(.interpolatingSpring(mass: 0.7, stiffness: 100, damping: 8, initialVelocity: 1)
-			.speed(1)
-			.delay(0)) {
-				self.board[rowIndex][colIndex].scale = 1.0
-				
-			}
-		
+	private func keyboardStatePriority(_ state: LetterState) -> Int {
+		switch state {
+			case .correctPosition:
+				return 3
+			case .correctLetter:
+				return 2
+			case .usedButNotCorrect:
+				return 1
+			case .notUsed:
+				return 0
+		}
 	}
 	
 	func useWord(word: String) {
@@ -659,7 +603,9 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
 	}
 	
 	
-	func resetBoard() {
+	func resetBoard(animated: Bool = false) {
+		let shouldAnimateReset = animated && !self.board.isEmpty
+		self.isResettingBoard = shouldAnimateReset
 		self.board = []
 		self.keyboard = []
 		self.fixStartBoard()
@@ -669,9 +615,7 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
 		self.currentIndex = 0
 		self.hintsUsed = 0
 		self.message = ""
-		withAnimation {
-			self.isGameOver = false
-		}
+		self.isGameOver = false
 		self.hasSharedResult = false
 		self.didWinGame = .lost
 		self.shouldPromptForNotificationsAfterFirstWin = false
@@ -679,6 +623,19 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
 		self.gameMode = self.selectedGameMode
 		self.resetFilters()
 		self.startDate = Date()
+		
+		if shouldAnimateReset {
+			DispatchQueue.main.asyncAfter(deadline: .now() + 0.35) {
+				self.isResettingBoard = false
+			}
+		} else {
+			self.isResettingBoard = false
+		}
+	}
+	
+	func startNewGameFromGameOver() {
+		self.selectedGameMode = .normal
+		self.resetBoard(animated: true)
 	}
 	
 	func restartCurrentGame() {
@@ -701,7 +658,7 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
 			)
 		}
 		
-		self.resetBoard()
+		self.resetBoard(animated: true)
 	}
 	
 	func resetFilters() {

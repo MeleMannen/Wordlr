@@ -354,17 +354,13 @@ struct Letter: Hashable, Codable, Identifiable {
     var isCorrectPosition: Bool = false
     var isCorrectLetter: Bool = false
     var isUsedButNotCorrect: Bool = false
-    var degreee: Double = 0
-    var scale: Double = 1.0
     var state: LetterState = .notUsed
     
-    init(letter: String = "", isCorrectPosition: Bool = false, isCorrectLetter: Bool = false, isUsedButNotCorrect: Bool = false, degreee: Double = 0, scale: Double = 1.0, state: LetterState = .notUsed) {
+    init(letter: String = "", isCorrectPosition: Bool = false, isCorrectLetter: Bool = false, isUsedButNotCorrect: Bool = false, state: LetterState = .notUsed) {
         self.letter = letter
         self.isCorrectPosition = isCorrectPosition
         self.isCorrectLetter = isCorrectLetter
         self.isUsedButNotCorrect = isUsedButNotCorrect
-        self.degreee = degreee
-        self.scale = scale
         self.state = state
     }
 }

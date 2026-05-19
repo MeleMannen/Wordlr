@@ -25,6 +25,160 @@ public struct GameTile: View {
     }
 }
 
+struct AnimatedGameTile: View {
+    let letter: Letter
+    let tileSize: CGFloat
+    let colIndex: Int
+    let rowIndex: Int
+    let currentRow: Int
+    let boardCount: Int
+    let isShaking: Bool
+    let isResettingBoard: Bool
+    let selectedGameMode: GameMode
+    let didWinGame: GameEndState
+    let isGameOver: Bool
+    let userWantsNormalTheme: Bool
+    let colorScheme: ColorScheme
+    let colorForUnused: Color
+    let gradient: LinearGradient
+    let shadowGradient: LinearGradient
+
+    @State private var spinDegrees = 0.0
+    @State private var tileScale = 1.0
+    @State private var displayedState: LetterState = .notUsed
+    @State private var animationGeneration = 0
+
+    private var tileSpring: Animation {
+        .interpolatingSpring(mass: 0.7, stiffness: 100, damping: 8, initialVelocity: 1)
+            .speed(1)
+            .delay(0)
+    }
+
+    var body: some View {
+        Text(letter.letter)
+            .font(.largeTitle).bold()
+            .foregroundStyle(tileTextColor)
+            .frame(width: tileSize, height: tileSize)
+            .background(tileBackground)
+            .rotationEffect(.degrees(spinDegrees), anchor: .center)
+            .animation(.easeInOut(duration: 0.5), value: didWinGame)
+            .scaleEffect(tileScale, anchor: .center)
+            .offset(x: rowIndex == currentRow ? (isShaking ? -15 : 0) : 0)
+            .onChange(of: letter.id, initial: true) {
+                prepareForCurrentLetterIdentity()
+            }
+            .onChange(of: letter.state) {
+                guard letter.state != .notUsed else { return }
+                animateStateChange(to: letter.state)
+            }
+            .onChange(of: letter.letter) {
+                guard !isResettingBoard else { return }
+                if letter.letter.isEmpty {
+                    animateRemove()
+                } else {
+                    animateTap()
+                }
+            }
+    }
+
+    @ViewBuilder
+    private var tileBackground: some View {
+        if shouldUseCelebrationGradient {
+            RoundedRectangle(cornerRadius: 5)
+                .foregroundStyle(gradient)
+                .gradientShadow(gradient: shadowGradient, radius: 3, x: 0, y: 0)
+        } else {
+            RoundedRectangle(cornerRadius: 5)
+                .fill(tileFill)
+        }
+    }
+
+    private var tileTextColor: Color {
+        displayedState == .notUsed ? .black : .white
+    }
+
+    private var shouldUseCelebrationGradient: Bool {
+        !userWantsNormalTheme &&
+        colorScheme == .dark &&
+        selectedGameMode == .dailyWord &&
+        didWinGame == .won &&
+        isGameOver &&
+        (rowIndex == currentRow - 1 || rowIndex == boardCount)
+    }
+
+    private var tileFill: Color {
+        switch displayedState {
+            case .correctPosition:
+                return .green
+            case .correctLetter:
+                return .orange
+            case .usedButNotCorrect:
+                return Color(UIColor.darkGray)
+            case .notUsed:
+                return colorForUnused
+        }
+    }
+
+    private func prepareForCurrentLetterIdentity() {
+        animationGeneration += 1
+        displayedState = letter.state
+
+        if isResettingBoard {
+            animateSpringSpin(generation: animationGeneration)
+        } else {
+            spinDegrees = 0
+            tileScale = 1.0
+        }
+    }
+
+    private func animateStateChange(to state: LetterState) {
+        animationGeneration += 1
+        animateSpringSpin(
+            to: state,
+            delay: Double(colIndex) * 0.3,
+            generation: animationGeneration
+        )
+    }
+
+    private func animateSpringSpin(to state: LetterState? = nil, delay: Double = 0, generation: Int) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
+            guard generation == animationGeneration else { return }
+
+            var transaction = Transaction()
+            transaction.disablesAnimations = true
+            withTransaction(transaction) {
+                if let state {
+                    displayedState = state
+                }
+                spinDegrees = 0
+                tileScale = 1.0
+            }
+
+            DispatchQueue.main.async {
+                guard generation == animationGeneration else { return }
+
+                withAnimation(tileSpring) {
+                    spinDegrees = 360
+                }
+            }
+        }
+    }
+
+    private func animateTap() {
+        tileScale = 1.1
+        withAnimation(tileSpring) {
+            tileScale = 1.0
+        }
+    }
+
+    private func animateRemove() {
+        tileScale = 0.87
+        withAnimation(tileSpring) {
+            tileScale = 1.0
+        }
+    }
+}
+
 #Preview {
     VStack(spacing: 8) {
         GameTile(letter: "W", fill: .green, textColor: .white)
