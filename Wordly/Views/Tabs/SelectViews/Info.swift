@@ -9,7 +9,7 @@ import SwiftUI
 
 struct Info: View {
 	@Environment(\.dismiss) var dismiss
-	@Environment(AdManager.self) private var adManager: AdManager
+	@Environment(AdManager.self) private var adManager
 	@EnvironmentObject var appState: AppState
 	@AppStorage("userWantsThePhraseNameBack") private var userWantsThePhraseNameBack = false
 	

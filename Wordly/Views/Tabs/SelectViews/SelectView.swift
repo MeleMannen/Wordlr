@@ -11,7 +11,7 @@ struct SelectView: View {
 	@Environment(\.modelContext) var modelContext
 	@Environment(\.colorScheme) private var colorScheme
 	@Environment(\.scenePhase) private var scenePhase
-	@Environment(AdManager.self) private var adManager: AdManager
+	@Environment(AdManager.self) private var adManager
 	@State private var appManager = AppManager()
 	@StateObject var reviewManager = ReviewManager()
 	@StateObject var appState = AppState.shared

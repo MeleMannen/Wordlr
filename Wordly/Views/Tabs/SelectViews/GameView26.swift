@@ -11,7 +11,7 @@ import TipKit
 
 struct GameView26: View {
 	@Environment(AppManager.self) private var appManager
-	@Environment(AdManager.self) private var adManager: AdManager
+	@Environment(AdManager.self) private var adManager
 	@Environment(\.modelContext) private var modelContext
 	@Environment(\.colorScheme) private var colorScheme
 	@Environment(\.scenePhase) private var scenePhase

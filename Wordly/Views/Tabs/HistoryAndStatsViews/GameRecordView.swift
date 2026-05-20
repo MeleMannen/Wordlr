@@ -10,7 +10,7 @@ import SwiftUI
 struct GameRecordView: View {
 	@Environment(\.colorScheme) private var colorScheme
 	@Environment(\.scenePhase) private var scenePhase
-	@Environment(AdManager.self) private var adManager: AdManager
+	@Environment(AdManager.self) private var adManager
 	@AppStorage("userWantsNormalTheme") private var userWantsNormalTheme: Bool = true
 	@AppStorage("userWantsThePhraseNameBack") private var userWantsThePhraseNameBack = false
 	var gameRecord: GameRecord

@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct SpanishWordDefinitionView: View {
-	@Environment(AdManager.self) private var adManager: AdManager
+	@Environment(AdManager.self) private var adManager
 	@EnvironmentObject private var definitionManager: DefinitionManager
 	@State var spanishDefinition: SpanishDefinition?
 	@State var word: String = ""

@@ -9,7 +9,7 @@ import SwiftUI
 
 struct GameView: View {
 	@Environment(AppManager.self) private var appManager
-	@Environment(AdManager.self) private var adManager: AdManager
+	@Environment(AdManager.self) private var adManager
 
     var body: some View {
         Group {

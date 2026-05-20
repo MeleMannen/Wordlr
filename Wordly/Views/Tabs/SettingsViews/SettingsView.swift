@@ -12,7 +12,7 @@ import SwiftData
 struct SettingsView: View {
 	@Environment(\.modelContext) private var context
 	@Environment(\.colorScheme) private var colorScheme
-	@Environment(AdManager.self) private var adManager: AdManager
+	@Environment(AdManager.self) private var adManager
 	@AppStorage("appTheme") private var appTheme: AppTheme = .dark
 	@AppStorage("userWantsNormalTheme") private var userWantsNormalTheme: Bool = true
 	@AppStorage("defaultLanguage") private var defaultLanguage: LanguageSelection = .norwegian

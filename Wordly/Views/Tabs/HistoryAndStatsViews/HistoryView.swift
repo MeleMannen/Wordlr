@@ -11,7 +11,7 @@ import SwiftData
 struct HistoryView: View {
 	@Environment(\.modelContext) private var modelContext
 	@Environment(\.colorScheme) private var colorScheme
-	@Environment(AdManager.self) private var adManager: AdManager
+	@Environment(AdManager.self) private var adManager
 	@AppStorage("defaultStatLanguage") private var defaultStatLanguage: LanguageSelection = .all
 	@AppStorage("defaultStatNumberOfLetters") private var defaultStatNumberOfLetters: Int = 9
 	@AppStorage("defaultStatGameMode") private var defaultStatGameMode: GameMode = .both
@@ -120,9 +120,10 @@ struct HistoryView: View {
 					}
 				}
 				.searchable(text: self.$searchedWord, placement: .navigationBarDrawer(displayMode: .always), prompt: "Search for a Word")
+				.searchToolbarAvoidsHidingContentWhenAvailable()
 				.navigationTitle("History")
 				.navigationBarTitleDisplayMode(.inline)
-				.safeAreaInset(edge: .top) {
+				.safeAreaInset(edge: .top, spacing: 0) {
 					if #available(iOS 26.0, *) {
 						FilterView(numberOfLetters: $numberOfLetters, selectedLanguage: $selectedLanguage, gameMode: $gameMode, showsWhenHintsUsed: $showsWhenHintsUsed)
 					}
@@ -202,6 +203,15 @@ extension View {
 				.blur(radius: radius)
 				.offset(x: x, y: y)
 		)
+	}
+	
+	@ViewBuilder
+	func searchToolbarAvoidsHidingContentWhenAvailable() -> some View {
+		if #available(iOS 17.1, *) {
+			self.searchPresentationToolbarBehavior(.avoidHidingContent)
+		} else {
+			self
+		}
 	}
 }
 

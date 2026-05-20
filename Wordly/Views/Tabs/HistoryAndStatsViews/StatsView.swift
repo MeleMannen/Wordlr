@@ -10,7 +10,7 @@ import Charts
 import SwiftData
 
 struct StatsView: View {
-	@Environment(AdManager.self) private var adManager: AdManager
+	@Environment(AdManager.self) private var adManager
 	@AppStorage("defaultStatLanguage") private var defaultStatLanguage: LanguageSelection = .all
 	@AppStorage("defaultStatNumberOfLetters") private var defaultStatNumberOfLetters: Int = 9
 	@AppStorage("defaultStatGameMode") private var defaultStatGameMode: GameMode = .both

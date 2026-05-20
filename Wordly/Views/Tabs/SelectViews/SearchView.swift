@@ -11,7 +11,7 @@ struct SearchView: View {
 	@Environment(\.dismiss) var dismiss
 	@Environment(\.scenePhase) private var scenePhase
 	@Environment(AppManager.self) private var appManager
-	@Environment(AdManager.self) private var adManager: AdManager
+	@Environment(AdManager.self) private var adManager
 	@Namespace private var namespace
 	@State private var isShowingFilterOptions: Bool = false
 	@State private var didTap: Bool = false

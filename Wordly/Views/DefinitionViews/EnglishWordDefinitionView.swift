@@ -9,7 +9,7 @@ import SwiftUI
 import AVFoundation
 
 struct EnglishWordDefinitionView: View {
-	@Environment(AdManager.self) private var adManager: AdManager
+	@Environment(AdManager.self) private var adManager
 	@EnvironmentObject private var definitionManager: DefinitionManager
 	@State var englishDefinition: [EnglishDefinition] = []
 	@State var word: String = ""
