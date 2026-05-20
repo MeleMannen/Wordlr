@@ -10,7 +10,7 @@ import SwiftUI
 struct SearchView: View {
 	@Environment(\.dismiss) var dismiss
 	@Environment(\.scenePhase) private var scenePhase
-	@EnvironmentObject var appManager: AppManager
+	@Environment(AppManager.self) private var appManager
 	@Environment(AdManager.self) private var adManager: AdManager
 	@Namespace private var namespace
 	@State private var isShowingFilterOptions: Bool = false
@@ -24,6 +24,8 @@ struct SearchView: View {
 	private let filterTip = FilterTip()
 	
 	var body: some View {
+		@Bindable var appManager = appManager
+		
 		if #available(iOS 17.1, *) {
 			VStack {
 				if self.searchResults.isEmpty && !appManager.searchedWord.isEmpty {
@@ -174,13 +176,13 @@ struct SearchView: View {
 			} content: {
 				if #available(iOS 26.0, *) {
 					FilterOptionsView(isShowingFilterOptions: self.$isShowingFilterOptions)
-						.environmentObject(appManager)
+						.environment(appManager)
 						.presentationDetents([.large, .fraction(0.8)], selection: $selectedDetent)
 					
 						.navigationTransition(.zoom(sourceID: "filter", in: self.namespace))
 				} else {
 					FilterOptionsView(isShowingFilterOptions: self.$isShowingFilterOptions)
-						.environmentObject(appManager)
+						.environment(appManager)
 				}
 			}
 			.onChange(of: appManager.isSearching) {
@@ -400,5 +402,5 @@ struct SectionHeaderView: View {
 
 #Preview {
 	SearchView()
-		.environmentObject(AppManager())
+		.environment(AppManager())
 }

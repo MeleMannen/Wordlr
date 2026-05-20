@@ -10,52 +10,76 @@ import SwiftData
 import GoogleMobileAds
 
 @MainActor
-final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
-	@AppStorage("defaultLanguage") private var defaultLanguage: LanguageSelection = .norwegian
-	@AppStorage("defaultNumberOfLetters") private var defaultNumberOfLetters: Int = 5
-	@AppStorage("userWantsThePhraseNameBack") private var userWantsThePhraseNameBack = false
+@Observable
+final class AppManager: NSObject, FullScreenContentDelegate {
+	private var defaultLanguage: LanguageSelection {
+		get {
+			UserDefaults.standard.string(forKey: "defaultLanguage").flatMap(LanguageSelection.init(rawValue:)) ?? .norwegian
+		}
+		set {
+			UserDefaults.standard.set(newValue.rawValue, forKey: "defaultLanguage")
+		}
+	}
+	
+	private var defaultNumberOfLetters: Int {
+		get {
+			UserDefaults.standard.object(forKey: "defaultNumberOfLetters") as? Int ?? 5
+		}
+		set {
+			UserDefaults.standard.set(newValue, forKey: "defaultNumberOfLetters")
+		}
+	}
+	
+	private var userWantsThePhraseNameBack: Bool {
+		get {
+			UserDefaults.standard.bool(forKey: "userWantsThePhraseNameBack")
+		}
+		set {
+			UserDefaults.standard.set(newValue, forKey: "userWantsThePhraseNameBack")
+		}
+	}
 	
 	var gameRecords: [GameRecordEntity] = []
-	var modelContext: ModelContext?
-	var gameRecordManager: GameRecordManager?
+	@ObservationIgnored var modelContext: ModelContext?
+	@ObservationIgnored var gameRecordManager: GameRecordManager?
 	
-	@Published var selectedLanguage: LanguageSelection = .norwegian
-	@Published var language: LanguageSelection = .norwegian
-	@Published var gameMode: GameMode = .normal
-	@Published var selectedGameMode: GameMode = .normal
-	@Published var numberOfLetters: Int = 5
-	@Published var word: String = ""
-	@Published var words: Words?
-	@Published var dailyWords: Words?
-	@Published var board: [[Letter]] = []
-	@Published var keyboard: [[KeyBoardLetter]] = []
-	@Published var currentRow = 0
-	@Published var currentIndex = 0
-	@Published var isGameOver: Bool = false
+	var selectedLanguage: LanguageSelection = .norwegian
+	var language: LanguageSelection = .norwegian
+	var gameMode: GameMode = .normal
+	var selectedGameMode: GameMode = .normal
+	var numberOfLetters: Int = 5
+	var word: String = ""
+	var words: Words?
+	var dailyWords: Words?
+	var board: [[Letter]] = []
+	var keyboard: [[KeyBoardLetter]] = []
+	var currentRow = 0
+	var currentIndex = 0
+	var isGameOver: Bool = false
 	var message: String = ""
-	@Published var isAnimating: Bool = false
-	@Published var isShaking: Bool = false
-	@Published var submitOpacity: Double = 0.5
-	@Published var shouldShowAdButton: Bool = false
-	@Published var hasLoadedAd: Bool = false
+	var isAnimating: Bool = false
+	var isShaking: Bool = false
+	var submitOpacity: Double = 0.5
+	var shouldShowAdButton: Bool = false
+	var hasLoadedAd: Bool = false
 	var startDate: Date = Date()
 	var endDate: Date = Date()
-	@Published var hasSharedResult: Bool = false
-	@Published var didWinGame: GameEndState = .lost
-	@Published var shouldPromptForNotificationsAfterFirstWin: Bool = false
-	@Published var searchedWord: String = ""
-	@Published var isSearching: Bool = false
+	var hasSharedResult: Bool = false
+	var didWinGame: GameEndState = .lost
+	var shouldPromptForNotificationsAfterFirstWin: Bool = false
+	var searchedWord: String = ""
+	var isSearching: Bool = false
 	
-	@Published var isFilteringSearchWord: Bool = true
-	@Published var isFilteringStartWith: Bool = false
-	@Published var startsWithFilter: String = ""
-	@Published var isFilteringEndsWith: Bool = false
-	@Published var endsWithFilter: String = ""
-	@Published var isFilteringExcludeLetters: Bool = false
-	@Published var isFilteringIncludedLetters: Bool = false
-	@Published var selectedExcludedLetters: [String] = []
-	@Published var selectedIncludedLetters: [String] = []
-	@Published var dailyWordHasBeenPlayed: Bool = false
+	var isFilteringSearchWord: Bool = true
+	var isFilteringStartWith: Bool = false
+	var startsWithFilter: String = ""
+	var isFilteringEndsWith: Bool = false
+	var endsWithFilter: String = ""
+	var isFilteringExcludeLetters: Bool = false
+	var isFilteringIncludedLetters: Bool = false
+	var selectedExcludedLetters: [String] = []
+	var selectedIncludedLetters: [String] = []
+	var dailyWordHasBeenPlayed: Bool = false
 	
 	private let valid5LetterNames: [String] = ["SIMEN", "LUKAS", "JONAS", "HELLE", "MARTE", "ROHIN", "HILDE", "TROND", "JOMAR", "DAHLE", "SYVER", "BØRGE", "ØLARS", "HSFKJ"]
 	private let valid6LetterNames: [String] = ["MARTIN", "MARIUS", "TOBIAS", "DANIEL", "HENRIK", "KRISTIN"]
@@ -64,10 +88,10 @@ final class AppManager: NSObject, ObservableObject, FullScreenContentDelegate {
 	let gradient = LinearGradient(colors: [.orange, .yellow, .yellow, .yellow, .yellow, .white], startPoint: .bottomLeading, endPoint: .topTrailing)
 	let shadowGradient = LinearGradient(colors: [.orange, .yellow, .yellow, .yellow, .yellow], startPoint: .bottomLeading, endPoint: .topTrailing)
 	
-	private var hintsUsed: Int = 0
-	@Published var isResettingBoard: Bool = false
+	@ObservationIgnored private var hintsUsed: Int = 0
+	var isResettingBoard: Bool = false
 	
-	private var rewardedAd: RewardedAd?
+	@ObservationIgnored private var rewardedAd: RewardedAd?
 	
 	func getWords() {
 		if let words = WordleDataManager.shared.loadWordsFromJSONFile(selectedLanguage: selectedLanguage) {

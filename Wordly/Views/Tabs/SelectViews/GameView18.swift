@@ -10,7 +10,7 @@ import GoogleMobileAds
 import TipKit
 
 struct GameView18: View {
-	@EnvironmentObject var appManager: AppManager
+	@Environment(AppManager.self) private var appManager
 	@Environment(AdManager.self) private var adManager: AdManager
 	@Environment(\.modelContext) private var modelContext
 	@Environment(\.colorScheme) private var colorScheme
@@ -423,7 +423,7 @@ struct GameView18: View {
 			}
 			.navigationDestination(isPresented: self.$isShowingCurrentDefinition, destination: {
 				WordDefinitionView(word: appManager.word)
-					.environmentObject(appManager)
+					.environment(appManager)
 			})
 			.navigationTitle(appManager.numberOfLetters == 1 ? "Guess the Letter" : "Guess the Word")
 			.navigationBarTitleDisplayMode(.inline)
@@ -431,13 +431,13 @@ struct GameView18: View {
 				if appManager.isHintAvailable() && appManager.shouldShowAdButton {
 					ToolbarItem(placement: .topBarTrailing) {
 						AdButton()
-							.environmentObject(appManager)
+							.environment(appManager)
 					}
 				}
 				
 				ToolbarItem(placement: .topBarTrailing) {
 					SearchToolbarItem()
-						.environmentObject(appManager)
+						.environment(appManager)
 				}
 			}
 		}
@@ -539,5 +539,5 @@ struct GameView18: View {
 
 #Preview {
 	GameView18()
-		.environmentObject(AppManager())
+		.environment(AppManager())
 }

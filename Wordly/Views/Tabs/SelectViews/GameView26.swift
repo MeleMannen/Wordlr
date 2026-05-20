@@ -10,7 +10,7 @@ import GoogleMobileAds
 import TipKit
 
 struct GameView26: View {
-	@EnvironmentObject var appManager: AppManager
+	@Environment(AppManager.self) private var appManager
 	@Environment(AdManager.self) private var adManager: AdManager
 	@Environment(\.modelContext) private var modelContext
 	@Environment(\.colorScheme) private var colorScheme
@@ -436,7 +436,7 @@ struct GameView26: View {
 				}
 				.navigationDestination(isPresented: self.$isShowingCurrentDefinition, destination: {
 					WordDefinitionView(word: appManager.word, language: appManager.language)
-						.environmentObject(appManager)
+						.environment(appManager)
 				})
 				.navigationTitle(appManager.numberOfLetters == 1 ? "Guess the Letter" : "Guess the Word")
 				.navigationBarTitleDisplayMode(.inline)
@@ -444,14 +444,14 @@ struct GameView26: View {
 					ToolbarItemGroup(placement: .topBarTrailing) {
 						if appManager.isHintAvailable() && appManager.shouldShowAdButton && !appManager.isGameOver {
 							AdButton()
-								.environmentObject(appManager)
+								.environment(appManager)
 							
 							SearchToolbarItem()
-								.environmentObject(appManager)
+								.environment(appManager)
 							
 						} else {
 							SearchToolbarItem()
-								.environmentObject(appManager)
+								.environment(appManager)
 						}
 					}
 				}
@@ -556,7 +556,7 @@ struct GameView26: View {
 }
 
 struct AdButton: View {
-	@EnvironmentObject var appManager: AppManager
+	@Environment(AppManager.self) private var appManager
 	@State private var didTap: Bool = false
 	let hintTip = HintTip()
 	
@@ -594,12 +594,12 @@ struct AdButton: View {
 }
 
 struct SearchToolbarItem: View {
-	@EnvironmentObject var appManager: AppManager
+	@Environment(AppManager.self) private var appManager
 	@State var didTapSearchButton: Bool = false
 	private let searchTip = SearchTip()
 	
 	var body: some View {
-		NavigationLink(destination: SearchView().environmentObject(appManager), label: {
+		NavigationLink(destination: SearchView().environment(appManager), label: {
 			Image(systemName: "magnifyingglass")
 				.contentShape(Rectangle())
 		})
@@ -634,5 +634,5 @@ struct ScalingButton: ButtonStyle {
 
 #Preview {
 	GameView26()
-		.environmentObject(AppManager())
+		.environment(AppManager())
 }

@@ -484,6 +484,9 @@
         }
       }
     },
+    "Copy email address" : {
+
+    },
     "Copy Result" : {
       "localizations" : {
         "en" : {
@@ -1824,6 +1827,9 @@
         }
       }
     },
+    "No Mail App Available" : {
+
+    },
     "No Reminders" : {
       "localizations" : {
         "es" : {
@@ -2335,6 +2341,9 @@
         }
       }
     },
+    "Send Feedback" : {
+
+    },
     "Settings" : {
       "localizations" : {
         "en" : {
@@ -2775,6 +2784,9 @@
           }
         }
       }
+    },
+    "The support email address has been copied to the clipboard." : {
+
     },
     "The Word Was: %@!" : {
       "localizations" : {

@@ -25,13 +25,31 @@ struct SettingsView: View {
 	
 	@AppStorage("notificationsEnabled") private var notificationsEnabled: Bool = false
 	@State private var showingNotificationSettingsAlert: Bool = false
+	@State private var showingSupportEmailUnavailableAlert: Bool = false
 	
 	@Query(sort: \DailyWordReminder.timeToFire) private var dailyWordReminders: [DailyWordReminder]
+	
+	private let supportEmailAddress = "kristoffer.fredrik@icloud.com"
 	
 	private var notificationTime: Date = {
 		let calendar = Calendar.current
 		return calendar.date(from: DateComponents(year: 2025, month: 9, day: 1, hour: 18, minute: 0)) ?? Date()
 	}()
+	
+	private var appVersionText: String {
+		"\(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0.0") (\(Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "0"))"
+	}
+	
+	private var supportEmailURL: URL? {
+		var components = URLComponents()
+		components.scheme = "mailto"
+		components.path = supportEmailAddress
+		components.queryItems = [
+			URLQueryItem(name: "subject", value: "Wordlr Feedback"),
+			URLQueryItem(name: "body", value: "\n\n\nApp version: \(appVersionText)")
+		]
+		return components.url
+	}
 	
 	
 	var body: some View {
@@ -263,28 +281,54 @@ struct SettingsView: View {
 					
 					
 					Section {
-						VStack {
+						Button(action: {
+							if let url = URL(string: "https://apps.apple.com/app/id6740833142?action=write-review") {
+								UIApplication.shared.open(url)
+							}
+						}, label: {
 							HStack {
-								Image(systemName: "info.circle")
+								Image(systemName: "star")
 									.font(.title2)
 									.foregroundStyle(.primary)
-								Text("Version")
+								
+								Text("Want To Rate My App?")
+									.foregroundStyle(.primary)
 								
 								Spacer(minLength: 0)
 								
-								Text("\(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0.0") (\(Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "0"))")
-									.fontWeight(.regular)
+								Image(systemName: "arrow.up.right")
+									.font(.caption).bold()
 									.foregroundStyle(.secondary)
-									.contextMenu {
-										Button(action: {
-											UIPasteboard.general.string = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "0.0.0"
-										}) {
-											Text("Copy")
-											Image(systemName: "doc.on.doc")
-										}
-									}
 							}
-						}
+						})
+						
+						Button(action: {
+							openSupportEmail()
+						}, label: {
+							HStack {
+								Image(systemName: "envelope")
+									.font(.title2)
+									.foregroundStyle(.primary)
+								
+								Text("Send Feedback")
+									.foregroundStyle(.primary)
+								
+								Spacer(minLength: 0)
+								
+								Image(systemName: "arrow.up.right")
+									.font(.caption).bold()
+									.foregroundStyle(.secondary)
+							}
+							.contextMenu {
+								Button(action: {
+									UIPasteboard.general.string = supportEmailAddress
+								}) {
+									Text("Copy email address")
+									
+									Image(systemName: "doc.on.doc")
+								}
+							}
+						})
 						
 						Button(action: {
 							Task {
@@ -302,24 +346,6 @@ struct SettingsView: View {
 								
 								Text("Privacy Options")
 									.foregroundStyle(.primary)
-							}
-							
-						})
-						
-						
-						Button(action: {
-							if let url = URL(string: "https://apps.apple.com/app/id6740833142?action=write-review") {
-								UIApplication.shared.open(url)
-							}
-						}, label: {
-							HStack {
-								Image(systemName: "star")
-									.font(.title2)
-									.foregroundStyle(.primary)
-								
-								Text("Want To Rate My App?")
-									.foregroundStyle(.primary)
-								
 								
 								Spacer(minLength: 0)
 								
@@ -327,6 +353,7 @@ struct SettingsView: View {
 									.font(.caption).bold()
 									.foregroundStyle(.secondary)
 							}
+							
 						})
 						
 #if targetEnvironment(simulator)
@@ -352,6 +379,29 @@ struct SettingsView: View {
 						})
 #endif
 						
+						VStack {
+							HStack {
+								Image(systemName: "info.circle")
+									.font(.title2)
+									.foregroundStyle(.primary)
+								Text("Version")
+								
+								Spacer(minLength: 0)
+								
+								Text(appVersionText)
+									.fontWeight(.regular)
+									.foregroundStyle(.secondary)
+									.contextMenu {
+										Button(action: {
+											UIPasteboard.general.string = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "0.0.0"
+										}) {
+											Text("Copy")
+											Image(systemName: "doc.on.doc")
+										}
+									}
+							}
+						}
+						
 					} header: {
 						Text("About")
 					}
@@ -363,8 +413,33 @@ struct SettingsView: View {
 				.onAppear {
 					AnalyticsManager.shared.logScreenViewed(screenName: "SettingsView")
 				}
+				.alert("No Mail App Available", isPresented: $showingSupportEmailUnavailableAlert) {
+					Button("OK", role: .cancel) { }
+				} message: {
+					Text("The support email address has been copied to the clipboard.")
+				}
 			}
 		}
+	}
+	
+	private func openSupportEmail() {
+		guard let url = supportEmailURL, UIApplication.shared.canOpenURL(url) else {
+			copySupportEmailAndShowAlert()
+			return
+		}
+		
+		UIApplication.shared.open(url) { didOpen in
+			if !didOpen {
+				DispatchQueue.main.async {
+					copySupportEmailAndShowAlert()
+				}
+			}
+		}
+	}
+	
+	private func copySupportEmailAndShowAlert() {
+		UIPasteboard.general.string = supportEmailAddress
+		showingSupportEmailUnavailableAlert = true
 	}
 	
 	private func scheduleNotification(reminder: DailyWordReminder) {

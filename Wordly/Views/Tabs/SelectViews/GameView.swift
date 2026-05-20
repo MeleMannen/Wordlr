@@ -8,18 +8,18 @@
 import SwiftUI
 
 struct GameView: View {
-	@EnvironmentObject var appManager: AppManager
+	@Environment(AppManager.self) private var appManager
 	@Environment(AdManager.self) private var adManager: AdManager
 
     var body: some View {
         Group {
             if #available(iOS 26.0, *) {
                 GameView26()
-                    .environmentObject(appManager)
+                    .environment(appManager)
                     .safeAreaPadding(.bottom, adManager.isAdsReady ? (UIDevice.current.userInterfaceIdiom == .pad || UIDevice.current.userInterfaceIdiom == .mac ? 98 : 72) : 0)
             } else {
                 GameView18()
-                    .environmentObject(appManager)
+                    .environment(appManager)
                     .safeAreaPadding(.bottom, adManager.isAdsReady ? (UIDevice.current.userInterfaceIdiom == .pad || UIDevice.current.userInterfaceIdiom == .mac ? 98 : 72) : 0)
             }
         }
@@ -28,6 +28,6 @@ struct GameView: View {
 
 #Preview {
     GameView()
-		.environmentObject(AppManager())
+		.environment(AppManager())
 		.environment(AdManager())
 }

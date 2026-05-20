@@ -14,7 +14,7 @@ enum FilterOptionsFields: Hashable {
 }
 
 struct FilterOptionsView: View {
-	@EnvironmentObject var appManager: AppManager
+	@Environment(AppManager.self) private var appManager
 	@Environment(AdManager.self) private var adManager: AdManager
 	@FocusState var focusedField: FilterOptionsFields?
 	@State private var didTap: Bool = false
@@ -23,6 +23,8 @@ struct FilterOptionsView: View {
 	
 	
 	var body: some View {
+		@Bindable var appManager = appManager
+		
 		NavigationStack {
 			List {
 				VStack {

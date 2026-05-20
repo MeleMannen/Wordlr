@@ -12,7 +12,7 @@ struct SelectView: View {
 	@Environment(\.colorScheme) private var colorScheme
 	@Environment(\.scenePhase) private var scenePhase
 	@Environment(AdManager.self) private var adManager: AdManager
-	@StateObject var appManager = AppManager()
+	@State private var appManager = AppManager()
 	@StateObject var reviewManager = ReviewManager()
 	@StateObject var appState = AppState.shared
 	@AppStorage("hasFixedLanguage") private var hasFixedLanguage: Bool = false
@@ -190,7 +190,7 @@ struct SelectView: View {
 								
 							} else {
 								VStack {
-									NavigationLink(destination: GameView().environmentObject(appManager)) {
+									NavigationLink(destination: GameView().environment(appManager)) {
 								if let streakEntity = appManager.getNormalStreakEntity(), streakEntity.currentStreak > 0 {
 											Text("Free Play - \(streakEntity.currentStreak)🔥")
 												.contentTransition(.numericText(value: Double(streakEntity.currentStreak)))
@@ -293,7 +293,7 @@ struct SelectView: View {
 							
 						} else {
 							VStack {
-								NavigationLink(destination: GameView().environmentObject(appManager)) {
+								NavigationLink(destination: GameView().environment(appManager)) {
 									if let streakEntity = appManager.getNormalStreakEntity(), streakEntity.currentStreak > 0 {
 										Text("Free Play - \(streakEntity.currentStreak)🔥")
 											.contentTransition(.numericText(value: Double(streakEntity.currentStreak)))
@@ -356,7 +356,7 @@ struct SelectView: View {
 											.foregroundStyle(.white)
 											.background {
 												ConditionalButtonBackground(opacity: 0.3)
-													.environmentObject(appManager)
+													.environment(appManager)
 											}
 											.onTapGesture {
 												self.didTapFakePlayDailyWordButton.toggle()
@@ -382,7 +382,7 @@ struct SelectView: View {
 											.foregroundStyle(.white)
 											.background {
 												ConditionalButtonBackground(opacity: 0.3)
-													.environmentObject(appManager)
+													.environment(appManager)
 											}
 											.onTapGesture {
 												self.didTapFakePlayDailyWordButton.toggle()
@@ -402,7 +402,7 @@ struct SelectView: View {
 								
 								
 							} else {
-								NavigationLink(destination: GameView().environmentObject(appManager)) {
+								NavigationLink(destination: GameView().environment(appManager)) {
 									if let streakEntity = appManager.getStreakEntity(), streakEntity.currentStreak > 0, streakEntity.isAlive {
 										Text("Daily Wordlr - \(streakEntity.currentStreak)🔥")
 											.multilineTextAlignment(.center)
@@ -413,7 +413,7 @@ struct SelectView: View {
 											.foregroundStyle(.white)
 											.background {
 												ConditionalButtonBackground2()
-													.environmentObject(appManager)
+													.environment(appManager)
 											}
 									} else {
 										Text("Daily Wordlr")
@@ -424,7 +424,7 @@ struct SelectView: View {
 											.foregroundStyle(.white)
 											.background {
 												ConditionalButtonBackground2()
-													.environmentObject(appManager)
+													.environment(appManager)
 											}
 									}
 								}
@@ -456,7 +456,7 @@ struct SelectView: View {
 											.foregroundStyle(.white)
 											.background {
 												ConditionalButtonBackground(opacity: 0.3)
-													.environmentObject(appManager)
+													.environment(appManager)
 											}
 											.padding(.horizontal, 30)
 											.onTapGesture {
@@ -476,7 +476,7 @@ struct SelectView: View {
 								
 								
 							} else {
-								NavigationLink(destination: GameView().environmentObject(appManager)) {
+								NavigationLink(destination: GameView().environment(appManager)) {
 									if let streakEntity = appManager.getStreakEntity(), streakEntity.currentStreak > 0, streakEntity.isAlive {
 										Text("Daily Wordlr - \(streakEntity.currentStreak)🔥")
 											.multilineTextAlignment(.center)
@@ -487,7 +487,7 @@ struct SelectView: View {
 											.foregroundStyle(.white)
 											.background {
 												ConditionalButtonBackground()
-													.environmentObject(appManager)
+													.environment(appManager)
 											}
 											.padding(.horizontal, 30)
 									} else {
@@ -499,7 +499,7 @@ struct SelectView: View {
 											.foregroundStyle(.white)
 											.background {
 												ConditionalButtonBackground()
-													.environmentObject(appManager)
+													.environment(appManager)
 											}
 											.padding(.horizontal, 30)
 									}
@@ -536,7 +536,7 @@ struct SelectView: View {
 			.safeAreaPadding(.bottom, adManager.isAdsReady ? (UIDevice.current.userInterfaceIdiom == .pad || UIDevice.current.userInterfaceIdiom == .mac ? 80 : 54) : 0)
 			.toolbar {
 				ToolbarItem(placement: .navigationBarTrailing) {
-					NavigationLink(destination: Info().environmentObject(appManager).environmentObject(appState)) {
+					NavigationLink(destination: Info().environment(appManager).environmentObject(appState)) {
 						Image(systemName: "info")
 							.font(.title2)
 							.foregroundStyle(.primary)
@@ -651,7 +651,7 @@ final class AppState: ObservableObject {
 
 struct ConditionalButtonBackground: View {
 	@Environment(\.colorScheme) private var colorScheme
-	@EnvironmentObject var appManager: AppManager
+	@Environment(AppManager.self) private var appManager
 	@AppStorage("userWantsNormalTheme") private var userWantsNormalTheme: Bool = true
 	var opacity: Double = 1.0
 	
@@ -672,7 +672,7 @@ struct ConditionalButtonBackground: View {
 struct ConditionalButtonBackground2: View {
 	@Environment(\.colorScheme) private var colorScheme
 	@Environment(\.scenePhase) private var scenePhase
-	@EnvironmentObject var appManager: AppManager
+	@Environment(AppManager.self) private var appManager
 	@AppStorage("userWantsNormalTheme") private var userWantsNormalTheme: Bool = true
 	
 	var body: some View {
