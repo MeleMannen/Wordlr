@@ -9,6 +9,7 @@ import SwiftUI
 import SwiftData
 import FirebaseCore
 import FirebaseAnalytics
+import TelemetryDeck
 
 @main
 struct WordleApp: App {
@@ -16,11 +17,12 @@ struct WordleApp: App {
     @AppStorage("appTheme") private var appTheme: AppTheme = .dark
     @AppStorage("hasSeenOnboarding") private var hasSeenOnboarding: Bool = false
     @State private var showingOnboardingSheet: Bool = false
-//    @State private var adManager: AdManager = AdManager()
 
     init() {
         FirebaseApp.configure()
         Analytics.setAnalyticsCollectionEnabled(false)
+
+		TelemetryDeck.initialize(config: .init(appID: "2CB2FADD-4FFE-4E4E-A41A-701488B32556"))
     }
 
     var body: some Scene {

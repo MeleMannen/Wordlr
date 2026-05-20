@@ -11,6 +11,7 @@ import GoogleMobileAds
 import TipKit
 import Network
 import AppTrackingTransparency
+import UserNotifications
 
 struct TabsView: View {
     @Environment(\.scenePhase) private var scenePhase
@@ -90,29 +91,6 @@ struct TabsView: View {
                     self.tintColor = .primary
                 }
             }
-            .task(id: notificationsEnabled) {
-                if notificationsEnabled {
-                    NotificationManager.requestPermission() { result in
-                        switch result {
-                            case .success(let granted):
-                                if granted {
-                                    print("Notification permission granted.")
-                                    UNUserNotificationCenter.current().delegate = NotificationsDelegate.shared
-                                    let reminders = NotificationManager.fetchReminders(context: modelContext)
-                                    for reminder in reminders {
-                                        NotificationManager.scheduleDailyWordReminder(reminder: reminder, context: modelContext)
-                                    }
-                                } else {
-                                    print("Notification permission denied.")
-                                    UserDefaults.standard.set(false, forKey: "notificationsEnabled")
-                                }
-                            case .failure(let error):
-                                print("Error requesting notification permission: \(error)")
-                                UserDefaults.standard.set(false, forKey: "notificationsEnabled")
-                        }
-                    }
-                }
-            }
             .task {
                 adManager.startMonitoringConnectivity()
             }
@@ -157,23 +135,45 @@ struct TabsView: View {
         }
     }
 
-    private func resolveTrackingAndPrepareAdsIfNeeded() async {
-        guard scenePhase == .active, !isResolvingStartupPrivacyFlow else { return }
+	private func resolveTrackingAndPrepareAdsIfNeeded() async {
+		guard scenePhase == .active, !isResolvingStartupPrivacyFlow else { return }
+		
+		isResolvingStartupPrivacyFlow = true
+		defer {
+			isResolvingStartupPrivacyFlow = false
+		}
+		
+		if !adManager.hasResolvedTrackingAuthorization {
+			let authorizationStatus = await adManager.requestTrackingAuthorizationIfNeeded()
+			print("ATT status: \(authorizationStatus.rawValue)")
+			
+			guard scenePhase == .active else { return }
+		}
+		
+		await adManager.prepareAdsIfNeeded()
 
-        isResolvingStartupPrivacyFlow = true
-        defer {
-            isResolvingStartupPrivacyFlow = false
-        }
-
-        if !adManager.hasResolvedTrackingAuthorization {
-            let authorizationStatus = await adManager.requestTrackingAuthorizationIfNeeded()
-            print("ATT status: \(authorizationStatus.rawValue)")
-
-            guard scenePhase == .active else { return }
-        }
-
-        await adManager.prepareAdsIfNeeded()
-    }
+		if notificationsEnabled {
+			NotificationManager.requestPermission() { result in
+				switch result {
+					case .success(let granted):
+						if granted {
+							print("Notification permission granted.")
+							UNUserNotificationCenter.current().delegate = NotificationsDelegate.shared
+							let reminders = NotificationManager.fetchReminders(context: modelContext)
+							for reminder in reminders {
+								NotificationManager.scheduleDailyWordReminder(reminder: reminder, context: modelContext)
+							}
+						} else {
+							print("Notification permission denied.")
+							UserDefaults.standard.set(false, forKey: "notificationsEnabled")
+						}
+					case .failure(let error):
+						print("Error requesting notification permission: \(error)")
+						UserDefaults.standard.set(false, forKey: "notificationsEnabled")
+				}
+			}
+		}
+	}
 }
 
 #Preview {

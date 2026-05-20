@@ -55,9 +55,10 @@ class ReviewManager: ObservableObject {
 	
 	private func requestReview() {
 		self.lastReviewPrompt = Date().timeIntervalSince1970
-		
+
 		if let windowScene = UIApplication.shared.connectedScenes
 			.first(where: { $0.activationState == .foregroundActive }) as? UIWindowScene {
+			AnalyticsManager.shared.logReviewPromptShownEvent(timesAskedBefore: self.numberOfTimesAskedBefore)
 			SKStoreReviewController.requestReview(in: windowScene)
 			self.numberOfTimesAskedBefore += 1
 		} else {

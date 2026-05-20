@@ -73,15 +73,34 @@ final class NotificationManager {
 	}
 	
 	static func requestPermission(completion: @escaping (Result<Bool, Error>) -> Void) {
-		AnalyticsManager.shared.logDidTapActivateNotificationsEvent()
-		UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { granted, error in
+		print("Requesting notification permission...")
+		UNUserNotificationCenter.current().getNotificationSettings { settings in
 			DispatchQueue.main.async {
-				if granted || error == nil {
-					AnalyticsManager.shared.logDidActivateNotificationsEvent()
+				switch settings.authorizationStatus {
+				case .authorized, .provisional, .ephemeral:
+					print("Notification permission already granted.")
 					completion(.success(true))
-				} else {
-					print(granted ? "Notification permission granted" : "Notification permission denied: \(error?.localizedDescription ?? "No error info")")
-					completion(.failure(error ?? NSError(domain: "NotificationPermission", code: 1, userInfo: [NSLocalizedDescriptionKey: "Notification permission denied"])))
+				case .denied:
+					print("Notification permission denied.")
+					AnalyticsManager.shared.logNotificationPermissionDeniedEvent()
+					completion(.failure(NSError(domain: "NotificationPermission", code: 1, userInfo: [NSLocalizedDescriptionKey: "Notification permission denied"])))
+				case .notDetermined:
+					print("Notification permission not determined.")
+					AnalyticsManager.shared.logDidTapActivateNotificationsEvent()
+					UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { granted, error in
+						DispatchQueue.main.async {
+							if granted {
+								AnalyticsManager.shared.logDidActivateNotificationsEvent()
+								completion(.success(true))
+							} else {
+								AnalyticsManager.shared.logNotificationPermissionDeniedEvent()
+								completion(.failure(error ?? NSError(domain: "NotificationPermission", code: 1, userInfo: [NSLocalizedDescriptionKey: "Notification permission denied"])))
+							}
+						}
+					}
+				@unknown default:
+					print("Unknown authorization status: \(settings.authorizationStatus)")
+					completion(.success(false))
 				}
 			}
 		}

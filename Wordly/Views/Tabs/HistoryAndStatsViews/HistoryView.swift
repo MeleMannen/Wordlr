@@ -143,12 +143,15 @@ struct HistoryView: View {
 				.onChange(of: self.showsWhenHintsUsed) {
 					self.filterGameRecords()
 				}
+				.task {
+					self.filterGameRecords()
+				}
 				.onAppear {
 					if !self.hasFixedDefualtValues {
 						self.setDefaultValues()
 						self.hasFixedDefualtValues = true
 					}
-					self.filterGameRecords()
+					
 					AnalyticsManager.shared.logScreenViewed(screenName: "HistoryView")
 				}
 			}

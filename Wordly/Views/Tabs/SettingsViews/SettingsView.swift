@@ -51,373 +51,379 @@ struct SettingsView: View {
 		return components.url
 	}
 	
+	private let aboutRowIconWidth: CGFloat = 28
+	
 	
 	var body: some View {
-		GeometryReader { geometry in
-			NavigationStack {
-				List {
-					Section {
-						Button(action: {
-							if let url = URL(string: UIApplication.openSettingsURLString) {
-								UIApplication.shared.open(url)
-							}
-						}, label: {
-							HStack {
-								Text("App Language")
-									.foregroundStyle(.primary)
-								
-								Spacer(minLength: 0)
-								
-								Text("\(Locale.current.localizedString(forIdentifier: String(Locale.preferredLanguages.first?.prefix(2) ?? "en"))?.capitalized ?? "")")
-									.fontWeight(.regular)
-								
-								Image(systemName: "arrow.up.right")
-									.font(.caption).bold()
-									.foregroundStyle(.secondary)
-							}
-						})
-						.modifier(ConditionalPadding())
-						
-						Picker("App Theme", selection: $appTheme) {
-							Text("System")
-								.tag(AppTheme.system)
-							Text("Dark")
-								.tag(AppTheme.dark)
-							Text("Light")
-								.tag(AppTheme.light)
+		NavigationStack {
+			List {
+				Section {
+					Button(action: {
+						if let url = URL(string: UIApplication.openSettingsURLString) {
+							UIApplication.shared.open(url)
+						}
+					}, label: {
+						HStack {
+							Text("App Language")
+								.foregroundStyle(.primary)
 							
+							Spacer(minLength: 0)
+							
+							Text("\(Locale.current.localizedString(forIdentifier: String(Locale.preferredLanguages.first?.prefix(2) ?? "en"))?.capitalized ?? "")")
+								.fontWeight(.regular)
+							
+							Image(systemName: "arrow.up.right")
+								.font(.caption).bold()
+								.foregroundStyle(.secondary)
+						}
+					})
+					.modifier(ConditionalPadding())
+					
+					Picker("App Theme", selection: $appTheme) {
+						Text("System")
+							.tag(AppTheme.system)
+						Text("Dark")
+							.tag(AppTheme.dark)
+						Text("Light")
+							.tag(AppTheme.light)
+						
+					}
+					.modifier(ConditionalPadding())
+					.pickerStyle(.menu)
+					.sensoryFeedback(.selection, trigger: appTheme)
+					.onChange(of: appTheme) { oldValue, newValue in
+						AnalyticsManager.shared.logDidChangeThemeEvent(newTheme: newValue, oldTheme: oldValue)
+					}
+					
+					
+					if self.colorScheme == .dark {
+						Picker("Daily Wordlr Theme", selection: $userWantsNormalTheme) {
+							Text("Standard")
+								.tag(true)
+							Text("Gold")
+								.tag(false)
 						}
 						.modifier(ConditionalPadding())
 						.pickerStyle(.menu)
-						.sensoryFeedback(.selection, trigger: appTheme)
-						.onChange(of: appTheme) { oldValue, newValue in
-							AnalyticsManager.shared.logDidChangeThemeEvent(newTheme: newValue, oldTheme: oldValue)
+						.sensoryFeedback(.selection, trigger: userWantsNormalTheme)
+						.onChange(of: userWantsNormalTheme) {
+							AnalyticsManager.shared.logDidChangeDailyWordThemeEvent(newTheme: userWantsNormalTheme ? "Standard" : "Gold")
 						}
-						
-						
-						if self.colorScheme == .dark {
-							Picker("Daily Wordlr Theme", selection: $userWantsNormalTheme) {
-								Text("Standard")
-									.tag(true)
-								Text("Gold")
-									.tag(false)
-							}
-							.modifier(ConditionalPadding())
-							.pickerStyle(.menu)
-							.sensoryFeedback(.selection, trigger: userWantsNormalTheme)
-							.onChange(of: userWantsNormalTheme) {
-								AnalyticsManager.shared.logDidChangeDailyWordThemeEvent(newTheme: userWantsNormalTheme ? "Standard" : "Gold")
-							}
-						}
-					} header: {
-						Text("General")
 					}
-					
-					Section {
-						Toggle("Daily Wordlr Reminders", isOn: $notificationsEnabled)
-							.modifier(ConditionalPadding())
-							.tint(.green)
-							.onChange(of: notificationsEnabled) { _, newValue in
-								if newValue {
-									NotificationManager.requestPermission() { result in
-										switch result {
-											case .success(let granted):
-												if granted {
-													print("Permission granted")
-												} else {
-													print("Permission denied")
-													notificationsEnabled = false
-												}
-											case .failure(let error):
-												print("Error requesting permission: \(error)")
+				} header: {
+					Text("General")
+				}
+				
+				Section {
+					Toggle("Daily Wordlr Reminders", isOn: $notificationsEnabled)
+						.modifier(ConditionalPadding())
+						.tint(.green)
+						.onChange(of: notificationsEnabled) { _, newValue in
+							if newValue {
+								NotificationManager.requestPermission() { result in
+									switch result {
+										case .success(let granted):
+											if granted {
+												print("Permission granted")
+											} else {
+												print("Permission denied")
 												notificationsEnabled = false
-												self.showingNotificationSettingsAlert = true
-										}
-										
-									}
-									UNUserNotificationCenter.current().delegate = NotificationsDelegate.shared
-									if dailyWordReminders.isEmpty {
-										let reminder = DailyWordReminder(language: self.defaultLanguage, numberOfLetters: self.defaultNumberOfLetters, timeToFire: self.notificationTime)
-										context.insert(reminder)
-										scheduleNotification(reminder: reminder)
-										try? context.save()
-										
-									} else {
-										for reminder in dailyWordReminders {
-											if reminder.isEnabled {
-												scheduleNotification(reminder: reminder)
 											}
-										}
+										case .failure(let error):
+											print("Error requesting permission: \(error)")
+											notificationsEnabled = false
+											self.showingNotificationSettingsAlert = true
 									}
+									
+								}
+								UNUserNotificationCenter.current().delegate = NotificationsDelegate.shared
+								if dailyWordReminders.isEmpty {
+									let reminder = DailyWordReminder(language: self.defaultLanguage, numberOfLetters: self.defaultNumberOfLetters, timeToFire: self.notificationTime)
+									context.insert(reminder)
+									scheduleNotification(reminder: reminder)
+									try? context.save()
+									
 								} else {
 									for reminder in dailyWordReminders {
 										if reminder.isEnabled {
-											NotificationManager.cancelDailyWordReminder(reminder: reminder)
+											scheduleNotification(reminder: reminder)
 										}
 									}
 								}
-							}
-							.alert("To enable notifications, please go to Settings and allow notifications for this app.", isPresented: $showingNotificationSettingsAlert) {
-								Button("OK", role: .cancel) { }
-								Button("Settings") {
-									if let appSettings = URL(string: UIApplication.openSettingsURLString) {
-										UIApplication.shared.open(appSettings)
+							} else {
+								for reminder in dailyWordReminders {
+									if reminder.isEnabled {
+										NotificationManager.cancelDailyWordReminder(reminder: reminder)
 									}
 								}
-								
 							}
-						
-						if notificationsEnabled {
-							NavigationLink {
-								NotificationView()
-							} label: {
-								Text("Edit Daily Wordlr Reminders")
-									.foregroundStyle(.primary)
-									.modifier(ConditionalPadding())
-							}
-							
-							
 						}
-					} header: {
-						Text("Reminders")
-					}
-					
-					Section {
-						Picker("Number of Letters", selection: $defaultNumberOfLetters) {
-							ForEach(1...8, id: \.self) { number in
-								if number == 1 {
-									Text("\(number) Letter")
-										.tag(number)
-								} else {
-									Text("\(number) Letters")
-										.tag(number)
+						.alert("To enable notifications, please go to Settings and allow notifications for this app.", isPresented: $showingNotificationSettingsAlert) {
+							Button("OK", role: .cancel) { }
+							Button("Settings") {
+								if let appSettings = URL(string: UIApplication.openSettingsURLString) {
+									UIApplication.shared.open(appSettings)
 								}
 							}
 							
 						}
-						.modifier(ConditionalPadding())
-						.pickerStyle(.menu)
-						.sensoryFeedback(.selection, trigger: defaultNumberOfLetters)
+					
+					if notificationsEnabled {
+						NavigationLink {
+							NotificationView()
+						} label: {
+							Text("Edit Daily Wordlr Reminders")
+								.foregroundStyle(.primary)
+								.modifier(ConditionalPadding())
+						}
 						
-						Picker("Language", selection: $defaultLanguage) {
-							ForEach(LanguageSelection.languages) { language in
+						
+					}
+				} header: {
+					Text("Reminders")
+				}
+				
+				Section {
+					Picker("Number of Letters", selection: $defaultNumberOfLetters) {
+						ForEach(1...8, id: \.self) { number in
+							if number == 1 {
+								Text("\(number) Letter")
+									.tag(number)
+							} else {
+								Text("\(number) Letters")
+									.tag(number)
+							}
+						}
+						
+					}
+					.modifier(ConditionalPadding())
+					.pickerStyle(.menu)
+					.sensoryFeedback(.selection, trigger: defaultNumberOfLetters)
+					
+					Picker("Language", selection: $defaultLanguage) {
+						ForEach(LanguageSelection.languages) { language in
+							Text(language.localizedName.capitalized)
+								.tag(language)
+						}
+						
+					}
+					.modifier(ConditionalPadding())
+					.pickerStyle(.menu)
+					.sensoryFeedback(.selection, trigger: defaultLanguage)
+					
+					
+				} header: {
+					Text("Game (Default)")
+				}
+				
+				Section {
+					Picker("Number of Letters", selection: $defaultStatNumberOfLetters) {
+						ForEach(1...9, id: \.self) { number in
+							if number == 1 {
+								Text("\(number) Letter")
+									.tag(number)
+							} else if number != 9 {
+								Text("\(number) Letters")
+									.tag(number)
+							} else {
+								Text("All Letters")
+									.tag(number)
+							}
+						}
+						
+					}
+					.modifier(ConditionalPadding())
+					.pickerStyle(.menu)
+					.sensoryFeedback(.selection, trigger: defaultStatNumberOfLetters)
+					
+					Picker("Language", selection: $defaultStatLanguage) {
+						ForEach(LanguageSelection.allCases) { language in
+							if language == .all {
+								Text("All")
+									.tag(language)
+							} else {
 								Text(language.localizedName.capitalized)
 									.tag(language)
 							}
-							
 						}
-						.modifier(ConditionalPadding())
-						.pickerStyle(.menu)
-						.sensoryFeedback(.selection, trigger: defaultLanguage)
 						
-						
-					} header: {
-						Text("Game (Default)")
 					}
+					.modifier(ConditionalPadding())
+					.pickerStyle(.menu)
+					.sensoryFeedback(.selection, trigger: defaultStatLanguage)
 					
-					Section {
-						Picker("Number of Letters", selection: $defaultStatNumberOfLetters) {
-							ForEach(1...9, id: \.self) { number in
-								if number == 1 {
-									Text("\(number) Letter")
-										.tag(number)
-								} else if number != 9 {
-									Text("\(number) Letters")
-										.tag(number)
-								} else {
-									Text("All Letters")
-										.tag(number)
-								}
-							}
-							
-						}
-						.modifier(ConditionalPadding())
-						.pickerStyle(.menu)
-						.sensoryFeedback(.selection, trigger: defaultStatNumberOfLetters)
-						
-						Picker("Language", selection: $defaultStatLanguage) {
-							ForEach(LanguageSelection.allCases) { language in
-								if language == .all {
-									Text("All")
-										.tag(language)
-								} else {
-									Text(language.localizedName.capitalized)
-										.tag(language)
-								}
-							}
-							
-						}
-						.modifier(ConditionalPadding())
-						.pickerStyle(.menu)
-						.sensoryFeedback(.selection, trigger: defaultStatLanguage)
-						
-						Picker("Gamemode", selection: $defaultStatGameMode) {
-							ForEach(GameMode.allCases) { mode in
-								if mode == .both {
-									Text("Both")
-										.tag(mode)
-								} else {
-									Text(mode.localizedName.capitalized)
-										.tag(mode)
-								}
-							}
-						}
-						.modifier(ConditionalPadding())
-						.pickerStyle(.menu)
-						.sensoryFeedback(.selection, trigger: defaultStatGameMode)
-						Picker("Show If Hints Used", selection: $defaultStatHintsUsed) {
-							ForEach(ShowsWhenHintsUsed.allCases) { mode in
+					Picker("Gamemode", selection: $defaultStatGameMode) {
+						ForEach(GameMode.allCases) { mode in
+							if mode == .both {
+								Text("Both")
+									.tag(mode)
+							} else {
 								Text(mode.localizedName.capitalized)
 									.tag(mode)
 							}
 						}
-						.modifier(ConditionalPadding())
-						.pickerStyle(.menu)
-						.sensoryFeedback(.selection, trigger: defaultStatHintsUsed)
-						
-					} header: {
-						Text("Stats and History (Default)")
 					}
+					.modifier(ConditionalPadding())
+					.pickerStyle(.menu)
+					.sensoryFeedback(.selection, trigger: defaultStatGameMode)
+					Picker("Show If Hints Used", selection: $defaultStatHintsUsed) {
+						ForEach(ShowsWhenHintsUsed.allCases) { mode in
+							Text(mode.localizedName.capitalized)
+								.tag(mode)
+						}
+					}
+					.modifier(ConditionalPadding())
+					.pickerStyle(.menu)
+					.sensoryFeedback(.selection, trigger: defaultStatHintsUsed)
 					
-					
-					Section {
-						Button(action: {
-							if let url = URL(string: "https://apps.apple.com/app/id6740833142?action=write-review") {
-								UIApplication.shared.open(url)
-							}
-						}, label: {
-							HStack {
-								Image(systemName: "star")
-									.font(.title2)
-									.foregroundStyle(.primary)
-								
-								Text("Want To Rate My App?")
-									.foregroundStyle(.primary)
-								
-								Spacer(minLength: 0)
-								
-								Image(systemName: "arrow.up.right")
-									.font(.caption).bold()
-									.foregroundStyle(.secondary)
-							}
-						})
-						
-						Button(action: {
-							openSupportEmail()
-						}, label: {
-							HStack {
-								Image(systemName: "envelope")
-									.font(.title2)
-									.foregroundStyle(.primary)
-								
-								Text("Send Feedback")
-									.foregroundStyle(.primary)
-								
-								Spacer(minLength: 0)
-								
-								Image(systemName: "arrow.up.right")
-									.font(.caption).bold()
-									.foregroundStyle(.secondary)
-							}
-							.contextMenu {
-								Button(action: {
-									UIPasteboard.general.string = supportEmailAddress
-								}) {
-									Text("Copy email address")
-									
-									Image(systemName: "doc.on.doc")
-								}
-							}
-						})
-						
-						Button(action: {
-							Task {
-								do {
-									try await adManager.presentPrivacyOptionsForm()
-								} catch {
-									print("Error presenting consent form: \(error)")
-								}
-							}
-						}, label: {
-							HStack {
-								Image(systemName: "hand.raised")
-									.font(.title2)
-									.foregroundStyle(.primary)
-								
-								Text("Privacy Options")
-									.foregroundStyle(.primary)
-								
-								Spacer(minLength: 0)
-								
-								Image(systemName: "arrow.up.right")
-									.font(.caption).bold()
-									.foregroundStyle(.secondary)
-							}
+				} header: {
+					Text("Stats and History (Default)")
+				}
+				
+				
+				Section {
+					Button(action: {
+						AnalyticsManager.shared.logDidTapRateAppEvent()
+						if let url = URL(string: "https://apps.apple.com/app/id6740833142?action=write-review") {
+							UIApplication.shared.open(url)
+						}
+					}, label: {
+						HStack {
+							Image(systemName: "star")
+								.font(.title2)
+								.foregroundStyle(.primary)
+								.frame(width: aboutRowIconWidth, alignment: .center)
 							
-						})
-						
-#if targetEnvironment(simulator)
-						Button(action: {
-							adManager.presentAdInspector()
-							print("Ad Inspector presented.")
-						}, label: {
-							HStack {
-								Image(systemName: "hammer")
-									.font(.title2)
-									.foregroundStyle(.primary)
+							Text("Want To Rate My App?")
+								.foregroundStyle(.primary)
+							
+							Spacer(minLength: 0)
+							
+							Image(systemName: "arrow.up.right")
+								.font(.caption).bold()
+								.foregroundStyle(.secondary)
+						}
+					})
+					
+					Button(action: {
+						openSupportEmail()
+					}, label: {
+						HStack {
+							Image(systemName: "envelope")
+								.font(.title2)
+								.foregroundStyle(.primary)
+								.frame(width: aboutRowIconWidth, alignment: .center)
+							
+							Text("Send Feedback")
+								.foregroundStyle(.primary)
+							
+							Spacer(minLength: 0)
+							
+							Image(systemName: "arrow.up.right")
+								.font(.caption).bold()
+								.foregroundStyle(.secondary)
+						}
+						.contextMenu {
+							Button(action: {
+								UIPasteboard.general.string = supportEmailAddress
+							}) {
+								Text("Copy email address")
 								
-								Text("Ad Inspector")
-									.foregroundStyle(.primary)
-								
-								
-								Spacer(minLength: 0)
-								
-								Image(systemName: "arrow.up.right")
-									.font(.caption).bold()
-									.foregroundStyle(.secondary)
-							}
-						})
-#endif
-						
-						VStack {
-							HStack {
-								Image(systemName: "info.circle")
-									.font(.title2)
-									.foregroundStyle(.primary)
-								Text("Version")
-								
-								Spacer(minLength: 0)
-								
-								Text(appVersionText)
-									.fontWeight(.regular)
-									.foregroundStyle(.secondary)
-									.contextMenu {
-										Button(action: {
-											UIPasteboard.general.string = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "0.0.0"
-										}) {
-											Text("Copy")
-											Image(systemName: "doc.on.doc")
-										}
-									}
+								Image(systemName: "doc.on.doc")
 							}
 						}
+					})
+					
+					Button(action: {
+						Task {
+							do {
+								try await adManager.presentPrivacyOptionsForm()
+							} catch {
+								print("Error presenting consent form: \(error)")
+							}
+						}
+					}, label: {
+						HStack {
+							Image(systemName: "hand.raised")
+								.font(.title2)
+								.foregroundStyle(.primary)
+								.frame(width: aboutRowIconWidth, alignment: .center)
+							
+							Text("Privacy Options")
+								.foregroundStyle(.primary)
+							
+							Spacer(minLength: 0)
+							
+							Image(systemName: "arrow.up.right")
+								.font(.caption).bold()
+								.foregroundStyle(.secondary)
+						}
 						
-					} header: {
-						Text("About")
+					})
+					
+#if targetEnvironment(simulator)
+					Button(action: {
+						adManager.presentAdInspector()
+						print("Ad Inspector presented.")
+					}, label: {
+						HStack {
+							Image(systemName: "hammer")
+								.font(.title2)
+								.foregroundStyle(.primary)
+								.frame(width: aboutRowIconWidth, alignment: .center)
+							
+							Text("Ad Inspector")
+								.foregroundStyle(.primary)
+							
+							
+							Spacer(minLength: 0)
+							
+							Image(systemName: "arrow.up.right")
+								.font(.caption).bold()
+								.foregroundStyle(.secondary)
+						}
+					})
+#endif
+					
+					VStack {
+						HStack {
+							Image(systemName: "info.circle")
+								.font(.title2)
+								.foregroundStyle(.primary)
+								.frame(width: aboutRowIconWidth, alignment: .center)
+							Text("Version")
+							
+							Spacer(minLength: 0)
+							
+							Text(appVersionText)
+								.fontWeight(.regular)
+								.foregroundStyle(.secondary)
+								.contextMenu {
+									Button(action: {
+										UIPasteboard.general.string = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "0.0.0"
+									}) {
+										Text("Copy")
+										Image(systemName: "doc.on.doc")
+									}
+								}
+						}
 					}
+					
+				} header: {
+					Text("About")
 				}
-				.fontWeight(.medium)
-				.navigationTitle("Settings")
-				.safeAreaPadding(.bottom, adManager.isAdsReady ? (UIDevice.current.userInterfaceIdiom == .pad || UIDevice.current.userInterfaceIdiom == .mac ? 80 : 54) : 0)
-				.tint(.secondary)
-				.onAppear {
-					AnalyticsManager.shared.logScreenViewed(screenName: "SettingsView")
-				}
-				.alert("No Mail App Available", isPresented: $showingSupportEmailUnavailableAlert) {
-					Button("OK", role: .cancel) { }
-				} message: {
-					Text("The support email address has been copied to the clipboard.")
-				}
+			}
+			.fontWeight(.medium)
+			.navigationTitle("Settings")
+			.safeAreaPadding(.bottom, adManager.isAdsReady ? (UIDevice.current.userInterfaceIdiom == .pad || UIDevice.current.userInterfaceIdiom == .mac ? 80 : 54) : 0)
+			.tint(.secondary)
+			.onAppear {
+				AnalyticsManager.shared.logScreenViewed(screenName: "SettingsView")
+			}
+			.alert("No Mail App Available", isPresented: $showingSupportEmailUnavailableAlert) {
+				Button("OK", role: .cancel) { }
+			} message: {
+				Text("The support email address has been copied to the clipboard.")
 			}
 		}
 	}
@@ -461,7 +467,7 @@ struct BannerViewContainer: UIViewRepresentable {
 	
 	func makeUIView(context: Context) -> BannerView {
 		let banner = BannerView(adSize: adSize)
-//		#warning("Replace the ad unit ID with your own ad unit ID when deploying to production.")
+		//		#warning("Replace the ad unit ID with your own ad unit ID when deploying to production.")
 #if targetEnvironment(simulator)
 		banner.adUnitID = "ca-app-pub-3940256099942544/2435281174" // ca-app-pub-7619403750703078/6852604335
 #else
@@ -497,7 +503,7 @@ struct BannerViewContainer: UIViewRepresentable {
 		}
 		
 		func bannerView(_ bannerView: BannerView, didFailToReceiveAdWithError error: Error) {
-//			print("FAILED TO RECEIVE AD: \(error.localizedDescription), error code: \(error._code), error: \(error)")
+			//			print("FAILED TO RECEIVE AD: \(error.localizedDescription), error code: \(error._code), error: \(error)")
 			let errorDomain = error._domain
 			let errorCode = error._code
 			let errorMessage = error.localizedDescription

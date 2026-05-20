@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		63432AFA2FBD42BB005529C4 /* TelemetryDeck in Frameworks */ = {isa = PBXBuildFile; productRef = 63432AF92FBD42BB005529C4 /* TelemetryDeck */; };
 		6344F4FF2EB9502300948552 /* KeyPress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6344F4FE2EB9500D00948552 /* KeyPress.swift */; };
 		63B1E1362F795EA500F36987 /* AdManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B1E1352F795EA500F36987 /* AdManager.swift */; };
 		63B9B4152EA58ED2008483FB /* FilterOptionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B9B3F72EA58ED2008483FB /* FilterOptionsView.swift */; };
@@ -119,6 +120,7 @@
 				63F225952E53B24100248D30 /* GoogleUserMessagingPlatform in Frameworks */,
 				63F697CB2E05A328008B0B6E /* GoogleMobileAds in Frameworks */,
 				63BF73DD2F4479CB0065D40B /* FirebaseAnalytics in Frameworks */,
+				63432AFA2FBD42BB005529C4 /* TelemetryDeck in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -289,6 +291,7 @@
 				63F697CA2E05A328008B0B6E /* GoogleMobileAds */,
 				63F225942E53B24100248D30 /* GoogleUserMessagingPlatform */,
 				63BF73DC2F4479CB0065D40B /* FirebaseAnalytics */,
+				63432AF92FBD42BB005529C4 /* TelemetryDeck */,
 			);
 			productName = Wordle;
 			productReference = 6382E3BC2D12FE0500B61353 /* Wordly.app */;
@@ -324,6 +327,7 @@
 				63F697C92E05A328008B0B6E /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */,
 				63F225932E53B24100248D30 /* XCRemoteSwiftPackageReference "swift-package-manager-google-user-messaging-platform" */,
 				63BF73DB2F4479CB0065D40B /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				63432AF82FBD42BB005529C4 /* XCRemoteSwiftPackageReference "SwiftSDK" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 6382E3BD2D12FE0500B61353 /* Products */;
@@ -654,6 +658,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		63432AF82FBD42BB005529C4 /* XCRemoteSwiftPackageReference "SwiftSDK" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/TelemetryDeck/SwiftSDK";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.13.0;
+			};
+		};
 		63BF73DB2F4479CB0065D40B /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
@@ -681,6 +693,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		63432AF92FBD42BB005529C4 /* TelemetryDeck */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 63432AF82FBD42BB005529C4 /* XCRemoteSwiftPackageReference "SwiftSDK" */;
+			productName = TelemetryDeck;
+		};
 		63BF73DC2F4479CB0065D40B /* FirebaseAnalytics */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 63BF73DB2F4479CB0065D40B /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
