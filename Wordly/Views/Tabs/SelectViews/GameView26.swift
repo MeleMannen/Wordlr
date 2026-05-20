@@ -20,6 +20,7 @@ struct GameView26: View {
 	@State var didTapSubmitButton: Bool = false
 	@State var didTapBackButton: Bool = false
 	@State var didTapResetButton: Bool = false
+	@State var didTapResetGameAlertButton: Bool = false
 	@State var didTapNewGameButton: Bool = false
 	@State var didTapShowDefinitionButton: Bool = false
 	@State var isShowingCurrentDefinition: Bool = false
@@ -110,24 +111,17 @@ struct GameView26: View {
 															.frame(minWidth: geometry2.size.width / CGFloat(14), maxWidth: geometry2.size.width / CGFloat(12), minHeight: geometry2.size.height / CGFloat(10), idealHeight: geometry2.size.height / CGFloat(8), maxHeight: geometry2.size.height / CGFloat(6))
 														
 													}
-													Button(action: {
+													KeyboardKeyButton26(
+														key: keyBoardKey,
+														colorForUnused: self.colorForUnused,
+														colorForWhenAppInBackground: self.colorForWhenAppInBackground,
+														scenePhase: self.scenePhase,
+														namespace: self.namespace,
+														width: geometry2.size.width,
+														height: geometry2.size.height
+													) {
 														appManager.insertLetterAtCurrentPosition(keyBoardKey.letter)
-														appManager.keyboard[rowIndex][colIndex].didTapButton.toggle()
-													}, label: {
-														Text(keyBoardKey.letter)
-															.font(.title2).bold()
-															.foregroundStyle(keyBoardKey.state == .notUsed ? AnyShapeStyle(.black) : AnyShapeStyle(Color.white))
-															.frame(minWidth: geometry2.size.width / CGFloat(14), maxWidth: geometry2.size.width / CGFloat(12), minHeight: geometry2.size.height / CGFloat(10), idealHeight: geometry2.size.height / CGFloat(8), maxHeight: geometry2.size.height / CGFloat(6))
-															.background {
-																if self.scenePhase == .background {
-																	RoundedRectangle(cornerRadius: 5)
-																		.foregroundStyle(keyBoardKey.state == .correctPosition ? Color(uiColor: .systemGreen) : (keyBoardKey.state == .correctLetter ? .orange : (keyBoardKey.state == .usedButNotCorrect ? Color(UIColor.darkGray) : self.colorForWhenAppInBackground)))
-																}
-															}
-													})
-													.sensoryFeedback(.impact, trigger: keyBoardKey.didTapButton)
-													.glassEffect(.regular.tint(keyBoardKey.state == .correctPosition ? .green : (keyBoardKey.state == .correctLetter ? .orange : (keyBoardKey.state == .usedButNotCorrect ? Color(UIColor.darkGray) : self.colorForUnused))).interactive(), in: .rect(cornerRadius: 5.0))
-													.glassEffectID("\(keyBoardKey.letter)", in: self.namespace)
+													}
 													
 													
 													
@@ -161,11 +155,13 @@ struct GameView26: View {
 																DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
 																	print("reseting...")
 																	appManager.restartCurrentGame()
+																	self.didTapResetGameAlertButton.toggle()
 																}
 															},
 															secondaryButton: .cancel(Text("Dismiss")) {
 																print("reseting...")
 																appManager.restartCurrentGame()
+																self.didTapResetGameAlertButton.toggle()
 															})
 													}, secondaryButton: .cancel())
 											}
@@ -188,10 +184,8 @@ struct GameView26: View {
 													}
 												}
 										})
-										.sensoryFeedback(.impact, trigger: self.didTapResetButton)
 										.glassEffect(.regular.tint(self.colorForUnused.opacity(appManager.selectedGameMode == .dailyWord ? 0.4 : 1.0)).interactive(), in: .rect(cornerRadius: 10.0))
 										.glassEffectID("reset", in: self.namespace)
-										.sensoryFeedback(.warning, trigger: self.didTapResetButton)
 										
 										
 										
@@ -219,9 +213,7 @@ struct GameView26: View {
 														RoundedRectangle(cornerRadius: 10)
 															.foregroundStyle(Color(uiColor: .systemGreen))
 															.opacity(appManager.submitOpacity)
-														
 													}
-													
 												}
 										})
 										.glassEffectID("submit", in: self.namespace)
@@ -277,6 +269,11 @@ struct GameView26: View {
 								}
 							}
 							.opacity((appManager.isGameOver && !appManager.isAnimating) ? 0 : 1)
+							.animation(.easeOut(duration: 0.3), value: appManager.isGameOver)
+							.animation(.easeOut(duration: 0.3), value: appManager.isAnimating)
+							.sensoryFeedback(.selection, trigger: appManager.isAnimating) { oldValue, newValue in
+								oldValue && !newValue
+							}
 							
 							
 							VStack(alignment: .center) {
@@ -365,9 +362,6 @@ struct GameView26: View {
 									
 									Spacer()
 								}
-								
-								
-								
 							}
 							.opacity((appManager.isGameOver && !appManager.isAnimating) ? 1 : 0)
 							.sensoryFeedback(.success, trigger: (appManager.isGameOver && !appManager.isAnimating))
@@ -468,7 +462,6 @@ struct GameView26: View {
 				DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
 					adManager.shouldShowAds = false
 				}
-				
 			}
 			.onDisappear {
 				adManager.currentSelectView = .selectView
@@ -477,11 +470,16 @@ struct GameView26: View {
 				guard shouldPrompt else { return }
 				presentNotificationPromptIfNeeded()
 			}
-			.onChange(of: appManager.isGameOver) { _, _ in
+			.onChange(of: appManager.isGameOver) {
 				presentNotificationPromptIfNeeded()
 			}
-			.onChange(of: appManager.isAnimating) { _, _ in
+			.onChange(of: appManager.isAnimating) {
 				presentNotificationPromptIfNeeded()
+			}
+			.onChange(of: self.alertItem?.title) {
+				if self.alertItem != nil {
+					self.didTapResetButton.toggle()
+				}
 			}
 			.alert(item: self.$alertItem) { item in
 				if let dismissButton = item.dismissButton {
@@ -492,13 +490,13 @@ struct GameView26: View {
 					Alert(title: item.title)
 				}
 			}
-			.sensoryFeedback(.warning, trigger: self.alertItem?.title)
+			.sensoryFeedback(.warning, trigger: self.didTapResetButton)
+			.sensoryFeedback(.success, trigger: self.didTapResetGameAlertButton)
 			.task {
 				await appManager.loadAd()
 				appManager.hasLoadedAd = true
 			}
 		}
-		
 	}
 	
 	private func presentNotificationPromptIfNeeded() {
@@ -611,6 +609,108 @@ struct SearchToolbarItem: View {
 		})
 		.sensoryFeedback(.selection, trigger: self.didTapSearchButton)
 		.popoverTip(self.searchTip)
+	}
+}
+
+struct KeyboardKeyButton18: View {
+	let key: KeyBoardLetter
+	let colorForUnused: Color
+	let width: CGFloat
+	let height: CGFloat
+	let action: () -> Void
+	
+	@State private var feedbackTrigger: Bool = false
+	
+	var body: some View {
+		Button {
+			action()
+			feedbackTrigger.toggle()
+		} label: {
+			Text(key.letter)
+				.font(.title2).bold()
+				.foregroundStyle(key.state == .notUsed ? AnyShapeStyle(.black) : AnyShapeStyle(Color.white))
+				.frame(minWidth: width / CGFloat(14), maxWidth: width / CGFloat(12), minHeight: height / CGFloat(10), idealHeight: height / CGFloat(8), maxHeight: height / CGFloat(6))
+				.background {
+					RoundedRectangle(cornerRadius: 5)
+						.fill(keyColor)
+				}
+		}
+		.buttonStyle(ScalingButton())
+		.sensoryFeedback(.impact, trigger: feedbackTrigger)
+	}
+	
+	private var keyColor: Color {
+		switch key.state {
+			case .correctPosition:
+				return .green
+			case .correctLetter:
+				return .orange
+			case .usedButNotCorrect:
+				return Color(UIColor.darkGray)
+			case .notUsed:
+				return colorForUnused
+		}
+	}
+}
+
+@available(iOS 26.0, *)
+struct KeyboardKeyButton26: View {
+	let key: KeyBoardLetter
+	let colorForUnused: Color
+	let colorForWhenAppInBackground: Color
+	let scenePhase: ScenePhase
+	let namespace: Namespace.ID
+	let width: CGFloat
+	let height: CGFloat
+	let action: () -> Void
+	
+	@State private var feedbackTrigger: Bool = false
+	
+	var body: some View {
+		Button {
+			action()
+			feedbackTrigger.toggle()
+		} label: {
+			Text(key.letter)
+				.font(.title2).bold()
+				.foregroundStyle(key.state == .notUsed ? AnyShapeStyle(.black) : AnyShapeStyle(Color.white))
+				.frame(minWidth: width / CGFloat(14), maxWidth: width / CGFloat(12), minHeight: height / CGFloat(10), idealHeight: height / CGFloat(8), maxHeight: height / CGFloat(6))
+				.background {
+					if scenePhase == .background {
+						RoundedRectangle(cornerRadius: 5)
+							.foregroundStyle(backgroundKeyColor)
+					}
+				}
+		}
+		.sensoryFeedback(.impact, trigger: feedbackTrigger)
+		.glassEffect(.regular.tint(keyColor).interactive(), in: .rect(cornerRadius: 5.0))
+		.glassEffectID("\(key.letter)", in: namespace)
+	}
+	
+	private var keyColor: Color {
+		switch key.state {
+			case .correctPosition:
+				return .green
+			case .correctLetter:
+				return .orange
+			case .usedButNotCorrect:
+				return Color(UIColor.darkGray)
+			case .notUsed:
+				return colorForUnused
+		}
+	}
+	
+	private var backgroundKeyColor: Color {
+		switch key.state {
+			case .correctPosition:
+				return Color(uiColor: .systemGreen)
+			case .correctLetter:
+				return .orange
+			case .usedButNotCorrect:
+				return Color(UIColor.darkGray)
+			case .notUsed:
+				return colorForWhenAppInBackground
+		}
 	}
 }
 

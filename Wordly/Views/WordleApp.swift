@@ -10,6 +10,7 @@ import SwiftData
 import FirebaseCore
 import FirebaseAnalytics
 import TelemetryDeck
+import PostHog
 
 @main
 struct WordleApp: App {
@@ -23,6 +24,12 @@ struct WordleApp: App {
         Analytics.setAnalyticsCollectionEnabled(false)
 
 		TelemetryDeck.initialize(config: .init(appID: "2CB2FADD-4FFE-4E4E-A41A-701488B32556"))
+		
+		let postHogConfig = PostHogConfig(projectToken: "phc_chCgS3rwJ0RaoaDMl61jK881N1oHxvRWpS6ok5aQJmX", host: "https://eu.i.posthog.com")
+		postHogConfig.captureScreenViews = false
+		postHogConfig.debug = true
+		postHogConfig.reuseAnonymousId = true
+		PostHogSDK.shared.setup(postHogConfig)
     }
 
     var body: some Scene {

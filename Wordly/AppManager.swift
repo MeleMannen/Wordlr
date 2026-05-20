@@ -89,6 +89,7 @@ final class AppManager: NSObject, FullScreenContentDelegate {
 	let shadowGradient = LinearGradient(colors: [.orange, .yellow, .yellow, .yellow, .yellow], startPoint: .bottomLeading, endPoint: .topTrailing)
 	
 	@ObservationIgnored private var hintsUsed: Int = 0
+	@ObservationIgnored private var submittedWordWaitingForReveal: String?
 	var isResettingBoard: Bool = false
 	
 	@ObservationIgnored private var rewardedAd: RewardedAd?
@@ -358,25 +359,7 @@ final class AppManager: NSObject, FullScreenContentDelegate {
 		
 		self.board = updatedBoard
 		
-		self.goThroughBoard() { success in
-			completion(success)
-		}
-	}
-	
-	
-	func goThroughBoard(completion: @escaping (Bool) -> Void) {
-		guard self.board.indices.contains(self.currentRow) else {
-			completion(false)
-			return
-		}
-		
-		let flipDuration = Double(self.board[self.currentRow].count) * 0.3
-		DispatchQueue.main.asyncAfter(deadline: .now() + flipDuration) {
-			self.goThroughKeyboard() { success in
-				self.isAnimating = false
-				completion(success)
-			}
-		}
+		completion(true)
 	}
 	
 	func goThroughKeyboard(completion: @escaping (Bool) -> Void) {
@@ -397,7 +380,12 @@ final class AppManager: NSObject, FullScreenContentDelegate {
 				updatedKeyboard[keyBoardPosition.row][keyBoardPosition.col].state = newState
 			}
 		}
-		self.keyboard = updatedKeyboard
+		
+		let tileAnimationDelay = Double(self.board[self.currentRow].count - 1) * 0.3 + 0.5
+		DispatchQueue.main.asyncAfter(deadline: .now() + tileAnimationDelay) {
+			self.keyboard = updatedKeyboard
+			self.isAnimating = false
+		}
 		self.currentRow += 1
 		self.currentIndex = 0
 		completion(true)
@@ -470,45 +458,12 @@ final class AppManager: NSObject, FullScreenContentDelegate {
 				self.isAnimating = true
 				self.highlightBoardLetters() { success in
 					if success {
-						if self.word == guessedWord {
-							print("Du vant!!")
-							withAnimation {
-								self.isGameOver = true
-							}
-							self.didWinGame = .won
-							self.endDate = Date()
-							self.addGameRecord(gameRecord: GameRecord(date: self.startDate, state: .won, mode: self.selectedGameMode, word: self.word, language: self.selectedLanguage, numberOfLetters: self.numberOfLetters, numberOfGuesses: self.currentRow, maxRows: rowCount(for: self.numberOfLetters), hintsUsed: self.hintsUsed, board: self.board, endDate: self.endDate))
-							self.maybePromptForNotificationsAfterFirstWin()
-							if self.selectedGameMode == .dailyWord {
-								self.fixReminderForDailyWord()
-								AnalyticsManager.shared.logGameEndedEvent(word: self.word, language: self.selectedLanguage, numberOfLetters: self.numberOfLetters, gameMode: self.selectedGameMode, won: true, attemptsNeeded: self.currentRow, gameDurationSeconds: Int(self.endDate.timeIntervalSince(self.startDate)), currentStreak: self.getStreakEntity()?.currentStreak ?? 0)
-							} else {
-								AnalyticsManager.shared.logGameEndedEvent(word: self.word, language: self.selectedLanguage, numberOfLetters: self.numberOfLetters, gameMode: self.selectedGameMode, won: true, attemptsNeeded: self.currentRow, gameDurationSeconds: Int(self.endDate.timeIntervalSince(self.startDate)), currentStreak: self.getNormalStreakEntity()?.currentStreak ?? 0)
-							}
-							self.message = String(format: NSLocalizedString("success_message", comment: "Success message with a word"), self.word)
-							
-							return
-						} else {
-							if self.currentRow == self.board.count {
-								print("Du tapte: \(guessedWord), ordet var \(self.word)")
-								withAnimation {
-									self.isGameOver = true
-								}
-								self.didWinGame = .lost
-								self.endDate = Date()
-								self.addGameRecord(gameRecord: GameRecord(date: self.startDate, state: .lost, mode: self.selectedGameMode, word: self.word, language: self.selectedLanguage, numberOfLetters: self.numberOfLetters, numberOfGuesses: self.currentRow, maxRows: rowCount(for: self.numberOfLetters), hintsUsed: self.hintsUsed, board: self.board, endDate: self.endDate))
-								if self.selectedGameMode == .dailyWord {
-									self.fixReminderForDailyWord()
-								}
-								self.message = String(format: NSLocalizedString("almost_message", comment: "Almost got the word message"), self.word)
-								AnalyticsManager.shared.logGameEndedEvent(word: self.word, language: self.selectedLanguage, numberOfLetters: self.numberOfLetters, gameMode: self.selectedGameMode, won: false, attemptsNeeded: self.currentRow, gameDurationSeconds: Int(self.endDate.timeIntervalSince(self.startDate)), currentStreak: 0)
-								
-							} else {
-								print("Feil ord: \(guessedWord)")
-							}
-						}
+						self.submittedWordWaitingForReveal = guessedWord
+						self.finishSubmittedRowReveal()
+					} else {
+						self.submittedWordWaitingForReveal = nil
+						self.isAnimating = false
 					}
-					
 				}
 				
 			} else {
@@ -526,13 +481,123 @@ final class AppManager: NSObject, FullScreenContentDelegate {
 		}
 	}
 	
+	func finishSubmittedRowReveal() {
+		guard let guessedWord = self.submittedWordWaitingForReveal else {
+			return
+		}
+		
+		self.submittedWordWaitingForReveal = nil
+		self.goThroughKeyboard() { success in
+			guard success else {
+				self.isAnimating = false
+				return
+			}
+			
+			if self.word == guessedWord {
+				print("Du vant!!")
+				self.completeGame(
+					state: .won,
+					message: String(format: NSLocalizedString("success_message", comment: "Success message with a word"), self.word)
+				)
+			} else if self.currentRow == self.board.count {
+				print("Du tapte: \(guessedWord), ordet var \(self.word)")
+				self.completeGame(
+					state: .lost,
+					message: String(format: NSLocalizedString("almost_message", comment: "Almost got the word message"), self.word)
+				)
+			} else {
+				print("Feil ord: \(guessedWord)")
+			}
+		}
+	}
+	
+	private func completeGame(state: GameEndState, message: String) {
+		self.didWinGame = state
+		self.endDate = Date()
+		self.message = message
+		
+		let completedStartDate = self.startDate
+		let completedEndDate = self.endDate
+		let completedGameMode = self.selectedGameMode
+		let completedWord = self.word
+		let completedLanguage = self.selectedLanguage
+		let completedNumberOfLetters = self.numberOfLetters
+		let completedNumberOfGuesses = self.currentRow
+		let completedHintsUsed = self.hintsUsed
+		let completedBoard = self.board
+		
+		withAnimation {
+			self.isGameOver = true
+		}
+		
+		Task { @MainActor in
+			try? await Task.sleep(nanoseconds: 400_000_000)
+			
+			self.addGameRecord(
+				gameRecord: GameRecord(
+					date: completedStartDate,
+					state: state,
+					mode: completedGameMode,
+					word: completedWord,
+					language: completedLanguage,
+					numberOfLetters: completedNumberOfLetters,
+					numberOfGuesses: completedNumberOfGuesses,
+					maxRows: rowCount(for: completedNumberOfLetters),
+					hintsUsed: completedHintsUsed,
+					board: completedBoard,
+					endDate: completedEndDate
+				)
+			)
+			
+			if state == .won {
+				self.maybePromptForNotificationsAfterFirstWin()
+			}
+			
+			if completedGameMode == .dailyWord {
+				self.fixReminderForDailyWord(language: completedLanguage, numberOfLetters: completedNumberOfLetters)
+			}
+			
+			let currentStreak: Int
+			if state == .lost {
+				currentStreak = 0
+			} else if completedGameMode == .dailyWord {
+				currentStreak = GameRecordStreakCalculator.dailySummary(
+					records: self.gameRecords,
+					language: completedLanguage,
+					numberOfLetters: completedNumberOfLetters
+				).currentStreak
+			} else {
+				currentStreak = GameRecordStreakCalculator.normalSummary(
+					records: self.gameRecords,
+					language: completedLanguage,
+					numberOfLetters: completedNumberOfLetters
+				).currentStreak
+			}
+			
+			AnalyticsManager.shared.logGameEndedEvent(
+				word: completedWord,
+				language: completedLanguage,
+				numberOfLetters: completedNumberOfLetters,
+				gameMode: completedGameMode,
+				won: state == .won,
+				attemptsNeeded: completedNumberOfGuesses,
+				gameDurationSeconds: Int(completedEndDate.timeIntervalSince(completedStartDate)),
+				currentStreak: currentStreak
+			)
+		}
+	}
+	
 	func fixReminderForDailyWord() {
+		self.fixReminderForDailyWord(language: self.selectedLanguage, numberOfLetters: self.numberOfLetters)
+	}
+	
+	func fixReminderForDailyWord(language: LanguageSelection, numberOfLetters: Int) {
 		guard let context = self.modelContext else {
 			return
 		}
 		let reminders = NotificationManager.fetchReminders(context: context)
 		for reminder in reminders {
-			if reminder.language == self.selectedLanguage && reminder.numberOfLetters == self.numberOfLetters && reminder.isEnabled {
+			if reminder.language == language && reminder.numberOfLetters == numberOfLetters && reminder.isEnabled {
 				NotificationManager.scheduleDailyWordReminder(reminder: reminder, context: context)
 			}
 		}
@@ -638,6 +703,7 @@ final class AppManager: NSObject, FullScreenContentDelegate {
 		self.currentRow = 0
 		self.currentIndex = 0
 		self.hintsUsed = 0
+		self.submittedWordWaitingForReveal = nil
 		self.message = ""
 		self.isGameOver = false
 		self.hasSharedResult = false

@@ -372,7 +372,6 @@ struct KeyBoardLetter: Hashable, Identifiable {
     var isCorrectLetter: Bool = false
     var isUsedButNotCorrect: Bool = false
     var state: LetterState = .notUsed
-    var didTapButton: Bool = false
 }
 
 

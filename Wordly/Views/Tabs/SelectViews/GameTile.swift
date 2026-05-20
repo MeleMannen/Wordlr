@@ -61,7 +61,6 @@ struct AnimatedGameTile: View {
             .frame(width: tileSize, height: tileSize)
             .background(tileBackground)
             .rotationEffect(.degrees(spinDegrees), anchor: .center)
-            .animation(.easeInOut(duration: 0.5), value: didWinGame)
             .scaleEffect(tileScale, anchor: .center)
             .offset(x: rowIndex == currentRow ? (isShaking ? -15 : 0) : 0)
             .onChange(of: letter.id, initial: true) {
@@ -154,12 +153,8 @@ struct AnimatedGameTile: View {
                 tileScale = 1.0
             }
 
-            DispatchQueue.main.async {
-                guard generation == animationGeneration else { return }
-
-                withAnimation(tileSpring) {
-                    spinDegrees = 360
-                }
+            withAnimation(tileSpring) {
+                spinDegrees = 360
             }
         }
     }
