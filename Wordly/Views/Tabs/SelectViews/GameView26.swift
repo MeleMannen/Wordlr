@@ -80,7 +80,13 @@ struct GameView26: View {
 											colorScheme: self.colorScheme,
 											colorForUnused: self.colorForUnused,
 											gradient: appManager.gradient,
-											shadowGradient: appManager.shadowGradient
+											shadowGradient: appManager.shadowGradient,
+											onRevealStart: colIndex == appManager.board[rowIndex].count - 1 ? {
+												appManager.applyPendingKeyboardUpdate()
+											} : nil,
+											onRevealComplete: colIndex == appManager.board[rowIndex].count - 1 ? {
+												appManager.applyPendingGameCompletion()
+											} : nil
 										)
 									}
 								}

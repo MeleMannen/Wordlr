@@ -12,6 +12,7 @@ import GoogleMobileAds
 @MainActor
 @Observable
 final class AppManager: NSObject, FullScreenContentDelegate {
+
 	private var defaultLanguage: LanguageSelection {
 		get {
 			UserDefaults.standard.string(forKey: "defaultLanguage").flatMap(LanguageSelection.init(rawValue:)) ?? .norwegian
@@ -59,6 +60,8 @@ final class AppManager: NSObject, FullScreenContentDelegate {
 	var message: String = ""
 	var isAnimating: Bool = false
 	var isShaking: Bool = false
+	private var pendingKeyboardUpdate: [[KeyBoardLetter]]?
+	private var pendingGameCompletion: (() -> Void)?
 	var submitOpacity: Double = 0.5
 	var shouldShowAdButton: Bool = false
 	var hasLoadedAd: Bool = false
@@ -364,19 +367,43 @@ final class AppManager: NSObject, FullScreenContentDelegate {
 				updatedKeyboard[keyBoardPosition.row][keyBoardPosition.col].state = newState
 			}
 		}
-		
-		let tileAnimationDelay = Double(self.board[self.currentRow].count - 1) * 0.3 + 0.7
-		DispatchQueue.main.asyncAfter(deadline: .now() + tileAnimationDelay) {
-			self.keyboard = updatedKeyboard
-			withAnimation {
-				self.isAnimating = false
-			}
-		}
+
+		self.pendingKeyboardUpdate = updatedKeyboard
 		self.currentRow += 1
 		self.currentIndex = 0
 		completion(true)
 	}
 	
+	func applyPendingKeyboardUpdate() {
+		if let update = pendingKeyboardUpdate {
+			pendingKeyboardUpdate = nil
+			DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+				withAnimation(.linear(duration: 0.1)) {
+					for row in update.indices {
+						for col in update[row].indices {
+							if self.keyboard[row][col].state != update[row][col].state {
+								self.keyboard[row][col].state = update[row][col].state
+							}
+						}
+					}
+					self.isAnimating = false
+				}
+				if self.pendingGameCompletion != nil {
+					DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+						self.applyPendingGameCompletion()
+					}
+				}
+			}
+		}
+	}
+
+	func applyPendingGameCompletion() {
+		if let gameCompletion = pendingGameCompletion {
+			pendingGameCompletion = nil
+			gameCompletion()
+		}
+	}
+
 	private func keyboardStatePriority(_ state: LetterState) -> Int {
 		switch state {
 			case .correctPosition:
@@ -473,7 +500,6 @@ final class AppManager: NSObject, FullScreenContentDelegate {
 		}
 
 		self.submittedWordWaitingForReveal = nil
-		let tileAnimationDelay = Double(self.numberOfLetters - 1) * 0.3 + 0.5
 
 		self.goThroughKeyboard() { success in
 			guard success else {
@@ -486,7 +512,7 @@ final class AppManager: NSObject, FullScreenContentDelegate {
 
 			if isWin {
 				print("Du vant!!")
-				DispatchQueue.main.asyncAfter(deadline: .now() + tileAnimationDelay) {
+				self.pendingGameCompletion = {
 					self.completeGame(
 						state: .won,
 						message: String(format: NSLocalizedString("success_message", comment: "Success message with a word"), self.word)
@@ -494,7 +520,7 @@ final class AppManager: NSObject, FullScreenContentDelegate {
 				}
 			} else if isLoss {
 				print("Du tapte: \(guessedWord), ordet var \(self.word)")
-				DispatchQueue.main.asyncAfter(deadline: .now() + tileAnimationDelay) {
+				self.pendingGameCompletion = {
 					self.completeGame(
 						state: .lost,
 						message: String(format: NSLocalizedString("almost_message", comment: "Almost got the word message"), self.word)

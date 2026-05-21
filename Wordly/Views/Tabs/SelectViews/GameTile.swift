@@ -42,6 +42,8 @@ struct AnimatedGameTile: View {
     let colorForUnused: Color
     let gradient: LinearGradient
     let shadowGradient: LinearGradient
+    var onRevealStart: (() -> Void)?
+    var onRevealComplete: (() -> Void)?
 
     @State private var spinDegrees = 0.0
     @State private var tileScale = 1.0
@@ -153,8 +155,12 @@ struct AnimatedGameTile: View {
                 tileScale = 1.0
             }
 
+            onRevealStart?()
+
             withAnimation(tileSpring) {
                 spinDegrees = 360
+            } completion: {
+                onRevealComplete?()
             }
         }
     }
