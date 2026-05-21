@@ -368,7 +368,9 @@ final class AppManager: NSObject, FullScreenContentDelegate {
 		let tileAnimationDelay = Double(self.board[self.currentRow].count - 1) * 0.3 + 0.5
 		DispatchQueue.main.asyncAfter(deadline: .now() + tileAnimationDelay) {
 			self.keyboard = updatedKeyboard
-			self.isAnimating = false
+			withAnimation {
+				self.isAnimating = false
+			}
 		}
 		self.currentRow += 1
 		self.currentIndex = 0

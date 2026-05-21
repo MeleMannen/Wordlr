@@ -26,7 +26,8 @@ struct GameView26: View {
 	@State var isShowingCurrentDefinition: Bool = false
 	@State var alertItem: AlertItem?
 	@State private var hasQueuedNotificationPromptForCurrentWin: Bool = false
-	
+	@State private var showHintButton: Bool = false
+
 	@Namespace private var namespace
 	
 	private var device : UIUserInterfaceIdiom { UIDevice.current.userInterfaceIdiom }
@@ -432,20 +433,34 @@ struct GameView26: View {
 				.navigationBarTitleDisplayMode(.inline)
 				.toolbar {
 					ToolbarItemGroup(placement: .topBarTrailing) {
-						if appManager.isHintAvailable() && appManager.shouldShowAdButton && !appManager.isGameOver {
+						if showHintButton {
 							AdButton()
 								.environment(appManager)
-							
+
 							SearchToolbarItem()
 								.environment(appManager)
-							
+
 						} else {
 							SearchToolbarItem()
 								.environment(appManager)
 						}
 					}
 				}
-				.animation(.default, value: appManager.isHintAvailable() && appManager.shouldShowAdButton && !appManager.isGameOver)
+				.animation(.smooth, value: showHintButton)
+				.onChange(of: appManager.shouldShowAdButton) {
+					showHintButton = appManager.isHintAvailable() && appManager.shouldShowAdButton && !appManager.isGameOver
+				}
+				.onChange(of: appManager.isGameOver) {
+					showHintButton = appManager.isHintAvailable() && appManager.shouldShowAdButton && !appManager.isGameOver
+				}
+				.onChange(of: appManager.keyboard) {
+					let newValue = appManager.isHintAvailable() && appManager.shouldShowAdButton && !appManager.isGameOver
+					if newValue != showHintButton {
+						showHintButton = newValue
+					}
+				}
+				
+//				.animation(.default, value: appManager.isHintAvailable() && !appManager.isGameOver)
 			}
 			.onAppear {
 				AnalyticsManager.shared.logScreenViewed(screenName: "GameView26")
