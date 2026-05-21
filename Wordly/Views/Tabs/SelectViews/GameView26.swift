@@ -514,6 +514,7 @@ struct GameView26: View {
 		guard appManager.isGameOver,
 			  !appManager.isAnimating,
 			  appManager.didWinGame == .won,
+			  appManager.shouldPromptForNotificationsAfterFirstWin,
 			  !notificationsEnabled,
 			  !hasQueuedNotificationPromptForCurrentWin,
 			  alertItem == nil else {

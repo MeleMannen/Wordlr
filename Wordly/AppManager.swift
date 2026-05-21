@@ -365,7 +365,7 @@ final class AppManager: NSObject, FullScreenContentDelegate {
 			}
 		}
 		
-		let tileAnimationDelay = Double(self.board[self.currentRow].count - 1) * 0.3 + 0.5
+		let tileAnimationDelay = Double(self.board[self.currentRow].count - 1) * 0.3 + 0.7
 		DispatchQueue.main.asyncAfter(deadline: .now() + tileAnimationDelay) {
 			self.keyboard = updatedKeyboard
 			withAnimation {
@@ -544,7 +544,7 @@ final class AppManager: NSObject, FullScreenContentDelegate {
 				)
 			)
 			
-			if state == .won {
+			if state == .won && completedGameMode == .dailyWord {
 				self.maybePromptForNotificationsAfterFirstWin()
 			}
 			
