@@ -12,7 +12,7 @@ struct HintTip: Tip {
 	static let getHintEvent = Event(id: "getHint")
 	static let gamesPlayedEvent = Event(id: "gamesPlayed")
 	var title: Text {
-		Text("Get a Hint")
+		Text("Get a hint")
 	}
 	var message: Text? {
 		Text("Tap here to get a hint for the current secret word, by watching a quick ad.")
@@ -36,7 +36,7 @@ struct HintTip: Tip {
 struct SearchTip: Tip {
 	static let searchEvent = Event(id: "search")
 	var title: Text {
-		Text("Search for a Word")
+		Text("Search for a word")
 	}
 	
 	var message: Text? {

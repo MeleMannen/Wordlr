@@ -135,13 +135,13 @@ struct GameView18: View {
 									self.didTapResetButton.toggle()
 									if appManager.selectedGameMode == .normal {
 										self.alertItem = AlertItem(
-											title: Text("Are you sure you want to Restart?"),
+											title: Text("Are you sure you want to restart?"),
 											message: Text("You will lose your word and you cannot undo this action!"),
 											primaryButton: .destructive(Text("Restart")) {
 												self.alertItem = AlertItem(
-													title: Text("The Word Was: \(appManager.word)!"),
+													title: Text("The word was: \(appManager.word)!"),
 													message: Text("Do you want to see the definition?"),
-													primaryButton: .default(Text("Show Definition")) {
+													primaryButton: .default(Text("Show definition")) {
 														self.isShowingCurrentDefinition = true
 														
 														DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
@@ -287,10 +287,10 @@ struct GameView18: View {
 								self.didTapNewGameButton.toggle()
 								appManager.startNewGameFromGameOver()
 								Task {
-									await HintTip.getHintEvent.donate()
+									await HintTip.gamesPlayedEvent.donate()
 								}
 							}, label: {
-								Text(appManager.selectedGameMode == .normal ? "New Game" : "Free Play")
+								Text(appManager.selectedGameMode == .normal ? "New game" : "Free play")
 									.conditionalShadow(color: .black.opacity(0.2), radius: 2, x: 4, y: 4)
 									.font(.title2).bold()
 									.frame(maxWidth: .infinity, minHeight: 40, idealHeight: 45, maxHeight: 50)
@@ -309,7 +309,7 @@ struct GameView18: View {
 							
 							NavigationLink(destination: WordDefinitionView(word: appManager.word, language: appManager.selectedLanguage), label: {
 								if !self.userWantsNormalTheme && self.colorScheme == .dark && appManager.selectedGameMode == .dailyWord {
-									Text("Show Definition")
+									Text("Show definition")
 										.conditionalShadow(color: .black.opacity(0.2), radius: 2, x: 4, y: 4)
 										.font(.title2).bold()
 										.frame(maxWidth: .infinity, minHeight: 40, idealHeight: 45, maxHeight: 50)
@@ -320,7 +320,7 @@ struct GameView18: View {
 												.gradientShadow(gradient: appManager.shadowGradient, radius: 3, x: 0, y: 0)
 										}
 								} else {
-									Text("Show Definition")
+									Text("Show definition")
 										.conditionalShadow(color: .black.opacity(0.2), radius: 2, x: 4, y: 4)
 										.font(.title2).bold()
 										.frame(maxWidth: .infinity, minHeight: 40, idealHeight: 45, maxHeight: 50)
@@ -352,7 +352,7 @@ struct GameView18: View {
 										
 									}
 								} label: {
-									Label("Copy Result", systemImage: appManager.hasSharedResult ? "doc.on.doc.fill" : "doc.on.doc")
+									Label("Copy result", systemImage: appManager.hasSharedResult ? "doc.on.doc.fill" : "doc.on.doc")
 										.font(.title2).bold()
 										.contentTransition(.symbolEffect(.replace))
 										.conditionalShadow(color: .black.opacity(0.5), radius: 4, x: 4, y: 4)
@@ -382,13 +382,13 @@ struct GameView18: View {
 								self.didTapResetButton.toggle()
 								if appManager.selectedGameMode == .normal {
 									self.alertItem = AlertItem(
-										title: Text("Are you sure you want to Restart?"),
+										title: Text("Are you sure you want to restart?"),
 										message: Text("You will lose your word and you cannot undo this action!"),
 										primaryButton: .destructive(Text("Restart")) {
 											self.alertItem = AlertItem(
-												title: Text("The Word Was: \(appManager.word)!"),
+												title: Text("The word was: \(appManager.word)!"),
 												message: Text("Do you want to see the definition?"),
-												primaryButton: .default(Text("Show Definition")) {
+												primaryButton: .default(Text("Show definition")) {
 													self.isShowingCurrentDefinition = true
 													
 													DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
@@ -408,7 +408,7 @@ struct GameView18: View {
 									self.didTapNewGameButton.toggle()
 									appManager.startNewGameFromGameOver()
 									Task {
-										await HintTip.getHintEvent.donate()
+										await HintTip.gamesPlayedEvent.donate()
 									}
 								}
 							},
@@ -430,12 +430,12 @@ struct GameView18: View {
 				WordDefinitionView(word: appManager.word)
 					.environment(appManager)
 			})
-			.navigationTitle(appManager.numberOfLetters == 1 ? "Guess the Letter" : "Guess the Word")
+			.navigationTitle(appManager.numberOfLetters == 1 ? "Guess the letter" : "Guess the Word")
 			.navigationBarTitleDisplayMode(.inline)
 			.toolbar {
 				if appManager.isHintAvailable() && appManager.shouldShowAdButton {
 					ToolbarItem(placement: .topBarTrailing) {
-						AdButton()
+						AdButton(shouldShowHintTip: appManager.isHintAvailable() && appManager.shouldShowAdButton)
 							.environment(appManager)
 					}
 				}
@@ -509,7 +509,7 @@ struct GameView18: View {
 		alertItem = AlertItem(
 			title: Text("Keep your streak going?"),
 			message: Text("Turn on reminders so you don't miss the next daily word."),
-			primaryButton: .default(Text("Turn On")) {
+			primaryButton: .default(Text("Turn on")) {
 				notificationsEnabled = true
 				createReminderForCurrentDailyWord()
 				UserDefaults.standard.set(Int.max, forKey: "notificationPromptNextWinThreshold")

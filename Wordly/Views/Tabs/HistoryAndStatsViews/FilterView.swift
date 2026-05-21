@@ -19,13 +19,13 @@ struct FilterView: View {
                 Picker("", selection: $numberOfLetters) {
                     ForEach(1...9, id: \.self) { number in
 						if number == 1 {
-							Text("\(number) Letter")
+							Text("\(number) letter")
 								.font(.title2).bold()
 						} else if number != 9 {
-                            Text("\(number) Letters")
+                            Text("\(number) letters")
                                 .font(.title2).bold()
                         } else {
-                            Text("All Letters")
+                            Text("Any length")
                                 .font(.title2).bold()
                         }
                     }
@@ -44,7 +44,7 @@ struct FilterView: View {
                 
                 Picker("", selection: $selectedLanguage) {
                     ForEach(LanguageSelection.allCases) { language in
-                        Text(language.localizedName.capitalized)
+                        Text(language.localizedName)
                     }
                 }
                 .pickerStyle(.menu)
@@ -61,7 +61,7 @@ struct FilterView: View {
                 
                 Picker("", selection: $gameMode) {
                     ForEach(GameMode.allCases) { mode in
-                        Text(mode.localizedName.capitalized)
+                        Text(mode.localizedName)
                     }
                 }
                 .pickerStyle(.menu)
@@ -79,11 +79,11 @@ struct FilterView: View {
                 Picker("", selection: $showsWhenHintsUsed) {
                     ForEach(ShowsWhenHintsUsed.allCases) { mode in
                         if mode == .both {
-                            Text("Both Hint Usage")
+                            Text("Both hint usage")
                         } else if mode == .neverUsed {
-                            Text("Hints Never Used")
+                            Text("Hints never used")
                         } else if mode == .onlyWhenUsed {
-                            Text("Only When Hints Was Used")
+                            Text("Only when hints was used")
                         }
                     }
                 }

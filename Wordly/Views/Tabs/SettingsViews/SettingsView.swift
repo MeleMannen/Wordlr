@@ -64,7 +64,7 @@ struct SettingsView: View {
 						}
 					}, label: {
 						HStack {
-							Text("App Language")
+							Text("App language")
 								.foregroundStyle(.primary)
 							
 							Spacer(minLength: 0)
@@ -79,7 +79,7 @@ struct SettingsView: View {
 					})
 					.modifier(ConditionalPadding())
 					
-					Picker("App Theme", selection: $appTheme) {
+					Picker("App theme", selection: $appTheme) {
 						Text("System")
 							.tag(AppTheme.system)
 						Text("Dark")
@@ -97,7 +97,7 @@ struct SettingsView: View {
 					
 					
 					if self.colorScheme == .dark {
-						Picker("Daily Wordlr Theme", selection: $userWantsNormalTheme) {
+						Picker("Daily Wordlr theme", selection: $userWantsNormalTheme) {
 							Text("Standard")
 								.tag(true)
 							Text("Gold")
@@ -115,7 +115,7 @@ struct SettingsView: View {
 				}
 				
 				Section {
-					Toggle("Daily Wordlr Reminders", isOn: $notificationsEnabled)
+					Toggle("Daily Wordlr reminders", isOn: $notificationsEnabled)
 						.modifier(ConditionalPadding())
 						.tint(.green)
 						.onChange(of: notificationsEnabled) { _, newValue in
@@ -172,7 +172,7 @@ struct SettingsView: View {
 						NavigationLink {
 							NotificationView()
 						} label: {
-							Text("Edit Daily Wordlr Reminders")
+							Text("Edit daily Wordlr reminders")
 								.foregroundStyle(.primary)
 								.modifier(ConditionalPadding())
 						}
@@ -184,13 +184,13 @@ struct SettingsView: View {
 				}
 				
 				Section {
-					Picker("Number of Letters", selection: $defaultNumberOfLetters) {
+					Picker("Word length", selection: $defaultNumberOfLetters) {
 						ForEach(1...8, id: \.self) { number in
 							if number == 1 {
-								Text("\(number) Letter")
+								Text("\(number) letter")
 									.tag(number)
 							} else {
-								Text("\(number) Letters")
+								Text("\(number) letters")
 									.tag(number)
 							}
 						}
@@ -202,7 +202,7 @@ struct SettingsView: View {
 					
 					Picker("Language", selection: $defaultLanguage) {
 						ForEach(LanguageSelection.languages) { language in
-							Text(language.localizedName.capitalized)
+							Text(language.localizedName)
 								.tag(language)
 						}
 						
@@ -213,20 +213,20 @@ struct SettingsView: View {
 					
 					
 				} header: {
-					Text("Game (Default)")
+					Text("Game (default)")
 				}
 				
 				Section {
-					Picker("Number of Letters", selection: $defaultStatNumberOfLetters) {
+					Picker("Word length", selection: $defaultStatNumberOfLetters) {
 						ForEach(1...9, id: \.self) { number in
 							if number == 1 {
-								Text("\(number) Letter")
+								Text("\(number) letter")
 									.tag(number)
 							} else if number != 9 {
-								Text("\(number) Letters")
+								Text("\(number) letters")
 									.tag(number)
 							} else {
-								Text("All Letters")
+								Text("Any length")
 									.tag(number)
 							}
 						}
@@ -242,7 +242,7 @@ struct SettingsView: View {
 								Text("All")
 									.tag(language)
 							} else {
-								Text(language.localizedName.capitalized)
+								Text(language.localizedName)
 									.tag(language)
 							}
 						}
@@ -258,7 +258,7 @@ struct SettingsView: View {
 								Text("Both")
 									.tag(mode)
 							} else {
-								Text(mode.localizedName.capitalized)
+								Text(mode.localizedName)
 									.tag(mode)
 							}
 						}
@@ -266,9 +266,10 @@ struct SettingsView: View {
 					.modifier(ConditionalPadding())
 					.pickerStyle(.menu)
 					.sensoryFeedback(.selection, trigger: defaultStatGameMode)
-					Picker("Show If Hints Used", selection: $defaultStatHintsUsed) {
+					
+					Picker("Show if hints used", selection: $defaultStatHintsUsed) {
 						ForEach(ShowsWhenHintsUsed.allCases) { mode in
-							Text(mode.localizedName.capitalized)
+							Text(mode.localizedName)
 								.tag(mode)
 						}
 					}
@@ -277,7 +278,7 @@ struct SettingsView: View {
 					.sensoryFeedback(.selection, trigger: defaultStatHintsUsed)
 					
 				} header: {
-					Text("Stats and History (Default)")
+					Text("Stats and history (default)")
 				}
 				
 				
@@ -294,7 +295,7 @@ struct SettingsView: View {
 								.foregroundStyle(.primary)
 								.frame(width: aboutRowIconWidth, alignment: .center)
 							
-							Text("Want To Rate My App?")
+							Text("Want to rate my app?")
 								.foregroundStyle(.primary)
 							
 							Spacer(minLength: 0)
@@ -314,7 +315,7 @@ struct SettingsView: View {
 								.foregroundStyle(.primary)
 								.frame(width: aboutRowIconWidth, alignment: .center)
 							
-							Text("Send Feedback")
+							Text("Send feedback")
 								.foregroundStyle(.primary)
 							
 							Spacer(minLength: 0)
@@ -327,9 +328,8 @@ struct SettingsView: View {
 							Button(action: {
 								UIPasteboard.general.string = supportEmailAddress
 							}) {
-								Text("Copy email address")
-								
 								Image(systemName: "doc.on.doc")
+								Text("Copy email")
 							}
 						}
 					})
@@ -349,7 +349,7 @@ struct SettingsView: View {
 								.foregroundStyle(.primary)
 								.frame(width: aboutRowIconWidth, alignment: .center)
 							
-							Text("Privacy Options")
+							Text("Privacy options")
 								.foregroundStyle(.primary)
 							
 							Spacer(minLength: 0)
@@ -420,7 +420,7 @@ struct SettingsView: View {
 			.onAppear {
 				AnalyticsManager.shared.logScreenViewed(screenName: "SettingsView")
 			}
-			.alert("No Mail App Available", isPresented: $showingSupportEmailUnavailableAlert) {
+			.alert("No mail app available", isPresented: $showingSupportEmailUnavailableAlert) {
 				Button("OK", role: .cancel) { }
 			} message: {
 				Text("The support email address has been copied to the clipboard.")

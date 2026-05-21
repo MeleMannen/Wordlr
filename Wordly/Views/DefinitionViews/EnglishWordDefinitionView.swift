@@ -70,7 +70,7 @@ struct EnglishWordDefinitionView: View {
 						} else if self.isNetworkError {
 							self.centeredUnavailableContent(minHeight: geometry.size.height) {
 								ContentUnavailableView(
-									"No Internet Connection",
+									"No internet connection",
 									systemImage: "wifi.slash",
 									description: Text("We couldn't load the definition right now. Check your connection and try again.")
 								)
@@ -78,7 +78,7 @@ struct EnglishWordDefinitionView: View {
 						} else {
 							self.centeredUnavailableContent(minHeight: geometry.size.height) {
 								ContentUnavailableView(
-									"No Definition Found",
+									"No definition found",
 									systemImage: "book.closed",
 									description: Text("We couldn't find a definition for this word. It might be a name or a place name.")
 								)

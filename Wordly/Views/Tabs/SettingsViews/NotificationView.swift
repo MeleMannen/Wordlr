@@ -25,7 +25,7 @@ struct NotificationView: View {
 		VStack {
 			if self.dailyWordReminders.isEmpty {
 				ContentUnavailableView(
-					"No Reminders",
+					"No reminders",
 					systemImage: "bell.badge.fill",
 					description: Text("No reminders has been scheduled yet.")
 				)
@@ -57,7 +57,7 @@ struct NotificationView: View {
 			}
 		}
 		.navigationBarTitleDisplayMode(.inline)
-		.navigationTitle("Daily Wordlr Reminders")
+		.navigationTitle("Daily Wordlr reminders")
 		.toolbar {
 			if #available(iOS 26.0, *) {
 				ToolbarItem(placement: .navigationBarTrailing) {
@@ -66,7 +66,7 @@ struct NotificationView: View {
 						self.shouldShowSheet = true
 						self.isPresentingFromAdd = true
 					}) {
-						Label("Add Reminder", systemImage: "plus")
+						Label("Add reminder", systemImage: "plus")
 					}
 					.sensoryFeedback(.selection, trigger: self.didTapAddReminder)
 				}
@@ -78,7 +78,7 @@ struct NotificationView: View {
 						self.didTapAddReminder.toggle()
 						self.shouldShowSheet = true
 					}) {
-						Label("Add Reminder", systemImage: "plus")
+						Label("Add reminder", systemImage: "plus")
 					}
 					.sensoryFeedback(.selection, trigger: self.didTapAddReminder)
 				}
@@ -148,16 +148,16 @@ struct AddReminderView: View {
 				Section {
 					Picker("Language", selection: $notificationLanguage) {
 						ForEach(LanguageSelection.languages) { language in
-							Text(language.localizedName.capitalized)
+							Text(language.localizedName)
 								.tag(language)
 								.foregroundStyle(.secondary)
 								
 						}
 					}
 					.pickerStyle(.menu)
-					Picker("Number of Letters", selection: $notificationLetters) {
+					Picker("Word length", selection: $notificationLetters) {
 						ForEach(1...8, id: \.self) { number in
-							Text(number == 1 ? "\(number) Letter" : "\(number) Letters")
+							Text(number == 1 ? "\(number) letter" : "\(number) letters")
 								.tag(number)
 								.foregroundStyle(.secondary)
 							
@@ -166,7 +166,7 @@ struct AddReminderView: View {
 					.pickerStyle(.menu)
 					
 				} header: {
-					Text("Reminder Details")
+					Text("Reminder details")
 				}
 				
 				if let reminder, self.isEditing {
@@ -197,7 +197,7 @@ struct AddReminderView: View {
 			}
 			.scrollContentBackground(.hidden)
 			.tint(.secondary)
-			.navigationTitle(self.isEditing ? "Edit Reminder" : "Add Reminder")
+			.navigationTitle(self.isEditing ? "Edit reminder" : "Add reminder")
 			.navigationBarTitleDisplayMode(.inline)
 			.fontWeight(.medium)
 			.toolbar {
@@ -304,7 +304,7 @@ struct ReminderRow: View {
 					.tint(.primary)
 				
 				HStack(spacing: 8) {
-					Chip(text: reminder.language.localizedName.capitalized)
+					Chip(text: reminder.language.localizedName)
 					
 					Chip(text: reminder.numberOfLetters == 1 ? String(format: NSLocalizedString("numberOfLetter", comment: "Number of letter single"), reminder.numberOfLetters) : String(format: NSLocalizedString("numberOfLetters", comment: "Number of letters plural"), reminder.numberOfLetters))
 				}

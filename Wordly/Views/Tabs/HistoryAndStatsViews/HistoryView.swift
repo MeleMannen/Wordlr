@@ -88,7 +88,7 @@ struct HistoryView: View {
 													
 													VStack(alignment: .leading) {
 														Text(gameRecordEntity.gameRecord.word)
-															.font(.title3)
+															.font(.title3).fontWeight(.medium)
 															.foregroundStyle(.primary)
 															.conditionalShadow(color: .black.opacity(0.3), radius: 1.5, x: 4, y: 4)
 														
@@ -119,7 +119,7 @@ struct HistoryView: View {
 						.safeAreaPadding(.bottom, adManager.isAdsReady ? (UIDevice.current.userInterfaceIdiom == .pad || UIDevice.current.userInterfaceIdiom == .mac ? 80 : 54) : 0)
 					}
 				}
-				.searchable(text: self.$searchedWord, placement: .navigationBarDrawer(displayMode: .always), prompt: "Search for a Word")
+				.searchable(text: self.$searchedWord, placement: .navigationBarDrawer(displayMode: .always), prompt: "Search for a word")
 				.searchToolbarAvoidsHidingContentWhenAvailable()
 				.navigationTitle("History")
 				.navigationBarTitleDisplayMode(.inline)

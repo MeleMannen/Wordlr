@@ -34,7 +34,7 @@ struct FilterOptionsView: View {
 					}
 					.tint(.green)
 					
-					TextField("Search for a Word", text: $appManager.searchedWord)
+					TextField("Search for a word", text: $appManager.searchedWord)
 						.textFieldStyle(WordlrTextFieldStyle())
 						.autocorrectionDisabled()
 						.focused($focusedField, equals: .search)
@@ -57,12 +57,12 @@ struct FilterOptionsView: View {
 				
 				VStack {
 					Toggle(isOn: $appManager.isFilteringStartWith) {
-						Text("Starts With")
+						Text("Starts with")
 							.font(.headline)
 					}
 					.tint(.green)
 					
-					TextField("Enter Starting Letters", text: $appManager.startsWithFilter)
+					TextField("Enter starting letters", text: $appManager.startsWithFilter)
 						.textFieldStyle(WordlrTextFieldStyle())
 						.autocorrectionDisabled()
 						.focused($focusedField, equals: .startsWith)
@@ -87,12 +87,12 @@ struct FilterOptionsView: View {
 				
 				VStack {
 					Toggle(isOn: $appManager.isFilteringEndsWith) {
-						Text("Ends With")
+						Text("Ends with")
 							.font(.headline)
 					}
 					.tint(.green)
 					
-					TextField("Enter Ending Letters", text: $appManager.endsWithFilter)
+					TextField("Enter ending letters", text: $appManager.endsWithFilter)
 						.textFieldStyle(WordlrTextFieldStyle())
 						.autocorrectionDisabled()
 						.focused($focusedField, equals: .endsWith)
@@ -117,7 +117,7 @@ struct FilterOptionsView: View {
 				
 				VStack {
 					Toggle(isOn: $appManager.isFilteringIncludedLetters) {
-						Text("Included Letters")
+						Text("Included letters")
 							.font(.headline)
 					}
 					.tint(.green)
@@ -185,7 +185,7 @@ struct FilterOptionsView: View {
 				
 				VStack {
 					Toggle(isOn: $appManager.isFilteringExcludeLetters) {
-						Text("Exclude Letters")
+						Text("Exclude letters")
 							.font(.headline)
 					}
 					.tint(.green)
@@ -253,7 +253,7 @@ struct FilterOptionsView: View {
 							appManager.resetFilters()
 							
 						} label: {
-							Text("Reset Filter")
+							Text("Reset filter")
 								.font(.headline)
 								.foregroundStyle(.red)
 						}
@@ -275,7 +275,7 @@ struct FilterOptionsView: View {
 						focusedField = nil
 					}
 			)
-			.navigationTitle("Filter Options")
+			.navigationTitle("Filter options")
 			.navigationBarTitleDisplayMode(.inline)
 			.toolbar {
 				if #available(iOS 26.0, *) {

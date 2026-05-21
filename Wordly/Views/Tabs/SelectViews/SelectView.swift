@@ -37,7 +37,7 @@ struct SelectView: View {
 				VStack {
 					Spacer()
 					VStack {
-						Text("Number of Letters")
+						Text("Word length")
 							.font(.title2).bold()
 							.conditionalShadow(color: .black.opacity(0.4), radius: 4, x: 4, y: 4)
 							.frame(maxWidth: .infinity, alignment: .leading)
@@ -46,10 +46,10 @@ struct SelectView: View {
 							Picker(selection: $appManager.numberOfLetters) {
 								ForEach(1...8, id: \.self) { number in
 									if number == 1 {
-										Text("\(number) Letter")
+										Text("\(number) letter")
 											.tag(number)
 									} else {
-										Text("\(number) Letters")
+										Text("\(number) letters")
 											.tag(number)
 									}
 								}
@@ -68,9 +68,9 @@ struct SelectView: View {
 							Picker(selection: $appManager.numberOfLetters) {
 								ForEach(1...8, id: \.self) { number in
 									if number == 1 {
-										Text("\(number) Letter")
+										Text("\(number) letter")
 									} else {
-										Text("\(number) Letters")
+										Text("\(number) letters")
 									}
 								}
 							} label: {
@@ -101,7 +101,7 @@ struct SelectView: View {
 						if #available(iOS 26.0, *) {
 							Picker(selection: $appManager.selectedLanguage) {
 								ForEach(LanguageSelection.languages) { language in
-									Text(language.localizedName.capitalized)
+									Text(language.localizedName)
 								}
 							} label: {
 								
@@ -117,7 +117,7 @@ struct SelectView: View {
 						} else {
 							Picker(selection: $appManager.selectedLanguage) {
 								ForEach(LanguageSelection.languages) { language in
-									Text(language.localizedName.capitalized)
+									Text(language.localizedName)
 								}
 							} label: {
 								
@@ -144,7 +144,7 @@ struct SelectView: View {
 							if appManager.hasGameStarted() && appManager.selectedGameMode != .normal && !self.isAllowedToChooseGameModeAgain {
 											if let streakEntity = appManager.getNormalStreakEntity(), streakEntity.currentStreak > 0 {
 									VStack {
-										Text("Free Play - \(streakEntity.currentStreak)🔥")
+										Text("Free play - \(streakEntity.currentStreak)🔥")
 											.multilineTextAlignment(.center)
 											.lineSpacing(5)
 											.font(.title2).bold()
@@ -166,7 +166,7 @@ struct SelectView: View {
 									.glassEffect(.regular.interactive(), in: .rect(cornerRadius: 15.0))
 								} else {
 									VStack {
-										Text("Free Play")
+										Text("Free play")
 											.multilineTextAlignment(.center)
 											.font(.title2).bold()
 											.padding()
@@ -192,7 +192,7 @@ struct SelectView: View {
 								VStack {
 									NavigationLink(destination: GameView().environment(appManager)) {
 								if let streakEntity = appManager.getNormalStreakEntity(), streakEntity.currentStreak > 0 {
-											Text("Free Play - \(streakEntity.currentStreak)🔥")
+											Text("Free play - \(streakEntity.currentStreak)🔥")
 												.contentTransition(.numericText(value: Double(streakEntity.currentStreak)))
 												.multilineTextAlignment(.center)
 												.lineSpacing(5)
@@ -208,7 +208,7 @@ struct SelectView: View {
 													}
 												}
 										} else {
-											Text("Free Play")
+											Text("Free play")
 												.font(.title2).bold()
 												.padding()
 												.foregroundStyle(.white)
@@ -245,7 +245,7 @@ struct SelectView: View {
 						if appManager.hasGameStarted() && appManager.selectedGameMode != .normal && !self.isAllowedToChooseGameModeAgain {
 								if let streakEntity = appManager.getNormalStreakEntity(), streakEntity.currentStreak > 0 {
 								VStack {
-									Text("Free Play - \(streakEntity.currentStreak)🔥")
+									Text("Free play - \(streakEntity.currentStreak)🔥")
 										.multilineTextAlignment(.center)
 										.lineSpacing(5)
 										.font(.title2).bold()
@@ -268,7 +268,7 @@ struct SelectView: View {
 								.padding(.bottom, 25)
 							} else {
 								VStack {
-									Text("Free Play")
+									Text("Free play")
 										.multilineTextAlignment(.center)
 										.font(.title2).bold()
 										.padding()
@@ -295,7 +295,7 @@ struct SelectView: View {
 							VStack {
 								NavigationLink(destination: GameView().environment(appManager)) {
 									if let streakEntity = appManager.getNormalStreakEntity(), streakEntity.currentStreak > 0 {
-										Text("Free Play - \(streakEntity.currentStreak)🔥")
+										Text("Free play - \(streakEntity.currentStreak)🔥")
 											.contentTransition(.numericText(value: Double(streakEntity.currentStreak)))
 											.multilineTextAlignment(.center)
 											.lineSpacing(5)
@@ -311,7 +311,7 @@ struct SelectView: View {
 											}
 											.padding(.horizontal, 30)
 									} else {
-										Text("Free Play")
+										Text("Free play")
 										//										.conditionalShadow(color: .black.opacity(0.05), radius: 1.5, x: 1, y: 1)
 										
 											.font(.title2).bold()
@@ -619,15 +619,15 @@ struct SelectView: View {
 	}
 	
 	func setGameAlert() {
-		self.alertItem = AlertItem(title: Text("Discard current Word?"), message: Text("Are you sure that you want to discard your current Word?"), primaryButton: .cancel({
+		self.alertItem = AlertItem(title: Text("Discard current word?"), message: Text("Are you sure that you want to discard your current word?"), primaryButton: .cancel({
 			self.isAllowedToChooseGameModeAgain = false
-		}), secondaryButton: .destructive(Text("I'm Sure"), action: {
+		}), secondaryButton: .destructive(Text("I'm sure"), action: {
 			self.isAllowedToChooseGameModeAgain = true
 		}))
 	}
 	
 	func setDailyWordAlreadyPlayedAlert() {
-		self.alertItem = AlertItem(title: Text("You have already played this Word"), message: Text("You have already played this exact Word today. Are you sure you want to play the same Word again?"), primaryButton: .cancel(), secondaryButton: .default(Text("I'm Sure"), action: {
+		self.alertItem = AlertItem(title: Text("You have already played this word"), message: Text("You have already played this exact word today. Are you sure you want to play the same word again?"), primaryButton: .cancel(), secondaryButton: .default(Text("I'm sure"), action: {
 			self.isAllowedToPlayDailyWordAgain = true
 			self.isAllowedToChooseGameModeAgain = true
 		}))

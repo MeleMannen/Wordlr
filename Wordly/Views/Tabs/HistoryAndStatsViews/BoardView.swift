@@ -201,7 +201,7 @@ struct BoardView: View {
             }
             .padding(.top, 15)
         }
-        .navigationTitle("The Board")
+        .navigationTitle("The board")
         .navigationBarTitleDisplayMode(.inline)
 		.onAppear {
 			AnalyticsManager.shared.logScreenViewed(screenName: "BoardView")

@@ -150,13 +150,13 @@ struct GameView26: View {
 											self.didTapResetButton.toggle()
 											if appManager.selectedGameMode == .normal {
 												self.alertItem = AlertItem(
-													title: Text("Are you sure you want to Restart?"),
+													title: Text("Are you sure you want to restart?"),
 													message: Text("You will lose your word and you cannot undo this action!"),
 													primaryButton: .destructive(Text("Restart")) {
 														self.alertItem = AlertItem(
-															title: Text("The Word Was: \(appManager.word)!"),
+															title: Text("The word was: \(appManager.word)!"),
 															message: Text("Do you want to see the definition?"),
-															primaryButton: .default(Text("Show Definition")) {
+															primaryButton: .default(Text("Show definition")) {
 																self.isShowingCurrentDefinition = true
 																
 																DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
@@ -293,10 +293,10 @@ struct GameView26: View {
 									self.didTapNewGameButton.toggle()
 									appManager.startNewGameFromGameOver()
 									Task {
-										await HintTip.getHintEvent.donate()
+										await HintTip.gamesPlayedEvent.donate()
 									}
 								}, label: {
-									Text(appManager.selectedGameMode == .normal ? "New Game" : "Free Play")
+									Text(appManager.selectedGameMode == .normal ? "New game" : "Free play")
 										.conditionalShadow(color: .black.opacity(0.2), radius: 2, x: 4, y: 4)
 										.font(.title2).bold()
 										.frame(maxWidth: .infinity, minHeight: 40, idealHeight: 45, maxHeight: 50)
@@ -318,7 +318,7 @@ struct GameView26: View {
 								Spacer()
 								
 								NavigationLink(destination: WordDefinitionView(word: appManager.word, language: appManager.selectedLanguage), label: {
-									Text("Show Definition")
+									Text("Show definition")
 										.conditionalShadow(color: .black.opacity(0.2), radius: 2, x: 4, y: 4)
 										.font(.title2).bold()
 										.frame(maxWidth: .infinity, minHeight: 40, idealHeight: 45, maxHeight: 50)
@@ -356,7 +356,7 @@ struct GameView26: View {
 											UIPasteboard.general.string = appManager.getShareResult(row: appManager.currentRow, numberOfLetters: appManager.numberOfLetters, date: appManager.startDate, board: appManager.board, timeUsedString: appManager.getTimeUsedString(startDate: appManager.startDate, endDate: appManager.endDate))
 										}
 									} label: {
-										Label("Copy Result", systemImage: appManager.hasSharedResult ? "doc.on.doc.fill" : "doc.on.doc")
+										Label("Copy result", systemImage: appManager.hasSharedResult ? "doc.on.doc.fill" : "doc.on.doc")
 											.font(.title2).bold()
 											.contentTransition(.symbolEffect(.replace))
 											.conditionalShadow(color: .black.opacity(0.5), radius: 4, x: 4, y: 4)
@@ -387,13 +387,13 @@ struct GameView26: View {
 									self.didTapResetButton.toggle()
 									if appManager.selectedGameMode == .normal {
 										self.alertItem = AlertItem(
-											title: Text("Are you sure you want to Restart?"),
+											title: Text("Are you sure you want to restart?"),
 											message: Text("You will lose your word and you cannot undo this action!"),
 											primaryButton: .destructive(Text("Restart")) {
 												self.alertItem = AlertItem(
-													title: Text("The Word Was: \(appManager.word)!"),
+													title: Text("The word was: \(appManager.word)!"),
 													message: Text("Do you want to see the definition?"),
-													primaryButton: .default(Text("Show Definition")) {
+													primaryButton: .default(Text("Show definition")) {
 														self.isShowingCurrentDefinition = true
 														
 														DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
@@ -413,7 +413,7 @@ struct GameView26: View {
 										self.didTapNewGameButton.toggle()
 										appManager.startNewGameFromGameOver()
 										Task {
-											await HintTip.getHintEvent.donate()
+											await HintTip.gamesPlayedEvent.donate()
 										}
 									}
 								},
@@ -435,12 +435,12 @@ struct GameView26: View {
 					WordDefinitionView(word: appManager.word, language: appManager.language)
 						.environment(appManager)
 				})
-				.navigationTitle(appManager.numberOfLetters == 1 ? "Guess the Letter" : "Guess the Word")
+				.navigationTitle(appManager.numberOfLetters == 1 ? "Guess the letter" : "Guess the Word")
 				.navigationBarTitleDisplayMode(.inline)
 				.toolbar {
 					ToolbarItemGroup(placement: .topBarTrailing) {
 						if showHintButton {
-							AdButton()
+							AdButton(shouldShowHintTip: showHintButton)
 								.environment(appManager)
 
 							SearchToolbarItem()
@@ -531,7 +531,7 @@ struct GameView26: View {
 		alertItem = AlertItem(
 			title: Text("Keep your streak going?"),
 			message: Text("Turn on reminders so you don't miss the next daily word."),
-			primaryButton: .default(Text("Turn On")) {
+			primaryButton: .default(Text("Turn on")) {
 				notificationsEnabled = true
 				createReminderForCurrentDailyWord()
 				UserDefaults.standard.set(Int.max, forKey: "notificationPromptNextWinThreshold")
@@ -574,38 +574,44 @@ struct GameView26: View {
 struct AdButton: View {
 	@Environment(AppManager.self) private var appManager
 	@State private var didTap: Bool = false
+	let shouldShowHintTip: Bool
 	let hintTip = HintTip()
 	
 	var body: some View {
-		Button(action: {
-			self.didTap.toggle()
-			self.hintTip.invalidate(reason: .actionPerformed)
-			Task {
-				await HintTip.getHintEvent.donate()
-			}
-			if !appManager.isGameOver && !appManager.isAnimating {
-				if appManager.hasLoadedAd {
-					appManager.showAd()
-					
-				} else {
-					Task {
-						await appManager.loadAd()
+		let button = Button(action: {
+				self.didTap.toggle()
+				self.hintTip.invalidate(reason: .actionPerformed)
+				Task {
+					await HintTip.getHintEvent.donate()
+				}
+				if !appManager.isGameOver && !appManager.isAnimating {
+					if appManager.hasLoadedAd {
 						appManager.showAd()
+						
+					} else {
+						Task {
+							await appManager.loadAd()
+							appManager.showAd()
+						}
 					}
 				}
+			}, label: {
+				Image(systemName: "lightbulb.max.fill")
+					.contentShape(Rectangle())
+			})
+			.task {
+				if !appManager.hasLoadedAd {
+					await appManager.loadAd()
+					appManager.hasLoadedAd = true
+				}
 			}
-		}, label: {
-			Image(systemName: "lightbulb.max.fill")
-				.contentShape(Rectangle())
-		})
-		.task {
-			if !appManager.hasLoadedAd {
-				await appManager.loadAd()
-				appManager.hasLoadedAd = true
-			}
+			.sensoryFeedback(.selection, trigger: self.didTap)
+		
+		if shouldShowHintTip {
+			button.popoverTip(self.hintTip)
+		} else {
+			button
 		}
-		.sensoryFeedback(.selection, trigger: self.didTap)
-		.popoverTip(self.hintTip)
 	}
 }
 

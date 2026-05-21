@@ -25,7 +25,7 @@ struct Info: View {
 					.font(.body)
 					.padding(.bottom, 15)
 				
-				Text("How to Play?")
+				Text("How to play?")
 					.font(.title3).bold()
 					.padding(.bottom, 2)
 				

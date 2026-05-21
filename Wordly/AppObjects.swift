@@ -214,8 +214,8 @@ enum ShowsWhenHintsUsed: String, CaseIterable, Identifiable {
     
     var localizedName: String {
         switch self {
-            case .neverUsed: return NSLocalizedString("hints_used_neverUsed", comment: "Never Used")
-            case .onlyWhenUsed: return NSLocalizedString("hints_used_onlyWhenUsed", comment: "Only When Used")
+            case .neverUsed: return NSLocalizedString("hints_used_neverUsed", comment: "Never used")
+            case .onlyWhenUsed: return NSLocalizedString("hints_used_onlyWhenUsed", comment: "Only when used")
             case .both: return NSLocalizedString("hints_used_both", comment: "Both")
         }
     }
@@ -235,9 +235,9 @@ enum GameMode: String, Codable, CaseIterable, Identifiable {
     
     var localizedName: String {
         switch self {
-            case .dailyWord: return NSLocalizedString("game_mode_daily_word", comment: "Daily Wordlr Mode")
-            case .normal: return NSLocalizedString("game_mode_unlimited", comment: "Free Play Mode")
-            case .both: return NSLocalizedString("game_mode_both", comment: "Both Modes")
+            case .dailyWord: return NSLocalizedString("game_mode_daily_word", comment: "Daily Wordlr mode")
+            case .normal: return NSLocalizedString("game_mode_unlimited", comment: "Free play mode")
+            case .both: return NSLocalizedString("game_mode_both", comment: "Both modes")
         }
     }
     
@@ -257,10 +257,10 @@ enum LanguageSelection: String, Codable, CaseIterable, Identifiable {
     
     var localizedName: String {
         switch self {
-            case .english: return NSLocalizedString("language_english", comment: "English Language")
-			case .spanish: return NSLocalizedString("language_spanish", comment: "Spanish Language")
-			case .norwegian: return NSLocalizedString("language_norwegian", comment: "Norwegian Language")
-            case .all: return NSLocalizedString("language_all", comment: "All Languages")
+            case .english: return NSLocalizedString("language_english", comment: "English language")
+			case .spanish: return NSLocalizedString("language_spanish", comment: "Spanish language")
+			case .norwegian: return NSLocalizedString("language_norwegian", comment: "Norwegian language")
+            case .all: return NSLocalizedString("language_all", comment: "All languages")
         }
     }
 	

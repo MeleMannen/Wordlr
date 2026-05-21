@@ -10,7 +10,7 @@ struct OnboardingView: View {
             ScrollView {
                 VStack(alignment: .leading, spacing: 20) {
                     VStack(alignment: .leading, spacing: 8) {
-                        Text("How to Play?")
+                        Text("How to play?")
                             .font(.largeTitle).bold()
                         Text("Guess the secret word in a limited number of tries. After each guess, the colors of the tiles will show how close you were.")
                             .font(.body)

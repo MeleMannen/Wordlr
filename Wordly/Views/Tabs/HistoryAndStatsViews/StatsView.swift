@@ -64,7 +64,7 @@ struct StatsView: View {
 								}
 								VStack(alignment: .leading) {
 									HStack {
-										Text("Win Rate")
+										Text("Win rate")
 											.font(.title3).bold()
 											.conditionalShadow(color: .black.opacity(0.05), radius: 2, x: 1, y: 1)
 											.padding(.top, 3)
@@ -120,7 +120,7 @@ struct StatsView: View {
 							
 							Section {
 								VStack(alignment: .leading) {
-									Text("Number of Guesses Needed")
+									Text("Number of guesses needed")
 										.font(.title3).bold()
 										.conditionalShadow(color: .black.opacity(0.05), radius: 2, x: 1, y: 1)
 										.padding(.top, 3)
@@ -129,7 +129,7 @@ struct StatsView: View {
 										ForEach(Array(self.counts.enumerated()), id: \.offset) { index, count in
 											BarMark(
 												x: .value("Count", count),
-												y: .value("Number of Guesses", " \(index+1) "),
+												y: .value("Number of guesses", " \(index+1) "),
 												width: .fixed(20.0)
 											)
 											.foregroundStyle(Color.green)
@@ -158,10 +158,10 @@ struct StatsView: View {
 							if self.maxStreakLength > 0 || self.maxNormalStreakLength > 0 {
 								Section {
 									if self.maxStreakLength > 0 && (self.gameMode == .both || self.gameMode == .dailyWord) {
-										StreakChartView(title: NSLocalizedString("Daily Wordlr Streaks 🔥", comment: "Title for daily word streaks chart in stats view"), longestStreakPerLetters: self.$longestStreakPerLetters, maxStreakLength: self.$maxStreakLength)
+										StreakChartView(title: NSLocalizedString("Daily Wordlr streaks 🔥", comment: "Title for daily word streaks chart in stats view"), longestStreakPerLetters: self.$longestStreakPerLetters, maxStreakLength: self.$maxStreakLength)
 									}
 									if self.maxNormalStreakLength > 0 && (self.gameMode == .both || self.gameMode == .normal) {
-											StreakChartView(title: NSLocalizedString("Free Play Streaks 🔥", comment: "Title for free play streaks chart in stats view"), longestStreakPerLetters: self.$longestNormalStreakPerLetters, maxStreakLength: self.$maxNormalStreakLength)
+											StreakChartView(title: NSLocalizedString("Free play streaks 🔥", comment: "Title for free play streaks chart in stats view"), longestStreakPerLetters: self.$longestNormalStreakPerLetters, maxStreakLength: self.$maxNormalStreakLength)
 									}
 								} header: {
 									Text("Streaks")

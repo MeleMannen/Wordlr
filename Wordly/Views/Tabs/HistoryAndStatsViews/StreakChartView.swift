@@ -32,7 +32,7 @@ struct StreakChartView: View {
 							let longestDouble = Double(streak.longestStreak)
 							BarMark(
 								x: .value("Current", (streak.currentStreak == 0) ? 0.005 * self.maxStreakLength : Double(streak.currentStreak)),
-								y: .value("Number of Guesses", " \(streak.index) "),
+								y: .value("Number of guesses", " \(streak.index) "),
 								height: .fixed(20.0)
 							)
 							.foregroundStyle(Color.green)
@@ -46,7 +46,7 @@ struct StreakChartView: View {
 							
 							BarMark(
 								x: .value("Longest", streak.longestStreak),
-								y: .value("Number of Guesses", " \(streak.index) "),
+								y: .value("Number of guesses", " \(streak.index) "),
 								height: .fixed(20.0)
 							)
 							.foregroundStyle(Color.orange)
@@ -93,5 +93,5 @@ struct StreakChartView: View {
 }
 
 #Preview {
-	StreakChartView(title: "Daily Wordlr Streaks 🔥", longestStreakPerLetters:  .constant([(language: .english, streaks: [(5, 1, 1)]), (language: .spanish, streaks: []), (language: .norwegian, streaks: [])]), maxStreakLength: .constant(1.0))
+	StreakChartView(title: "Daily Wordlr streaks 🔥", longestStreakPerLetters:  .constant([(language: .english, streaks: [(5, 1, 1)]), (language: .spanish, streaks: []), (language: .norwegian, streaks: [])]), maxStreakLength: .constant(1.0))
 }

@@ -151,7 +151,7 @@ struct GameRecordView: View {
 						.padding(.bottom, 5)
 						
 						HStack(alignment: .bottom) {
-							Text("Number of Letters")
+							Text("Word length")
 								.foregroundStyle(.secondary)
 								.font(.title3)
 							Spacer()
@@ -204,7 +204,7 @@ struct GameRecordView: View {
 						.padding(.bottom, 5)
 						
 						HStack(alignment: .bottom) {
-							Text("Number of Guesses")
+							Text("Number of guesses")
 								.foregroundStyle(.secondary)
 								.font(.title3)
 							Spacer()
@@ -224,7 +224,7 @@ struct GameRecordView: View {
 						
 						if let hintsUsed = gameRecord.hintsUsed, hintsUsed > 0 {
 							HStack(alignment: .bottom) {
-								Text("Hints Used")
+								Text("Hints used")
 									.foregroundStyle(.secondary)
 									.font(.title3)
 								Spacer()
@@ -243,7 +243,7 @@ struct GameRecordView: View {
 						
 						if !self.timeUsedString.isEmpty {
 							HStack(alignment: .bottom) {
-								Text("Time Used")
+								Text("Time used")
 									.foregroundStyle(.secondary)
 									.font(.title3)
 								Spacer()
@@ -263,7 +263,7 @@ struct GameRecordView: View {
 					
 					if #available(iOS 26.0, *) {
 						NavigationLink(destination: WordDefinitionView(word: gameRecord.word, language: gameRecord.language)) {
-							Text("Show Definition")
+							Text("Show definition")
 								.foregroundColor(.white)
 								.conditionalShadow(color: .black.opacity(0.5), radius: 4, x: 4, y: 4)
 								.font(.title2).bold()
@@ -291,7 +291,7 @@ struct GameRecordView: View {
 						
 						if let board = gameRecord.board {
 							NavigationLink(destination: BoardView(gameRecord: self.gameRecord, board: board)) {
-								Text("View the Board")
+								Text("View the board")
 									.foregroundColor(.white)
 									.conditionalShadow(color: .black.opacity(0.5), radius: 4, x: 4, y: 4)
 									.font(.title2).bold()
@@ -322,7 +322,7 @@ struct GameRecordView: View {
 						}
 					} else {
 						NavigationLink(destination: WordDefinitionView(word: gameRecord.word, language: gameRecord.language)) {
-							Text("Show Definition")
+							Text("Show definition")
 								.foregroundColor(.white)
 								.conditionalShadow(color: .black.opacity(0.05), radius: 2, x: 1, y: 1)
 								.font(.title2).bold()
@@ -345,7 +345,7 @@ struct GameRecordView: View {
 						
 						if let board = gameRecord.board {
 							NavigationLink(destination: BoardView(gameRecord: self.gameRecord, board: board)) {
-								Text("View the Board")
+								Text("View the board")
 									.foregroundColor(.white)
 									.conditionalShadow(color: .black.opacity(0.05), radius: 1.5, x: 1, y: 1)
 									.font(.title2).bold()
@@ -389,7 +389,7 @@ struct GameRecordView: View {
 									self.didTap.toggle()
 								}
 							} label: {
-								Label("Copy Result", systemImage: self.hasSharedResult ? "doc.on.doc.fill" : "doc.on.doc")
+								Label("Copy result", systemImage: self.hasSharedResult ? "doc.on.doc.fill" : "doc.on.doc")
 									.font(.title2).bold()
 									.contentTransition(.symbolEffect(.replace))
 									.conditionalShadow(color: .black.opacity(0.5), radius: 4, x: 4, y: 4)

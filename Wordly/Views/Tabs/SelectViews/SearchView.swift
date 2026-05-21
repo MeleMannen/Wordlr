@@ -54,7 +54,7 @@ struct SearchView: View {
 													appManager.useWord(word: word)
 													dismiss()
 												} label: {
-													Label("Use the Word", systemImage: "checkmark.circle")
+													Label("Use the word", systemImage: "checkmark.circle")
 												}
 											}
 										}
@@ -90,7 +90,7 @@ struct SearchView: View {
 													appManager.useWord(word: word)
 													dismiss()
 												} label: {
-													Label("Use the Word", systemImage: "checkmark.circle")
+													Label("Use the word", systemImage: "checkmark.circle")
 												}
 											}
 										}
@@ -106,7 +106,7 @@ struct SearchView: View {
 					}
 				}
 			}
-			.searchable(text: $appManager.searchedWord, isPresented: $appManager.isSearching, placement: .navigationBarDrawer(displayMode: .always), prompt: "Search for a Word")
+			.searchable(text: $appManager.searchedWord, isPresented: $appManager.isSearching, placement: .navigationBarDrawer(displayMode: .always), prompt: "Search for a word")
 			.searchPresentationToolbarBehavior(.avoidHidingContent)
 			.navigationTitle("Search")
 			.toolbar {
@@ -148,7 +148,7 @@ struct SearchView: View {
 							}
 							AnalyticsManager.shared.logDidUseSearchFiltersEvent(word: appManager.word, language: appManager.selectedLanguage, numberOfLetters: appManager.numberOfLetters, gameMode: appManager.gameMode)
 						}) {
-							Label("Filter Options", systemImage: "slider.horizontal.3")
+							Label("Filter options", systemImage: "slider.horizontal.3")
 						}
 						.sensoryFeedback(.selection, trigger: self.didTap)
 						.popoverTip(self.filterTip, arrowEdge: .top)
@@ -168,7 +168,7 @@ struct SearchView: View {
 							}
 							AnalyticsManager.shared.logDidUseSearchFiltersEvent(word: appManager.word, language: appManager.selectedLanguage, numberOfLetters: appManager.numberOfLetters, gameMode: appManager.gameMode)
 						}) {
-							Label("Filter Options", systemImage: "slider.horizontal.3")
+							Label("Filter options", systemImage: "slider.horizontal.3")
 						}
 						.sensoryFeedback(.selection, trigger: self.didTap)
 						.popoverTip(self.filterTip, arrowEdge: .top)
