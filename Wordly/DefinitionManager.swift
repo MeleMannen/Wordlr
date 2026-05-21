@@ -41,7 +41,7 @@ final class DefinitionManager: NSObject, ObservableObject {
     }
     
     
-    func getDefinition(for word: String, completion: @escaping (DefinitionFetchResult<[ProcessedWord]>) -> Void) {
+    func getNorwegianDefinition(for word: String, completion: @escaping (DefinitionFetchResult<[NorwegianDefinition]>) -> Void) {
         WordleDataManager.shared.fetchNorwegianDefinition(for: word) { result in
             DispatchQueue.main.async {
                 completion(result)

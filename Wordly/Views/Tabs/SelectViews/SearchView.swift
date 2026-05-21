@@ -139,7 +139,9 @@ struct SearchView: View {
 				if #available(iOS 26.0, *) {
 					ToolbarItem(placement: .navigationBarTrailing) {
 						Button(action: {
-							self.isShowingFilterOptions = true
+							DispatchQueue.main.async {
+								self.isShowingFilterOptions = true
+							}
 							self.didTap.toggle()
 							Task {
 								await FilterTip.filterEvent.donate()
@@ -157,7 +159,9 @@ struct SearchView: View {
 				} else {
 					ToolbarItem(placement: .navigationBarTrailing) {
 						Button(action: {
-							self.isShowingFilterOptions = true
+							DispatchQueue.main.async {
+								self.isShowingFilterOptions = true
+							}
 							self.didTap.toggle()
 							Task {
 								await FilterTip.filterEvent.donate()
@@ -178,7 +182,6 @@ struct SearchView: View {
 					FilterOptionsView(isShowingFilterOptions: self.$isShowingFilterOptions)
 						.environment(appManager)
 						.presentationDetents([.large, .fraction(0.8)], selection: $selectedDetent)
-					
 						.navigationTransition(.zoom(sourceID: "filter", in: self.namespace))
 				} else {
 					FilterOptionsView(isShowingFilterOptions: self.$isShowingFilterOptions)
@@ -223,103 +226,6 @@ struct SearchView: View {
 			.onChange(of: appManager.isFilteringExcludeLetters) {
 				self.filterGameRecords()
 			}
-			//			.overlay(alignment: .bottomTrailing) {
-			//				if #available(iOS 26.0, *) {
-			//					NavigationLink(destination: FilterOptionsView().environmentObject(appManager).navigationTransition(.zoom(sourceID: "filter", in: namespace)), label: {
-			//						Image(systemName: "slider.horizontal.3")
-			//							.font(.title)
-			//							.foregroundColor(.white)
-			//							.padding()
-			//							.matchedTransitionSource(id: "filter", in: namespace)
-			//							.background {
-			//								if self.scenePhase == .background {
-			//									Circle()
-			//										.foregroundStyle(Color(uiColor: .systemGreen))
-			//									
-			//								}
-			//							}
-			//					})
-			//					.glassEffect(.regular.tint(.green).interactive(), in: .circle)
-			//					.padding(.trailing, 25)
-			//					.padding(.bottom, UIDevice.current.userInterfaceIdiom == .pad || UIDevice.current.userInterfaceIdiom == .mac ? 100 : (adManager.shouldShowAds ? 75 : 25))
-			//					.transition(.scale)
-			//					.simultaneousGesture(
-			//						LongPressGesture(minimumDuration: 1.2)
-			//							.onEnded { _ in
-			//								appManager.resetFilters()
-			//								self.isShowingFilterOptions.toggle()
-			//							}
-			//					)
-			//					.simultaneousGesture(TapGesture().onEnded {
-			//						self.isShowingFilterOptions.toggle()
-			//						Task {
-			//							await FilterTip.filterEvent.donate()
-			//						}
-			//					})
-			//					.popoverTip(self.filterTip, arrowEdge: .top)
-			//					.sensoryFeedback(.selection, trigger: self.isShowingFilterOptions)
-			//					.id(filterButtonID)
-			//					
-			//				} else if #available(iOS 18.0, *) {
-			//					NavigationLink(destination: FilterOptionsView().environmentObject(appManager).navigationTransition(.zoom(sourceID: "filter", in: namespace)), label: {
-			//						Image(systemName: "slider.horizontal.3")
-			//							.font(.title)
-			//							.foregroundColor(.white)
-			//							.padding()
-			//							.background(Color.green)
-			//							.clipShape(Circle())
-			//							.sensoryFeedback(.selection, trigger: self.isShowingFilterOptions)
-			//							.matchedTransitionSource(id: "filter", in: namespace)
-			//							.simultaneousGesture(
-			//								LongPressGesture(minimumDuration: 1.2)
-			//									.onEnded { _ in
-			//										appManager.resetFilters()
-			//										self.isShowingFilterOptions.toggle()
-			//									}
-			//							)
-			//					})
-			//					.padding(.trailing, 25)
-			//					.padding(.bottom, UIDevice.current.userInterfaceIdiom == .pad || UIDevice.current.userInterfaceIdiom == .mac ? 100 : (adManager.shouldShowAds ? 75 : 25))
-			//					.transition(.scale)
-			//					.simultaneousGesture(TapGesture().onEnded {
-			//						self.isShowingFilterOptions.toggle()
-			//						Task {
-			//							await FilterTip.filterEvent.donate()
-			//						}
-			//					})
-			//					.popoverTip(self.filterTip, arrowEdge: .top)
-			//					.id(filterButtonID)
-			//				} else {
-			//					NavigationLink(destination: FilterOptionsView().environmentObject(appManager), label: {
-			//						Image(systemName: "slider.horizontal.3")
-			//							.font(.title)
-			//							.foregroundColor(.white)
-			//							.padding()
-			//							.background(Color.green)
-			//							.clipShape(Circle())
-			//							.sensoryFeedback(.selection, trigger: self.isShowingFilterOptions)
-			//							.simultaneousGesture(
-			//								LongPressGesture(minimumDuration: 1.2)
-			//									.onEnded { _ in
-			//										appManager.resetFilters()
-			//										self.isShowingFilterOptions.toggle()
-			//									}
-			//							)
-			//					})
-			//					.padding(.trailing, 25)
-			//					.padding(.bottom, UIDevice.current.userInterfaceIdiom == .pad || UIDevice.current.userInterfaceIdiom == .mac ? 100 : (adManager.shouldShowAds ? 75 : 25))
-			//					.simultaneousGesture(TapGesture().onEnded {
-			//						self.isShowingFilterOptions.toggle()
-			//						Task {
-			//							await FilterTip.filterEvent.donate()
-			//						}
-			//					})
-			//					.popoverTip(self.filterTip, arrowEdge: .top)
-			//					
-			//					
-			//				}
-			//				
-			//			}
 			.onAppear {
 				AnalyticsManager.shared.logScreenViewed(screenName: "SearchView")
 				self.filterGameRecords()

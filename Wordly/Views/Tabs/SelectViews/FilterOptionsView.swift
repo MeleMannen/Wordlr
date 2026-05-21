@@ -281,7 +281,9 @@ struct FilterOptionsView: View {
 				if #available(iOS 26.0, *) {
 					ToolbarItem(placement: .cancellationAction) {
 						Button("Cancel", systemImage: "xmark") {
-							self.isShowingFilterOptions = false
+							DispatchQueue.main.async {
+								self.isShowingFilterOptions = false
+							}
 						}
 						.sensoryFeedback(.selection, trigger: self.didTap)
 					}
@@ -289,7 +291,9 @@ struct FilterOptionsView: View {
 				} else {
 					ToolbarItem(placement: .cancellationAction) {
 						Button("Back", role: .cancel) {
-							self.isShowingFilterOptions = false
+							DispatchQueue.main.async {
+								self.isShowingFilterOptions = false
+							}
 						}
 						.sensoryFeedback(.selection, trigger: self.didTap)
 					}

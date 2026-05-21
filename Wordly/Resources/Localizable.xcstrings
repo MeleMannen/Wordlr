@@ -2310,6 +2310,7 @@
       }
     },
     "Search %@" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -2340,6 +2341,9 @@
           }
         }
       }
+    },
+    "Search on NOAB" : {
+
     },
     "Send Feedback" : {
 

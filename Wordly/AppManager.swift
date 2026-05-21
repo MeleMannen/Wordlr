@@ -192,22 +192,6 @@ final class AppManager: NSObject, FullScreenContentDelegate {
 		return self.words?.wordGroups["\(numberOfLetters)"]?.randomElement() ?? "PIANO"
 	}
 	
-	
-	
-	
-	func getDefinition(for word: String, completion: @escaping ([ProcessedWord]) -> Void) {
-		WordleDataManager.shared.fetchNorwegianDefinition(for: word) { result in
-			DispatchQueue.main.async {
-				switch result {
-					case .success(let processedWords):
-						completion(processedWords)
-					case .notFound, .networkError:
-						completion([])
-				}
-			}
-		}
-	}
-	
 	func fixKeyboard() {
 		var newKeyboard: [[KeyBoardLetter]] = []
 		var keyBoardCharacters: [[String]] = []
@@ -485,26 +469,35 @@ final class AppManager: NSObject, FullScreenContentDelegate {
 		guard let guessedWord = self.submittedWordWaitingForReveal else {
 			return
 		}
-		
+
 		self.submittedWordWaitingForReveal = nil
+		let tileAnimationDelay = Double(self.numberOfLetters - 1) * 0.3 + 0.5
+
 		self.goThroughKeyboard() { success in
 			guard success else {
 				self.isAnimating = false
 				return
 			}
-			
-			if self.word == guessedWord {
+
+			let isWin = self.word == guessedWord
+			let isLoss = !isWin && self.currentRow == self.board.count
+
+			if isWin {
 				print("Du vant!!")
-				self.completeGame(
-					state: .won,
-					message: String(format: NSLocalizedString("success_message", comment: "Success message with a word"), self.word)
-				)
-			} else if self.currentRow == self.board.count {
+				DispatchQueue.main.asyncAfter(deadline: .now() + tileAnimationDelay) {
+					self.completeGame(
+						state: .won,
+						message: String(format: NSLocalizedString("success_message", comment: "Success message with a word"), self.word)
+					)
+				}
+			} else if isLoss {
 				print("Du tapte: \(guessedWord), ordet var \(self.word)")
-				self.completeGame(
-					state: .lost,
-					message: String(format: NSLocalizedString("almost_message", comment: "Almost got the word message"), self.word)
-				)
+				DispatchQueue.main.asyncAfter(deadline: .now() + tileAnimationDelay) {
+					self.completeGame(
+						state: .lost,
+						message: String(format: NSLocalizedString("almost_message", comment: "Almost got the word message"), self.word)
+					)
+				}
 			} else {
 				print("Feil ord: \(guessedWord)")
 			}

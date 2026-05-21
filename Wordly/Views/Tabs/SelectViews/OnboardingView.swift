@@ -2,8 +2,8 @@ import SwiftUI
 
 struct OnboardingView: View {
 	@AppStorage("userWantsThePhraseNameBack") private var userWantsThePhraseNameBack = false
-    @Binding var isPresented: Bool
-    @Binding var hasSeenOnboarding: Bool
+	@AppStorage("hasSeenOnboarding") private var hasSeenOnboarding: Bool = false
+	@Binding var isShowingOnboarding: Bool
 
     var body: some View {
         NavigationStack {
@@ -67,8 +67,8 @@ struct OnboardingView: View {
                 VStack {
                     if #available(iOS 26.0, *) {
                         Button(action: {
-                            hasSeenOnboarding = true
-                            isPresented = false
+							hasSeenOnboarding = true
+							isShowingOnboarding = false
                         }, label: {
                             Text("Got it!")
                                 .font(.title2).bold()
@@ -82,8 +82,8 @@ struct OnboardingView: View {
                         .conditionalShadow(color: .black.opacity(0.4), radius: 4, x: 4, y: 4)
                     } else {
                         Button(action: {
-                            hasSeenOnboarding = true
-                            isPresented = false
+							hasSeenOnboarding = true
+							isShowingOnboarding = false
                         }, label: {
                             Text("Got it!")
                                 .font(.title2).bold()
@@ -111,15 +111,4 @@ struct OnboardingView: View {
 			}
 		}
 	}
-}
-
-#Preview {
-    struct PreviewHost: View {
-        @State var presented = true
-        @State var seen = false
-        var body: some View {
-            OnboardingView(isPresented: $presented, hasSeenOnboarding: $seen)
-        }
-    }
-    return PreviewHost()
 }

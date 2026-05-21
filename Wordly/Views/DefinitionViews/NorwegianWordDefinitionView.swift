@@ -11,11 +11,11 @@ struct NorwegianWordDefinitionView: View {
 	@Environment(\.scenePhase) private var scenePhase
 	@Environment(AdManager.self) private var adManager
 	@EnvironmentObject private var definitionManager: DefinitionManager
-	@State var processedWords: [ProcessedWord] = []
+	@State var processedWords: [NorwegianDefinition] = []
 	@State var word: String
 	@State var isLoading: Bool = true
 	@State var didTap: Bool = false
-	@State private var fetchResult: DefinitionFetchResult<[ProcessedWord]>?
+	@State private var fetchResult: DefinitionFetchResult<[NorwegianDefinition]>?
 	
 	var body: some View {
 		VStack {
@@ -136,53 +136,21 @@ struct NorwegianWordDefinitionView: View {
 								} description: {
 									Text("We couldn't find a definition for this word. It might be a name or a place name.")
 								} actions: {
-									if #available(iOS 26.0, *) {
-										NavigationLink(destination: NAOBView(word: self.word)) {
-											Text("Search \(self.word.uppercased())")
-												.foregroundColor(.white)
-												.font(.title2).bold()
-												.padding(14)
-												.frame(maxWidth: .infinity)
-												.background {
-													if self.scenePhase == .background {
-														RoundedRectangle(cornerRadius: 15)
-															.foregroundStyle(Color(uiColor: .systemGreen))
-													}
-												}
-										}
-										.glassEffect(.regular.tint(.green).interactive(), in: .rect(cornerRadius: 15.0))
-										.simultaneousGesture(TapGesture().onEnded {
-											self.didTap.toggle()
-										})
-										.padding(.top, 10)
-										.padding(.horizontal, 40)
-										.sensoryFeedback(.impact, trigger: self.didTap)
-									} else {
-										NavigationLink(destination: NAOBView(word: self.word)) {
-											Text("Search \(self.word.uppercased())")
-												.foregroundColor(.white)
-												.font(.title2).bold()
-												.padding(14)
-												.frame(maxWidth: .infinity)
-												.background {
-													RoundedRectangle(cornerRadius: 15)
-														.fill(Color.green)
-												}
-												.padding(.horizontal, 40)
-										}
-										.simultaneousGesture(TapGesture().onEnded {
-											self.didTap.toggle()
-										})
-										.padding(.top, 10)
-										.sensoryFeedback(.impact, trigger: self.didTap)
-										.buttonStyle(GrowingButton())
+									NavigationLink(destination: NAOBView(word: self.word)) {
+										Text("Search on NOAB")
+											.foregroundColor(.blue)
+											.font(.headline)
 									}
+									.simultaneousGesture(TapGesture().onEnded {
+										self.didTap.toggle()
+									})
+									.sensoryFeedback(.impact, trigger: self.didTap)
 								}
 							}
 						}
 					}
 					.refreshable {
-						definitionManager.getDefinition(for: self.word) { result in
+						definitionManager.getNorwegianDefinition(for: self.word) { result in
 							self.apply(result)
 						}
 					}
@@ -191,13 +159,12 @@ struct NorwegianWordDefinitionView: View {
 			} else {
 				ProgressView()
 					.progressViewStyle(CircularProgressViewStyle())
-					.font(.largeTitle)
 				
 			}
 		}
 		.navigationTitle("\(self.word)")
 		.onAppear {
-			definitionManager.getDefinition(for: self.word) { result in
+			definitionManager.getNorwegianDefinition(for: self.word) { result in
 				self.apply(result)
 				AnalyticsManager.shared.logDidViewWordDefinitionEvent(word: self.word, language: .norwegian, numberOfLetters: self.word.count, viewSuccess: !self.processedWords.isEmpty)
 			}
@@ -228,7 +195,7 @@ struct NorwegianWordDefinitionView: View {
 		return false
 	}
 	
-	private func apply(_ result: DefinitionFetchResult<[ProcessedWord]>) {
+	private func apply(_ result: DefinitionFetchResult<[NorwegianDefinition]>) {
 		self.fetchResult = result
 		self.isLoading = false
 		

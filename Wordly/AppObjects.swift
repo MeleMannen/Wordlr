@@ -600,7 +600,7 @@ struct QuoteItem: Codable {
     }
 }
 
-struct ProcessedWord: Identifiable {
+struct NorwegianDefinition: Identifiable {
     let id = UUID()
     let words: [String]?
     let wordClass: String?
@@ -1242,7 +1242,7 @@ extension WordleDataManager {
         return words
     }
     
-    func fetchArticleDetails(articleID: Int, completion: @escaping (DefinitionFetchResult<ProcessedWord>) -> Void) {
+    func fetchArticleDetails(articleID: Int, completion: @escaping (DefinitionFetchResult<NorwegianDefinition>) -> Void) {
         let request = NSMutableURLRequest(url: NSURL(string: "https://ord.uib.no/bm/article/\(articleID).json")! as URL,
                                           cachePolicy: .useProtocolCachePolicy,
                                           timeoutInterval: 20)
@@ -1305,7 +1305,7 @@ extension WordleDataManager {
                 }
                 
                 
-                let prosessedWords: ProcessedWord = ProcessedWord(words: words,
+                let prosessedWords: NorwegianDefinition = NorwegianDefinition(words: words,
                                                                   wordClass: wordClass,
                                                                   gender: gender,
                                                                   pronunciation: pronunciation,
@@ -1452,8 +1452,8 @@ extension WordleDataManager {
     }
 	
 	
-    func fetchNorwegianDefinition(for word: String, completion: @escaping (DefinitionFetchResult<[ProcessedWord]>) -> Void) {
-        var processedWords: [ProcessedWord] = []
+    func fetchNorwegianDefinition(for word: String, completion: @escaping (DefinitionFetchResult<[NorwegianDefinition]>) -> Void) {
+        var processedWords: [NorwegianDefinition] = []
         self.fetchArticleIDs(for: word) { articleIDsResult in
             switch articleIDsResult {
                 case .networkError:

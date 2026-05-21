@@ -259,13 +259,9 @@ struct GameView26: View {
 										.glassEffect(.regular.tint(self.colorForUnused).interactive(), in: .rect(cornerRadius: 10.0))
 										.glassEffectID("delete", in: self.namespace)
 										.sensoryFeedback(.impact, trigger: self.didTapBackButton)
-										
-										
-										
 									}
 									.padding(.top, 5)
 									.padding(.bottom, 5)
-									
 								}
 							}
 							.opacity((appManager.isGameOver && !appManager.isAnimating) ? 0 : 1)

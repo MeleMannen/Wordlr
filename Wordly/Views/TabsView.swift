@@ -19,6 +19,7 @@ struct TabsView: View {
     @AppStorage("appTheme") private var appTheme: AppTheme = .dark
     @AppStorage("notificationsEnabled") private var notificationsEnabled: Bool = false
     @AppStorage("userWantsThePhraseNameBack") private var userWantsThePhraseNameBack = false
+    @AppStorage("hasSeenOnboarding") private var hasSeenOnboarding: Bool = false
     @State var selection: TabSelection = .home
     @State var tintColor: Color = .green
     @State private var isResolvingStartupPrivacyFlow = false
@@ -95,7 +96,16 @@ struct TabsView: View {
                 adManager.startMonitoringConnectivity()
             }
             .task {
+                try? await Task.sleep(nanoseconds: 1_500_000_000)
                 await resolveTrackingAndPrepareAdsIfNeeded()
+            }
+            .onChange(of: hasSeenOnboarding) { _, newValue in
+                if newValue {
+                    Task {
+                        try? await Task.sleep(nanoseconds: 600_000_000)
+                        await resolveTrackingAndPrepareAdsIfNeeded()
+                    }
+                }
             }
             .task {
                 for await _ in NotificationCenter.default.notifications(named: UIResponder.keyboardWillShowNotification) {
@@ -136,7 +146,7 @@ struct TabsView: View {
     }
 
 	private func resolveTrackingAndPrepareAdsIfNeeded() async {
-		guard scenePhase == .active, !isResolvingStartupPrivacyFlow else { return }
+		guard scenePhase == .active, !isResolvingStartupPrivacyFlow, hasSeenOnboarding else { return }
 		
 		isResolvingStartupPrivacyFlow = true
 		defer {
