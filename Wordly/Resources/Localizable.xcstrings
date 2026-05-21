@@ -1,3951 +1,3957 @@
 {
-  "sourceLanguage": "en",
-  "strings": {
-    "": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": ""
+  "sourceLanguage" : "en",
+  "strings" : {
+    "" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : ""
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": ""
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : ""
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": ""
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : ""
           }
         }
       }
     },
-    "  ": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "  "
+    "  " : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "  "
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "  "
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "  "
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "  "
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "  "
           }
         }
       }
     },
-    "%@": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@"
+    " - %lld🔥" : {
+
+    },
+    "%@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@"
           }
         }
       }
     },
-    "%@  ": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@"
+    "%@  " : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@"
           }
         }
       }
     },
-    "%@ (%@)": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "new",
-            "value": "%1$@ (%2$@)"
+    "%@ (%@)" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ (%2$@)"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$@ (%2$@)"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ (%2$@)"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$@ (%2$@)"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ (%2$@)"
           }
         }
       }
     },
-    "%@ is a word game where you guess a secret word. The game provides feedback on your guesses, indicating correct letters and their positions.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@ is a word game where you guess a secret word. The game provides feedback on your guesses, indicating correct letters and their positions."
+    "%@ is a word game where you guess a secret word. The game provides feedback on your guesses, indicating correct letters and their positions." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ is a word game where you guess a secret word. The game provides feedback on your guesses, indicating correct letters and their positions."
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@ es un juego de palabras en el que debes adivinar una palabra secreta. El juego te da retroalimentación sobre tus intentos, indicando las letras correctas y sus posiciones."
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ es un juego de palabras en el que debes adivinar una palabra secreta. El juego te da retroalimentación sobre tus intentos, indicando las letras correctas y sus posiciones."
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@ er et ordspill hvor du gjetter et hemmelig ord. Spillet gir tilbakemelding på gjettene dine, og indikerer riktige bokstaver og deres posisjoner."
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ er et ordspill hvor du gjetter et hemmelig ord. Spillet gir tilbakemelding på gjettene dine, og indikerer riktige bokstaver og deres posisjoner."
           }
         }
       }
     },
-    "%lld": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld"
+    "%lld" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld"
           }
         }
       }
     },
-    "%lld letter": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld letter"
+    "%lld letter" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld letter"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld letra"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld letra"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld bokstav"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld bokstav"
           }
         }
       }
     },
-    "%lld letters": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld letters"
+    "%lld letters" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld letters"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld letras"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld letras"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld bokstaver"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld bokstaver"
           }
         }
       }
     },
-    "%lld.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld."
+    "%lld." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld."
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld."
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld."
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld."
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld."
           }
         }
       }
     },
-    "ANTONYMS": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ANTONYMS"
+    "•" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "•"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Antónimos"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "•"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ANOTNYMER"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "•"
           }
         }
       }
     },
-    "About": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "About"
+    "About" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "About"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Acerca de"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Acerca de"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Om"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Om"
           }
         }
       }
     },
-    "Add reminder": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Add reminder"
+    "Add reminder" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add reminder"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Agregar recordatorio"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Agregar recordatorio"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Legg til påminnelse"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Legg til påminnelse"
           }
         }
       }
     },
-    "All": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "All"
+    "All" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "All"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Todo"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Todo"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Alle"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alle"
           }
         }
       }
     },
-    "All letters": {
-      "extractionState": "stale",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "All letters"
+    "All letters" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "All letters"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Todas las letras"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Todas las letras"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Alle bokstaver"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alle bokstaver"
           }
         }
       }
     },
-    "Any length": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Any length"
+    "almost_message" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Almost!! - %@"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Cualquier longitud"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¡Casi! - %@"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Alle lengder"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nesten!! - %@"
           }
         }
       }
     },
-    "App language": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "App language"
+    "ANTONYMS" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ANTONYMS"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Idioma de la app"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Antónimos"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "App språk"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ANOTNYMER"
           }
         }
       }
     },
-    "App theme": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "App theme"
+    "Any length" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Any length"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Tema de la app"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cualquier longitud"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "App tema"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alle lengder"
           }
         }
       }
     },
-    "Are you sure that you want to discard your current word?": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Are you sure that you want to discard your current word?"
+    "App language" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "App language"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "¿Seguro que quieres descartar la palabra actual?"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Idioma de la app"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Er du sikker på at du vil forkaste ditt påbegynte ord?"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "App språk"
           }
         }
       }
     },
-    "Are you sure you want to restart?": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Are you sure you want to restart?"
+    "App theme" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "App theme"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "¿Estás seguro de que quieres reiniciar?"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tema de la app"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Er du sikker på at du vil restarte?"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "App tema"
           }
         }
       }
     },
-    "Back": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Back"
+    "Are you sure that you want to discard your current word?" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Are you sure that you want to discard your current word?"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Atrás"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿Seguro que quieres descartar la palabra actual?"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Tilbake"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Er du sikker på at du vil forkaste ditt påbegynte ord?"
           }
         }
       }
     },
-    "Both": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Both"
+    "Are you sure you want to restart?" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Are you sure you want to restart?"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ambos"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿Estás seguro de que quieres reiniciar?"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Begge"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Er du sikker på at du vil restarte?"
           }
         }
       }
     },
-    "Both hint usage": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Both hint usage"
+    "Back" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Back"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Uso de ambas pistas"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Atrás"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Begge hint valg"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tilbake"
           }
         }
       }
     },
-    "Cancel": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Cancel"
+    "Both" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Both"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Cancelar"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ambos"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Avbryt"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Begge"
           }
         }
       }
     },
-    "Copy": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Copy"
+    "Both hint usage" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Both hint usage"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Copiar"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uso de ambas pistas"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Kopier"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Begge hint valg"
           }
         }
       }
     },
-    "Copy email": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Copy email"
+    "Cancel" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cancel"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Copiar correo"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cancelar"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Kopier e-post"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Avbryt"
           }
         }
       }
     },
-    "Copy email address": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Copy email address"
+    "Copy" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copy"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Copiar dirección de correo electrónico"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copiar"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Kopier e-postadresse"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kopier"
           }
         }
       }
     },
-    "Copy result": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Copy result"
+    "Copy email" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copy email"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Copiar resultado"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copiar correo"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Kopier resultatet"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kopier e-post"
           }
         }
       }
     },
-    "Correct letter, wrong position": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Correct letter, wrong position"
+    "Copy email address" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copy email address"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Letra correcta, posición incorrecta"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copiar dirección de correo electrónico"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Riktig bokstav, feil posisjon"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kopier e-postadresse"
           }
         }
       }
     },
-    "Correct position": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Correct position"
+    "Copy result" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copy result"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Posición correcta"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copiar resultado"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Riktig posisjon"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kopier resultatet"
           }
         }
       }
     },
-    "Count": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Count"
+    "Correct letter, wrong position" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Correct letter, wrong position"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Contar"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Letra correcta, posición incorrecta"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Antall"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Riktig bokstav, feil posisjon"
           }
         }
       }
     },
-    "Current": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Current"
+    "Correct position" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Correct position"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Actual"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Posición correcta"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nåværende"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Riktig posisjon"
           }
         }
       }
     },
-    "Daily Wordlr": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Daily Wordlr"
+    "Count" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Count"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Palabra diaria"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Contar"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Dagens ord"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Antall"
           }
         }
       }
     },
-    "Daily Wordlr - %lld🔥": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Daily Wordlr - %lld🔥"
+    "Current" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Current"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Palabra diaria - %lld🔥"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Actual"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Dagens ord - %lld🔥"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nåværende"
           }
         }
       }
     },
-    "Daily Wordlr reminder": {
-      "comment": "Title for Daily Wordlr reminder notification",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Daily Wordlr reminder"
+    "Daily Wordlr" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Daily Wordlr"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Recordatorio de la palabra diaria"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Palabra diaria"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Dagens ord påminnelse"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dagens ord"
           }
         }
       }
     },
-    "Daily Wordlr reminders": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Daily Wordlr reminders"
+    "Daily Wordlr - %lld🔥" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Daily Wordlr - %lld🔥"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Recordatorios de la palabra diaria"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Palabra diaria - %lld🔥"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Dagens ord påminnelser"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dagens ord - %lld🔥"
           }
         }
       }
     },
-    "Daily Wordlr streaks 🔥": {
-      "comment": "Title for daily word streaks chart in stats view",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Daily Wordlr streaks 🔥"
+    "Daily Wordlr reminder" : {
+      "comment" : "Title for Daily Wordlr reminder notification",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Daily Wordlr reminder"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Rachas de la palabra diaria 🔥"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recordatorio de la palabra diaria"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Dagens ord streaks 🔥"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dagens ord påminnelse"
           }
         }
       }
     },
-    "Daily Wordlr theme": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Daily Wordlr theme"
+    "Daily Wordlr reminders" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Daily Wordlr reminders"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Tema de la palabra diaria"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recordatorios de la palabra diaria"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Dagens ord tema"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dagens ord påminnelser"
           }
         }
       }
     },
-    "Dark": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Dark"
+    "Daily Wordlr streaks 🔥" : {
+      "comment" : "Title for daily word streaks chart in stats view",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Daily Wordlr streaks 🔥"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Oscuro"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rachas de la palabra diaria 🔥"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Mørkt"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dagens ord streaks 🔥"
           }
         }
       }
     },
-    "Dark gray means the letter is not in the word at all.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Dark gray means the letter is not in the word at all."
+    "Daily Wordlr theme" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Daily Wordlr theme"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "El gris oscuro significa que la letra no está en la palabra en absoluto."
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tema de la palabra diaria"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Mørkegrå betyr at bokstaven ikke er i ordet i det hele tatt."
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dagens ord tema"
           }
         }
       }
     },
-    "Date": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Date"
+    "Dark" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dark"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Fecha"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Oscuro"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Dato"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mørkt"
           }
         }
       }
     },
-    "Delete": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Delete"
+    "Dark gray means the letter is not in the word at all." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dark gray means the letter is not in the word at all."
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Borrar"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El gris oscuro significa que la letra no está en la palabra en absoluto."
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Slett"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mørkegrå betyr at bokstaven ikke er i ordet i det hele tatt."
           }
         }
       }
     },
-    "Discard current word?": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Discard current word?"
+    "Date" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Date"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "¿Descartar la palabra actual?"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fecha"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Forkaste påbegynt ord?"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dato"
           }
         }
       }
     },
-    "Dismiss": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Dismiss"
+    "Delete" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Delete"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Desechar"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Borrar"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Fjern"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Slett"
           }
         }
       }
     },
-    "Do you want to see the definition?": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Do you want to see the definition?"
+    "Discard current word?" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Discard current word?"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "¿Quieres ver la definición?"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿Descartar la palabra actual?"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Vil du se definisjonen av ordet?"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Forkaste påbegynt ord?"
           }
         }
       }
     },
-    "Don't forget to complete today's %d letter, %@ daily Wordlr!": {
-      "comment": "Body for Daily Wordlr reminder notification",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "new",
-            "value": "Don't forget to complete today's %1$d letter, %2$@ daily Wordlr!"
+    "Dismiss" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dismiss"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "¡No olvides completar la palabra diaria de %1$d letras de hoy en %2$@!"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Desechar"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ikke glem å spille dagens %1$d bokstav, %2$@ dagens ord!"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fjern"
           }
         }
       }
     },
-    "EXAMPLE": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "EXAMPLE"
+    "Do you want to see the definition?" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Do you want to see the definition?"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "EJEMPLO"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿Quieres ver la definición?"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "EKSEMPEL"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vil du se definisjonen av ordet?"
           }
         }
       }
     },
-    "EXPLANATION AND USAGE": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "EXPLANATION AND USAGE"
+    "Don't forget to complete today's %d letter, %@ daily Wordlr!" : {
+      "comment" : "Body for Daily Wordlr reminder notification",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Don't forget to complete today's %1$d letter, %2$@ daily Wordlr!"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "EXPLICACIÓN y USO"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¡No olvides completar la palabra diaria de %1$d letras de hoy en %2$@!"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "BETYDNING OG BRUK"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ikke glem å spille dagens %1$d bokstav, %2$@ dagens ord!"
           }
         }
       }
     },
-    "Edit daily Wordlr reminders": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Edit daily Wordlr reminders"
+    "Edit daily Wordlr reminders" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Edit daily Wordlr reminders"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Editar recordatorio de la palabra diaria"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Editar recordatorio de la palabra diaria"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Rediger dagens ord påminnelser"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rediger dagens ord påminnelser"
           }
         }
       }
     },
-    "Edit reminder": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Edit reminder"
+    "Edit reminder" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Edit reminder"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Editar recordatorio"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Editar recordatorio"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Rediger påminnelse"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rediger påminnelse"
           }
         }
       }
     },
-    "Ends with": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ends with"
+    "Ends with" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ends with"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Termina con"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Termina con"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Slutter med"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Slutter med"
           }
         }
       }
     },
-    "Enter ending letters": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Enter ending letters"
+    "Enter ending letters" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enter ending letters"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Introduce las letras finales"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Introduce las letras finales"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Skriv endelige bokstaver"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skriv endelige bokstaver"
           }
         }
       }
     },
-    "Enter starting letters": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Enter starting letters"
+    "Enter starting letters" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enter starting letters"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Introduce las letras iniciales"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Introduce las letras iniciales"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Skriv start bokstaver"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skriv start bokstaver"
           }
         }
       }
     },
-    "Example": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Example"
+    "Example" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Example"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ejemplo"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ejemplo"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Eksempel"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eksempel"
           }
         }
       }
     },
-    "Exclude letters": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Exclude letters"
+    "EXAMPLE" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "EXAMPLE"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Excluir letras"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "EJEMPLO"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ekskluder bokstaver"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "EKSEMPEL"
           }
         }
       }
     },
-    "Excluded letters": {
-      "comment": "Label for excluded letters in filter options",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Excluded letters"
+    "Exclude letters" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Exclude letters"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Letras excluidas"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Excluir letras"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ekskluderte bokstaver"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ekskluder bokstaver"
           }
         }
       }
     },
-    "Filter options": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Filter options"
+    "Excluded letters" : {
+      "comment" : "Label for excluded letters in filter options",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Excluded letters"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Opciones de filtro"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Letras excluidas"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Filter"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ekskluderte bokstaver"
           }
         }
       }
     },
-    "Free play": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Free play"
+    "EXPLANATION AND USAGE" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "EXPLANATION AND USAGE"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Jugar libre"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "EXPLICACIÓN y USO"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Spill fritt"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "BETYDNING OG BRUK"
           }
         }
       }
     },
-    "Free play - %lld🔥": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Free play - %lld🔥"
+    "Filter options" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Filter options"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Jugar libre - %lld🔥"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Opciones de filtro"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Spill fritt - %lld🔥"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Filter"
           }
         }
       }
     },
-    "Free play streaks 🔥": {
-      "comment": "Title for free play streaks chart in stats view",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Free play streaks 🔥"
+    "Free play" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Free play"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Rachas de jugar libre 🔥"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jugar libre"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Spill fritt streaks 🔥"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spill fritt"
           }
         }
       }
     },
-    "Game (default)": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Game (default)"
+    "Free play - %lld🔥" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Free play - %lld🔥"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Juego (estándar)"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jugar libre - %lld🔥"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Spill (standard)"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spill fritt - %lld🔥"
           }
         }
       }
     },
-    "Gamemode": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Gamemode"
+    "Free play streaks 🔥" : {
+      "comment" : "Title for free play streaks chart in stats view",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Free play streaks 🔥"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Modo de juego"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rachas de jugar libre 🔥"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Modus"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spill fritt streaks 🔥"
           }
         }
       }
     },
-    "General": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "General"
+    "Game (default)" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Game (default)"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "General"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Juego (estándar)"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Generelt"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spill (standard)"
           }
         }
       }
     },
-    "Get a hint": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Get a hint"
+    "game_mode_both" : {
+      "comment" : "Both modes",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Both modes"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Obtener una pista"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ambos modos"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Få et hint"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Begge moduser"
           }
         }
       }
     },
-    "Gold": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Gold"
+    "game_mode_daily_word" : {
+      "comment" : "Daily Wordlr mode",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Daily Wordlr"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Oro"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Palabra diaria"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Gull"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dagens ord"
           }
         }
       }
     },
-    "Got it!": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Got it!"
+    "game_mode_unlimited" : {
+      "comment" : "Free play mode",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Free play"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "¡Entendido!"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jugar libre"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Skjønner!"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spill fritt"
           }
         }
       }
     },
-    "Green means the letter is in the word and in the correct spot.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Green means the letter is in the word and in the correct spot."
+    "Gamemode" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gamemode"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Verde significa que la letra está en la palabra y en la posición correcta."
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Modo de juego"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Grønn betyr at bokstaven er i ordet og at det på riktig plass."
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Modus"
           }
         }
       }
     },
-    "Guess the Word": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Guess the Word"
+    "General" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "General"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Adivina la Palabra"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "General"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Gjett Ordet"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Generelt"
           }
         }
       }
     },
-    "Guess the letter": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Guess the letter"
+    "Get a hint" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Get a hint"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Adivina la letra"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Obtener una pista"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Gjett bokstaven"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Få et hint"
           }
         }
       }
     },
-    "Guess the secret word in a limited number of tries. After each guess, the colors of the tiles will show how close you were.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Guess the secret word in a limited number of tries. After each guess, the colors of the tiles will show how close you were."
+    "Gold" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gold"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Adivina la palabra secreta en un número limitado de intentos. Después de cada intento, los colores mostrarán qué tan cerca estuviste."
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Oro"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Gjett det hemmelige ordet i et begrenset antall forsøk. Etter hver gjetning vil fargene vil vise hvor nærme du var."
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gull"
           }
         }
       }
     },
-    "Guesses": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Guesses"
+    "Got it!" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Got it!"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Intentos"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¡Entendido!"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Gjett"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skjønner!"
           }
         }
       }
     },
-    "Hints never used": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Hints never used"
+    "Green means the letter is in the word and in the correct spot." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Green means the letter is in the word and in the correct spot."
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Pistas nunca usadas"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verde significa que la letra está en la palabra y en la posición correcta."
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Hint aldri brukt"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Grønn betyr at bokstaven er i ordet og at det på riktig plass."
           }
         }
       }
     },
-    "Hints used": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Hints used"
+    "Guess the letter" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Guess the letter"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Pistas usadas"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Adivina la letra"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Hint brukt"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gjett bokstaven"
           }
         }
       }
     },
-    "History": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "History"
+    "Guess the secret word in a limited number of tries. After each guess, the colors of the tiles will show how close you were." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Guess the secret word in a limited number of tries. After each guess, the colors of the tiles will show how close you were."
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Historia"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Adivina la palabra secreta en un número limitado de intentos. Después de cada intento, los colores mostrarán qué tan cerca estuviste."
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Historikk"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gjett det hemmelige ordet i et begrenset antall forsøk. Etter hver gjetning vil fargene vil vise hvor nærme du var."
           }
         }
       }
     },
-    "History is not available with this selection!": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "History is not available with this selection!"
+    "Guess the Word" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Guess the Word"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "¡Historia no está disponible con esta selección!"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Adivina la Palabra"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Historikk er ikke tilgjengelig med disse valgene!"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gjett Ordet"
           }
         }
       }
     },
-    "How to play?": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "How to play?"
+    "Guesses" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Guesses"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "¿Cómo jugar?"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Intentos"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Hvordan spille?"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gjett"
           }
         }
       }
     },
-    "I'm sure": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "I'm sure"
+    "Hints never used" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hints never used"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Seguro"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pistas nunca usadas"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Jeg er sikker"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hint aldri brukt"
           }
         }
       }
     },
-    "Included letters": {
-      "comment": "Label for included letters in filter options",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Included letters"
+    "Hints used" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hints used"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Letras incluidas"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pistas usadas"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Inkluderte bokstaver"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hint brukt"
           }
         }
       }
     },
-    "Info": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Info"
+    "hints_used_both" : {
+      "comment" : "Both",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Both"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Info"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ambos"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Info"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Begge"
           }
         }
       }
     },
-    "Keep your streak going?": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Keep your streak going?"
+    "hints_used_neverUsed" : {
+      "comment" : "Never used",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Never used"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "¿Mantener tu racha?"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nunca usado"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Holde streaken gående?"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aldri brukt"
           }
         }
       }
     },
-    "Language": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Language"
+    "hints_used_onlyWhenUsed" : {
+      "comment" : "Only when used",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Only when used"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Idioma"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Solo cuando se use"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Språk"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bare brukt"
           }
         }
       }
     },
-    "Light": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Light"
+    "History" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "History"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Luz"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Historia"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Lyst"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Historikk"
           }
         }
       }
     },
-    "Longest": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Longest"
+    "History is not available with this selection!" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "History is not available with this selection!"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Más largo"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¡Historia no está disponible con esta selección!"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Lengste"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Historikk er ikke tilgjengelig med disse valgene!"
           }
         }
       }
     },
-    "Mode": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Mode"
+    "hour_string" : {
+      "comment" : "String for the hours",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@h "
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Modo"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@h "
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Modus"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@t "
           }
         }
       }
     },
-    "NAOB – %@": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "NAOB – %@"
+    "How to play?" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "How to play?"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "NAOB – %@"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿Cómo jugar?"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "NAOB – %@"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hvordan spille?"
           }
         }
       }
     },
-    "New game": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "New game"
+    "I'm sure" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "I'm sure"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nuevo juego"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Seguro"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Spill på nytt"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jeg er sikker"
           }
         }
       }
     },
-    "No definition found": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "No definition found"
+    "Included letters" : {
+      "comment" : "Label for included letters in filter options",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Included letters"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "No se encontró definición"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Letras incluidas"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ingen definisjon funnet"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Inkluderte bokstaver"
           }
         }
       }
     },
-    "No internet connection": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "No internet connection"
+    "Info" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Info"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Sin conexión a internet"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Info"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ingen internett-tilkobling"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Info"
           }
         }
       }
     },
-    "No mail app available": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "No mail app available"
+    "Keep your streak going?" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keep your streak going?"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "No hay app de correo disponible"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿Mantener tu racha?"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ingen e-postapp tilgjengelig"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Holde streaken gående?"
           }
         }
       }
     },
-    "No reminders": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "No reminders"
+    "Language" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Language"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Sin recordatorios"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Idioma"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ingen påminnelser"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Språk"
           }
         }
       }
     },
-    "No reminders has been scheduled yet.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "No reminders has been scheduled yet."
+    "language_all" : {
+      "comment" : "All languages",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "All languages"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Aún no se han programado recordatorios."
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Todos los idiomas"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ingen påminnelser er planlagt ennå."
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alle språk"
           }
         }
       }
     },
-    "No stats available for this selection!": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "No stats available for this selection!"
+    "language_english" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "English"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "¡No hay estadísticas disponibles para esta selección!"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Inglés"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Det er ingen statistikk tilgjengelig med dette utvalget!"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Engelsk"
           }
         }
       }
     },
-    "Not in the word": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Not in the word"
+    "language_norwegian" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Norwegian"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "No está en la palabra"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Noruego"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ikke i ordet."
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Norsk"
           }
         }
       }
     },
-    "Not now": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Not now"
+    "language_spanish" : {
+      "comment" : "Spanish language",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spanish"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ahora no"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Español"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ikke nå"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spansk"
           }
         }
       }
     },
-    "Number of guesses": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Number of guesses"
+    "Light" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Light"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Número de intentos"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Luz"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Antall gjett"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lyst"
           }
         }
       }
     },
-    "Number of guesses needed": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Number of guesses needed"
+    "Longest" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Longest"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Número de intentos necesarios"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Más largo"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Antall gjett nødvendig"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lengste"
           }
         }
       }
     },
-    "Number of letters": {
-      "extractionState": "stale",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Number of letters"
+    "Mode" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mode"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Número de letras"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Modo"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Antall bokstaver"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Modus"
           }
         }
       }
     },
-    "OK": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "OK"
+    "NAOB – %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "NAOB – %@"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Aceptar"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "NAOB – %@"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "OK"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "NAOB – %@"
           }
         }
       }
     },
-    "ORIGIN   ": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ORIGIN   "
+    "New game" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "New game"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ORIGEN   "
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nuevo juego"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "OPPHAV   "
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spill på nytt"
           }
         }
       }
     },
-    "Only when hints was used": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Only when hints was used"
+    "No definition found" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No definition found"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Solo cuando se usaron pistas"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No se encontró definición"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Bare når hint var brukt"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ingen definisjon funnet"
           }
         }
       }
     },
-    "Orange means the letter is in the word, but in a different spot.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Orange means the letter is in the word, but in a different spot."
+    "No internet connection" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No internet connection"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "El naranja significa que la letra está en la palabra, pero en una posición diferente."
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sin conexión a internet"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Oransje betyr at bokstaven er i ordet, men på en annen posisjon."
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ingen internett-tilkobling"
           }
         }
       }
     },
-    "PRONUNCIATION   ": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "PRONUNCIATION   "
+    "No mail app available" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No mail app available"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "PRONUNCIACIÓN   "
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No hay app de correo disponible"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "UTTALE   "
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ingen e-postapp tilgjengelig"
           }
         }
       }
     },
-    "Played": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Played"
+    "No reminders" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No reminders"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Jugado"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sin recordatorios"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Spilt"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ingen påminnelser"
           }
         }
       }
     },
-    "Privacy options": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Privacy options"
+    "No reminders has been scheduled yet." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No reminders has been scheduled yet."
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Opciones de privacidad"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aún no se han programado recordatorios."
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Personvernsvalg"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ingen påminnelser er planlagt ennå."
           }
         }
       }
     },
-    "Remember to play today's %d letter, %@ daily Wordlr to not lose your %d🔥 day streak.": {
-      "comment": "Body for Daily Wordlr streak reminder notification",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Remember to play today's %d letter, %@ daily Wordlr to not lose your %d🔥 day streak."
+    "No stats available for this selection!" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No stats available for this selection!"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Recuerda jugar hoy la daily Wordlr de %d letras en %@ para no perder tu racha de %d🔥 días."
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¡No hay estadísticas disponibles para esta selección!"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Husk å spille dagens %d bokstaver, %@ daily Wordlr, så du ikke mister streaken din på %d🔥 dager."
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Det er ingen statistikk tilgjengelig med dette utvalget!"
           }
         }
       }
     },
-    "Reminder details": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Reminder details"
+    "Not in the word" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Not in the word"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Detalles del recordatorio"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No está en la palabra"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Påminnelse detaljer"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ikke i ordet."
           }
         }
       }
     },
-    "Reminders": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Reminders"
+    "Not now" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Not now"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Recordatorios"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ahora no"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Påminnelser"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ikke nå"
           }
         }
       }
     },
-    "Reset filter": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Reset filter"
+    "Number of guesses" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Number of guesses"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Restablecer filtro"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Número de intentos"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Reset filter"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Antall gjett"
           }
         }
       }
     },
-    "Restart": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Restart"
+    "Number of guesses needed" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Number of guesses needed"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Reiniciar"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Número de intentos necesarios"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Restart"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Antall gjett nødvendig"
           }
         }
       }
     },
-    "SUBMIT WORD": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "SUBMIT WORD"
+    "Number of letters" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Number of letters"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ELIGE PALABRA"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Número de letras"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "GJETT ORDET"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Antall bokstaver"
           }
         }
       }
     },
-    "SYNONYMS": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "SYNONYMS"
+    "number_letters" : {
+      "comment" : "Daily Word Mode with number of letters",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld letters"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "SINÓNIMOS"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld letras"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "SYNONYMER"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld bokstaver"
           }
         }
       }
     },
-    "Save": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Save"
+    "numberOfLetter" : {
+      "comment" : "Number of letter single",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld letter"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Guardar"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld letra"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Lagre"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld bokstav"
           }
         }
       }
     },
-    "Search": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Search"
+    "numberOfLetters" : {
+      "comment" : "Number of letters plural",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld letters"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Buscar"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld letras"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Søk"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld bokstaver"
           }
         }
       }
     },
-    "Search for a word": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Search for a word"
+    "OK" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Buscar una palabra"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aceptar"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Søk etter et ord"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
           }
         }
       }
     },
-    "Search on NAOB": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Search on NAOB"
+    "Only when hints was used" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Only when hints was used"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Buscar en NAOB"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Solo cuando se usaron pistas"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Søk i NAOB"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bare når hint var brukt"
           }
         }
       }
     },
-    "Send feedback": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Send feedback"
+    "Orange means the letter is in the word, but in a different spot." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Orange means the letter is in the word, but in a different spot."
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Enviar comentarios"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El naranja significa que la letra está en la palabra, pero en una posición diferente."
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Send tilbakemelding"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Oransje betyr at bokstaven er i ordet, men på en annen posisjon."
           }
         }
       }
     },
-    "Settings": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Settings"
+    "ordbokene.no" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ordbokene.no"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ajustes"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ordbokene.no"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Innstillinger"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ordbokene.no"
           }
         }
       }
     },
-    "Show definition": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Show definition"
+    "ORIGIN   " : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ORIGIN   "
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Mostrar definición"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ORIGEN   "
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Vis definisjon"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OPPHAV   "
           }
         }
       }
     },
-    "Show if hints used": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Show if hints used"
+    "Played" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Played"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Mostrar si se usaron pistas"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jugado"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Vis når hint brukt"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spilt"
           }
         }
       }
     },
-    "Standard": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Standard"
+    "Privacy options" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Privacy options"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Estándar"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Opciones de privacidad"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Standard"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Personvernsvalg"
           }
         }
       }
     },
-    "Starts with": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Starts with"
+    "PRONUNCIATION   " : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PRONUNCIATION   "
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Comienza con"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PRONUNCIACIÓN   "
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Starter med"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "UTTALE   "
           }
         }
       }
     },
-    "State": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "State"
+    "Remember to play today's %d letter, %@ daily Wordlr to not lose your %d🔥 day streak." : {
+      "comment" : "Body for Daily Wordlr streak reminder notification",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Remember to play today's %d letter, %@ daily Wordlr to not lose your %d🔥 day streak."
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Estado"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recuerda jugar hoy la daily Wordlr de %d letras en %@ para no perder tu racha de %d🔥 días."
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Tilstand"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Husk å spille dagens %d bokstaver, %@ daily Wordlr, så du ikke mister streaken din på %d🔥 dager."
           }
         }
       }
     },
-    "Stats": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Stats"
+    "Reminder details" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reminder details"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Estadísticas"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Detalles del recordatorio"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Stats"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Påminnelse detaljer"
           }
         }
       }
     },
-    "Stats and history (default)": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Stats and history (default)"
+    "Reminders" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reminders"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Estadísticas y historia (estándar)"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recordatorios"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Stats og historikk (standard)"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Påminnelser"
           }
         }
       }
     },
-    "Streaks": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Streaks"
+    "Reset filter" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reset filter"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Rachas"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Restablecer filtro"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Streaks"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reset filter"
           }
         }
       }
     },
-    "System": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "System"
+    "Restart" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Restart"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Sistema"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reiniciar"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "System"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Restart"
           }
         }
       }
     },
-    "Tap here to be able to search for words, and to see the definitions.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Tap here to be able to search for words, and to see the definitions."
+    "Save" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Save"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Toca aquí para poder buscar palabras y ver sus definiciones."
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Guardar"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Trykk her for å kunne søke etter ord, og for å kunne se definisjoner."
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lagre"
           }
         }
       }
     },
-    "Tap here to filter the words, to easily find the word you are looking for.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Tap here to filter the words, to easily find the word you are looking for."
+    "Search" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Search"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Toca aquí para filtrar las palabras y encontrar fácilmente la que buscas."
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Buscar"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Trykk her for å filtrere ordene, for å enkelt finne ordet du leter etter."
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Søk"
           }
         }
       }
     },
-    "Tap here to get a hint for the current secret word, by watching a quick ad.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Tap here to get a hint for the current secret word, by watching a quick ad."
+    "Search for a word" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Search for a word"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Toca aquí para obtener una pista de la palabra secreta actual viendo un anuncio breve."
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Buscar una palabra"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Trykk her for å få et hint for the hemmelige ordet, ved å se en kjapp reklame video. "
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Søk etter et ord"
           }
         }
       }
     },
-    "The Phrase": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "The Phrase"
+    "Search on NAOB" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Search on NAOB"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "The Phrase"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Buscar en NAOB"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "The Phrase"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Søk i NAOB"
           }
         }
       }
     },
-    "The board": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "The board"
+    "Send feedback" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Send feedback"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "El tablero"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enviar comentarios"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Brettet"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Send tilbakemelding"
           }
         }
       }
     },
-    "The support email address has been copied to the clipboard.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "The support email address has been copied to the clipboard."
+    "Settings" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Settings"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "La dirección de correo de soporte se copió al portapapeles."
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ajustes"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "E-postadressen for brukerstøtte er kopiert til utklippstavlen."
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Innstillinger"
           }
         }
       }
     },
-    "The word was: %@!": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "The word was: %@!"
+    "share_letter" : {
+      "comment" : "Letter",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%d letter"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "La palabra era: %@!"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%d letra"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ordet var: %@!"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%d bokstav"
           }
         }
       }
     },
-    "Time used": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Time used"
+    "share_letters" : {
+      "comment" : "Letters",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%d letters"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Tiempo usado"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%d letras"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Tid brukt"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%d bokstaver"
           }
         }
       }
     },
-    "To enable notifications, please go to Settings and allow notifications for this app.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "To enable notifications, please go to Settings and allow notifications for this app."
+    "share_row" : {
+      "comment" : "Row",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rows"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Para habilitar las notificaciones, ve a ajustes y permite las notificaciones para esta app."
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Filas"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "For å aktivere varslinger, gå til innstillinger og tillat varslinger for denne appen."
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rader"
           }
         }
       }
     },
-    "To play the game, just enter a valid word and submit your guess. After each guess, the colors of the tiles will show how close you were.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "To play the game, just enter a valid word and submit your guess. After each guess, the colors of the tiles will show how close you were."
+    "share_used" : {
+      "comment" : "Used",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Used"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Para jugar, introduce una palabra válida y envía tu intento. Tras cada intento, los colores indicarán lo cerca que estuviste."
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usado"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "For å spille, bare skriv et gyldig ord og gjett ordet. Etter hver gjetning vil fargene vil vise hvor nærme du var."
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Brukt"
           }
         }
       }
     },
-    "Try playing a game first or changing the selection.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Try playing a game first or changing the selection."
+    "Show definition" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Show definition"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Intenta jugar un juego primero o cambiar la selección."
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mostrar definición"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Prøv å gjette et ord først eller endre valgene."
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vis definisjon"
           }
         }
       }
     },
-    "Try playing a game first.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Try playing a game first."
+    "Show if hints used" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Show if hints used"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Intenta jugar un juego primero."
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mostrar si se usaron pistas"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Prøv å gjette et ord først."
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vis når hint brukt"
           }
         }
       }
     },
-    "Turn on": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Turn on"
+    "Standard" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Standard"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Activar"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Estándar"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Slå på"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Standard"
           }
         }
       }
     },
-    "Turn on reminders so you don't miss the next daily word.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Turn on reminders so you don't miss the next daily word."
+    "Starts with" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Starts with"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Activa los recordatorios para no perderte la próxima palabra diaria."
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Comienza con"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Slå på påminnelser så du ikke går glipp av neste daglige ord."
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Starter med"
           }
         }
       }
     },
-    "Use filters": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Use filters"
+    "State" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "State"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Usa filtros"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Estado"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Bruk filter"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tilstand"
           }
         }
       }
     },
-    "Use the word": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Use the word"
+    "Stats" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stats"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Usa la palabra"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Estadísticas"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Bruk ordet"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stats"
           }
         }
       }
     },
-    "Version": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Version"
+    "Stats and history (default)" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stats and history (default)"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Versión"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Estadísticas y historia (estándar)"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Versjon"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stats og historikk (standard)"
           }
         }
       }
     },
-    "View the board": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "View the board"
+    "Streaks" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Streaks"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ver el tablero"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rachas"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Se brettet"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Streaks"
           }
         }
       }
     },
-    "Want to rate my app?": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Want to rate my app?"
+    "SUBMIT WORD" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "SUBMIT WORD"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "¿Te gustaría valorar mi app?"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ELIGE PALABRA"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Vil du gi appen en rating?"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "GJETT ORDET"
           }
         }
       }
     },
-    "We couldn't find a definition for this word. It might be a name or a place name.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "We couldn't find a definition for this word. It might be a name or a place name."
+    "success_message" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You did it!! - %@"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "No pudimos encontrar una definición para esta palabra. Podría ser un nombre o el nombre de un lugar."
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¡Lo lograste! - %@"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Vi kunne ikke finne en definisjon for dette ordet. Det kan være et navn eller stedsnavn. "
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Du klarte det!! - %@"
           }
         }
       }
     },
-    "We couldn't load the definition right now. Check your connection and try again.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "We couldn't load the definition right now. Check your connection and try again."
+    "SYNONYMS" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "SYNONYMS"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "No pudimos cargar la definición en este momento. Comprueba tu conexión y vuelve a intentarlo."
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "SINÓNIMOS"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Vi kunne ikke laste inn definisjonen akkurat nå. Sjekk tilkoblingen din og prøv igjen."
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "SYNONYMER"
           }
         }
       }
     },
-    "Welcome to %@": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Welcome to %@"
+    "System" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "System"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Bienvenidos a %@"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sistema"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Velkommen til %@"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "System"
           }
         }
       }
     },
-    "Win rate": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Win rate"
+    "Tap here to be able to search for words, and to see the definitions." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tap here to be able to search for words, and to see the definitions."
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Tasa de victorias"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Toca aquí para poder buscar palabras y ver sus definiciones."
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Seiere"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trykk her for å kunne søke etter ord, og for å kunne se definisjoner."
           }
         }
       }
     },
-    "Word length": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Word length"
+    "Tap here to filter the words, to easily find the word you are looking for." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tap here to filter the words, to easily find the word you are looking for."
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Longitud de palabra"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Toca aquí para filtrar las palabras y encontrar fácilmente la que buscas."
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ordlengde"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trykk her for å filtrere ordene, for å enkelt finne ordet du leter etter."
           }
         }
       }
     },
-    "Wordlr": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Wordlr"
+    "Tap here to get a hint for the current secret word, by watching a quick ad." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tap here to get a hint for the current secret word, by watching a quick ad."
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Wordlr"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Toca aquí para obtener una pista de la palabra secreta actual viendo un anuncio breve."
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Wordlr"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trykk her for å få et hint for the hemmelige ordet, ved å se en kjapp reklame video. "
           }
         }
       }
     },
-    "You have already played this exact word today. Are you sure you want to play the same word again?": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "You have already played this exact word today. Are you sure you want to play the same word again?"
+    "The board" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The board"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ya has jugado exactamente esta palabra hoy. ¿seguro que quieres jugar la misma palabra otra vez?"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El tablero"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Du har allerede gjette dette ordet i dag. Er du sikker på at du vil gjette det samme ordet igjen?"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Brettet"
           }
         }
       }
     },
-    "You have already played this word": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "You have already played this word"
+    "The Phrase" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The Phrase"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ya has jugado esta palabra"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The Phrase"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Du har allerede spillt dette ordet"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The Phrase"
           }
         }
       }
     },
-    "You will lose your word and you cannot undo this action!": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "You will lose your word and you cannot undo this action!"
+    "The support email address has been copied to the clipboard." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The support email address has been copied to the clipboard."
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "¡Perderás tu palabra y no podrás deshacer esta acción!"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La dirección de correo de soporte se copió al portapapeles."
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Du vil få et nytt ord og du kan ikke gjøre om denne handlingen!"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "E-postadressen for brukerstøtte er kopiert til utklippstavlen."
           }
         }
       }
     },
-    "Z": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Z"
+    "The word was: %@!" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The word was: %@!"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Z"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La palabra era: %@!"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Z"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ordet var: %@!"
           }
         }
       }
     },
-    "almost_message": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Almost!! - %@"
+    "Time used" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Time used"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "¡Casi! - %@"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tiempo usado"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nesten!! - %@"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tid brukt"
           }
         }
       }
     },
-    "game_mode_both": {
-      "comment": "Both modes",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Both modes"
+    "To enable notifications, please go to Settings and allow notifications for this app." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "To enable notifications, please go to Settings and allow notifications for this app."
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ambos modos"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Para habilitar las notificaciones, ve a ajustes y permite las notificaciones para esta app."
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Begge moduser"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "For å aktivere varslinger, gå til innstillinger og tillat varslinger for denne appen."
           }
         }
       }
     },
-    "game_mode_daily_word": {
-      "comment": "Daily Wordlr mode",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Daily Wordlr"
+    "To play the game, just enter a valid word and submit your guess. After each guess, the colors of the tiles will show how close you were." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "To play the game, just enter a valid word and submit your guess. After each guess, the colors of the tiles will show how close you were."
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Palabra diaria"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Para jugar, introduce una palabra válida y envía tu intento. Tras cada intento, los colores indicarán lo cerca que estuviste."
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Dagens ord"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "For å spille, bare skriv et gyldig ord og gjett ordet. Etter hver gjetning vil fargene vil vise hvor nærme du var."
           }
         }
       }
     },
-    "game_mode_unlimited": {
-      "comment": "Free play mode",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Free play"
+    "Try playing a game first or changing the selection." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Try playing a game first or changing the selection."
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Jugar libre"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Intenta jugar un juego primero o cambiar la selección."
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Spill fritt"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prøv å gjette et ord først eller endre valgene."
           }
         }
       }
     },
-    "hints_used_both": {
-      "comment": "Both",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Both"
+    "Try playing a game first." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Try playing a game first."
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ambos"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Intenta jugar un juego primero."
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Begge"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prøv å gjette et ord først."
           }
         }
       }
     },
-    "hints_used_neverUsed": {
-      "comment": "Never used",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Never used"
+    "Turn on" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Turn on"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nunca usado"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Activar"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Aldri brukt"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Slå på"
           }
         }
       }
     },
-    "hints_used_onlyWhenUsed": {
-      "comment": "Only when used",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Only when used"
+    "Turn on reminders so you don't miss the next daily word." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Turn on reminders so you don't miss the next daily word."
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Solo cuando se use"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Activa los recordatorios para no perderte la próxima palabra diaria."
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Bare brukt"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Slå på påminnelser så du ikke går glipp av neste daglige ord."
           }
         }
       }
     },
-    "hour_string": {
-      "comment": "String for the hours",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@h "
+    "Use filters" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Use filters"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@h "
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usa filtros"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@t "
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bruk filter"
           }
         }
       }
     },
-    "language_all": {
-      "comment": "All languages",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "All languages"
+    "Use the word" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Use the word"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Todos los idiomas"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usa la palabra"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Alle språk"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bruk ordet"
           }
         }
       }
     },
-    "language_english": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "English"
+    "Version" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Version"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Inglés"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Versión"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Engelsk"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Versjon"
           }
         }
       }
     },
-    "language_norwegian": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Norwegian"
+    "View the board" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "View the board"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Noruego"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ver el tablero"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Norsk"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Se brettet"
           }
         }
       }
     },
-    "language_spanish": {
-      "comment": "Spanish language",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Spanish"
+    "Want to rate my app?" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Want to rate my app?"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Español"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿Te gustaría valorar mi app?"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Spansk"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vil du gi appen en rating?"
           }
         }
       }
     },
-    "numberOfLetter": {
-      "comment": "Number of letter single",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld letter"
+    "We couldn't find a definition for this word. It might be a name or a place name." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "We couldn't find a definition for this word. It might be a name or a place name."
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld letra"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No pudimos encontrar una definición para esta palabra. Podría ser un nombre o el nombre de un lugar."
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld bokstav"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vi kunne ikke finne en definisjon for dette ordet. Det kan være et navn eller stedsnavn. "
           }
         }
       }
     },
-    "numberOfLetters": {
-      "comment": "Number of letters plural",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld letters"
+    "We couldn't load the definition right now. Check your connection and try again." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "We couldn't load the definition right now. Check your connection and try again."
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld letras"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No pudimos cargar la definición en este momento. Comprueba tu conexión y vuelve a intentarlo."
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld bokstaver"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vi kunne ikke laste inn definisjonen akkurat nå. Sjekk tilkoblingen din og prøv igjen."
           }
         }
       }
     },
-    "number_letters": {
-      "comment": "Daily Word Mode with number of letters",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld letters"
+    "Welcome to %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Welcome to %@"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld letras"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bienvenidos a %@"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld bokstaver"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Velkommen til %@"
           }
         }
       }
     },
-    "ordbokene.no": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ordbokene.no"
+    "wiktionary.org" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "wiktionary.org"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ordbokene.no"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "wiktionary.org"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ordbokene.no"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "wiktionary.org"
           }
         }
       }
     },
-    "share_letter": {
-      "comment": "Letter",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%d letter"
+    "Win rate" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Win rate"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%d letra"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tasa de victorias"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%d bokstav"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Seiere"
           }
         }
       }
     },
-    "share_letters": {
-      "comment": "Letters",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%d letters"
+    "Word length" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Word length"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%d letras"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Longitud de palabra"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%d bokstaver"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ordlengde"
           }
         }
       }
     },
-    "share_row": {
-      "comment": "Row",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Rows"
+    "Wordlr" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wordlr"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Filas"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wordlr"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Rader"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wordlr"
           }
         }
       }
     },
-    "share_used": {
-      "comment": "Used",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Used"
+    "You have already played this exact word today. Are you sure you want to play the same word again?" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You have already played this exact word today. Are you sure you want to play the same word again?"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Usado"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ya has jugado exactamente esta palabra hoy. ¿seguro que quieres jugar la misma palabra otra vez?"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Brukt"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Du har allerede gjette dette ordet i dag. Er du sikker på at du vil gjette det samme ordet igjen?"
           }
         }
       }
     },
-    "success_message": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "You did it!! - %@"
+    "You have already played this word" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You have already played this word"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "¡Lo lograste! - %@"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ya has jugado esta palabra"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Du klarte det!! - %@"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Du har allerede spillt dette ordet"
           }
         }
       }
     },
-    "wiktionary.org": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "wiktionary.org"
+    "You will lose your word and you cannot undo this action!" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You will lose your word and you cannot undo this action!"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "wiktionary.org"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¡Perderás tu palabra y no podrás deshacer esta acción!"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "wiktionary.org"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Du vil få et nytt ord og du kan ikke gjøre om denne handlingen!"
           }
         }
       }
     },
-    "•": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "•"
+    "Z" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Z"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "•"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Z"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "•"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Z"
           }
         }
       }
     }
   },
-  "version": "1.1"
+  "version" : "1.1"
 }

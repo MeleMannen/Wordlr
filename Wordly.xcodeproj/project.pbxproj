@@ -10,6 +10,7 @@
 		63432AFA2FBD42BB005529C4 /* TelemetryDeck in Frameworks */ = {isa = PBXBuildFile; productRef = 63432AF92FBD42BB005529C4 /* TelemetryDeck */; };
 		63432AFD2FBDDA29005529C4 /* PostHog in Frameworks */ = {isa = PBXBuildFile; productRef = 63432AFC2FBDDA29005529C4 /* PostHog */; };
 		6344F4FF2EB9502300948552 /* KeyPress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6344F4FE2EB9500D00948552 /* KeyPress.swift */; };
+		635799612FC033F300B31921 /* SelectGameModeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 635799602FC033F300B31921 /* SelectGameModeButton.swift */; };
 		63B1E1362F795EA500F36987 /* AdManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B1E1352F795EA500F36987 /* AdManager.swift */; };
 		63B9B4152EA58ED2008483FB /* FilterOptionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B9B3F72EA58ED2008483FB /* FilterOptionsView.swift */; };
 		63B9B4162EA58ED2008483FB /* GameTile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B9B3F82EA58ED2008483FB /* GameTile.swift */; };
@@ -62,6 +63,7 @@
 
 /* Begin PBXFileReference section */
 		6344F4FE2EB9500D00948552 /* KeyPress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyPress.swift; sourceTree = "<group>"; };
+		635799602FC033F300B31921 /* SelectGameModeButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectGameModeButton.swift; sourceTree = "<group>"; };
 		6382E3BC2D12FE0500B61353 /* Wordly.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Wordly.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		63B0C6502E056A710047E4E9 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS26.0.sdk/System/Library/Frameworks/WebKit.framework; sourceTree = DEVELOPER_DIR; };
 		63B1E1352F795EA500F36987 /* AdManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdManager.swift; sourceTree = "<group>"; };
@@ -208,6 +210,7 @@
 			isa = PBXGroup;
 			children = (
 				63B9B3FF2EA58ED2008483FB /* SelectView.swift */,
+				635799602FC033F300B31921 /* SelectGameModeButton.swift */,
 				63B9B3F92EA58ED2008483FB /* GameView.swift */,
 				63B9B3FA2EA58ED2008483FB /* GameView18.swift */,
 				63B9B3FB2EA58ED2008483FB /* GameView26.swift */,
@@ -398,6 +401,7 @@
 				63B9B42D2EA58ED2008483FB /* StatsView.swift in Sources */,
 				63B1E1362F795EA500F36987 /* AdManager.swift in Sources */,
 				63B9B42E2EA58ED2008483FB /* SelectView.swift in Sources */,
+				635799612FC033F300B31921 /* SelectGameModeButton.swift in Sources */,
 				63B9B42F2EA58ED2008483FB /* HistoryView.swift in Sources */,
 				63B9B4312EA58ED2008483FB /* FilterView.swift in Sources */,
 				63B9B4322EA58ED2008483FB /* Info.swift in Sources */,
