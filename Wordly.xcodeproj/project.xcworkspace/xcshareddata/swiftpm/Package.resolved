@@ -1,5 +1,5 @@
 {
-  "originHash" : "bdaa6d46078ec1475a9623795c1b42af6fdedca055477c3d130c067bf11f3874",
+  "originHash" : "de1c0372c9ebbd3dd880efa731d10b30f3445e6244a83743f714c642fc39a4cf",
   "pins" : [
     {
       "identity" : "abseil-cpp-binary",
@@ -24,8 +24,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/firebase/firebase-ios-sdk",
       "state" : {
-        "revision" : "9b3aed4fa6226125305b82d4d86c715bef250785",
-        "version" : "12.9.0"
+        "revision" : "d10045cace0b4c335c4efa8f7df7e9a9fc5a7c60",
+        "version" : "12.13.0"
       }
     },
     {
@@ -33,8 +33,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/googleads/google-ads-on-device-conversion-ios-sdk",
       "state" : {
-        "revision" : "35b601a60fbbea2de3ea461f604deaaa4d8bbd0c",
-        "version" : "3.2.0"
+        "revision" : "19dffda9a9caf8d86570ff846535902d8509d7bf",
+        "version" : "3.5.0"
       }
     },
     {
@@ -42,8 +42,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/google/GoogleAppMeasurement.git",
       "state" : {
-        "revision" : "2ffd220823f3716904733162e9ae685545c276d1",
-        "version" : "12.8.0"
+        "revision" : "c2c76bebcfbb90d90ea10599f934f9af160e1604",
+        "version" : "12.13.0"
       }
     },
     {
@@ -132,8 +132,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/googleads/swift-package-manager-google-mobile-ads.git",
       "state" : {
-        "revision" : "c79144a4a0a5bbc2019f9030af66d6573e348daf",
-        "version" : "12.11.0"
+        "revision" : "a81f522aa4f59c0d90ee523d703bd426d5b27a03",
+        "version" : "13.4.0"
       }
     },
     {
@@ -141,8 +141,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/googleads/swift-package-manager-google-user-messaging-platform.git",
       "state" : {
-        "revision" : "69b53394c5258b3fe688e625a998047d1f393497",
-        "version" : "3.0.0"
+        "revision" : "13b248eaa73b7826f0efb1bcf455e251d65ecb1b",
+        "version" : "3.1.0"
       }
     },
     {

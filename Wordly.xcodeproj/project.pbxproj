@@ -675,7 +675,7 @@
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 12.9.0;
+				minimumVersion = 12.13.0;
 			};
 		};
 		63F225932E53B24100248D30 /* XCRemoteSwiftPackageReference "swift-package-manager-google-user-messaging-platform" */ = {
@@ -683,7 +683,7 @@
 			repositoryURL = "https://github.com/googleads/swift-package-manager-google-user-messaging-platform.git";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 3.0.0;
+				minimumVersion = 3.1.0;
 			};
 		};
 		63F697C92E05A328008B0B6E /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */ = {
@@ -691,7 +691,7 @@
 			repositoryURL = "https://github.com/googleads/swift-package-manager-google-mobile-ads.git";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 12.6.0;
+				minimumVersion = 13.4.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
