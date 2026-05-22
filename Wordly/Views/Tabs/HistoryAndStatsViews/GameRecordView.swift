@@ -417,7 +417,7 @@ struct GameRecordView: View {
 			}
 			.navigationTitle(gameRecord.word)
 			.navigationBarTitleDisplayMode(.inline)
-			.safeAreaPadding(.bottom, adManager.isBannerAdLoaded ? (UIDevice.current.userInterfaceIdiom == .pad || UIDevice.current.userInterfaceIdiom == .mac ? 80 : 60) : 0)
+			.safeAreaPadding(.bottom, adManager.isBannerAdLoaded ? (UIDevice.current.userInterfaceIdiom == .pad || UIDevice.current.userInterfaceIdiom == .mac ? 100 : 75) : 0)
 			.onAppear {
 				AnalyticsManager.shared.logScreenViewed(screenName: "GameRecordView")
 				if let endDate = gameRecord.endDate {

@@ -235,7 +235,9 @@ struct SelectView: View {
 		}
 		.onAppear {
 			appManager.message = ""
-			self.isAllowedToPlayDailyWordAgain = false
+			if appManager.selectedGameMode != .dailyWord {
+				self.isAllowedToPlayDailyWordAgain = false
+			}
 			if !self.hasFixedContextAndFetched {
 				appManager.modelContext = modelContext
 				appManager.gameRecordManager = GameRecordManager(context: modelContext)
@@ -333,7 +335,7 @@ struct SelectView: View {
 	}
 	
 	func setDailyWordAlreadyPlayedAlert() {
-		self.alertItem = AlertItem(title: Text("You have already played this word"), message: Text("You have already played this exact word today. Are you sure you want to play the same word again?"), primaryButton: .cancel(), secondaryButton: .default(Text("I'm sure"), action: {
+		self.alertItem = AlertItem(title: Text("You have already played this word"), message: Text("You have already played this exact word today. Are you sure you want to play the same word again?"), primaryButton: .cancel(), secondaryButton: .destructive(Text("I'm sure"), action: {
 			self.isAllowedToPlayDailyWordAgain = true
 			self.isAllowedToChooseGameModeAgain = true
 		}))

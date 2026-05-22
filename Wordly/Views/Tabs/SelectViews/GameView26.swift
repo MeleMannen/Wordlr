@@ -273,20 +273,16 @@ struct GameView26: View {
 								}
 							}
 							.opacity((appManager.isGameOver && !appManager.isAnimating) ? 0 : 1)
-							.animation(.easeOut(duration: 0.3), value: appManager.isGameOver)
-							.animation(.easeOut(duration: 0.3), value: appManager.isAnimating)
-							
 							
 							VStack(alignment: .center) {
 								Spacer()
-								Spacer()
-								
+
 								Text(appManager.message)
 									.font(.title2).bold()
-									.padding(.top, 5)
-								
+									.padding(.top, 35)
+
 								Spacer()
-								
+
 								Button(action: {
 									self.didTapNewGameButton.toggle()
 									appManager.startNewGameFromGameOver()
@@ -308,7 +304,7 @@ struct GameView26: View {
 												RoundedRectangle(cornerRadius: 15)
 													.foregroundStyle(Color(uiColor: .systemGreen))
 
-											}
+												}
 										}
 								})
 								.glassEffect(self.userWantsNormalTheme || !self.userWantsNormalTheme && self.colorScheme == .dark && appManager.selectedGameMode == .normal ? .regular.tint(.green).interactive() : .regular.interactive(), in: .rect(cornerRadius: 10.0))
@@ -316,9 +312,9 @@ struct GameView26: View {
 								.padding(.horizontal, 20)
 								.sensoryFeedback(.impact, trigger: self.didTapNewGameButton)
 								.conditionalShadow(color: .black.opacity(0.1), radius: 0.5, x: 1, y: 1)
-								
+
 								Spacer()
-								
+
 								NavigationLink(destination: WordDefinitionView(word: appManager.word, language: appManager.selectedLanguage), label: {
 									Text("Show definition")
 										.conditionalShadow(color: .black.opacity(0.2), radius: 2, x: 4, y: 4)
@@ -326,12 +322,9 @@ struct GameView26: View {
 										.frame(maxWidth: .infinity, minHeight: 40, idealHeight: 45, maxHeight: 50)
 										.foregroundStyle(.white)
 										.background {
-//											if self.scenePhase == .background {
-												let useGreen = !self.userWantsNormalTheme && self.colorScheme == .dark && appManager.selectedGameMode == .dailyWord
-												RoundedRectangle(cornerRadius: 15)
-													.foregroundStyle(Color(uiColor: useGreen ? .systemGreen : .systemOrange))
-
-//											}
+											let useGreen = !self.userWantsNormalTheme && self.colorScheme == .dark && appManager.selectedGameMode == .dailyWord
+											RoundedRectangle(cornerRadius: 15)
+												.foregroundStyle(Color(uiColor: useGreen ? .systemGreen : .systemOrange))
 										}
 
 								})
@@ -344,9 +337,9 @@ struct GameView26: View {
 								.conditionalShadow(color: .black.opacity(0.1), radius: 0.5, x: 1, y: 1)
 								.sensoryFeedback(.impact, trigger: self.didTapShowDefinitionButton)
 								.padding(.horizontal, 20)
-								
+
 								Spacer()
-								
+
 								if appManager.selectedGameMode == .dailyWord && !appManager.dailyWordHasBeenPlayed {
 									Button {
 										withAnimation {
@@ -361,7 +354,7 @@ struct GameView26: View {
 											.conditionalShadow(color: .black.opacity(0.5), radius: 4, x: 4, y: 4)
 											.tint(.primary)
 									}
-									
+
 									Spacer()
 								}
 							}
@@ -451,17 +444,22 @@ struct GameView26: View {
 						}
 					}
 				}
-				.animation(.smooth, value: showHintButton)
 				.onChange(of: appManager.shouldShowAdButton) {
-					showHintButton = appManager.isHintAvailable() && appManager.shouldShowAdButton && !appManager.isGameOver
+					withAnimation(.smooth) {
+						showHintButton = appManager.isHintAvailable() && appManager.shouldShowAdButton && !appManager.isGameOver
+					}
 				}
 				.onChange(of: appManager.isGameOver) {
-					showHintButton = appManager.isHintAvailable() && appManager.shouldShowAdButton && !appManager.isGameOver
+					withAnimation(.smooth) {
+						showHintButton = appManager.isHintAvailable() && appManager.shouldShowAdButton && !appManager.isGameOver
+					}
 				}
 				.onChange(of: appManager.keyboard) {
 					let newValue = appManager.isHintAvailable() && appManager.shouldShowAdButton && !appManager.isGameOver
 					if newValue != showHintButton {
-						showHintButton = newValue
+						withAnimation(.smooth) {
+							showHintButton = newValue
+						}
 					}
 				}
 				
