@@ -47,8 +47,49 @@ struct AnimatedGameTile: View {
 
     @State private var spinDegrees = 0.0
     @State private var tileScale = 1.0
-    @State private var displayedState: LetterState = .notUsed
+    @State private var displayedState: LetterState
     @State private var animationGeneration = 0
+
+    init(
+        letter: Letter,
+        tileSize: CGFloat,
+        colIndex: Int,
+        rowIndex: Int,
+        currentRow: Int,
+        boardCount: Int,
+        isShaking: Bool,
+        isResettingBoard: Bool,
+        selectedGameMode: GameMode,
+        didWinGame: GameEndState,
+        isGameOver: Bool,
+        userWantsNormalTheme: Bool,
+        colorScheme: ColorScheme,
+        colorForUnused: Color,
+        gradient: LinearGradient,
+        shadowGradient: LinearGradient,
+        onRevealStart: (() -> Void)? = nil,
+        onRevealComplete: (() -> Void)? = nil
+    ) {
+        self.letter = letter
+        self.tileSize = tileSize
+        self.colIndex = colIndex
+        self.rowIndex = rowIndex
+        self.currentRow = currentRow
+        self.boardCount = boardCount
+        self.isShaking = isShaking
+        self.isResettingBoard = isResettingBoard
+        self.selectedGameMode = selectedGameMode
+        self.didWinGame = didWinGame
+        self.isGameOver = isGameOver
+        self.userWantsNormalTheme = userWantsNormalTheme
+        self.colorScheme = colorScheme
+        self.colorForUnused = colorForUnused
+        self.gradient = gradient
+        self.shadowGradient = shadowGradient
+        self.onRevealStart = onRevealStart
+        self.onRevealComplete = onRevealComplete
+        _displayedState = State(initialValue: letter.state)
+    }
 
     private var tileSpring: Animation {
         .interpolatingSpring(mass: 0.7, stiffness: 100, damping: 8, initialVelocity: 1)

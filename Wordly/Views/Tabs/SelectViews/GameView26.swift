@@ -183,13 +183,14 @@ struct GameView26: View {
 													   idealHeight: geometry2.size.height / CGFloat(8),
 													   maxHeight: geometry2.size.height / CGFloat(6))
 												.background {
-													if self.scenePhase == .background {
+//													if self.scenePhase == .background {
 														RoundedRectangle(cornerRadius: 10)
 															.foregroundStyle(self.colorForWhenAppInBackground)
 															.opacity(appManager.selectedGameMode == .dailyWord ? 0.4 : 1.0)
 														
-													}
+//													}
 												}
+												.opacity(appManager.selectedGameMode == .dailyWord ? 0.4 : 1.0)
 										})
 										.glassEffect(.regular.tint(self.colorForUnused.opacity(appManager.selectedGameMode == .dailyWord ? 0.4 : 1.0)).interactive(), in: .rect(cornerRadius: 10.0))
 										.glassEffectID("reset", in: self.namespace)
@@ -216,7 +217,7 @@ struct GameView26: View {
 															.foregroundStyle(appManager.gradient)
 															.gradientShadow(gradient: appManager.shadowGradient, radius: 3, x: 0, y: 0)
 															.opacity(appManager.submitOpacity)
-													} else if self.scenePhase == .background {
+													} else {
 														RoundedRectangle(cornerRadius: 10)
 															.foregroundStyle(Color(uiColor: .systemGreen))
 															.opacity(appManager.submitOpacity)
@@ -256,10 +257,10 @@ struct GameView26: View {
 												.foregroundStyle(.black)
 												.frame(minWidth: geometry2.size.width / CGFloat(9), maxWidth: geometry2.size.width / CGFloat(7), minHeight: geometry2.size.height / CGFloat(10), idealHeight: geometry2.size.height / CGFloat(8), maxHeight: geometry2.size.height / CGFloat(6))
 												.background {
-													if self.scenePhase == .background {
+//													if self.scenePhase == .background {
 														RoundedRectangle(cornerRadius: 10)
 															.foregroundStyle(self.colorForWhenAppInBackground)
-													}
+//													}
 												}
 										})
 										.buttonRepeatBehavior(.enabled)
@@ -274,9 +275,6 @@ struct GameView26: View {
 							.opacity((appManager.isGameOver && !appManager.isAnimating) ? 0 : 1)
 							.animation(.easeOut(duration: 0.3), value: appManager.isGameOver)
 							.animation(.easeOut(duration: 0.3), value: appManager.isAnimating)
-							.sensoryFeedback(.selection, trigger: appManager.isAnimating) { oldValue, newValue in
-								oldValue && !newValue
-							}
 							
 							
 							VStack(alignment: .center) {
@@ -306,7 +304,7 @@ struct GameView26: View {
 												RoundedRectangle(cornerRadius: 10)
 													.foregroundStyle(appManager.gradient)
 													.gradientShadow(gradient: appManager.shadowGradient, radius: 3, x: 0, y: 0)
-											} else if self.scenePhase == .background {
+											} else {
 												RoundedRectangle(cornerRadius: 15)
 													.foregroundStyle(Color(uiColor: .systemGreen))
 
@@ -328,12 +326,12 @@ struct GameView26: View {
 										.frame(maxWidth: .infinity, minHeight: 40, idealHeight: 45, maxHeight: 50)
 										.foregroundStyle(.white)
 										.background {
-											if self.scenePhase == .background {
+//											if self.scenePhase == .background {
 												let useGreen = !self.userWantsNormalTheme && self.colorScheme == .dark && appManager.selectedGameMode == .dailyWord
 												RoundedRectangle(cornerRadius: 15)
 													.foregroundStyle(Color(uiColor: useGreen ? .systemGreen : .systemOrange))
 
-											}
+//											}
 										}
 
 								})
@@ -704,10 +702,10 @@ struct KeyboardKeyButton26: View {
 				.foregroundStyle(key.state == .notUsed ? AnyShapeStyle(.black) : AnyShapeStyle(Color.white))
 				.frame(minWidth: width / CGFloat(14), maxWidth: width / CGFloat(12), minHeight: height / CGFloat(10), idealHeight: height / CGFloat(8), maxHeight: height / CGFloat(6))
 				.background {
-					if scenePhase == .background {
+//					if scenePhase == .background {
 						RoundedRectangle(cornerRadius: 5)
 							.foregroundStyle(backgroundKeyColor)
-					}
+//					}
 				}
 		}
 		.sensoryFeedback(.impact, trigger: feedbackTrigger)
@@ -733,7 +731,7 @@ struct KeyboardKeyButton26: View {
 			case .correctPosition:
 				return Color(uiColor: .systemGreen)
 			case .correctLetter:
-				return .orange
+				return Color(uiColor: .systemOrange)
 			case .usedButNotCorrect:
 				return Color(UIColor.darkGray)
 			case .notUsed:

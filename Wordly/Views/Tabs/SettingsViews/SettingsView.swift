@@ -500,7 +500,9 @@ struct BannerViewContainer: UIViewRepresentable {
 		func bannerViewDidReceiveAd(_ bannerView: BannerView) {
 			print("DID RECEIVE AD.")
 			Task { @MainActor in
-				self.parent.adManager.isBannerAdLoaded = true
+				withAnimation {
+					self.parent.adManager.isBannerAdLoaded = true
+				}
 				self.parent.adManager.cancelBannerRetry()
 			}
 			bannerView.alpha = 0
@@ -511,9 +513,15 @@ struct BannerViewContainer: UIViewRepresentable {
 
 		func bannerView(_ bannerView: BannerView, didFailToReceiveAdWithError error: Error) {
 			Task { @MainActor in
-				self.parent.adManager.isBannerAdLoaded = false
+				withAnimation {
+					self.parent.adManager.isBannerAdLoaded = false
+				}
 				self.parent.adManager.scheduleBannerRetry()
 			}
+			bannerView.alpha = 1
+			UIView.animate(withDuration: 1, animations: {
+				bannerView.alpha = 0
+			})
 			let errorDomain = error._domain
 			let errorCode = error._code
 			let errorMessage = error.localizedDescription

@@ -68,10 +68,10 @@ struct GameRecordView: View {
 									.conditionalShadow(color: .black.opacity(0.4), radius: 2, x: 2, y: 2)
 									.padding(12)
 									.background {
-										if self.scenePhase == .background {
+//										if self.scenePhase == .background {
 											Circle()
 												.foregroundStyle(gameRecord.state == .won ? Color(uiColor: .systemGreen) : Color(uiColor: .systemRed))
-										}
+//										}
 									}
 									.glassEffect(.regular.tint(gameRecord.state == .won ? Color(uiColor: .systemGreen) : Color(uiColor: .systemRed)).interactive())
 									.font(.largeTitle).bold()
@@ -274,7 +274,7 @@ struct GameRecordView: View {
 										RoundedRectangle(cornerRadius: 15)
 											.foregroundStyle(self.gradient)
 											.gradientShadow(gradient: self.shadowGradient, radius: 3, x: 0, y: 0)
-									} else if self.scenePhase == .background {
+									} else {
 										RoundedRectangle(cornerRadius: 15)
 											.foregroundStyle(Color(uiColor: .systemGreen))
 									}
@@ -302,11 +302,11 @@ struct GameRecordView: View {
 									.padding(14)
 									.frame(maxWidth: .infinity)
 									.background {
-										if self.scenePhase == .background {
+//										if self.scenePhase == .background {
 											let useGreen = !self.userWantsNormalTheme && self.colorScheme == .dark && gameRecord.mode == .dailyWord && gameRecord.state == .won
 											RoundedRectangle(cornerRadius: 15)
 												.foregroundStyle(Color(uiColor: useGreen ? .systemGreen : .systemOrange))
-										}
+//										}
 									}
 
 							}

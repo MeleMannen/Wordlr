@@ -83,10 +83,10 @@ struct SelectGameModeButton: View {
 		let useGreen = !userWantsNormalTheme && colorScheme == .dark
 		if isAvailable {
 			if #available(iOS 26.0, *) {
-				if scenePhase == .background {
+//				if scenePhase == .background {
 					RoundedRectangle(cornerRadius: 15)
 						.foregroundStyle(Color(uiColor: useGreen ? .systemGreen : .systemOrange))
-				}
+//				}
 			} else {
 				RoundedRectangle(cornerRadius: 15)
 					.foregroundStyle(useGreen ? .green : .orange)
@@ -107,10 +107,10 @@ struct SelectGameModeButton: View {
 				.gradientShadow(gradient: appManager.shadowGradient, radius: 3, x: 0, y: 0)
 		} else if isAvailable {
 			if #available(iOS 26.0, *) {
-				if scenePhase == .background {
+//				if scenePhase == .background {
 					RoundedRectangle(cornerRadius: 15)
 						.foregroundStyle(Color(uiColor: .systemGreen))
-				}
+//				}
 			} else {
 				RoundedRectangle(cornerRadius: 15)
 					.foregroundStyle(.green)

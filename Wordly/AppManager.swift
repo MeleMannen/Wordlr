@@ -717,10 +717,14 @@ final class AppManager: NSObject, FullScreenContentDelegate {
 	func resetBoard(animated: Bool = false) {
 		let shouldAnimateReset = animated && !self.board.isEmpty
 		self.isResettingBoard = shouldAnimateReset
-		self.board = []
-		self.keyboard = []
-		self.fixStartBoard()
-		self.fixKeyboard()
+		var noAnimation = Transaction()
+		noAnimation.disablesAnimations = true
+		withTransaction(noAnimation) {
+			self.board = []
+			self.keyboard = []
+			self.fixStartBoard()
+			self.fixKeyboard()
+		}
 		self.getRandomWord()
 		self.currentRow = 0
 		self.currentIndex = 0

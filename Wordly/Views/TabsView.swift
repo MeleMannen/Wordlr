@@ -132,6 +132,7 @@ struct TabsView: View {
                     .frame(width: max(0, adSize.size.width), height: max(0, adSize.size.height))
                     .frame(height: adManager.isBannerAdLoaded ? nil : 0)
                     .clipped()
+                    .allowsHitTesting(adManager.isBannerAdLoaded)
                     .padding(.bottom, adManager.isBannerAdLoaded ? (adManager.isKeyboardVisible ? 6 : 55) : 0)
             } else if #available(iOS 18.0, *),
                       UIDevice.current.userInterfaceIdiom == .pad || UIDevice.current.userInterfaceIdiom == .mac {
@@ -140,12 +141,14 @@ struct TabsView: View {
                     .frame(width: max(0, adSize.size.width), height: max(0, adSize.size.height))
                     .frame(height: adManager.isBannerAdLoaded ? nil : 0)
                     .clipped()
+                    .allowsHitTesting(adManager.isBannerAdLoaded)
             } else {
                 let adSize = inlineAdaptiveBanner(width: geometry.size.width, maxHeight: 50)
                 BannerViewContainer(adSize, adManager: adManager)
                     .frame(width: max(0, adSize.size.width), height: max(0, adSize.size.height))
                     .frame(height: adManager.isBannerAdLoaded ? nil : 0)
                     .clipped()
+                    .allowsHitTesting(adManager.isBannerAdLoaded)
                     .padding(.bottom, adManager.isBannerAdLoaded ? (adManager.isKeyboardVisible ? 0 : 49) : 0)
             }
         }
