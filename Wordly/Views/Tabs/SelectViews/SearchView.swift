@@ -67,7 +67,7 @@ struct SearchView: View {
 								}
 							}
 							.listSectionIndexVisibility(.visible)
-							.safeAreaPadding(.bottom, adManager.isAdsReady ? (UIDevice.current.userInterfaceIdiom == .pad || UIDevice.current.userInterfaceIdiom == .mac ? 80 : 54) : 0)
+							.safeAreaPadding(.bottom, adManager.isBannerAdLoaded ? (UIDevice.current.userInterfaceIdiom == .pad || UIDevice.current.userInterfaceIdiom == .mac ? 80 : 54) : 0)
 						} else {
 							List {
 								ForEach(self.sectionKeys, id: \.self) { letter in
@@ -101,7 +101,7 @@ struct SearchView: View {
 									.id(letter)
 								}
 							}
-							.safeAreaPadding(.bottom, adManager.isAdsReady ? (UIDevice.current.userInterfaceIdiom == .pad || UIDevice.current.userInterfaceIdiom == .mac ? 80 : 54) : 0)
+							.safeAreaPadding(.bottom, adManager.isBannerAdLoaded ? (UIDevice.current.userInterfaceIdiom == .pad || UIDevice.current.userInterfaceIdiom == .mac ? 80 : 54) : 0)
 						}
 					}
 				}

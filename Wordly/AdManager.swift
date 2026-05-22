@@ -11,6 +11,10 @@ import UserMessagingPlatform
 import AppTrackingTransparency
 import FirebaseAnalytics
 
+extension Notification.Name {
+	static let rewardedAdDidLoad = Notification.Name("rewardedAdDidLoad")
+}
+
 @MainActor
 @Observable
 final class AdManager {
@@ -18,11 +22,14 @@ final class AdManager {
 	var shouldShowAds: Bool = true
 	var isMobileAdsStartCalled = false
 	var isAdsReady = false
+	var isBannerAdLoaded = false
 	var isKeyboardVisible = false
 	var hasResolvedTrackingAuthorization = false
 	private var isPreparingAds = false
 	private let pathMonitor = NWPathMonitor()
 	private var hasStartedPathMonitor = false
+	@ObservationIgnored weak var bannerView: BannerView?
+	@ObservationIgnored private var bannerRetryTask: Task<Void, Never>?
 	
 	var canRequestAds: Bool {
 		return ConsentInformation.shared.canRequestAds
@@ -42,6 +49,16 @@ final class AdManager {
 			}
 		}
 		pathMonitor.start(queue: DispatchQueue(label: "Wordlr.AdManager.NetworkMonitor"))
+
+		NotificationCenter.default.addObserver(forName: .rewardedAdDidLoad, object: nil, queue: .main) { [weak self] _ in
+			guard let self else { return }
+			Task { @MainActor in
+				if !self.isBannerAdLoaded {
+					print("Rewarded ad loaded — retrying banner ad...")
+					self.reloadBannerAd()
+				}
+			}
+		}
 	}
 	
 	func updateFirebaseAnalyticsConsent() {
@@ -152,7 +169,7 @@ final class AdManager {
 		}
 		
 //#if targetEnvironment(simulator)
-		let testDeviceIdentifiers = ["AC276EF4-3093-42DF-8DE1-84C495BF8585"]
+		let testDeviceIdentifiers = ["96b612b47bebe02c609b509f57174108"]
 		MobileAds.shared.requestConfiguration.testDeviceIdentifiers = testDeviceIdentifiers
 //#endif
 		
@@ -180,7 +197,27 @@ final class AdManager {
 		}
 	}
 	
+	func reloadBannerAd() {
+		bannerView?.load(Request())
+	}
+
+	func scheduleBannerRetry() {
+		bannerRetryTask?.cancel()
+		bannerRetryTask = Task { @MainActor in
+			try? await Task.sleep(nanoseconds: 30_000_000_000)
+			guard !Task.isCancelled, !isBannerAdLoaded else { return }
+			print("Retrying banner ad load...")
+			reloadBannerAd()
+		}
+	}
+
+	func cancelBannerRetry() {
+		bannerRetryTask?.cancel()
+		bannerRetryTask = nil
+	}
+
 	deinit {
 		pathMonitor.cancel()
+		bannerRetryTask?.cancel()
 	}
 }

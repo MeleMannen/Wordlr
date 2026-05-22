@@ -137,20 +137,6 @@ struct SelectView: View {
 					Spacer()
 					
 					SelectGameModeButton(
-						title: "Free play",
-						mode: .normal,
-						appManager: appManager,
-						streak: self.normalStreak,
-						isAvailable: !self.isNormalModeBlocked,
-						impactTrigger: self.didTapPlayNormalButton,
-						errorTrigger: self.didTapFakePlayDailyWordButton,
-						startAction: self.startNormalGame,
-						blockedAction: self.showChangeGameAlert
-					)
-					.padding(.horizontal, 30)
-					.padding(.bottom, 25)
-					
-					SelectGameModeButton(
 						title: "Daily Wordlr",
 						mode: .dailyWord,
 						appManager: appManager,
@@ -160,6 +146,20 @@ struct SelectView: View {
 						errorTrigger: self.didTapFakePlayDailyWordButton,
 						startAction: self.startDailyWordGame,
 						blockedAction: self.showDailyWordBlockedAlert
+					)
+					.padding(.horizontal, 30)
+					.padding(.bottom, 25)
+
+					SelectGameModeButton(
+						title: "Free play",
+						mode: .normal,
+						appManager: appManager,
+						streak: self.normalStreak,
+						isAvailable: !self.isNormalModeBlocked,
+						impactTrigger: self.didTapPlayNormalButton,
+						errorTrigger: self.didTapFakePlayDailyWordButton,
+						startAction: self.startNormalGame,
+						blockedAction: self.showChangeGameAlert
 					)
 					.padding(.horizontal, 30)
 					.padding(.bottom, 10)
@@ -178,7 +178,7 @@ struct SelectView: View {
 				}
 				.padding(.horizontal)
 			}
-			.safeAreaPadding(.bottom, adManager.isAdsReady ? (UIDevice.current.userInterfaceIdiom == .pad || UIDevice.current.userInterfaceIdiom == .mac ? 80 : 54) : 0)
+			.safeAreaPadding(.bottom, adManager.isBannerAdLoaded ? (UIDevice.current.userInterfaceIdiom == .pad || UIDevice.current.userInterfaceIdiom == .mac ? 80 : 54) : 0)
 			.toolbar {
 				ToolbarItem(placement: .navigationBarTrailing) {
 					NavigationLink(destination: Info().environment(appManager).environmentObject(appState)) {

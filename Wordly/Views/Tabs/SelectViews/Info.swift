@@ -87,7 +87,7 @@ struct Info: View {
 		}
 		.navigationTitle("Info")
 		.navigationBarTitleDisplayMode(.inline)
-		.safeAreaPadding(.bottom, adManager.isAdsReady ? (UIDevice.current.userInterfaceIdiom == .pad || UIDevice.current.userInterfaceIdiom == .mac ? 80 : 54) : 0)
+		.safeAreaPadding(.bottom, adManager.isBannerAdLoaded ? (UIDevice.current.userInterfaceIdiom == .pad || UIDevice.current.userInterfaceIdiom == .mac ? 80 : 54) : 0)
 		.onChange(of: appState.navigateHomeTrigger) {
 			print("SelectView detected navigateHomeTrigger change")
 			dismiss()

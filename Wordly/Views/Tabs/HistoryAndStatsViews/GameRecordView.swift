@@ -270,13 +270,17 @@ struct GameRecordView: View {
 								.padding(14)
 								.frame(maxWidth: .infinity)
 								.background {
-									if self.scenePhase == .background {
+									if !self.userWantsNormalTheme && self.colorScheme == .dark && gameRecord.mode == .dailyWord && gameRecord.state == .won {
+										RoundedRectangle(cornerRadius: 15)
+											.foregroundStyle(self.gradient)
+											.gradientShadow(gradient: self.shadowGradient, radius: 3, x: 0, y: 0)
+									} else if self.scenePhase == .background {
 										RoundedRectangle(cornerRadius: 15)
 											.foregroundStyle(Color(uiColor: .systemGreen))
 									}
 								}
 						}
-						.glassEffect(.regular.tint(.green).interactive(), in: .rect(cornerRadius: 15.0))
+						.glassEffect(!self.userWantsNormalTheme && self.colorScheme == .dark && gameRecord.mode == .dailyWord && gameRecord.state == .won ? .regular.interactive() : .regular.tint(.green).interactive(), in: .rect(cornerRadius: 15.0))
 						.glassEffectID("definition", in: self.namespace)
 						.simultaneousGesture(TapGesture().onEnded {
 							self.didTap.toggle()
@@ -298,19 +302,15 @@ struct GameRecordView: View {
 									.padding(14)
 									.frame(maxWidth: .infinity)
 									.background {
-										if !self.userWantsNormalTheme && self.colorScheme == .dark && gameRecord.mode == .dailyWord && gameRecord.state == .won {
+										if self.scenePhase == .background {
+											let useGreen = !self.userWantsNormalTheme && self.colorScheme == .dark && gameRecord.mode == .dailyWord && gameRecord.state == .won
 											RoundedRectangle(cornerRadius: 15)
-												.foregroundStyle(self.gradient)
-												.gradientShadow(gradient: self.shadowGradient, radius: 3, x: 0, y: 0)
-										} else if self.scenePhase == .background {
-											RoundedRectangle(cornerRadius: 15)
-												.foregroundStyle(Color.orange)
-											
+												.foregroundStyle(Color(uiColor: useGreen ? .systemGreen : .systemOrange))
 										}
 									}
-								
+
 							}
-							.glassEffect(!self.userWantsNormalTheme && self.colorScheme == .dark && gameRecord.mode == .dailyWord && gameRecord.state == .won ? .regular.interactive() : .regular.tint(.orange).interactive(), in: .rect(cornerRadius: 15.0))
+							.glassEffect(!self.userWantsNormalTheme && self.colorScheme == .dark && gameRecord.mode == .dailyWord && gameRecord.state == .won ? .regular.tint(.green).interactive() : .regular.tint(.orange).interactive(), in: .rect(cornerRadius: 15.0))
 							.glassEffectID("board", in: self.namespace)
 							.simultaneousGesture(TapGesture().onEnded {
 								self.didTap.toggle()
@@ -329,8 +329,15 @@ struct GameRecordView: View {
 								.padding(14)
 								.frame(maxWidth: .infinity)
 								.background {
-									RoundedRectangle(cornerRadius: 15)
-										.fill(Color.green)
+									if !self.userWantsNormalTheme && self.colorScheme == .dark && gameRecord.mode == .dailyWord && gameRecord.state == .won {
+										RoundedRectangle(cornerRadius: 15)
+											.foregroundStyle(self.gradient)
+											.gradientShadow(gradient: self.shadowGradient, radius: 3, x: 0, y: 0)
+									} else {
+										RoundedRectangle(cornerRadius: 15)
+											.fill(Color.green)
+											.conditionalShadow(color: .black.opacity(0.05), radius: 2, x: 1, y: 1)
+									}
 								}
 								.padding(.horizontal, 40)
 						}
@@ -341,8 +348,8 @@ struct GameRecordView: View {
 						.sensoryFeedback(.impact, trigger: self.didTap)
 						.buttonStyle(GrowingButton())
 						.conditionalShadow(color: .black.opacity(0.5), radius: 4, x: 4, y: 4)
-						
-						
+
+
 						if let board = gameRecord.board {
 							NavigationLink(destination: BoardView(gameRecord: self.gameRecord, board: board)) {
 								Text("View the board")
@@ -352,15 +359,8 @@ struct GameRecordView: View {
 									.padding(14)
 									.frame(maxWidth: .infinity)
 									.background {
-										if !self.userWantsNormalTheme && self.colorScheme == .dark && gameRecord.mode == .dailyWord && gameRecord.state == .won {
-											RoundedRectangle(cornerRadius: 15)
-												.foregroundStyle(self.gradient)
-												.gradientShadow(gradient: self.shadowGradient, radius: 3, x: 0, y: 0)
-										} else {
-											RoundedRectangle(cornerRadius: 15)
-												.fill(Color.orange)
-												.conditionalShadow(color: .black.opacity(0.05), radius: 2, x: 1, y: 1)
-										}
+										RoundedRectangle(cornerRadius: 15)
+											.fill(Color.orange)
 									}
 									.padding(.horizontal, 40)
 							}
@@ -417,7 +417,7 @@ struct GameRecordView: View {
 			}
 			.navigationTitle(gameRecord.word)
 			.navigationBarTitleDisplayMode(.inline)
-			.safeAreaPadding(.bottom, adManager.isAdsReady ? (UIDevice.current.userInterfaceIdiom == .pad || UIDevice.current.userInterfaceIdiom == .mac ? 80 : 60) : 0)
+			.safeAreaPadding(.bottom, adManager.isBannerAdLoaded ? (UIDevice.current.userInterfaceIdiom == .pad || UIDevice.current.userInterfaceIdiom == .mac ? 80 : 60) : 0)
 			.onAppear {
 				AnalyticsManager.shared.logScreenViewed(screenName: "GameRecordView")
 				if let endDate = gameRecord.endDate {

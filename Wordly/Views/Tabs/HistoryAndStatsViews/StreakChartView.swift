@@ -9,10 +9,19 @@ import SwiftUI
 import Charts
 
 struct StreakChartView: View {
+	@Environment(\.colorScheme) private var colorScheme
+	@AppStorage("userWantsNormalTheme") private var userWantsNormalTheme: Bool = true
+
 	@State var title: String
 	@Binding var longestStreakPerLetters: [(language: LanguageSelection, streaks: [(index: Int, currentStreak: Int, longestStreak: Int)])]
 	@Binding var maxStreakLength: Double
-	
+
+	private let gradient = LinearGradient(colors: [.orange, .yellow, .yellow, .yellow, .yellow, .white], startPoint: .bottomLeading, endPoint: .topTrailing)
+
+	private var useGradientTheme: Bool {
+		!userWantsNormalTheme && colorScheme == .dark
+	}
+
     var body: some View {
 		VStack(alignment: .leading) {
 			Text(self.title)
@@ -35,11 +44,12 @@ struct StreakChartView: View {
 								y: .value("Number of guesses", " \(streak.index) "),
 								height: .fixed(20.0)
 							)
-							.foregroundStyle(Color.green)
+							.foregroundStyle(useGradientTheme ? AnyShapeStyle(gradient) : AnyShapeStyle(Color.green))
 							.annotation(position: currentDouble < (self.maxStreakLength / 8.0) ? .trailing : .overlay) {
 								Text("\(streak.currentStreak)")
 									.foregroundColor(currentDouble < (self.maxStreakLength / 8.0) ? .primary : .white)
 									.font(.headline)
+									.shadow(color: .black.opacity(0.5), radius: 2, x: 2, y: 2)
 									.padding(.leading, streak.currentStreak == 0 ? 3 : 0)
 							}
 							.position(by: .value("Current", "Current"))
@@ -49,11 +59,12 @@ struct StreakChartView: View {
 								y: .value("Number of guesses", " \(streak.index) "),
 								height: .fixed(20.0)
 							)
-							.foregroundStyle(Color.orange)
+							.foregroundStyle(useGradientTheme ? AnyShapeStyle(Color.green) : AnyShapeStyle(Color.orange))
 							.annotation(position: longestDouble < (self.maxStreakLength / 8.0) ? .trailing : .overlay) {
 								Text("\(streak.longestStreak)")
 									.foregroundColor(longestDouble < (self.maxStreakLength / 8.0) ? .primary : .white)
 									.font(.headline)
+									.shadow(color: .black.opacity(0.5), radius: 2, x: 2, y: 2)
 							}
 							.position(by: .value("Longest", "Longest"))
 						}
@@ -73,14 +84,14 @@ struct StreakChartView: View {
 			
 			HStack {
 				Circle()
-					.fill(Color.green)
+					.fill(useGradientTheme ? AnyShapeStyle(gradient) : AnyShapeStyle(Color.green))
 					.frame(width: 5, height: 5)
 				Text("Current")
 					.foregroundStyle(.secondary)
 					.font(.footnote)
 					.padding(.trailing, 10)
 				Circle()
-					.fill(Color.orange)
+					.fill(useGradientTheme ? AnyShapeStyle(Color.green) : AnyShapeStyle(Color.orange))
 					.frame(width: 5, height: 5)
 				Text("Longest")
 					.foregroundStyle(.secondary)

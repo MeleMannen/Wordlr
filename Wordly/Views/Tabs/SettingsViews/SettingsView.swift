@@ -415,7 +415,7 @@ struct SettingsView: View {
 			}
 			.fontWeight(.medium)
 			.navigationTitle("Settings")
-			.safeAreaPadding(.bottom, adManager.isAdsReady ? (UIDevice.current.userInterfaceIdiom == .pad || UIDevice.current.userInterfaceIdiom == .mac ? 80 : 54) : 0)
+			.safeAreaPadding(.bottom, adManager.isBannerAdLoaded ? (UIDevice.current.userInterfaceIdiom == .pad || UIDevice.current.userInterfaceIdiom == .mac ? 80 : 54) : 0)
 			.tint(.secondary)
 			.onAppear {
 				AnalyticsManager.shared.logScreenViewed(screenName: "SettingsView")
@@ -460,9 +460,11 @@ struct SettingsView: View {
 struct BannerViewContainer: UIViewRepresentable {
 	typealias UIViewType = BannerView
 	let adSize: AdSize
-	
-	init(_ adSize: AdSize) {
+	let adManager: AdManager
+
+	init(_ adSize: AdSize, adManager: AdManager) {
 		self.adSize = adSize
+		self.adManager = adManager
 	}
 	
 	func makeUIView(context: Context) -> BannerView {
@@ -476,6 +478,7 @@ struct BannerViewContainer: UIViewRepresentable {
 		
 		banner.load(Request())
 		banner.delegate = context.coordinator
+		adManager.bannerView = banner
 		return banner
 	}
 	
@@ -484,26 +487,33 @@ struct BannerViewContainer: UIViewRepresentable {
 	func makeCoordinator() -> BannerCoordinator {
 		return BannerCoordinator(self)
 	}
-	
+
 	class BannerCoordinator: NSObject, BannerViewDelegate {
 		let parent: BannerViewContainer
-		
+
 		init(_ parent: BannerViewContainer) {
 			self.parent = parent
 		}
-		
+
 		// MARK: - GADBannerViewDelegate methods
-		
+
 		func bannerViewDidReceiveAd(_ bannerView: BannerView) {
 			print("DID RECEIVE AD.")
+			Task { @MainActor in
+				self.parent.adManager.isBannerAdLoaded = true
+				self.parent.adManager.cancelBannerRetry()
+			}
 			bannerView.alpha = 0
 			UIView.animate(withDuration: 1, animations: {
 				bannerView.alpha = 1
 			})
 		}
-		
+
 		func bannerView(_ bannerView: BannerView, didFailToReceiveAdWithError error: Error) {
-			//			print("FAILED TO RECEIVE AD: \(error.localizedDescription), error code: \(error._code), error: \(error)")
+			Task { @MainActor in
+				self.parent.adManager.isBannerAdLoaded = false
+				self.parent.adManager.scheduleBannerRetry()
+			}
 			let errorDomain = error._domain
 			let errorCode = error._code
 			let errorMessage = error.localizedDescription

@@ -10,7 +10,9 @@ import Charts
 import SwiftData
 
 struct StatsView: View {
+	@Environment(\.colorScheme) private var colorScheme
 	@Environment(AdManager.self) private var adManager
+	@AppStorage("userWantsNormalTheme") private var userWantsNormalTheme: Bool = true
 	@AppStorage("defaultStatLanguage") private var defaultStatLanguage: LanguageSelection = .all
 	@AppStorage("defaultStatNumberOfLetters") private var defaultStatNumberOfLetters: Int = 9
 	@AppStorage("defaultStatGameMode") private var defaultStatGameMode: GameMode = .both
@@ -35,7 +37,13 @@ struct StatsView: View {
 	@State private var maxNormalStreakLength: Double = 0.0
 	
 	@Query private var gameRecords: [GameRecordEntity]
-	
+
+	private let gradient = LinearGradient(colors: [.orange, .yellow, .yellow, .yellow, .yellow, .white], startPoint: .bottomLeading, endPoint: .topTrailing)
+
+	private var useGradientTheme: Bool {
+		!userWantsNormalTheme && colorScheme == .dark
+	}
+
 	var body: some View {
 		NavigationStack {
 			GeometryReader { geometry in
@@ -79,21 +87,22 @@ struct StatsView: View {
 									Chart {
 										BarMark(
 											x: .value("Count", self.wonCount),
-											y: .value("State", "✅"),
+											y: .value("State", "won"),
 											width: .fixed(20.0)
 										)
-										.foregroundStyle(Color.green)
+										.foregroundStyle(useGradientTheme ? AnyShapeStyle(gradient) : AnyShapeStyle(Color.green))
 										.annotation(position: self.wonCount < (self.lostCount / 6) ? .trailing : .overlay) {
 											if self.wonCount > 0 {
 												Text("\(self.wonCount)")
 													.foregroundColor(self.wonCount < (self.lostCount / 6) ? .primary : .white)
 													.font(.headline)
+													.shadow(color: .black.opacity(0.5), radius: 2, x: 2, y: 2)
 											}
 										}
-										
+
 										BarMark(
 											x: .value("Count", self.lostCount),
-											y: .value("State", "❌"),
+											y: .value("State", "lost"),
 											width: .fixed(20.0)
 										)
 										.foregroundStyle(Color.red)
@@ -102,16 +111,32 @@ struct StatsView: View {
 												Text("\(self.lostCount)")
 													.foregroundColor(self.lostCount < (self.wonCount / 6) ? .primary : .white)
 													.font(.headline)
+													.shadow(color: .black.opacity(0.5), radius: 2, x: 2, y: 2)
+											}
+										}
+									}
+									.chartYAxis {
+										AxisMarks(preset: .extended, position: .leading) { value in
+											AxisValueLabel {
+												if let label = value.as(String.self) {
+													if label == "won" {
+														Image(systemName: "checkmark.square.fill")
+															.font(.title2)
+															.symbolRenderingMode(.palette)
+															.foregroundStyle(.white, useGradientTheme ? AnyShapeStyle(gradient) : AnyShapeStyle(Color.green))
+															.shadow(color: .black.opacity(0.5), radius: 2, x: 2, y: 2)
+													} else {
+														Image(systemName: "xmark.square.fill")
+															.font(.title2)
+															.symbolRenderingMode(.palette)
+															.foregroundStyle(.white, .red)
+															.shadow(color: .black.opacity(0.5), radius: 2, x: 2, y: 2)
+													}
+												}
 											}
 										}
 									}
 									.chartXScale(domain: 0...Double(self.totalCount))
-									.chartYAxis {
-										AxisMarks(preset: .extended, position: .leading) { _ in
-											AxisValueLabel(horizontalSpacing: 15)
-												.font(.footnote)
-										}
-									}
 									.animation(.easeInOut(duration: 0.5), value: self.filteredGameRecords.count)
 								}
 							} header: {
@@ -132,12 +157,13 @@ struct StatsView: View {
 												y: .value("Number of guesses", " \(index+1) "),
 												width: .fixed(20.0)
 											)
-											.foregroundStyle(Color.green)
+											.foregroundStyle(useGradientTheme ? AnyShapeStyle(gradient) : AnyShapeStyle(Color.green))
 											.annotation(position: count < (self.maxGuessesPerCount / 6) ? .trailing : .overlay) {
 												if count > 0 {
 													Text("\(count)")
 														.foregroundColor(count < (self.maxGuessesPerCount / 6) ? .primary : .white)
 														.font(.headline)
+														.shadow(color: .black.opacity(0.5), radius: 2, x: 2, y: 2)
 												}
 											}
 										}
@@ -169,7 +195,7 @@ struct StatsView: View {
 							}
 							
 						}
-						.safeAreaPadding(.bottom, adManager.isAdsReady ? (UIDevice.current.userInterfaceIdiom == .pad || UIDevice.current.userInterfaceIdiom == .mac ? 80 : 54) : 0)
+						.safeAreaPadding(.bottom, adManager.isBannerAdLoaded ? (UIDevice.current.userInterfaceIdiom == .pad || UIDevice.current.userInterfaceIdiom == .mac ? 80 : 54) : 0)
 					}
 				}
 				.navigationTitle("Stats")

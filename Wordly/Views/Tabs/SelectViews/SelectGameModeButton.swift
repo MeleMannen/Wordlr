@@ -80,19 +80,20 @@ struct SelectGameModeButton: View {
 	
 	@ViewBuilder
 	private var normalBackground: some View {
+		let useGreen = !userWantsNormalTheme && colorScheme == .dark
 		if isAvailable {
 			if #available(iOS 26.0, *) {
 				if scenePhase == .background {
 					RoundedRectangle(cornerRadius: 15)
-						.foregroundStyle(Color(uiColor: .systemGreen))
+						.foregroundStyle(Color(uiColor: useGreen ? .systemGreen : .systemOrange))
 				}
 			} else {
 				RoundedRectangle(cornerRadius: 15)
-					.foregroundStyle(.green)
+					.foregroundStyle(useGreen ? .green : .orange)
 			}
 		} else {
 			RoundedRectangle(cornerRadius: 15)
-				.foregroundStyle(.green.opacity(0.3))
+				.foregroundStyle((useGreen ? Color.green : Color.orange).opacity(0.3))
 		}
 	}
 	
@@ -135,9 +136,11 @@ private struct SelectGameModeButtonStyle: ViewModifier {
 					.conditionalShadow(color: .black.opacity(0.4), radius: 4, x: 4, y: 4)
 					.glassEffect(.regular.interactive(), in: .rect(cornerRadius: 15.0))
 			} else if isAvailable {
+				let useGreen = mode == .normal && !userWantsNormalTheme && colorScheme == .dark
+				let tintColor: Color = mode == .normal ? (useGreen ? .green : .orange) : .green
 				content
 					.conditionalShadow(color: .black.opacity(0.4), radius: 4, x: 4, y: 4)
-					.glassEffect(.regular.tint(.green).interactive(), in: .rect(cornerRadius: 15.0))
+					.glassEffect(.regular.tint(tintColor).interactive(), in: .rect(cornerRadius: 15.0))
 			} else {
 				content
 					.conditionalShadow(color: .black.opacity(0.4), radius: 4, x: 4, y: 4)

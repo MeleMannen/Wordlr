@@ -16,11 +16,11 @@ struct GameView: View {
             if #available(iOS 26.0, *) {
                 GameView26()
                     .environment(appManager)
-                    .safeAreaPadding(.bottom, adManager.isAdsReady ? (UIDevice.current.userInterfaceIdiom == .pad || UIDevice.current.userInterfaceIdiom == .mac ? 98 : 72) : 0)
+                    .safeAreaPadding(.bottom, adManager.isBannerAdLoaded ? (UIDevice.current.userInterfaceIdiom == .pad || UIDevice.current.userInterfaceIdiom == .mac ? 98 : 72) : 0)
             } else {
                 GameView18()
                     .environment(appManager)
-                    .safeAreaPadding(.bottom, adManager.isAdsReady ? (UIDevice.current.userInterfaceIdiom == .pad || UIDevice.current.userInterfaceIdiom == .mac ? 98 : 72) : 0)
+                    .safeAreaPadding(.bottom, adManager.isBannerAdLoaded ? (UIDevice.current.userInterfaceIdiom == .pad || UIDevice.current.userInterfaceIdiom == .mac ? 98 : 72) : 0)
             }
         }
     }

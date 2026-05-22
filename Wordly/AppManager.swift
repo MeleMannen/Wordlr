@@ -912,6 +912,7 @@ final class AppManager: NSObject, FullScreenContentDelegate {
 				}
 			}
 			print("Rewarded ad loaded.")
+			NotificationCenter.default.post(name: .rewardedAdDidLoad, object: nil)
 		} catch {
 			print("Failed to load rewarded ad with error: \(error.localizedDescription)")
 			await MainActor.run {

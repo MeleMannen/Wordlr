@@ -302,14 +302,18 @@ struct GameView26: View {
 										.frame(maxWidth: .infinity, minHeight: 40, idealHeight: 45, maxHeight: 50)
 										.foregroundStyle(.white)
 										.background {
-											if self.scenePhase == .background {
+											if !self.userWantsNormalTheme && self.colorScheme == .dark && appManager.selectedGameMode == .dailyWord {
+												RoundedRectangle(cornerRadius: 10)
+													.foregroundStyle(appManager.gradient)
+													.gradientShadow(gradient: appManager.shadowGradient, radius: 3, x: 0, y: 0)
+											} else if self.scenePhase == .background {
 												RoundedRectangle(cornerRadius: 15)
 													.foregroundStyle(Color(uiColor: .systemGreen))
-												
+
 											}
 										}
 								})
-								.glassEffect(.regular.tint(.green).interactive(), in: .rect(cornerRadius: 10.0))
+								.glassEffect(self.userWantsNormalTheme || !self.userWantsNormalTheme && self.colorScheme == .dark && appManager.selectedGameMode == .normal ? .regular.tint(.green).interactive() : .regular.interactive(), in: .rect(cornerRadius: 10.0))
 								.glassEffectID("new", in: self.namespace)
 								.padding(.horizontal, 20)
 								.sensoryFeedback(.impact, trigger: self.didTapNewGameButton)
@@ -324,23 +328,20 @@ struct GameView26: View {
 										.frame(maxWidth: .infinity, minHeight: 40, idealHeight: 45, maxHeight: 50)
 										.foregroundStyle(.white)
 										.background {
-											if !self.userWantsNormalTheme && self.colorScheme == .dark && appManager.selectedGameMode == .dailyWord {
-												RoundedRectangle(cornerRadius: 10)
-													.foregroundStyle(appManager.gradient)
-													.gradientShadow(gradient: appManager.shadowGradient, radius: 3, x: 0, y: 0)
-											} else if self.scenePhase == .background {
+											if self.scenePhase == .background {
+												let useGreen = !self.userWantsNormalTheme && self.colorScheme == .dark && appManager.selectedGameMode == .dailyWord
 												RoundedRectangle(cornerRadius: 15)
-													.foregroundStyle(Color(uiColor: .systemGreen))
-												
+													.foregroundStyle(Color(uiColor: useGreen ? .systemGreen : .systemOrange))
+
 											}
 										}
-									
+
 								})
 								.simultaneousGesture(TapGesture().onEnded {
 									self.didTapShowDefinitionButton.toggle()
 									adManager.shouldShowAds = true
 								})
-								.glassEffect(self.userWantsNormalTheme || !self.userWantsNormalTheme && self.colorScheme == .dark && appManager.selectedGameMode == .normal ? .regular.tint(.orange).interactive() : .regular.interactive(), in: .rect(cornerRadius: 10.0))
+								.glassEffect(.regular.tint(!self.userWantsNormalTheme && self.colorScheme == .dark && appManager.selectedGameMode == .dailyWord ? .green : .orange).interactive(), in: .rect(cornerRadius: 10.0))
 								.glassEffectID("definition", in: self.namespace)
 								.conditionalShadow(color: .black.opacity(0.1), radius: 0.5, x: 1, y: 1)
 								.sensoryFeedback(.impact, trigger: self.didTapShowDefinitionButton)
