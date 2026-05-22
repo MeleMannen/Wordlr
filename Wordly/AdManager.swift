@@ -54,7 +54,7 @@ final class AdManager {
 			guard let self else { return }
 			Task { @MainActor in
 				if !self.isBannerAdLoaded {
-					print("Rewarded ad loaded — retrying banner ad...")
+					print("Rewarded ad loaded - retrying banner ad...")
 					self.reloadBannerAd()
 				}
 			}

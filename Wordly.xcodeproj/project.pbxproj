@@ -43,15 +43,12 @@
 		63B9B4332EA58ED2008483FB /* Tips.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B9B4122EA58ED2008483FB /* Tips.swift */; };
 		63B9B4342EA58ED2008483FB /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B9B3FD2EA58ED2008483FB /* OnboardingView.swift */; };
 		63B9B4352EA58ED2008483FB /* StreakChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B9B3F52EA58ED2008483FB /* StreakChartView.swift */; };
-		63B9B4362EA58ED2008483FB /* dailyNorwegianWords.json in Resources */ = {isa = PBXBuildFile; fileRef = 63B9B3E12EA58ED2008483FB /* dailyNorwegianWords.json */; };
+		63B9B4362EA58ED2008483FB /* norwegianWords.json in Resources */ = {isa = PBXBuildFile; fileRef = 63B9B3E12EA58ED2008483FB /* norwegianWords.json */; };
 		63B9B4372EA58ED2008483FB /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 63B9B3DD2EA58ED2008483FB /* Preview Assets.xcassets */; };
-		63B9B4382EA58ED2008483FB /* norwegianWords.json in Resources */ = {isa = PBXBuildFile; fileRef = 63B9B3E52EA58ED2008483FB /* norwegianWords.json */; };
-		63B9B4392EA58ED2008483FB /* spanishWords.json in Resources */ = {isa = PBXBuildFile; fileRef = 63B9B3E72EA58ED2008483FB /* spanishWords.json */; };
-		63B9B43A2EA58ED2008483FB /* englishWords.json in Resources */ = {isa = PBXBuildFile; fileRef = 63B9B3E32EA58ED2008483FB /* englishWords.json */; };
-		63B9B43B2EA58ED2008483FB /* dailySpanishWords.json in Resources */ = {isa = PBXBuildFile; fileRef = 63B9B3E22EA58ED2008483FB /* dailySpanishWords.json */; };
+		63B9B43B2EA58ED2008483FB /* spanishWords.json in Resources */ = {isa = PBXBuildFile; fileRef = 63B9B3E22EA58ED2008483FB /* spanishWords.json */; };
 		63B9B43C2EA58ED2008483FB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 63B9B3DF2EA58ED2008483FB /* Assets.xcassets */; };
 		63B9B43F2EA58ED2008483FB /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 63B9B40F2EA58ED2008483FB /* PrivacyInfo.xcprivacy */; };
-		63B9B4402EA58ED2008483FB /* dailyEnglishWords.json in Resources */ = {isa = PBXBuildFile; fileRef = 63B9B3E02EA58ED2008483FB /* dailyEnglishWords.json */; };
+		63B9B4402EA58ED2008483FB /* englishWords.json in Resources */ = {isa = PBXBuildFile; fileRef = 63B9B3E02EA58ED2008483FB /* englishWords.json */; };
 		63B9B4412EA58ED2008483FB /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 63B9B3E42EA58ED2008483FB /* Localizable.xcstrings */; };
 		63B9B4422EA58ED2008483FB /* shortedNorwegainWords.json in Resources */ = {isa = PBXBuildFile; fileRef = 63B9B3E62EA58ED2008483FB /* shortedNorwegainWords.json */; };
 		63BF73DA2F4477E80065D40B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 63BF73D92F4477E80065D40B /* GoogleService-Info.plist */; };
@@ -69,14 +66,11 @@
 		63B1E1352F795EA500F36987 /* AdManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdManager.swift; sourceTree = "<group>"; };
 		63B9B3DD2EA58ED2008483FB /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		63B9B3DF2EA58ED2008483FB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		63B9B3E02EA58ED2008483FB /* dailyEnglishWords.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = dailyEnglishWords.json; sourceTree = "<group>"; };
-		63B9B3E12EA58ED2008483FB /* dailyNorwegianWords.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = dailyNorwegianWords.json; sourceTree = "<group>"; };
-		63B9B3E22EA58ED2008483FB /* dailySpanishWords.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = dailySpanishWords.json; sourceTree = "<group>"; };
-		63B9B3E32EA58ED2008483FB /* englishWords.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = englishWords.json; sourceTree = "<group>"; };
+		63B9B3E02EA58ED2008483FB /* englishWords.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = englishWords.json; sourceTree = "<group>"; };
+		63B9B3E12EA58ED2008483FB /* norwegianWords.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = norwegianWords.json; sourceTree = "<group>"; };
+		63B9B3E22EA58ED2008483FB /* spanishWords.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = spanishWords.json; sourceTree = "<group>"; };
 		63B9B3E42EA58ED2008483FB /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
-		63B9B3E52EA58ED2008483FB /* norwegianWords.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = norwegianWords.json; sourceTree = "<group>"; };
 		63B9B3E62EA58ED2008483FB /* shortedNorwegainWords.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = shortedNorwegainWords.json; sourceTree = "<group>"; };
-		63B9B3E72EA58ED2008483FB /* spanishWords.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = spanishWords.json; sourceTree = "<group>"; };
 		63B9B3EA2EA58ED2008483FB /* EnglishWordDefinitionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnglishWordDefinitionView.swift; sourceTree = "<group>"; };
 		63B9B3EB2EA58ED2008483FB /* NAOBView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NAOBView.swift; sourceTree = "<group>"; };
 		63B9B3EC2EA58ED2008483FB /* NorwegianWordDefinitionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NorwegianWordDefinitionView.swift; sourceTree = "<group>"; };
@@ -168,13 +162,10 @@
 			isa = PBXGroup;
 			children = (
 				63B9B3E42EA58ED2008483FB /* Localizable.xcstrings */,
-				63B9B3E02EA58ED2008483FB /* dailyEnglishWords.json */,
-				63B9B3E12EA58ED2008483FB /* dailyNorwegianWords.json */,
-				63B9B3E22EA58ED2008483FB /* dailySpanishWords.json */,
-				63B9B3E32EA58ED2008483FB /* englishWords.json */,
-				63B9B3E52EA58ED2008483FB /* norwegianWords.json */,
+				63B9B3E02EA58ED2008483FB /* englishWords.json */,
+				63B9B3E12EA58ED2008483FB /* norwegianWords.json */,
+				63B9B3E22EA58ED2008483FB /* spanishWords.json */,
 				63B9B3E62EA58ED2008483FB /* shortedNorwegainWords.json */,
-				63B9B3E72EA58ED2008483FB /* spanishWords.json */,
 				63B9B3DF2EA58ED2008483FB /* Assets.xcassets */,
 				63BF73D92F4477E80065D40B /* GoogleService-Info.plist */,
 			);
@@ -351,16 +342,13 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				63B9B4362EA58ED2008483FB /* dailyNorwegianWords.json in Resources */,
+				63B9B4362EA58ED2008483FB /* norwegianWords.json in Resources */,
 				63B9B4372EA58ED2008483FB /* Preview Assets.xcassets in Resources */,
-				63B9B4382EA58ED2008483FB /* norwegianWords.json in Resources */,
-				63B9B4392EA58ED2008483FB /* spanishWords.json in Resources */,
-				63B9B43A2EA58ED2008483FB /* englishWords.json in Resources */,
 				63BF73DA2F4477E80065D40B /* GoogleService-Info.plist in Resources */,
-				63B9B43B2EA58ED2008483FB /* dailySpanishWords.json in Resources */,
+				63B9B43B2EA58ED2008483FB /* spanishWords.json in Resources */,
 				63B9B43C2EA58ED2008483FB /* Assets.xcassets in Resources */,
 				63B9B43F2EA58ED2008483FB /* PrivacyInfo.xcprivacy in Resources */,
-				63B9B4402EA58ED2008483FB /* dailyEnglishWords.json in Resources */,
+				63B9B4402EA58ED2008483FB /* englishWords.json in Resources */,
 				63B9B4412EA58ED2008483FB /* Localizable.xcstrings in Resources */,
 				63B9B4422EA58ED2008483FB /* shortedNorwegainWords.json in Resources */,
 			);

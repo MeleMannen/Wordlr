@@ -96,7 +96,7 @@ struct StatsView: View {
 												Text("\(self.wonCount)")
 													.foregroundColor(self.wonCount < (self.lostCount / 6) ? .primary : .white)
 													.font(.headline)
-													.shadow(color: .black.opacity(0.5), radius: 2, x: 2, y: 2)
+													.shadow(color: .black.opacity(0.3), radius: 1, x: 1, y: 1)
 											}
 										}
 
@@ -111,7 +111,7 @@ struct StatsView: View {
 												Text("\(self.lostCount)")
 													.foregroundColor(self.lostCount < (self.wonCount / 6) ? .primary : .white)
 													.font(.headline)
-													.shadow(color: .black.opacity(0.5), radius: 2, x: 2, y: 2)
+													.shadow(color: .black.opacity(0.3), radius: 1, x: 1, y: 1)
 											}
 										}
 									}
@@ -124,13 +124,13 @@ struct StatsView: View {
 															.font(.title2)
 															.symbolRenderingMode(.palette)
 															.foregroundStyle(.white, useGradientTheme ? AnyShapeStyle(gradient) : AnyShapeStyle(Color.green))
-															.shadow(color: .black.opacity(0.5), radius: 2, x: 2, y: 2)
+															.shadow(color: .black.opacity(0.3), radius: 1, x: 1, y: 1)
 													} else {
 														Image(systemName: "xmark.square.fill")
 															.font(.title2)
 															.symbolRenderingMode(.palette)
 															.foregroundStyle(.white, .red)
-															.shadow(color: .black.opacity(0.5), radius: 2, x: 2, y: 2)
+															.shadow(color: .black.opacity(0.3), radius: 1, x: 1, y: 1)
 													}
 												}
 											}
@@ -163,7 +163,7 @@ struct StatsView: View {
 													Text("\(count)")
 														.foregroundColor(count < (self.maxGuessesPerCount / 6) ? .primary : .white)
 														.font(.headline)
-														.shadow(color: .black.opacity(0.5), radius: 2, x: 2, y: 2)
+														.shadow(color: .black.opacity(0.3), radius: 1, x: 1, y: 1)
 												}
 											}
 										}

@@ -273,15 +273,6 @@ enum LanguageSelection: String, Codable, CaseIterable, Identifiable {
 		}
 	}
 	
-	var dailyWordFileName: String {
-		switch self {
-			case .english: return "dailyEnglishWords"
-			case .spanish: return "dailySpanishWords"
-			case .norwegian: return "dailyNorwegianWords"
-			case .all: return "BadBadDailyWordError"
-		}
-	}
-	
 	var alphabet: [String] {
 		switch self {
 			case .english: return ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
@@ -831,22 +822,6 @@ extension WordleDataManager {
         }
     }
     
-    func loadDailyWordsFromJSONFile(selectedLanguage: LanguageSelection) -> Words? {
-        guard let filePath = Bundle.main.path(forResource: selectedLanguage.dailyWordFileName, ofType: "json") else {
-            print("File not found")
-            return nil
-        }
-        
-        do {
-            let data = try Data(contentsOf: URL(fileURLWithPath: filePath))
-            let decoder = JSONDecoder()
-            let words = try decoder.decode(Words.self, from: data)
-            return words
-        } catch {
-            print("Error decoding JSON: \(error)")
-            return nil
-        }
-    }
     
     func loadShortedFromJSONFile() -> Shorted? {
         guard let filePath = Bundle.main.path(forResource: "shortedNorwegainWords", ofType: "json") else {

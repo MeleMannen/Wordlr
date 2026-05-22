@@ -476,6 +476,7 @@ struct GameView26: View {
 				} else if appManager.word.count != appManager.numberOfLetters {
 					appManager.resetBoard()
 				}
+				showHintButton = appManager.isHintAvailable() && appManager.shouldShowAdButton && !appManager.isGameOver
 				adManager.currentSelectView = .gameView
 				DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
 					adManager.shouldShowAds = false
@@ -511,8 +512,10 @@ struct GameView26: View {
 			.sensoryFeedback(.warning, trigger: self.didTapResetButton)
 			.sensoryFeedback(.success, trigger: self.didTapResetGameAlertButton)
 			.task {
-				await appManager.loadAd()
-				appManager.hasLoadedAd = true
+				if !appManager.hasLoadedAd {
+					await appManager.loadAd()
+					appManager.hasLoadedAd = true
+				}
 			}
 		}
 	}

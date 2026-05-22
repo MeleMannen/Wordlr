@@ -96,20 +96,18 @@ final class AppManager: NSObject, FullScreenContentDelegate {
 	var isResettingBoard: Bool = false
 	
 	@ObservationIgnored private var rewardedAd: RewardedAd?
+	@ObservationIgnored private var isLoadingAd = false
 	
 	func getWords() {
 		if let words = WordleDataManager.shared.loadWordsFromJSONFile(selectedLanguage: selectedLanguage) {
 			self.words = words
+			self.dailyWords = words
 			if self.numberOfLetters == 5 && self.userWantsThePhraseNameBack {
 				self.words?.wordGroups["5"]?.append(contentsOf: self.valid5LetterNames)
 			} else if self.numberOfLetters == 6 && self.userWantsThePhraseNameBack {
 				self.words?.wordGroups["6"]?.append(contentsOf: self.valid6LetterNames)
 			} else if self.numberOfLetters == 8 && self.userWantsThePhraseNameBack {
 				self.words?.wordGroups["8"]?.append(contentsOf: self.valid8LetterNames)
-			}
-			
-			if let dailyWords = WordleDataManager.shared.loadDailyWordsFromJSONFile(selectedLanguage: selectedLanguage) {
-				self.dailyWords = dailyWords
 			}
 			self.resetBoard()
 		}
@@ -632,8 +630,11 @@ final class AppManager: NSObject, FullScreenContentDelegate {
 		if self.userWantsThePhraseNameBack && self.numberOfLetters == 5 && self.valid5LetterNames.contains(self.getWordFromCurrentRow()) {
 			return true
 		}
-		let wordIsValid = self.words?.wordGroups["\(self.numberOfLetters)"]?.contains(self.getWordFromCurrentRow()) ?? false
-		if wordIsValid {
+		let currentWord = self.getWordFromCurrentRow()
+		if self.words?.wordGroups["\(self.numberOfLetters)"]?.contains(currentWord) == true {
+			return true
+		}
+		if self.words?.blockedWords.contains(currentWord) == true {
 			return true
 		}
 		return false
@@ -892,6 +893,9 @@ final class AppManager: NSObject, FullScreenContentDelegate {
 	
 	// MARK: - ADS
 	func loadAd() async {
+		guard rewardedAd == nil, !isLoadingAd else { return }
+		isLoadingAd = true
+		defer { isLoadingAd = false }
 		do {
 			//			#warning("Replace the ad unit ID with your own ad unit ID when deploying to production.")
 			
@@ -934,6 +938,7 @@ final class AppManager: NSObject, FullScreenContentDelegate {
 			print("Reward amount: \(reward.amount)")
 			self.getHint()
 			print("I got a Hint!!!!!!")
+			
 		}
 	}
 	
@@ -947,6 +952,13 @@ final class AppManager: NSObject, FullScreenContentDelegate {
 	
 	func ad(_ ad: FullScreenPresentingAd, didFailToPresentFullScreenContentWithError error: Error) {
 		print("\(#function) called")
+		self.rewardedAd = nil
+		self.hasLoadedAd = false
+		self.shouldShowAdButton = false
+		Task {
+			await self.loadAd()
+			self.hasLoadedAd = true
+		}
 	}
 	
 	func adWillPresentFullScreenContent(_ ad: FullScreenPresentingAd) {
@@ -960,6 +972,11 @@ final class AppManager: NSObject, FullScreenContentDelegate {
 	func adDidDismissFullScreenContent(_ ad: FullScreenPresentingAd) {
 		print("\(#function) called")
 		self.rewardedAd = nil
+		self.hasLoadedAd = false
+		Task {
+			await self.loadAd()
+			self.hasLoadedAd = true
+		}
 	}
 	
 }
