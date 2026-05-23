@@ -10,6 +10,7 @@ import SwiftData
 
 struct NotificationView: View {
 	@Environment(\.modelContext) private var context
+	@Environment(\.colorScheme) private var colorScheme
 	@AppStorage("notificationsEnabled") private var notificationsEnabled: Bool = false
 	@State private var didTapAddReminder: Bool = false
 	@State private var shouldShowSheet: Bool = false
@@ -54,6 +55,8 @@ struct NotificationView: View {
 					.onDelete(perform: deleteReminder)
 				}
 				.listStyle(.insetGrouped)
+				.scrollContentBackground(.hidden)
+				.darkGradientBackground(colorScheme: colorScheme)
 			}
 		}
 		.navigationBarTitleDisplayMode(.inline)

@@ -12,9 +12,9 @@ import TipKit
 struct GameView26: View {
 	@Environment(AppManager.self) private var appManager
 	@Environment(AdManager.self) private var adManager
+	@Environment(StoreManager.self) private var storeManager
 	@Environment(\.modelContext) private var modelContext
 	@Environment(\.colorScheme) private var colorScheme
-	@Environment(\.scenePhase) private var scenePhase
 	@AppStorage("userWantsNormalTheme") private var userWantsNormalTheme: Bool = true
 	@AppStorage("notificationsEnabled") private var notificationsEnabled: Bool = false
 	@State var didTapSubmitButton: Bool = false
@@ -122,7 +122,6 @@ struct GameView26: View {
 														key: keyBoardKey,
 														colorForUnused: self.colorForUnused,
 														colorForWhenAppInBackground: self.colorForWhenAppInBackground,
-														scenePhase: self.scenePhase,
 														namespace: self.namespace,
 														width: geometry2.size.width,
 														height: geometry2.size.height
@@ -183,12 +182,9 @@ struct GameView26: View {
 													   idealHeight: geometry2.size.height / CGFloat(8),
 													   maxHeight: geometry2.size.height / CGFloat(6))
 												.background {
-//													if self.scenePhase == .background {
 														RoundedRectangle(cornerRadius: 10)
 															.foregroundStyle(self.colorForWhenAppInBackground)
 															.opacity(appManager.selectedGameMode == .dailyWord ? 0.4 : 1.0)
-														
-//													}
 												}
 												.opacity(appManager.selectedGameMode == .dailyWord ? 0.4 : 1.0)
 										})
@@ -257,10 +253,8 @@ struct GameView26: View {
 												.foregroundStyle(.black)
 												.frame(minWidth: geometry2.size.width / CGFloat(9), maxWidth: geometry2.size.width / CGFloat(7), minHeight: geometry2.size.height / CGFloat(10), idealHeight: geometry2.size.height / CGFloat(8), maxHeight: geometry2.size.height / CGFloat(6))
 												.background {
-//													if self.scenePhase == .background {
 														RoundedRectangle(cornerRadius: 10)
 															.foregroundStyle(self.colorForWhenAppInBackground)
-//													}
 												}
 										})
 										.buttonRepeatBehavior(.enabled)
@@ -273,7 +267,7 @@ struct GameView26: View {
 								}
 							}
 							.opacity((appManager.isGameOver && !appManager.isAnimating) ? 0 : 1)
-							
+
 							VStack(alignment: .center) {
 								Spacer()
 
@@ -423,6 +417,7 @@ struct GameView26: View {
 					}
 					.frame(maxWidth: .infinity, maxHeight: (geometry.size.height*3) / 5)
 				}
+				.darkGradientBackground(colorScheme: colorScheme)
 				.navigationDestination(isPresented: self.$isShowingCurrentDefinition, destination: {
 					WordDefinitionView(word: appManager.word, language: appManager.language)
 						.environment(appManager)
@@ -446,24 +441,22 @@ struct GameView26: View {
 				}
 				.onChange(of: appManager.shouldShowAdButton) {
 					withAnimation(.smooth) {
-						showHintButton = appManager.isHintAvailable() && appManager.shouldShowAdButton && !appManager.isGameOver
+						showHintButton = appManager.isHintAvailable() && (appManager.shouldShowAdButton || storeManager.isAdRemovalPurchased) && !appManager.isGameOver
 					}
 				}
 				.onChange(of: appManager.isGameOver) {
 					withAnimation(.smooth) {
-						showHintButton = appManager.isHintAvailable() && appManager.shouldShowAdButton && !appManager.isGameOver
+						showHintButton = appManager.isHintAvailable() && (appManager.shouldShowAdButton || storeManager.isAdRemovalPurchased) && !appManager.isGameOver
 					}
 				}
 				.onChange(of: appManager.keyboard) {
-					let newValue = appManager.isHintAvailable() && appManager.shouldShowAdButton && !appManager.isGameOver
+					let newValue = appManager.isHintAvailable() && (appManager.shouldShowAdButton || storeManager.isAdRemovalPurchased) && !appManager.isGameOver
 					if newValue != showHintButton {
 						withAnimation(.smooth) {
 							showHintButton = newValue
 						}
 					}
 				}
-				
-//				.animation(.default, value: appManager.isHintAvailable() && !appManager.isGameOver)
 			}
 			.onAppear {
 				AnalyticsManager.shared.logScreenViewed(screenName: "GameView26")
@@ -472,7 +465,7 @@ struct GameView26: View {
 				} else if appManager.word.count != appManager.numberOfLetters {
 					appManager.resetBoard()
 				}
-				showHintButton = appManager.isHintAvailable() && appManager.shouldShowAdButton && !appManager.isGameOver
+				showHintButton = appManager.isHintAvailable() && (appManager.shouldShowAdButton || storeManager.isAdRemovalPurchased) && !appManager.isGameOver
 				adManager.currentSelectView = .gameView
 				DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
 					adManager.shouldShowAds = false
@@ -573,10 +566,11 @@ struct GameView26: View {
 
 struct AdButton: View {
 	@Environment(AppManager.self) private var appManager
+	@Environment(StoreManager.self) private var storeManager
 	@State private var didTap: Bool = false
 	let shouldShowHintTip: Bool
 	let hintTip = HintTip()
-	
+
 	var body: some View {
 		let button = Button(action: {
 				self.didTap.toggle()
@@ -585,9 +579,10 @@ struct AdButton: View {
 					await HintTip.getHintEvent.donate()
 				}
 				if !appManager.isGameOver && !appManager.isAnimating {
-					if appManager.hasLoadedAd {
+					if storeManager.isAdRemovalPurchased {
+						appManager.getHint()
+					} else if appManager.hasLoadedAd {
 						appManager.showAd()
-						
 					} else {
 						Task {
 							await appManager.loadAd()
@@ -600,13 +595,13 @@ struct AdButton: View {
 					.contentShape(Rectangle())
 			})
 			.task {
-				if !appManager.hasLoadedAd {
+				if !storeManager.isAdRemovalPurchased && !appManager.hasLoadedAd {
 					await appManager.loadAd()
 					appManager.hasLoadedAd = true
 				}
 			}
 			.sensoryFeedback(.selection, trigger: self.didTap)
-		
+
 		if shouldShowHintTip {
 			button.popoverTip(self.hintTip)
 		} else {
@@ -682,7 +677,6 @@ struct KeyboardKeyButton26: View {
 	let key: KeyBoardLetter
 	let colorForUnused: Color
 	let colorForWhenAppInBackground: Color
-	let scenePhase: ScenePhase
 	let namespace: Namespace.ID
 	let width: CGFloat
 	let height: CGFloat
@@ -700,10 +694,8 @@ struct KeyboardKeyButton26: View {
 				.foregroundStyle(key.state == .notUsed ? AnyShapeStyle(.black) : AnyShapeStyle(Color.white))
 				.frame(minWidth: width / CGFloat(14), maxWidth: width / CGFloat(12), minHeight: height / CGFloat(10), idealHeight: height / CGFloat(8), maxHeight: height / CGFloat(6))
 				.background {
-//					if scenePhase == .background {
 						RoundedRectangle(cornerRadius: 5)
 							.foregroundStyle(backgroundKeyColor)
-//					}
 				}
 		}
 		.sensoryFeedback(.impact, trigger: feedbackTrigger)

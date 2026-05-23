@@ -26,6 +26,7 @@ struct HistoryView: View {
 	@State private var searchResults: [GameRecordEntity] = []
 	@State private var groupedWords: [String: [GameRecordEntity]] = [:]
 	@State private var sectionKeys: [String] = []
+	@State private var hasCompletedInitialLoad: Bool = false
 	@Query private var gameRecords: [GameRecordEntity]
 	
 	let gradient = LinearGradient(colors: [.orange, .yellow, .yellow, .yellow, .yellow, .white], startPoint: .bottomLeading, endPoint: .topTrailing)
@@ -44,10 +45,15 @@ struct HistoryView: View {
 					if #unavailable(iOS 26.0) {
 						FilterView(numberOfLetters: $numberOfLetters, selectedLanguage: $selectedLanguage, gameMode: $gameMode, showsWhenHintsUsed: $showsWhenHintsUsed)
 					}
-					if self.searchResults.isEmpty && !self.searchedWord.isEmpty {
+					if !self.hasCompletedInitialLoad {
+						Color.clear
+							.darkGradientBackground(colorScheme: colorScheme)
+					} else if self.searchResults.isEmpty && !self.searchedWord.isEmpty {
 						ContentUnavailableView.search(text: self.searchedWord)
+							.darkGradientBackground(colorScheme: colorScheme)
 					} else if self.searchResults.isEmpty {
 						ContentUnavailableView.init("History is not available with this selection!", systemImage: "exclamationmark.arrow.trianglehead.counterclockwise.rotate.90", description: Text("Try playing a game first."))
+							.darkGradientBackground(colorScheme: colorScheme)
 					} else {
 						List {
 							ForEach(sectionKeys, id: \.self) { date in
@@ -116,7 +122,10 @@ struct HistoryView: View {
 								.listSectionSeparator(.hidden)
 							}
 						}
+						.scrollContentBackground(.hidden)
+						.darkGradientBackground(colorScheme: colorScheme)
 						.safeAreaPadding(.bottom, adManager.isBannerAdLoaded ? (UIDevice.current.userInterfaceIdiom == .pad || UIDevice.current.userInterfaceIdiom == .mac ? 80 : 54) : 0)
+						.transition(.opacity)
 					}
 				}
 				.searchable(text: self.$searchedWord, placement: .navigationBarDrawer(displayMode: .always), prompt: "Search for a word")
@@ -159,35 +168,36 @@ struct HistoryView: View {
 	}
 	
 	func filterGameRecords() {
-		var filteredRecords = self.gameRecords
-		if !self.searchedWord.isEmpty {
-			filteredRecords = filteredRecords.filter { $0.gameRecord.word.contains(self.searchedWord.uppercased()) }
-		}
-		if self.numberOfLetters != 9 {
-			filteredRecords = filteredRecords.filter { $0.gameRecord.numberOfLetters == self.numberOfLetters }
-		}
-		
-		if self.selectedLanguage != .all {
-			filteredRecords = filteredRecords.filter { $0.gameRecord.language == self.selectedLanguage }
-		}
-		
-		if self.gameMode != .both {
-			filteredRecords = filteredRecords.filter { $0.gameRecord.mode == self.gameMode }
-		}
-		
-		if self.showsWhenHintsUsed == .neverUsed {
-			filteredRecords = filteredRecords.filter { $0.gameRecord.hintsUsed ?? 0 == 0 }
-		} else if self.showsWhenHintsUsed == .onlyWhenUsed {
-			filteredRecords = filteredRecords.filter { $0.gameRecord.hintsUsed ?? 0 > 0 }
-		}
-		self.searchResults = filteredRecords
-		print("Filtered Results: \(self.searchResults.count)")
-		self.groupedWords = Dictionary(grouping: searchResults.sorted { $0.gameRecord.date > $1.gameRecord.date }, by: { String(formatter1.string(from: $0.gameRecord.date)) })
-		self.sectionKeys = groupedWords.keys.sorted { date1, date2 in
-			guard let date1 = formatter1.date(from: date1), let date2 = formatter1.date(from: date2) else {
-				return false
+		Task {
+			let searchedWord = self.searchedWord.uppercased()
+
+			let filteredRecords = self.gameRecords.filter { entity in
+				let game = entity.gameRecord
+				if !searchedWord.isEmpty && !game.word.contains(searchedWord) { return false }
+				if self.numberOfLetters != 9 && game.numberOfLetters != self.numberOfLetters { return false }
+				if self.selectedLanguage != .all && game.language != self.selectedLanguage { return false }
+				if self.gameMode != .both && game.mode != self.gameMode { return false }
+				if self.showsWhenHintsUsed == .neverUsed && (game.hintsUsed ?? 0) != 0 { return false }
+				if self.showsWhenHintsUsed == .onlyWhenUsed && (game.hintsUsed ?? 0) == 0 { return false }
+				return true
 			}
-			return date1 > date2
+
+			let sorted = filteredRecords.sorted { $0.gameRecord.date > $1.gameRecord.date }
+			let grouped = Dictionary(grouping: sorted, by: { formatter1.string(from: $0.gameRecord.date) })
+			let keys = grouped.keys.sorted { date1, date2 in
+				guard let d1 = formatter1.date(from: date1), let d2 = formatter1.date(from: date2) else {
+					return false
+				}
+				return d1 > d2
+			}
+			self.searchResults = filteredRecords
+			self.groupedWords = grouped
+			self.sectionKeys = keys
+			if !self.hasCompletedInitialLoad {
+				withAnimation(.smooth(duration: 0.2)) {
+					self.hasCompletedInitialLoad = true
+				}
+			}
 		}
 	}
 	
@@ -200,6 +210,21 @@ struct HistoryView: View {
 }
 
 extension View {
+	@ViewBuilder
+	func darkGradientBackground(colorScheme: ColorScheme) -> some View {
+		self.background {
+			if colorScheme == .dark {
+				RadialGradient(
+					colors: [.green.opacity(0.25), .clear],
+					center: .topLeading,
+					startRadius: 0,
+					endRadius: 420
+				)
+				.ignoresSafeArea()
+			}
+		}
+	}
+
 	func gradientShadow(gradient: LinearGradient, radius: CGFloat, x: CGFloat = 0, y: CGFloat = 0) -> some View {
 		self.overlay(
 			self.mask(gradient)

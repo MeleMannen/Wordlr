@@ -9,6 +9,7 @@ import SwiftUI
 
 struct SelectView: View {
 	@Environment(\.modelContext) var modelContext
+	@Environment(\.colorScheme) private var colorScheme
 	@Environment(AdManager.self) private var adManager
 	@State private var appManager = AppManager()
 	@StateObject var reviewManager = ReviewManager()
@@ -179,6 +180,7 @@ struct SelectView: View {
 				.padding(.horizontal)
 			}
 			.safeAreaPadding(.bottom, adManager.isBannerAdLoaded ? (UIDevice.current.userInterfaceIdiom == .pad || UIDevice.current.userInterfaceIdiom == .mac ? 80 : 54) : 0)
+			.darkGradientBackground(colorScheme: colorScheme)
 			.toolbar {
 				ToolbarItem(placement: .navigationBarTrailing) {
 					NavigationLink(destination: Info().environment(appManager).environmentObject(appState)) {

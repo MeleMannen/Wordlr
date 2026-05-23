@@ -12,6 +12,7 @@ import TipKit
 struct GameView18: View {
 	@Environment(AppManager.self) private var appManager
 	@Environment(AdManager.self) private var adManager
+	@Environment(StoreManager.self) private var storeManager
 	@Environment(\.modelContext) private var modelContext
 	@Environment(\.colorScheme) private var colorScheme
 	@AppStorage("userWantsNormalTheme") private var userWantsNormalTheme: Bool = true
@@ -433,9 +434,9 @@ struct GameView18: View {
 			.navigationTitle(appManager.numberOfLetters == 1 ? "Guess the letter" : "Guess the Word")
 			.navigationBarTitleDisplayMode(.inline)
 			.toolbar {
-				if appManager.isHintAvailable() && appManager.shouldShowAdButton {
+				if appManager.isHintAvailable() && (appManager.shouldShowAdButton || storeManager.isAdRemovalPurchased) {
 					ToolbarItem(placement: .topBarTrailing) {
-						AdButton(shouldShowHintTip: appManager.isHintAvailable() && appManager.shouldShowAdButton)
+						AdButton(shouldShowHintTip: appManager.isHintAvailable() && (appManager.shouldShowAdButton || storeManager.isAdRemovalPurchased))
 							.environment(appManager)
 					}
 				}

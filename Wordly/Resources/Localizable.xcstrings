@@ -46,7 +46,20 @@
       }
     },
     " - %lld🔥" : {
-
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : " - %lld🔥"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : " - %lld🔥"
+          }
+        }
+      }
     },
     "%@" : {
       "localizations" : {
@@ -264,6 +277,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Om"
+          }
+        }
+      }
+    },
+    "Ad-free experience, free hints, and priority support" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sin anuncios, pistas gratis y soporte prioritario"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uten reklame, gratis hint og prioritert støtte"
           }
         }
       }
@@ -579,6 +608,7 @@
       }
     },
     "Copy" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -645,6 +675,22 @@
         }
       }
     },
+    "Copy link" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copiar enlace"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kopier lenke"
+          }
+        }
+      }
+    },
     "Copy result" : {
       "localizations" : {
         "en" : {
@@ -663,6 +709,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Kopier resultatet"
+          }
+        }
+      }
+    },
+    "Copy version" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copiar versión"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kopier versjon"
           }
         }
       }
@@ -2670,6 +2732,25 @@
         }
       }
     },
+    "PRO" : {
+
+    },
+    "Pro Feature" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Función Pro"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pro-funksjon"
+          }
+        }
+      }
+    },
     "PRONUNCIATION   " : {
       "localizations" : {
         "en" : {
@@ -2803,6 +2884,22 @@
         }
       }
     },
+    "Restore Purchases" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Restaurar compras"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gjenopprett kjøp"
+          }
+        }
+      }
+    },
     "Save" : {
       "localizations" : {
         "en" : {
@@ -2931,6 +3028,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Innstillinger"
+          }
+        }
+      }
+    },
+    "Share app" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Compartir app"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Del appen"
           }
         }
       }
@@ -3600,6 +3713,54 @@
         }
       }
     },
+    "Upgrade to Pro" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mejora a Pro"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Oppgrader til Pro"
+          }
+        }
+      }
+    },
+    "Upgrade to Pro - %@" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mejora a Pro - %@"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Oppgrader til Pro - %@"
+          }
+        }
+      }
+    },
+    "Upgrade to Pro in Settings to use game clues." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mejora a Pro en Ajustes para usar las pistas del juego."
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Oppgrader til Pro i Innstillinger for å bruke spillets ledetråder."
+          }
+        }
+      }
+    },
     "Use filters" : {
       "localizations" : {
         "en" : {
@@ -3618,6 +3779,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Bruk filter"
+          }
+        }
+      }
+    },
+    "Use game clues" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usar pistas del juego"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bruk spillets ledetråder"
           }
         }
       }

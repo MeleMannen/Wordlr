@@ -8,11 +8,13 @@
 import SwiftUI
 import GoogleMobileAds
 import SwiftData
+import StoreKit
 
 struct SettingsView: View {
 	@Environment(\.modelContext) private var context
 	@Environment(\.colorScheme) private var colorScheme
 	@Environment(AdManager.self) private var adManager
+	@Environment(StoreManager.self) private var storeManager
 	@AppStorage("appTheme") private var appTheme: AppTheme = .dark
 	@AppStorage("userWantsNormalTheme") private var userWantsNormalTheme: Bool = true
 	@AppStorage("defaultLanguage") private var defaultLanguage: LanguageSelection = .norwegian
@@ -44,9 +46,10 @@ struct SettingsView: View {
 		var components = URLComponents()
 		components.scheme = "mailto"
 		components.path = supportEmailAddress
+		let proStatus = storeManager.isAdRemovalPurchased ? "Pro" : "Free"
 		components.queryItems = [
 			URLQueryItem(name: "subject", value: "Wordlr Feedback"),
-			URLQueryItem(name: "body", value: "\n\n\nApp version: \(appVersionText)")
+			URLQueryItem(name: "body", value: "\n\n\nApp version: \(appVersionText)\nUser: \(proStatus)")
 		]
 		return components.url
 	}
@@ -57,6 +60,76 @@ struct SettingsView: View {
 	var body: some View {
 		NavigationStack {
 			List {
+				if !storeManager.isAdRemovalPurchased {
+					Section {
+						VStack(spacing: 16) {
+							HStack(spacing: 12) {
+								Image(systemName: "crown.fill")
+									.font(.title2)
+									.foregroundStyle(.white)
+									.frame(width: 48, height: 48)
+									.background(.green, in: Circle())
+
+								Text("Upgrade to Pro")
+									.font(.title2).bold()
+									.foregroundStyle(.primary)
+
+								Spacer()
+							}
+
+							Text("Ad-free experience, free hints, and priority support")
+								.font(.subheadline)
+								.foregroundStyle(.secondary)
+								.frame(maxWidth: .infinity, alignment: .leading)
+
+							Button(action: {
+								Task {
+									await storeManager.purchaseAdRemoval()
+								}
+							}, label: {
+								Group {
+									if storeManager.isPurchasing {
+										ProgressView()
+											.tint(.white)
+									} else if let product = storeManager.adRemovalProduct {
+										Text("Upgrade to Pro - \(product.displayPrice)")
+									} else {
+										Text("Upgrade to Pro")
+									}
+								}
+								.font(.headline)
+								.foregroundStyle(.white)
+								.frame(maxWidth: .infinity)
+								.padding(.vertical, 14)
+								.background(.green, in: RoundedRectangle(cornerRadius: 14))
+							})
+							.buttonStyle(.plain)
+							.disabled(storeManager.isPurchasing || storeManager.adRemovalProduct == nil)
+
+							Button("Restore Purchases") {
+								Task {
+									await storeManager.restorePurchases()
+								}
+							}
+							.buttonStyle(.plain)
+							.font(.subheadline.weight(.medium))
+							.foregroundStyle(.green)
+						}
+						.padding(16)
+						.background {
+							RoundedRectangle(cornerRadius: 26)
+								.fill(.green.opacity(0.1))
+								.overlay(
+									RoundedRectangle(cornerRadius: 26)
+										.strokeBorder(.green.opacity(0.3), lineWidth: 1)
+								)
+						}
+						.listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
+						.listRowBackground(Color.clear)
+						.listRowSeparator(.hidden)
+					}
+				}
+
 				Section {
 					Button(action: {
 						if let url = URL(string: UIApplication.openSettingsURLString) {
@@ -66,19 +139,19 @@ struct SettingsView: View {
 						HStack {
 							Text("App language")
 								.foregroundStyle(.primary)
-							
+
 							Spacer(minLength: 0)
-							
+
 							Text("\(Locale.current.localizedString(forIdentifier: String(Locale.preferredLanguages.first?.prefix(2) ?? "en"))?.capitalized ?? "")")
 								.fontWeight(.regular)
-							
+
 							Image(systemName: "arrow.up.right")
 								.font(.caption).bold()
 								.foregroundStyle(.secondary)
 						}
 					})
 					.modifier(ConditionalPadding())
-					
+
 					Picker("App theme", selection: $appTheme) {
 						Text("System")
 							.tag(AppTheme.system)
@@ -86,7 +159,7 @@ struct SettingsView: View {
 							.tag(AppTheme.dark)
 						Text("Light")
 							.tag(AppTheme.light)
-						
+
 					}
 					.modifier(ConditionalPadding())
 					.pickerStyle(.menu)
@@ -94,8 +167,8 @@ struct SettingsView: View {
 					.onChange(of: appTheme) { oldValue, newValue in
 						AnalyticsManager.shared.logDidChangeThemeEvent(newTheme: newValue, oldTheme: oldValue)
 					}
-					
-					
+
+
 					if self.colorScheme == .dark {
 						Picker("Daily Wordlr theme", selection: $userWantsNormalTheme) {
 							Text("Standard")
@@ -113,7 +186,7 @@ struct SettingsView: View {
 				} header: {
 					Text("General")
 				}
-				
+
 				Section {
 					Toggle("Daily Wordlr reminders", isOn: $notificationsEnabled)
 						.modifier(ConditionalPadding())
@@ -306,6 +379,31 @@ struct SettingsView: View {
 						}
 					})
 					
+					ShareLink(item: URL(string: "https://apps.apple.com/app/id6740833142")!) {
+						HStack {
+							Image(systemName: "square.and.arrow.up")
+								.font(.title2)
+								.foregroundStyle(.primary)
+								.frame(width: aboutRowIconWidth, alignment: .center)
+
+							Text("Share app")
+								.foregroundStyle(.primary)
+
+							Spacer(minLength: 0)
+
+							Image(systemName: "arrow.up.right")
+								.font(.caption).bold()
+								.foregroundStyle(.secondary)
+						}
+					}
+					.contextMenu {
+						Button {
+							UIPasteboard.general.string = "https://apps.apple.com/app/id6740833142"
+						} label: {
+							Label("Copy link", systemImage: "doc.on.doc")
+						}
+					}
+
 					Button(action: {
 						openSupportEmail()
 					}, label: {
@@ -402,7 +500,7 @@ struct SettingsView: View {
 									Button(action: {
 										UIPasteboard.general.string = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "0.0.0"
 									}) {
-										Text("Copy")
+										Text("Copy version")
 										Image(systemName: "doc.on.doc")
 									}
 								}
@@ -414,8 +512,11 @@ struct SettingsView: View {
 				}
 			}
 			.fontWeight(.medium)
+			.animation(.easeInOut(duration: 0.4), value: storeManager.isAdRemovalPurchased)
+			.scrollContentBackground(.hidden)
+			.darkGradientBackground(colorScheme: colorScheme)
 			.navigationTitle("Settings")
-			.safeAreaPadding(.bottom, adManager.isBannerAdLoaded ? (UIDevice.current.userInterfaceIdiom == .pad || UIDevice.current.userInterfaceIdiom == .mac ? 80 : 54) : 0)
+			.safeAreaPadding(.bottom, adManager.isBannerAdLoaded && !storeManager.isAdRemovalPurchased ? (UIDevice.current.userInterfaceIdiom == .pad || UIDevice.current.userInterfaceIdiom == .mac ? 80 : 54) : 0)
 			.tint(.secondary)
 			.onAppear {
 				AnalyticsManager.shared.logScreenViewed(screenName: "SettingsView")
@@ -500,26 +601,27 @@ struct BannerViewContainer: UIViewRepresentable {
 		func bannerViewDidReceiveAd(_ bannerView: BannerView) {
 			print("DID RECEIVE AD.")
 			Task { @MainActor in
-				withAnimation {
+				self.parent.adManager.cancelBannerRetry()
+				try? await Task.sleep(nanoseconds: 100_000_000)
+				withAnimation(.easeInOut(duration: 0.6)) {
 					self.parent.adManager.isBannerAdLoaded = true
 				}
-				self.parent.adManager.cancelBannerRetry()
 			}
 			bannerView.alpha = 0
-			UIView.animate(withDuration: 1, animations: {
+			UIView.animate(withDuration: 0.6, delay: 0.1, animations: {
 				bannerView.alpha = 1
 			})
 		}
 
 		func bannerView(_ bannerView: BannerView, didFailToReceiveAdWithError error: Error) {
 			Task { @MainActor in
-				withAnimation {
+				withAnimation(.easeInOut(duration: 0.4)) {
 					self.parent.adManager.isBannerAdLoaded = false
 				}
 				self.parent.adManager.scheduleBannerRetry()
 			}
 			bannerView.alpha = 1
-			UIView.animate(withDuration: 1, animations: {
+			UIView.animate(withDuration: 0.4, animations: {
 				bannerView.alpha = 0
 			})
 			let errorDomain = error._domain

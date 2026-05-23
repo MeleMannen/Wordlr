@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct NorwegianWordDefinitionView: View {
-	@Environment(\.scenePhase) private var scenePhase
 	@Environment(AdManager.self) private var adManager
 	@EnvironmentObject private var definitionManager: DefinitionManager
 	@State var processedWords: [NorwegianDefinition] = []

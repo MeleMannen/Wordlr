@@ -9,7 +9,7 @@ import SwiftUI
 
 struct SearchView: View {
 	@Environment(\.dismiss) var dismiss
-	@Environment(\.scenePhase) private var scenePhase
+	@Environment(\.colorScheme) private var colorScheme
 	@Environment(AppManager.self) private var appManager
 	@Environment(AdManager.self) private var adManager
 	@Namespace private var namespace
@@ -67,6 +67,8 @@ struct SearchView: View {
 								}
 							}
 							.listSectionIndexVisibility(.visible)
+							.scrollContentBackground(.hidden)
+							.darkGradientBackground(colorScheme: colorScheme)
 							.safeAreaPadding(.bottom, adManager.isBannerAdLoaded ? (UIDevice.current.userInterfaceIdiom == .pad || UIDevice.current.userInterfaceIdiom == .mac ? 80 : 54) : 0)
 						} else {
 							List {
@@ -101,6 +103,8 @@ struct SearchView: View {
 									.id(letter)
 								}
 							}
+							.scrollContentBackground(.hidden)
+							.darkGradientBackground(colorScheme: colorScheme)
 							.safeAreaPadding(.bottom, adManager.isBannerAdLoaded ? (UIDevice.current.userInterfaceIdiom == .pad || UIDevice.current.userInterfaceIdiom == .mac ? 80 : 54) : 0)
 						}
 					}

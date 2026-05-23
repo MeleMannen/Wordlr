@@ -16,8 +16,11 @@ enum FilterOptionsFields: Hashable {
 struct FilterOptionsView: View {
 	@Environment(AppManager.self) private var appManager
 	@Environment(AdManager.self) private var adManager
+	@Environment(StoreManager.self) private var storeManager
 	@FocusState var focusedField: FilterOptionsFields?
-	@State private var didTap: Bool = false
+	@State private var didTapGameClues: Bool = false
+	@State private var didTapReset: Bool = false
+	@State private var showProAlert: Bool = false
 	@Binding var isShowingFilterOptions: Bool
 	
 	
@@ -245,28 +248,78 @@ struct FilterOptionsView: View {
 					}
 				}
 				
-				VStack {
+				Button {
+					self.didTapGameClues.toggle()
+					if storeManager.isAdRemovalPurchased {
+						applyGameInfoToFilters()
+					} else {
+						showProAlert = true
+					}
+				} label: {
 					HStack {
 						Spacer()
-						Button {
-							print("Resetting Filters")
-							appManager.resetFilters()
-							
-						} label: {
-							Text("Reset filter")
-								.font(.headline)
-								.foregroundStyle(.red)
+
+						Image(systemName: "sparkles")
+							.font(.headline)
+							.foregroundStyle(.green)
+
+						Text("Use game clues")
+							.font(.headline)
+							.foregroundStyle(.green)
+							.frame(alignment: .center)
+
+						if !storeManager.isAdRemovalPurchased {
+							Text("PRO")
+								.font(.caption2).bold()
+								.foregroundStyle(.white)
+								.padding(.horizontal, 6)
+								.padding(.vertical, 2)
+								.background(Capsule().fill(.green))
 						}
-						.simultaneousGesture(
-							TapGesture()
-								.onEnded { _ in
-									appManager.resetFilters()
-								}
-						)
+
 						Spacer()
 					}
 					.padding(.vertical, 5)
 				}
+				.simultaneousGesture(
+					TapGesture()
+						.onEnded { _ in
+							self.didTapGameClues.toggle()
+							if storeManager.isAdRemovalPurchased {
+								applyGameInfoToFilters()
+							} else {
+								showProAlert = true
+							}
+						}
+				)
+				.sensoryFeedback(.selection, trigger: self.didTapGameClues)
+				.alignmentGuide(.listRowSeparatorLeading) { d in
+					d[.leading]
+				}
+
+				Button {
+					self.didTapReset.toggle()
+					appManager.resetFilters()
+				} label: {
+					HStack {
+						Spacer()
+
+						Text("Reset filter")
+							.font(.headline)
+							.foregroundStyle(.red)
+
+						Spacer()
+					}
+				}
+				.simultaneousGesture(
+					TapGesture()
+						.onEnded { _ in
+							self.didTapReset.toggle()
+							appManager.resetFilters()
+						}
+				)
+				.sensoryFeedback(.impact(weight: .medium), trigger: self.didTapReset)
+				.padding(.vertical, 5)
 			}
 			.padding(.top, -20)
 			.simultaneousGesture(
@@ -281,24 +334,31 @@ struct FilterOptionsView: View {
 				if #available(iOS 26.0, *) {
 					ToolbarItem(placement: .cancellationAction) {
 						Button("Cancel", systemImage: "xmark") {
+							self.didTapGameClues.toggle()
 							DispatchQueue.main.async {
 								self.isShowingFilterOptions = false
 							}
 						}
-						.sensoryFeedback(.selection, trigger: self.didTap)
+						.sensoryFeedback(.selection, trigger: self.didTapGameClues)
 					}
 					
 				} else {
 					ToolbarItem(placement: .cancellationAction) {
 						Button("Back", role: .cancel) {
+							self.didTapGameClues.toggle()
 							DispatchQueue.main.async {
 								self.isShowingFilterOptions = false
 							}
 						}
-						.sensoryFeedback(.selection, trigger: self.didTap)
+						.sensoryFeedback(.selection, trigger: self.didTapGameClues)
 					}
 				}
 			}
+		}
+		.alert("Pro Feature", isPresented: $showProAlert) {
+			Button("OK", role: .cancel) {}
+		} message: {
+			Text("Upgrade to Pro in Settings to use game clues.")
 		}
 		.onAppear {
 			AnalyticsManager.shared.logScreenViewed(screenName: "FilterOptionsView")
@@ -312,6 +372,66 @@ struct FilterOptionsView: View {
 		}
 	}
 	
+	private func applyGameInfoToFilters() {
+		var included: Set<String> = []
+		var excluded: Set<String> = []
+
+		for row in appManager.keyboard {
+			for key in row {
+				switch key.state {
+				case .correctPosition, .correctLetter:
+					included.insert(key.letter)
+				case .usedButNotCorrect:
+					excluded.insert(key.letter)
+				case .notUsed:
+					break
+				}
+			}
+		}
+
+		let wordLength = appManager.numberOfLetters
+		var correctPositions = Array(repeating: "", count: wordLength)
+		for row in appManager.board {
+			for (index, letter) in row.enumerated() {
+				if letter.state == .correctPosition && index < wordLength {
+					correctPositions[index] = letter.letter
+				}
+			}
+		}
+
+		var startsWith = ""
+		for letter in correctPositions {
+			if !letter.isEmpty {
+				startsWith += letter
+			} else {
+				break
+			}
+		}
+
+		var endsWith = ""
+		for letter in correctPositions.reversed() {
+			if !letter.isEmpty {
+				endsWith = letter + endsWith
+			} else {
+				break
+			}
+		}
+
+		appManager.searchedWord = ""
+
+		appManager.startsWithFilter = startsWith
+		appManager.isFilteringStartWith = !startsWith.isEmpty
+
+		appManager.endsWithFilter = endsWith
+		appManager.isFilteringEndsWith = !endsWith.isEmpty
+
+		appManager.selectedIncludedLetters = included.sorted()
+		appManager.isFilteringIncludedLetters = !included.isEmpty
+
+		appManager.selectedExcludedLetters = excluded.sorted()
+		appManager.isFilteringExcludeLetters = !excluded.isEmpty
+	}
+
 	func focusNextField() {
 		guard let currentField = focusedField else { return }
 		switch currentField {

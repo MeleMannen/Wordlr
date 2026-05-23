@@ -24,6 +24,7 @@ struct TabsView: View {
     @State var tintColor: Color = .green
     @State private var isResolvingStartupPrivacyFlow = false
 	@State private var adManager: AdManager = AdManager()
+	@State private var storeManager: StoreManager = StoreManager()
 
     var body: some View {
         GeometryReader { geometry in
@@ -36,7 +37,6 @@ struct TabsView: View {
                 .tabItem {
                     Label(self.userWantsThePhraseNameBack ? "The Phrase" : "Wordlr", systemImage: self.userWantsThePhraseNameBack ? "p.square.fill" : "w.square.fill")
                 }
-                .environment(adManager)
                 .task {
                     try? Tips.configure([.datastoreLocation(.applicationDefault)])
                 }
@@ -51,7 +51,6 @@ struct TabsView: View {
                             Label("Stats", systemImage: "chart.bar.xaxis")
                         }
                     }
-                    .environment(adManager)
                     .tint(.primary)
 
                 HistoryView()
@@ -63,7 +62,6 @@ struct TabsView: View {
                             Label("History", systemImage: "clock")
                         }
                     }
-                    .environment(adManager)
                     .tint(.primary)
 
                 SettingsView()
@@ -71,10 +69,11 @@ struct TabsView: View {
                     .tabItem {
                         Label("Settings", systemImage: "gear")
                     }
-                    .environment(adManager)
                     .tint(.primary)
 
             }
+            .environment(adManager)
+            .environment(storeManager)
             .tint(self.tintColor)
             .onChange(of: self.scenePhase) { _, newPhase in
                 if newPhase == .active {
@@ -92,8 +91,17 @@ struct TabsView: View {
                     self.tintColor = .primary
                 }
             }
+            .onChange(of: storeManager.isAdRemovalPurchased) { _, purchased in
+                if purchased {
+                    withAnimation {
+                        adManager.isBannerAdLoaded = false
+                    }
+                }
+            }
             .task {
-                adManager.startMonitoringConnectivity()
+                if !storeManager.isAdRemovalPurchased {
+                    adManager.startMonitoringConnectivity()
+                }
             }
             .task {
                 try? await Task.sleep(nanoseconds: 1_500_000_000)
@@ -124,8 +132,8 @@ struct TabsView: View {
     private func bottomAd(for geometry: GeometryProxy) -> some View {
         let canRequestAds = adManager.canRequestAds
         let isAdsReady = adManager.isAdsReady
-        
-        if canRequestAds && isAdsReady {
+
+        if canRequestAds && isAdsReady && !storeManager.isAdRemovalPurchased {
             if #available(iOS 26.0, *), UIDevice.current.userInterfaceIdiom == .phone {
                 let adSize = inlineAdaptiveBanner(width: geometry.size.width - (geometry.size.width / 11), maxHeight: 50)
                 BannerViewContainer(adSize, adManager: adManager)
@@ -155,7 +163,7 @@ struct TabsView: View {
     }
 
 	private func resolveTrackingAndPrepareAdsIfNeeded() async {
-		guard scenePhase == .active, !isResolvingStartupPrivacyFlow, hasSeenOnboarding else { return }
+		guard scenePhase == .active, !isResolvingStartupPrivacyFlow, hasSeenOnboarding, !storeManager.isAdRemovalPurchased else { return }
 		
 		isResolvingStartupPrivacyFlow = true
 		defer {

@@ -9,6 +9,7 @@ import SwiftUI
 
 struct Info: View {
 	@Environment(\.dismiss) var dismiss
+	@Environment(\.colorScheme) private var colorScheme
 	@Environment(AdManager.self) private var adManager
 	@EnvironmentObject var appState: AppState
 	@AppStorage("userWantsThePhraseNameBack") private var userWantsThePhraseNameBack = false
@@ -85,6 +86,8 @@ struct Info: View {
 				}
 			}
 		}
+		.scrollContentBackground(.hidden)
+		.darkGradientBackground(colorScheme: colorScheme)
 		.navigationTitle("Info")
 		.navigationBarTitleDisplayMode(.inline)
 		.safeAreaPadding(.bottom, adManager.isBannerAdLoaded ? (UIDevice.current.userInterfaceIdiom == .pad || UIDevice.current.userInterfaceIdiom == .mac ? 80 : 54) : 0)

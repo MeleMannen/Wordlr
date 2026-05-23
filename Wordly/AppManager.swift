@@ -376,7 +376,8 @@ final class AppManager: NSObject, FullScreenContentDelegate {
 		if let update = pendingKeyboardUpdate {
 			pendingKeyboardUpdate = nil
 			DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-				withAnimation(.linear(duration: 0.1)) {
+				if self.isGameOver {
+					self.isAnimating = false
 					for row in update.indices {
 						for col in update[row].indices {
 							if self.keyboard[row][col].state != update[row][col].state {
@@ -384,7 +385,17 @@ final class AppManager: NSObject, FullScreenContentDelegate {
 							}
 						}
 					}
-					self.isAnimating = false
+				} else {
+					withAnimation(.linear(duration: 0.1)) {
+						for row in update.indices {
+							for col in update[row].indices {
+								if self.keyboard[row][col].state != update[row][col].state {
+									self.keyboard[row][col].state = update[row][col].state
+								}
+							}
+						}
+						self.isAnimating = false
+					}
 				}
 				if self.pendingGameCompletion != nil {
 					DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
@@ -545,9 +556,7 @@ final class AppManager: NSObject, FullScreenContentDelegate {
 		let completedHintsUsed = self.hintsUsed
 		let completedBoard = self.board
 		
-		withAnimation {
-			self.isGameOver = true
-		}
+		self.isGameOver = true
 		
 		Task { @MainActor in
 			try? await Task.sleep(nanoseconds: 400_000_000)
