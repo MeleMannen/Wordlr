@@ -23,6 +23,7 @@ struct TabsView: View {
     @State var selection: TabSelection = .home
     @State var tintColor: Color = .green
     @State private var isResolvingStartupPrivacyFlow = false
+	@ObservedObject private var appState = AppState.shared
 	@State private var adManager: AdManager = AdManager()
 	@State private var storeManager: StoreManager = StoreManager()
 
@@ -96,6 +97,12 @@ struct TabsView: View {
                     withAnimation {
                         adManager.isBannerAdLoaded = false
                     }
+                }
+            }
+            .onChange(of: appState.navigateToSettingsTrigger) { _, shouldNavigate in
+                if shouldNavigate {
+                    appState.navigateToSettingsTrigger = false
+                    self.selection = .settings
                 }
             }
             .task {

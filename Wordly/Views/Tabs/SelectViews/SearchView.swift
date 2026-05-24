@@ -136,7 +136,7 @@ struct SearchView: View {
 				//							}
 				//						})
 				//						.popoverTip(self.filterTip, arrowEdge: .top)
-				//						.sensoryFeedback(.selection, trigger: self.isShowingFilterOptions)
+				//						.conditionalHaptic(.selection, trigger: self.isShowingFilterOptions)
 				//						.id(filterButtonID)
 				//					}
 				//				}
@@ -154,7 +154,7 @@ struct SearchView: View {
 						}) {
 							Label("Filter options", systemImage: "slider.horizontal.3")
 						}
-						.sensoryFeedback(.selection, trigger: self.didTap)
+						.conditionalHaptic(.selection, trigger: self.didTap)
 						.popoverTip(self.filterTip, arrowEdge: .top)
 					}
 					.matchedTransitionSource(id: "filter", in: self.namespace)
@@ -174,7 +174,7 @@ struct SearchView: View {
 						}) {
 							Label("Filter options", systemImage: "slider.horizontal.3")
 						}
-						.sensoryFeedback(.selection, trigger: self.didTap)
+						.conditionalHaptic(.selection, trigger: self.didTap)
 						.popoverTip(self.filterTip, arrowEdge: .top)
 					}
 				}

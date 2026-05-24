@@ -25,9 +25,11 @@ struct SettingsView: View {
 	@AppStorage("defaultStatGameMode") private var defaultStatGameMode: GameMode = .both
 	@AppStorage("defaultStatHintsUsed") private var defaultStatHintsUsed: ShowsWhenHintsUsed = .both
 	
+	@AppStorage("hapticsEnabled") private var hapticsEnabled: Bool = true
 	@AppStorage("notificationsEnabled") private var notificationsEnabled: Bool = false
 	@State private var showingNotificationSettingsAlert: Bool = false
 	@State private var showingSupportEmailUnavailableAlert: Bool = false
+	@State private var proSectionMaxY: CGFloat = 300
 	
 	@Query(sort: \DailyWordReminder.timeToFire) private var dailyWordReminders: [DailyWordReminder]
 	
@@ -117,16 +119,29 @@ struct SettingsView: View {
 						}
 						.padding(16)
 						.background {
-							RoundedRectangle(cornerRadius: 26)
+							let cr: CGFloat = {
+								if #available(iOS 26.0, *) { return 26 } else { return 16 }
+							}()
+							RoundedRectangle(cornerRadius: cr)
 								.fill(.green.opacity(0.1))
 								.overlay(
-									RoundedRectangle(cornerRadius: 26)
+									RoundedRectangle(cornerRadius: cr)
 										.strokeBorder(.green.opacity(0.3), lineWidth: 1)
 								)
 						}
 						.listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
 						.listRowBackground(Color.clear)
 						.listRowSeparator(.hidden)
+						.overlay {
+							GeometryReader { proxy in
+								Color.clear.onChange(of: proxy.frame(in: .named("settingsList")).maxY) { _, newValue in
+									proSectionMaxY = newValue
+								}
+								.onAppear {
+									proSectionMaxY = proxy.frame(in: .named("settingsList")).maxY
+								}
+							}
+						}
 					}
 				}
 
@@ -163,7 +178,7 @@ struct SettingsView: View {
 					}
 					.modifier(ConditionalPadding())
 					.pickerStyle(.menu)
-					.sensoryFeedback(.selection, trigger: appTheme)
+					.conditionalHaptic(.selection, trigger: appTheme)
 					.onChange(of: appTheme) { oldValue, newValue in
 						AnalyticsManager.shared.logDidChangeThemeEvent(newTheme: newValue, oldTheme: oldValue)
 					}
@@ -178,11 +193,15 @@ struct SettingsView: View {
 						}
 						.modifier(ConditionalPadding())
 						.pickerStyle(.menu)
-						.sensoryFeedback(.selection, trigger: userWantsNormalTheme)
+						.conditionalHaptic(.selection, trigger: userWantsNormalTheme)
 						.onChange(of: userWantsNormalTheme) {
 							AnalyticsManager.shared.logDidChangeDailyWordThemeEvent(newTheme: userWantsNormalTheme ? "Standard" : "Gold")
 						}
 					}
+
+					Toggle("Haptic feedback", isOn: $hapticsEnabled)
+						.modifier(ConditionalPadding())
+						.tint(.green)
 				} header: {
 					Text("General")
 				}
@@ -271,7 +290,7 @@ struct SettingsView: View {
 					}
 					.modifier(ConditionalPadding())
 					.pickerStyle(.menu)
-					.sensoryFeedback(.selection, trigger: defaultNumberOfLetters)
+					.conditionalHaptic(.selection, trigger: defaultNumberOfLetters)
 					
 					Picker("Language", selection: $defaultLanguage) {
 						ForEach(LanguageSelection.languages) { language in
@@ -282,7 +301,7 @@ struct SettingsView: View {
 					}
 					.modifier(ConditionalPadding())
 					.pickerStyle(.menu)
-					.sensoryFeedback(.selection, trigger: defaultLanguage)
+					.conditionalHaptic(.selection, trigger: defaultLanguage)
 					
 					
 				} header: {
@@ -307,7 +326,7 @@ struct SettingsView: View {
 					}
 					.modifier(ConditionalPadding())
 					.pickerStyle(.menu)
-					.sensoryFeedback(.selection, trigger: defaultStatNumberOfLetters)
+					.conditionalHaptic(.selection, trigger: defaultStatNumberOfLetters)
 					
 					Picker("Language", selection: $defaultStatLanguage) {
 						ForEach(LanguageSelection.allCases) { language in
@@ -323,7 +342,7 @@ struct SettingsView: View {
 					}
 					.modifier(ConditionalPadding())
 					.pickerStyle(.menu)
-					.sensoryFeedback(.selection, trigger: defaultStatLanguage)
+					.conditionalHaptic(.selection, trigger: defaultStatLanguage)
 					
 					Picker("Gamemode", selection: $defaultStatGameMode) {
 						ForEach(GameMode.allCases) { mode in
@@ -338,7 +357,7 @@ struct SettingsView: View {
 					}
 					.modifier(ConditionalPadding())
 					.pickerStyle(.menu)
-					.sensoryFeedback(.selection, trigger: defaultStatGameMode)
+					.conditionalHaptic(.selection, trigger: defaultStatGameMode)
 					
 					Picker("Show if hints used", selection: $defaultStatHintsUsed) {
 						ForEach(ShowsWhenHintsUsed.allCases) { mode in
@@ -348,7 +367,7 @@ struct SettingsView: View {
 					}
 					.modifier(ConditionalPadding())
 					.pickerStyle(.menu)
-					.sensoryFeedback(.selection, trigger: defaultStatHintsUsed)
+					.conditionalHaptic(.selection, trigger: defaultStatHintsUsed)
 					
 				} header: {
 					Text("Stats and history (default)")
@@ -513,8 +532,29 @@ struct SettingsView: View {
 			}
 			.fontWeight(.medium)
 			.animation(.easeInOut(duration: 0.4), value: storeManager.isAdRemovalPurchased)
+			.coordinateSpace(name: "settingsList")
 			.scrollContentBackground(.hidden)
-			.darkGradientBackground(colorScheme: colorScheme)
+			.background {
+				if colorScheme == .dark {
+					if #available(iOS 26.0, *) {
+						RadialGradient(
+							colors: [.green.opacity(0.25), .clear],
+							center: .topLeading,
+							startRadius: 0,
+							endRadius: 420
+						)
+						.ignoresSafeArea()
+					} else if !storeManager.isAdRemovalPurchased {
+						RadialGradient(
+							colors: [.green.opacity(0.25 * max(0, min(1, proSectionMaxY / 300))), .clear],
+							center: .topLeading,
+							startRadius: 0,
+							endRadius: 420
+						)
+						.ignoresSafeArea()
+					}
+				}
+			}
 			.navigationTitle("Settings")
 			.safeAreaPadding(.bottom, adManager.isBannerAdLoaded && !storeManager.isAdRemovalPurchased ? (UIDevice.current.userInterfaceIdiom == .pad || UIDevice.current.userInterfaceIdiom == .mac ? 80 : 54) : 0)
 			.tint(.secondary)

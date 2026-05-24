@@ -172,6 +172,7 @@
       }
     },
     "%lld letter" : {
+      "comment" : "Number of letters singular",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -194,6 +195,7 @@
       }
     },
     "%lld letters" : {
+      "comment" : "Number of letters plural",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -475,6 +477,28 @@
         }
       }
     },
+    "Haptic feedback" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Haptic feedback"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Respuesta háptica"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Haptisk tilbakemelding"
+          }
+        }
+      }
+    },
     "Are you sure that you want to discard your current word?" : {
       "localizations" : {
         "en" : {
@@ -564,6 +588,7 @@
       }
     },
     "Both hint usage" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1597,6 +1622,28 @@
         }
       }
     },
+    "Get from game" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Get from game"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usar pistas de la partida"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hent fra spillet"
+          }
+        }
+      }
+    },
     "Gold" : {
       "localizations" : {
         "en" : {
@@ -1752,6 +1799,7 @@
       }
     },
     "Hints never used" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1853,13 +1901,13 @@
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Solo cuando se use"
+            "value" : "Solo cuando se usaron"
           }
         },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bare brukt"
+            "value" : "Bare når hint ble brukt"
           }
         }
       }
@@ -1897,7 +1945,7 @@
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "¡Historia no está disponible con esta selección!"
+            "value" : "¡El historial no está disponible con esta selección!"
           }
         },
         "nb" : {
@@ -2601,6 +2649,7 @@
       }
     },
     "Only when hints was used" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -3658,7 +3707,7 @@
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Intenta jugar un juego primero."
+            "value" : "Prueba a jugar una partida primero."
           }
         },
         "nb" : {
@@ -3745,18 +3794,46 @@
         }
       }
     },
-    "Upgrade to Pro in Settings to use game clues." : {
+    "Game clues automatically fills in filter options based on your current game progress. Upgrade to Pro in Settings to unlock this feature." : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Game clues automatically fills in filter options based on your current game progress. Upgrade to Pro in Settings to unlock this feature."
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Mejora a Pro en Ajustes para usar las pistas del juego."
+            "value" : "Las pistas del juego rellenan automáticamente las opciones de filtro según tu progreso actual. Mejora a Pro en Ajustes para desbloquear esta función."
           }
         },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Oppgrader til Pro i Innstillinger for å bruke spillets ledetråder."
+            "value" : "Spillets ledetråder fyller automatisk inn filteralternativene basert på din nåværende spillprogresjon. Oppgrader til Pro i Innstillinger for å låse opp denne funksjonen."
+          }
+        }
+      }
+    },
+    "Go to Settings" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Go to Settings"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ir a Ajustes"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gå til Innstillinger"
           }
         }
       }
@@ -3784,6 +3861,7 @@
       }
     },
     "Use game clues" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {

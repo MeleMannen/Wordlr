@@ -16,6 +16,7 @@ struct GameView26: View {
 	@Environment(\.modelContext) private var modelContext
 	@Environment(\.colorScheme) private var colorScheme
 	@AppStorage("userWantsNormalTheme") private var userWantsNormalTheme: Bool = true
+	@AppStorage("hapticsEnabled") private var hapticsEnabled: Bool = true
 	@AppStorage("notificationsEnabled") private var notificationsEnabled: Bool = false
 	@State var didTapSubmitButton: Bool = false
 	@State var didTapBackButton: Bool = false
@@ -223,7 +224,7 @@ struct GameView26: View {
 										.glassEffectID("submit", in: self.namespace)
 										.glassEffect(!self.userWantsNormalTheme && self.colorScheme == .dark && appManager.selectedGameMode == .dailyWord ? .regular.interactive() : .regular.tint(.green.opacity(appManager.submitOpacity)).interactive(), in: .rect(cornerRadius: 10.0))
 										.animation(.easeInOut(duration: 0.2), value: appManager.submitOpacity)
-										.sensoryFeedback(.alignment, trigger: appManager.submitOpacity)
+										.conditionalHaptic(.alignment, trigger: appManager.submitOpacity)
 										.onChange(of: appManager.wordIsValidForSubmitButton()) { _, newValue in
 											withAnimation {
 												if newValue {
@@ -233,12 +234,9 @@ struct GameView26: View {
 												}
 											}
 										}
-										.sensoryFeedback(trigger: self.didTapSubmitButton) {
-											if appManager.isAnimating {
-												return .impact
-											} else {
-												return .error
-											}
+										.sensoryFeedback(trigger: self.didTapSubmitButton) { _, _ in
+											guard hapticsEnabled else { return nil }
+											return appManager.isAnimating ? .impact : .error
 										}
 										
 										Spacer()
@@ -260,7 +258,7 @@ struct GameView26: View {
 										.buttonRepeatBehavior(.enabled)
 										.glassEffect(.regular.tint(self.colorForUnused).interactive(), in: .rect(cornerRadius: 10.0))
 										.glassEffectID("delete", in: self.namespace)
-										.sensoryFeedback(.impact, trigger: self.didTapBackButton)
+										.conditionalHaptic(.impact, trigger: self.didTapBackButton)
 									}
 									.padding(.top, 5)
 									.padding(.bottom, 5)
@@ -304,7 +302,7 @@ struct GameView26: View {
 								.glassEffect(self.userWantsNormalTheme || !self.userWantsNormalTheme && self.colorScheme == .dark && appManager.selectedGameMode == .normal ? .regular.tint(.green).interactive() : .regular.interactive(), in: .rect(cornerRadius: 10.0))
 								.glassEffectID("new", in: self.namespace)
 								.padding(.horizontal, 20)
-								.sensoryFeedback(.impact, trigger: self.didTapNewGameButton)
+								.conditionalHaptic(.impact, trigger: self.didTapNewGameButton)
 								.conditionalShadow(color: .black.opacity(0.1), radius: 0.5, x: 1, y: 1)
 
 								Spacer()
@@ -329,7 +327,7 @@ struct GameView26: View {
 								.glassEffect(.regular.tint(!self.userWantsNormalTheme && self.colorScheme == .dark && appManager.selectedGameMode == .dailyWord ? .green : .orange).interactive(), in: .rect(cornerRadius: 10.0))
 								.glassEffectID("definition", in: self.namespace)
 								.conditionalShadow(color: .black.opacity(0.1), radius: 0.5, x: 1, y: 1)
-								.sensoryFeedback(.impact, trigger: self.didTapShowDefinitionButton)
+								.conditionalHaptic(.impact, trigger: self.didTapShowDefinitionButton)
 								.padding(.horizontal, 20)
 
 								Spacer()
@@ -353,7 +351,7 @@ struct GameView26: View {
 								}
 							}
 							.opacity((appManager.isGameOver && !appManager.isAnimating) ? 1 : 0)
-							.sensoryFeedback(.success, trigger: (appManager.isGameOver && !appManager.isAnimating))
+							.conditionalHaptic(.success, trigger: (appManager.isGameOver && !appManager.isAnimating))
 							
 						}
 						.padding(.horizontal, 5)
@@ -498,8 +496,8 @@ struct GameView26: View {
 					Alert(title: item.title)
 				}
 			}
-			.sensoryFeedback(.warning, trigger: self.didTapResetButton)
-			.sensoryFeedback(.success, trigger: self.didTapResetGameAlertButton)
+			.conditionalHaptic(.warning, trigger: self.didTapResetButton)
+			.conditionalHaptic(.success, trigger: self.didTapResetGameAlertButton)
 			.task {
 				if !appManager.hasLoadedAd {
 					await appManager.loadAd()
@@ -600,7 +598,7 @@ struct AdButton: View {
 					appManager.hasLoadedAd = true
 				}
 			}
-			.sensoryFeedback(.selection, trigger: self.didTap)
+			.conditionalHaptic(.selection, trigger: self.didTap)
 
 		if shouldShowHintTip {
 			button.popoverTip(self.hintTip)
@@ -626,7 +624,7 @@ struct SearchToolbarItem: View {
 				await SearchTip.searchEvent.donate()
 			}
 		})
-		.sensoryFeedback(.selection, trigger: self.didTapSearchButton)
+		.conditionalHaptic(.selection, trigger: self.didTapSearchButton)
 		.popoverTip(self.searchTip)
 	}
 }
@@ -655,7 +653,7 @@ struct KeyboardKeyButton18: View {
 				}
 		}
 		.buttonStyle(ScalingButton())
-		.sensoryFeedback(.impact, trigger: feedbackTrigger)
+		.conditionalHaptic(.impact, trigger: feedbackTrigger)
 	}
 	
 	private var keyColor: Color {
@@ -698,7 +696,7 @@ struct KeyboardKeyButton26: View {
 							.foregroundStyle(backgroundKeyColor)
 				}
 		}
-		.sensoryFeedback(.impact, trigger: feedbackTrigger)
+		.conditionalHaptic(.impact, trigger: feedbackTrigger)
 		.glassEffect(.regular.tint(keyColor).interactive(), in: .rect(cornerRadius: 5.0))
 		.glassEffectID("\(key.letter)", in: namespace)
 	}

@@ -263,7 +263,7 @@ struct FilterOptionsView: View {
 							.font(.headline)
 							.foregroundStyle(.green)
 
-						Text("Use game clues")
+						Text("Get from game")
 							.font(.headline)
 							.foregroundStyle(.green)
 							.frame(alignment: .center)
@@ -292,7 +292,7 @@ struct FilterOptionsView: View {
 							}
 						}
 				)
-				.sensoryFeedback(.selection, trigger: self.didTapGameClues)
+				.conditionalHaptic(.selection, trigger: self.didTapGameClues)
 				.alignmentGuide(.listRowSeparatorLeading) { d in
 					d[.leading]
 				}
@@ -318,7 +318,7 @@ struct FilterOptionsView: View {
 							appManager.resetFilters()
 						}
 				)
-				.sensoryFeedback(.impact(weight: .medium), trigger: self.didTapReset)
+				.conditionalHaptic(.impact(weight: .medium), trigger: self.didTapReset)
 				.padding(.vertical, 5)
 			}
 			.padding(.top, -20)
@@ -339,7 +339,7 @@ struct FilterOptionsView: View {
 								self.isShowingFilterOptions = false
 							}
 						}
-						.sensoryFeedback(.selection, trigger: self.didTapGameClues)
+						.conditionalHaptic(.selection, trigger: self.didTapGameClues)
 					}
 					
 				} else {
@@ -350,15 +350,21 @@ struct FilterOptionsView: View {
 								self.isShowingFilterOptions = false
 							}
 						}
-						.sensoryFeedback(.selection, trigger: self.didTapGameClues)
+						.conditionalHaptic(.selection, trigger: self.didTapGameClues)
 					}
 				}
 			}
 		}
 		.alert("Pro Feature", isPresented: $showProAlert) {
+			Button("Go to Settings") {
+				self.isShowingFilterOptions = false
+				DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+					AppState.shared.navigateToSettingsTrigger = true
+				}
+			}
 			Button("OK", role: .cancel) {}
 		} message: {
-			Text("Upgrade to Pro in Settings to use game clues.")
+			Text("Game clues automatically fills in filter options based on your current game progress. Upgrade to Pro in Settings to unlock this feature.")
 		}
 		.onAppear {
 			AnalyticsManager.shared.logScreenViewed(screenName: "FilterOptionsView")

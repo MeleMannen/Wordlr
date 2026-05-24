@@ -30,14 +30,14 @@ struct SelectGameModeButton: View {
 				.simultaneousGesture(TapGesture().onEnded {
 					startAction()
 				})
-				.sensoryFeedback(.impact, trigger: impactTrigger)
+				.conditionalHaptic(.impact, trigger: impactTrigger)
 				.selectGameModeButtonStyle(mode: mode, isAvailable: true)
 			} else {
 				Button(action: blockedAction) {
 					label
 				}
 				.buttonStyle(.plain)
-				.sensoryFeedback(.error, trigger: errorTrigger)
+				.conditionalHaptic(.error, trigger: errorTrigger)
 				.selectGameModeButtonStyle(mode: mode, isAvailable: false)
 			}
 		}

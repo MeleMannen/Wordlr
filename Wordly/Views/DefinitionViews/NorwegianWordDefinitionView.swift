@@ -143,7 +143,7 @@ struct NorwegianWordDefinitionView: View {
 									.simultaneousGesture(TapGesture().onEnded {
 										self.didTap.toggle()
 									})
-									.sensoryFeedback(.impact, trigger: self.didTap)
+									.conditionalHaptic(.impact, trigger: self.didTap)
 								}
 							}
 						}

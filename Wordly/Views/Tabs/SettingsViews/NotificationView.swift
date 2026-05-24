@@ -71,7 +71,7 @@ struct NotificationView: View {
 					}) {
 						Label("Add reminder", systemImage: "plus")
 					}
-					.sensoryFeedback(.selection, trigger: self.didTapAddReminder)
+					.conditionalHaptic(.selection, trigger: self.didTapAddReminder)
 				}
 				.matchedTransitionSource(id: "add", in: self.namespace)
 				
@@ -83,7 +83,7 @@ struct NotificationView: View {
 					}) {
 						Label("Add reminder", systemImage: "plus")
 					}
-					.sensoryFeedback(.selection, trigger: self.didTapAddReminder)
+					.conditionalHaptic(.selection, trigger: self.didTapAddReminder)
 				}
 			}
 		}
@@ -209,7 +209,7 @@ struct AddReminderView: View {
 						Button("Cancel", systemImage: "xmark") {
 							self.isPresented = false
 						}
-						.sensoryFeedback(.selection, trigger: self.didTap)
+						.conditionalHaptic(.selection, trigger: self.didTap)
 					}
 					
 				} else {
@@ -217,7 +217,7 @@ struct AddReminderView: View {
 						Button("Cancel", role: .cancel) {
 							self.isPresented = false
 						}
-						.sensoryFeedback(.selection, trigger: self.didTap)
+						.conditionalHaptic(.selection, trigger: self.didTap)
 						.tint(.red)
 					}
 				}
@@ -227,7 +227,7 @@ struct AddReminderView: View {
 						Button("Save", systemImage: "checkmark") {
 							self.saveButtonAction()
 						}
-						.sensoryFeedback(self.isEditing ? .selection : (self.checkIfReminderExists() ? .error : .selection), trigger: self.didTap)
+						.conditionalHaptic(self.isEditing ? .selection : (self.checkIfReminderExists() ? .error : .selection), trigger: self.didTap)
 						.opacity(self.isEditing ? 1.0 : (self.checkIfReminderExists() ? 0.3 : 1.0))
 						.tint(self.isEditing ? .blue : (self.checkIfReminderExists() ? .secondary : .blue))
 						.animation(.easeInOut, value: self.isEditing)
@@ -240,7 +240,7 @@ struct AddReminderView: View {
 								.foregroundStyle(.blue)
 								.opacity(self.isEditing ? 1.0 : (self.checkIfReminderExists() ? 0.3 : 1.0))
 						}
-						.sensoryFeedback(self.isEditing ? .selection : (self.checkIfReminderExists() ? .error : .selection), trigger: self.didTap)
+						.conditionalHaptic(self.isEditing ? .selection : (self.checkIfReminderExists() ? .error : .selection), trigger: self.didTap)
 						.animation(.easeInOut, value: self.isEditing)
 						.animation(.easeInOut, value: self.checkIfReminderExists())
 					}

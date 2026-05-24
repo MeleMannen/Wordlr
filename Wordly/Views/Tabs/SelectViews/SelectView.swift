@@ -60,7 +60,7 @@ struct SelectView: View {
 							}
 							.glassEffect(.regular.interactive())
 							.conditionalShadow(color: .black.opacity(0.4), radius: 4, x: 4, y: 4)
-							.sensoryFeedback(.selection, trigger: appManager.numberOfLetters)
+							.conditionalHaptic(.selection, trigger: appManager.numberOfLetters)
 							.frame(maxWidth: .infinity, alignment: .trailing)
 						} else {
 							Picker(selection: $appManager.numberOfLetters) {
@@ -82,7 +82,7 @@ struct SelectView: View {
 									.foregroundStyle(Color(uiColor: .tertiarySystemBackground))
 									.conditionalShadow(color: .black.opacity(0.4), radius: 4, x: 4, y: 4)
 							}
-							.sensoryFeedback(.selection, trigger: appManager.numberOfLetters)
+							.conditionalHaptic(.selection, trigger: appManager.numberOfLetters)
 							.frame(maxWidth: .infinity, alignment: .trailing)
 						}
 					}
@@ -110,7 +110,7 @@ struct SelectView: View {
 							}
 							.glassEffect(.regular.interactive())
 							.conditionalShadow(color: .black.opacity(0.4), radius: 4, x: 4, y: 4)
-							.sensoryFeedback(.selection, trigger: appManager.selectedLanguage)
+							.conditionalHaptic(.selection, trigger: appManager.selectedLanguage)
 							.frame(maxWidth: .infinity, alignment: .trailing)
 						} else {
 							Picker(selection: $appManager.selectedLanguage) {
@@ -128,7 +128,7 @@ struct SelectView: View {
 									.foregroundStyle(Color(uiColor: .tertiarySystemBackground))
 									.conditionalShadow(color: .black.opacity(0.4), radius: 4, x: 4, y: 4)
 							}
-							.sensoryFeedback(.selection, trigger: appManager.selectedLanguage)
+							.conditionalHaptic(.selection, trigger: appManager.selectedLanguage)
 							.frame(maxWidth: .infinity, alignment: .trailing)
 						}
 					}
@@ -191,7 +191,7 @@ struct SelectView: View {
 					.simultaneousGesture(TapGesture().onEnded {
 						self.didTapInfoButton.toggle()
 					})
-					.sensoryFeedback(.selection, trigger: self.didTapInfoButton)
+					.conditionalHaptic(.selection, trigger: self.didTapInfoButton)
 				}
 			}
 		}
@@ -348,6 +348,7 @@ final class AppState: ObservableObject {
 	static let shared = AppState()
 	
 	@Published var navigateHomeTrigger = UUID()
+	@Published var navigateToSettingsTrigger = false
 	@Published var selectedLanguageName: String?
 	@Published var numberOfLetters: Int?
 	

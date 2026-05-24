@@ -16,6 +16,7 @@ struct GameView18: View {
 	@Environment(\.modelContext) private var modelContext
 	@Environment(\.colorScheme) private var colorScheme
 	@AppStorage("userWantsNormalTheme") private var userWantsNormalTheme: Bool = true
+	@AppStorage("hapticsEnabled") private var hapticsEnabled: Bool = true
 	@AppStorage("notificationsEnabled") private var notificationsEnabled: Bool = false
 	@State var didTapSubmitButton: Bool = false
 	@State var didTapBackButton: Bool = false
@@ -199,7 +200,7 @@ struct GameView18: View {
 													.gradientShadow(gradient: appManager.shadowGradient, radius: 3, x: 0, y: 0)
 													.opacity(appManager.submitOpacity)
 													.animation(.easeInOut(duration: 0.2), value: appManager.submitOpacity)
-													.sensoryFeedback(.alignment, trigger: appManager.submitOpacity)
+													.conditionalHaptic(.alignment, trigger: appManager.submitOpacity)
 													.onChange(of: appManager.wordIsValidForSubmitButton()) { _, newValue in
 														withAnimation {
 															if newValue {
@@ -214,7 +215,7 @@ struct GameView18: View {
 													.foregroundStyle(.green)
 													.opacity(appManager.submitOpacity)
 													.animation(.easeInOut(duration: 0.2), value: appManager.submitOpacity)
-													.sensoryFeedback(.alignment, trigger: appManager.submitOpacity)
+													.conditionalHaptic(.alignment, trigger: appManager.submitOpacity)
 													.onChange(of: appManager.wordIsValidForSubmitButton()) { _, newValue in
 														withAnimation {
 															if newValue {
@@ -228,12 +229,9 @@ struct GameView18: View {
 											
 										}
 								})
-								.sensoryFeedback(trigger: self.didTapSubmitButton) {
-									if appManager.isAnimating {
-										return .impact
-									} else {
-										return .error
-									}
+								.sensoryFeedback(trigger: self.didTapSubmitButton) { _, _ in
+									guard hapticsEnabled else { return nil }
+									return appManager.isAnimating ? .impact : .error
 								}
 								.buttonStyle(GrowingButton())
 								
@@ -258,7 +256,7 @@ struct GameView18: View {
 									
 								})
 								.buttonRepeatBehavior(.enabled)
-								.sensoryFeedback(.impact, trigger: self.didTapBackButton)
+								.conditionalHaptic(.impact, trigger: self.didTapBackButton)
 								.buttonStyle(ScalingButton())
 								
 							}
@@ -271,7 +269,7 @@ struct GameView18: View {
 						.animation(.easeOut(duration: 0.3), value: appManager.isGameOver)
 						.animation(.easeOut(duration: 0.3), value: appManager.isAnimating)
 						.sensoryFeedback(.selection, trigger: appManager.isAnimating) { oldValue, newValue in
-							oldValue && !newValue
+							hapticsEnabled && oldValue && !newValue
 						}
 						
 						
@@ -302,7 +300,7 @@ struct GameView18: View {
 									}
 							})
 							.padding(.horizontal, 20)
-							.sensoryFeedback(.impact, trigger: self.didTapNewGameButton)
+							.conditionalHaptic(.impact, trigger: self.didTapNewGameButton)
 							.buttonStyle(GrowingButton())
 							.conditionalShadow(color: .black.opacity(0.1), radius: 0.5, x: 1, y: 1)
 							
@@ -338,7 +336,7 @@ struct GameView18: View {
 							})
 							.buttonStyle(GrowingButton())
 							.conditionalShadow(color: .black.opacity(0.1), radius: 0.5, x: 1, y: 1)
-							.sensoryFeedback(.impact, trigger: self.didTapShowDefinitionButton)
+							.conditionalHaptic(.impact, trigger: self.didTapShowDefinitionButton)
 							.padding(.horizontal, 20)
 							
 							Spacer()
@@ -363,7 +361,7 @@ struct GameView18: View {
 							}
 						}
 						.opacity((appManager.isGameOver && !appManager.isAnimating) ? 1 : 0)
-						.sensoryFeedback(.success, trigger: (appManager.isGameOver && !appManager.isAnimating))
+						.conditionalHaptic(.success, trigger: (appManager.isGameOver && !appManager.isAnimating))
 						
 					}
 					.padding(.horizontal, 5)
@@ -487,8 +485,8 @@ struct GameView18: View {
 				Alert(title: item.title)
 			}
 		}
-		.sensoryFeedback(.warning, trigger: self.didTapResetButton)
-		.sensoryFeedback(.success, trigger: self.didTapResetGameAlertButton)
+		.conditionalHaptic(.warning, trigger: self.didTapResetButton)
+		.conditionalHaptic(.success, trigger: self.didTapResetGameAlertButton)
 		.task {
 			await appManager.loadAd()
 			appManager.hasLoadedAd = true

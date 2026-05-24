@@ -284,7 +284,7 @@ struct GameRecordView: View {
 						.padding(.vertical, 10)
 						
 						.padding(.horizontal, 40)
-						.sensoryFeedback(.impact, trigger: self.didTap)
+						.conditionalHaptic(.impact, trigger: self.didTap)
 						//						.buttonStyle(GrowingButton())
 						.conditionalShadow(color: .black.opacity(0.5), radius: 4, x: 4, y: 4)
 						
@@ -311,7 +311,7 @@ struct GameRecordView: View {
 							})
 							.padding(.vertical, 10)
 							.padding(.horizontal, 40)
-							.sensoryFeedback(.impact, trigger: self.didTap)
+							.conditionalHaptic(.impact, trigger: self.didTap)
 							.conditionalShadow(color: .black.opacity(0.5), radius: 4, x: 4, y: 4)
 						}
 					} else {
@@ -339,7 +339,7 @@ struct GameRecordView: View {
 							self.didTap.toggle()
 						})
 						.padding(.vertical, 10)
-						.sensoryFeedback(.impact, trigger: self.didTap)
+						.conditionalHaptic(.impact, trigger: self.didTap)
 						.buttonStyle(GrowingButton())
 						.conditionalShadow(color: .black.opacity(0.5), radius: 4, x: 4, y: 4)
 
@@ -362,7 +362,7 @@ struct GameRecordView: View {
 								self.didTap.toggle()
 							})
 							.padding(.vertical, 10)
-							.sensoryFeedback(.impact, trigger: self.didTap)
+							.conditionalHaptic(.impact, trigger: self.didTap)
 							.buttonStyle(GrowingButton())
 							.conditionalShadow(color: .black.opacity(0.5), radius: 4, x: 4, y: 4)
 						}
@@ -391,7 +391,7 @@ struct GameRecordView: View {
 								
 							}
 							.padding(.vertical, 15)
-							.sensoryFeedback(.impact, trigger: self.didTap)
+							.conditionalHaptic(.impact, trigger: self.didTap)
 							
 							Spacer()
 							

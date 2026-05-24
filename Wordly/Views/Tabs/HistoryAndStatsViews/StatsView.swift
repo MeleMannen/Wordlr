@@ -238,8 +238,10 @@ struct StatsView: View {
 				self.setDefaultValues()
 				self.hasFixedDefualtValues = true
 			}
-			
-			self.filterGameRecords()
+
+			Task {
+				self.filterGameRecords()
+			}
 			AnalyticsManager.shared.logScreenViewed(screenName: "StatsView")
 		}
 	}

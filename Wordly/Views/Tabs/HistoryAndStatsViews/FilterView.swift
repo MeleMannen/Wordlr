@@ -17,19 +17,19 @@ struct FilterView: View {
         ScrollView(.horizontal) {
             HStack(spacing: UIDevice.current.userInterfaceIdiom == .pad ? 20 : 10) {
                 Picker("", selection: $numberOfLetters) {
-                    ForEach(1...9, id: \.self) { number in
+					ForEach(1...9, id: \.self) { number in
 						if number == 1 {
-							Text("\(number) letter")
+							Text(String(format: NSLocalizedString("%lld letter", comment: "Number of letters singular"), number))
 								.font(.title2).bold()
 						} else if number != 9 {
-                            Text("\(number) letters")
-                                .font(.title2).bold()
-                        } else {
-                            Text("Any length")
-                                .font(.title2).bold()
-                        }
-                    }
-                }
+							Text(String(format: NSLocalizedString("%lld letters", comment: "Number of letters plural"), number))
+								.font(.title2).bold()
+						} else {
+							Text("Any length")
+								.font(.title2).bold()
+						}
+					}
+				}
                 .pickerStyle(.menu)
                 .foregroundStyle(.primary)
                 .accentColor(.primary)
@@ -37,9 +37,9 @@ struct FilterView: View {
                     if #unavailable(iOS 26.0, ) {
                         RoundedRectangle(cornerRadius: 10)
                             .foregroundStyle(Color(uiColor: .tertiarySystemBackground))
-                    }
+					}
                 }
-                .sensoryFeedback(.selection, trigger: self.numberOfLetters)
+                .conditionalHaptic(.selection, trigger: self.numberOfLetters)
                 .modifier(ConditionalGlassEffect())
                 
                 Picker("", selection: $selectedLanguage) {
@@ -56,7 +56,7 @@ struct FilterView: View {
                             .foregroundStyle(Color(uiColor: .tertiarySystemBackground))
                     }
                 }
-                .sensoryFeedback(.selection, trigger: selectedLanguage)
+                .conditionalHaptic(.selection, trigger: selectedLanguage)
                 .modifier(ConditionalGlassEffect())
                 
                 Picker("", selection: $gameMode) {
@@ -73,20 +73,14 @@ struct FilterView: View {
                             .foregroundStyle(Color(uiColor: .tertiarySystemBackground))
                     }
                 }
-                .sensoryFeedback(.selection, trigger: gameMode)
+                .conditionalHaptic(.selection, trigger: gameMode)
                 .modifier(ConditionalGlassEffect())
-                
-                Picker("", selection: $showsWhenHintsUsed) {
-                    ForEach(ShowsWhenHintsUsed.allCases) { mode in
-                        if mode == .both {
-                            Text("Both hint usage")
-                        } else if mode == .neverUsed {
-                            Text("Hints never used")
-                        } else if mode == .onlyWhenUsed {
-                            Text("Only when hints was used")
-                        }
-                    }
-                }
+	                
+	                Picker("", selection: $showsWhenHintsUsed) {
+	                    ForEach(ShowsWhenHintsUsed.allCases) { mode in
+							Text(mode.localizedName)
+	                    }
+	                }
                 .pickerStyle(.menu)
                 .foregroundStyle(.primary)
                 .accentColor(.primary)
@@ -96,7 +90,7 @@ struct FilterView: View {
                             .foregroundStyle(Color(uiColor: .tertiarySystemBackground))
                     }
                 }
-                .sensoryFeedback(.selection, trigger: showsWhenHintsUsed)
+                .conditionalHaptic(.selection, trigger: showsWhenHintsUsed)
                 .modifier(ConditionalGlassEffect())
             }
             .padding(.leading)
