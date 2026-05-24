@@ -71,9 +71,10 @@ struct StatsView: View {
 										AnimatedCountText(value: Double(self.filteredGameRecords.count))
 											.font(.title3)
 											.foregroundStyle(.secondary)
-											.animation(.easeInOut(duration: 0.8), value: self.filteredGameRecords.count)
+											.animation(.easeInOut(duration: 1.0), value: self.filteredGameRecords.count)
 									}
 								}
+								.wordlrListSectionRowBackground(.first)
 								VStack(alignment: .leading) {
 									HStack {
 										Text("Win rate")
@@ -86,7 +87,7 @@ struct StatsView: View {
 										AnimatedCountText(value: self.winRate, isPercentage: true)
 											.font(.title3)
 											.foregroundStyle(.secondary)
-											.animation(.easeInOut(duration: 0.8), value: self.winRate)
+											.animation(.easeInOut(duration: 1.0), value: self.winRate)
 									}
 									
 									Chart {
@@ -146,11 +147,13 @@ struct StatsView: View {
 										}
 									}
 									.chartXScale(domain: 0...max(Double(self.totalCount), 1))
-									.animation(.easeOut(duration: 0.5), value: self.filteredGameRecords.count)
+									.animation(.easeOut(duration: 1.0), value: self.filteredGameRecords.count)
 								}
+								.wordlrListSectionRowBackground(.last)
 							} header: {
 								Text("Played")
 							}
+							.wordlrListSectionBackground()
 							
 							Section {
 								VStack(alignment: .leading) {
@@ -186,23 +189,28 @@ struct StatsView: View {
 												.font(.footnote)
 										}
 									}
-									.animation(.easeOut(duration: 0.5), value: self.filteredGameRecords.count)
+									.animation(.easeOut(duration: 1.0), value: self.filteredGameRecords.count)
 									.frame(minHeight: 250)
 								}
+								.wordlrListSectionRowBackground(.single)
 							} header: {
 								Text("Guesses")
 							}
+							.wordlrListSectionBackground()
 							if self.maxStreakLength > 0 || self.maxNormalStreakLength > 0 {
 								Section {
 									if self.maxStreakLength > 0 && (self.gameMode == .both || self.gameMode == .dailyWord) {
 										StreakChartView(title: NSLocalizedString("Daily Wordlr streaks 🔥", comment: "Title for daily word streaks chart in stats view"), longestStreakPerLetters: self.$longestStreakPerLetters, maxStreakLength: self.$maxStreakLength)
+											.wordlrListSectionRowBackground((self.maxNormalStreakLength > 0 && (self.gameMode == .both || self.gameMode == .normal)) ? .first : .single)
 									}
 									if self.maxNormalStreakLength > 0 && (self.gameMode == .both || self.gameMode == .normal) {
 											StreakChartView(title: NSLocalizedString("Free play streaks 🔥", comment: "Title for free play streaks chart in stats view"), longestStreakPerLetters: self.$longestNormalStreakPerLetters, maxStreakLength: self.$maxNormalStreakLength)
+											.wordlrListSectionRowBackground((self.maxStreakLength > 0 && (self.gameMode == .both || self.gameMode == .dailyWord)) ? .last : .single)
 									}
 								} header: {
 									Text("Streaks")
 								}
+								.wordlrListSectionBackground()
 							}
 							
 						}
@@ -320,7 +328,7 @@ struct StatsView: View {
 		if isInitialLoad {
 			self.showBarLabels = false
 		}
-		withAnimation(.easeOut(duration: 0.5)) {
+		withAnimation(.easeOut(duration: 1.0)) {
 			self.filteredGameRecords = filteredRecords
 			self.maxNumberOfRows = maxRows
 			self.wonCount = wonCount
@@ -336,7 +344,7 @@ struct StatsView: View {
 			self.hasCompletedInitialLoad = true
 		}
 		if isInitialLoad {
-			DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+			DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
 				withAnimation(.easeOut(duration: 0.3)) {
 					self.showBarLabels = true
 				}

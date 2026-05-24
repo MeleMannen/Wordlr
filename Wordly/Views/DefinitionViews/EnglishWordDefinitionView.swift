@@ -9,6 +9,7 @@ import SwiftUI
 import AVFoundation
 
 struct EnglishWordDefinitionView: View {
+	@Environment(\.colorScheme) private var colorScheme
 	@Environment(AdManager.self) private var adManager
 	@EnvironmentObject private var definitionManager: DefinitionManager
 	@State var englishDefinition: [EnglishDefinition] = []
@@ -42,10 +43,7 @@ struct EnglishWordDefinitionView: View {
 									}
 									.padding(25)
 								}
-								.background {
-									RoundedRectangle(cornerRadius: 20)
-										.foregroundStyle(Color(uiColor: .secondarySystemBackground))
-								}
+									.wordlrSurface(cornerRadius: 20)
 								.overlay(alignment: .bottomTrailing) {
 									if let sourceURL = self.sourceURL(for: definition) {
 										if #available(iOS 26.0, *) {
@@ -99,6 +97,7 @@ struct EnglishWordDefinitionView: View {
 			}
 		}
 		.navigationTitle("\(self.word)")
+		.darkGradientBackground(colorScheme: colorScheme)
 		.onAppear {
 			definitionManager.getEnglishDefinition(for: self.word) { result in
 				self.apply(result)
@@ -132,19 +131,19 @@ struct EnglishWordDefinitionView: View {
 								
 								if let sourceURL = phonetic.sourceURL, !sourceURL.isEmpty {
 									Link("\(text.replacingOccurrences(of: "/", with: ""))", destination: URL(string: "\(sourceURL)")!)
-										.foregroundColor(.blue)
+										.foregroundStyle(.blue)
 										.lineLimit(nil)
 										.fixedSize(horizontal: false, vertical: true)
 								} else {
 									Text("\(text.replacingOccurrences(of: "/", with: ""))")
-										.foregroundColor(.gray)
+										.foregroundStyle(.gray)
 										.lineLimit(nil)
 										.fixedSize(horizontal: false, vertical: true)
 								}
 								
 								if !phonetic.audio.isEmpty {
 									Image(systemName: "play.fill")
-										.foregroundColor(.blue)
+										.foregroundStyle(.blue)
 										.onTapGesture {
 											definitionManager.playAudio(from: phonetic.audio)
 										}

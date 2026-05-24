@@ -477,28 +477,6 @@
         }
       }
     },
-    "Haptic feedback" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Haptic feedback"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Respuesta háptica"
-          }
-        },
-        "nb" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Haptisk tilbakemelding"
-          }
-        }
-      }
-    },
     "Are you sure that you want to discard your current word?" : {
       "localizations" : {
         "en" : {
@@ -853,13 +831,13 @@
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Palabra diaria"
+            "value" : "Palabra Diaria"
           }
         },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Dagens ord"
+            "value" : "Dagens Ord"
           }
         }
       }
@@ -876,13 +854,13 @@
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Palabra diaria - %lld🔥"
+            "value" : "Palabra Diaria - %lld🔥"
           }
         },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Dagens ord - %lld🔥"
+            "value" : "Dagens Ord - %lld🔥"
           }
         }
       }
@@ -899,13 +877,13 @@
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Recordatorio de la palabra diaria"
+            "value" : "Recordatorio de Palabra Diaria"
           }
         },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Dagens ord påminnelse"
+            "value" : "Dagens Ord-påminnelse"
           }
         }
       }
@@ -921,13 +899,13 @@
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Recordatorios de la palabra diaria"
+            "value" : "Recordatorios de Palabra Diaria"
           }
         },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Dagens ord påminnelser"
+            "value" : "Dagens Ord-påminnelser"
           }
         }
       }
@@ -944,13 +922,13 @@
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Rachas de la palabra diaria 🔥"
+            "value" : "Rachas de Palabra Diaria 🔥"
           }
         },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Dagens ord streaks 🔥"
+            "value" : "Dagens Ord-streaks 🔥"
           }
         }
       }
@@ -966,13 +944,13 @@
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Tema de la palabra diaria"
+            "value" : "Tema de Palabra Diaria"
           }
         },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Dagens ord tema"
+            "value" : "Dagens Ord-tema"
           }
         }
       }
@@ -1143,13 +1121,13 @@
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "¡No olvides completar la palabra diaria de %1$d letras de hoy en %2$@!"
+            "value" : "¡No olvides completar la Palabra Diaria de %1$d letras de hoy en %2$@!"
           }
         },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ikke glem å spille dagens %1$d bokstav, %2$@ dagens ord!"
+            "value" : "Ikke glem å fullføre dagens %1$d bokstav, %2$@ Dagens Ord!"
           }
         }
       }
@@ -1165,13 +1143,13 @@
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Editar recordatorio de la palabra diaria"
+            "value" : "Editar Recordatorios de Palabra Diaria"
           }
         },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Rediger dagens ord påminnelser"
+            "value" : "Rediger Dagens Ord-påminnelser"
           }
         }
       }
@@ -1398,23 +1376,46 @@
       }
     },
     "Free play" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Free play"
+            "value" : "Free Play"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Jugar libre"
+            "value" : "Juego Libre"
           }
         },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Spill fritt"
+            "value" : "Spill Fritt"
+          }
+        }
+      }
+    },
+    "Free Play" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Free Play"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Juego Libre"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spill Fritt"
           }
         }
       }
@@ -1425,19 +1426,19 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Free play - %lld🔥"
+            "value" : "Free Play - %lld🔥"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Jugar libre - %lld🔥"
+            "value" : "Juego Libre - %lld🔥"
           }
         },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Spill fritt - %lld🔥"
+            "value" : "Spill Fritt - %lld🔥"
           }
         }
       }
@@ -1448,19 +1449,19 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Free play streaks 🔥"
+            "value" : "Free Play streaks 🔥"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Rachas de jugar libre 🔥"
+            "value" : "Rachas de Juego Libre 🔥"
           }
         },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Spill fritt streaks 🔥"
+            "value" : "Spill Fritt-streaks 🔥"
           }
         }
       }
@@ -1483,6 +1484,28 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Spill (standard)"
+          }
+        }
+      }
+    },
+    "Game clues automatically fills in filter options based on your current game progress. Upgrade to Pro in Settings to unlock this feature." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Game clues automatically fills in filter options based on your current game progress. Upgrade to Pro in Settings to unlock this feature."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Las pistas del juego rellenan automáticamente las opciones de filtro según tu progreso actual. Mejora a Pro en Ajustes para desbloquear esta función."
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spillets ledetråder fyller automatisk inn filteralternativene basert på din nåværende spillprogresjon. Oppgrader til Pro i Innstillinger for å låse opp denne funksjonen."
           }
         }
       }
@@ -1522,13 +1545,13 @@
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Palabra diaria"
+            "value" : "Palabra Diaria"
           }
         },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Dagens ord"
+            "value" : "Dagens Ord"
           }
         }
       }
@@ -1539,19 +1562,19 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Free play"
+            "value" : "Free Play"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Jugar libre"
+            "value" : "Juego Libre"
           }
         },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Spill fritt"
+            "value" : "Spill Fritt"
           }
         }
       }
@@ -1640,6 +1663,28 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Hent fra spillet"
+          }
+        }
+      }
+    },
+    "Go to Settings" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Go to Settings"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ir a Ajustes"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gå til Innstillinger"
           }
         }
       }
@@ -1794,6 +1839,28 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Gjett"
+          }
+        }
+      }
+    },
+    "Haptic feedback" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Haptic feedback"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Respuesta háptica"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Haptisk tilbakemelding"
           }
         }
       }
@@ -2781,9 +2848,6 @@
         }
       }
     },
-    "PRO" : {
-
-    },
     "Pro Feature" : {
       "localizations" : {
         "es" : {
@@ -2834,13 +2898,13 @@
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Recuerda jugar hoy la daily Wordlr de %d letras en %@ para no perder tu racha de %d🔥 días."
+            "value" : "Recuerda jugar hoy la Palabra Diaria de %d letras en %@ para no perder tu racha de %d🔥 días."
           }
         },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Husk å spille dagens %d bokstaver, %@ daily Wordlr, så du ikke mister streaken din på %d🔥 dager."
+            "value" : "Husk å spille dagens %d bokstaver, %@ Dagens Ord, så du ikke mister streaken din på %d🔥 dager."
           }
         }
       }
@@ -3790,50 +3854,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Oppgrader til Pro - %@"
-          }
-        }
-      }
-    },
-    "Game clues automatically fills in filter options based on your current game progress. Upgrade to Pro in Settings to unlock this feature." : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Game clues automatically fills in filter options based on your current game progress. Upgrade to Pro in Settings to unlock this feature."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Las pistas del juego rellenan automáticamente las opciones de filtro según tu progreso actual. Mejora a Pro en Ajustes para desbloquear esta función."
-          }
-        },
-        "nb" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Spillets ledetråder fyller automatisk inn filteralternativene basert på din nåværende spillprogresjon. Oppgrader til Pro i Innstillinger for å låse opp denne funksjonen."
-          }
-        }
-      }
-    },
-    "Go to Settings" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Go to Settings"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ir a Ajustes"
-          }
-        },
-        "nb" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Gå til Innstillinger"
           }
         }
       }

@@ -24,6 +24,99 @@ func legacyRowCount(for numberOfLetters: Int) -> Int {
     }
 }
 
+enum GameResultShareFormatter {
+	private static let cetTimeZone = TimeZone(identifier: "CET")
+
+	static func timeUsedString(startDate: Date, endDate: Date) -> String {
+		let timeInterval = max(0, endDate.timeIntervalSince(startDate))
+		let hours = Int(timeInterval) / 3600
+		let minutes = (Int(timeInterval) % 3600) / 60
+		let seconds = Int(timeInterval) % 60
+
+		var timeUsedString = ""
+		if hours > 0 {
+			let hourFormatString = NSLocalizedString("hour_string", comment: "String for the hours")
+			if hourFormatString.contains("%@") {
+				timeUsedString += String(format: hourFormatString, "\(hours)")
+			} else if hourFormatString.contains("%d") || hourFormatString.contains("%ld") {
+				timeUsedString += String(format: hourFormatString, hours)
+			} else {
+				timeUsedString += "\(hours)h "
+			}
+		}
+		if minutes > 0 {
+			timeUsedString += "\(minutes)m "
+		}
+		if seconds > 0 {
+			timeUsedString += "\(seconds)s"
+		}
+		return timeUsedString
+	}
+
+	static func shareText(
+		row: Int,
+		numberOfLetters: Int,
+		maxRows: Int,
+		date: Date,
+		board: [[Letter]],
+		timeUsedString: String = ""
+	) -> String {
+		let dateFormatter = DateFormatter()
+		dateFormatter.dateStyle = .short
+		dateFormatter.timeStyle = .none
+		dateFormatter.timeZone = cetTimeZone
+
+		var letterString = String(format: NSLocalizedString("share_letter", comment: "Letter"), numberOfLetters)
+		if numberOfLetters > 1 {
+			letterString = String(format: NSLocalizedString("share_letters", comment: "Letters"), numberOfLetters)
+		}
+
+		let rowString = String(format: NSLocalizedString("share_row", comment: "Row"))
+		let usedString = String(format: NSLocalizedString("share_used", comment: "Used"))
+
+		var shareText = "Wordlr \(dateFormatter.string(from: date)), \(letterString), \(row)/\(maxRows) \(rowString)\(timeUsedString.isEmpty ? "" : ", \(timeUsedString) \(usedString)"):\n"
+		var shouldBreak = false
+
+		for row in board {
+			for letter in row {
+				switch letter.state {
+				case .correctPosition:
+					shareText += "🟩"
+				case .correctLetter:
+					shareText += "🟧"
+				case .usedButNotCorrect:
+					shareText += "⬜️"
+				default:
+					shouldBreak = true
+					break
+				}
+			}
+			if shouldBreak {
+				break
+			}
+			shareText += "\n"
+		}
+
+		return shareText
+	}
+
+	static func shareText(for gameRecord: GameRecord) -> String? {
+		guard let board = gameRecord.board else { return nil }
+		let timeUsedString = gameRecord.endDate.map {
+			self.timeUsedString(startDate: gameRecord.date, endDate: $0)
+		} ?? ""
+
+		return self.shareText(
+			row: gameRecord.numberOfGuesses,
+			numberOfLetters: gameRecord.numberOfLetters,
+			maxRows: gameRecord.effectiveMaxRows,
+			date: gameRecord.date,
+			board: board,
+			timeUsedString: timeUsedString
+		)
+	}
+}
+
 enum CurrentSelectView {
 	case selectView
 	case gameView
@@ -1514,4 +1607,150 @@ extension Date {
         let timezoneOffset = TimeInterval(TimeZone.current.secondsFromGMT(for: self))
         return self.addingTimeInterval(-timezoneOffset)
     }
+}
+
+struct WordlrListRowBackground: View {
+	private let materialOpacity = 0.5
+
+	var body: some View {
+		if #available(iOS 26.0, *) {
+			Rectangle()
+				.fill(.ultraThinMaterial)
+				.opacity(materialOpacity)
+		} else {
+			Color(uiColor: .secondarySystemBackground)
+		}
+	}
+}
+
+struct WordlrListSectionModifier: ViewModifier {
+	let cornerRadius: CGFloat
+
+	func body(content: Content) -> some View {
+		content
+			.listRowBackground(WordlrListRowBackground())
+	}
+}
+
+enum WordlrListSectionRowPosition {
+	case single
+	case first
+	case middle
+	case last
+}
+
+struct WordlrListSectionRowBorderShape: Shape {
+	let position: WordlrListSectionRowPosition
+	let cornerRadius: CGFloat
+
+	func path(in rect: CGRect) -> Path {
+		let radius = min(cornerRadius, min(rect.width, rect.height) / 2)
+		var path = Path()
+
+		switch position {
+		case .single:
+			path.addRoundedRect(in: rect.insetBy(dx: 0.5, dy: 0.5), cornerSize: CGSize(width: radius, height: radius))
+		case .first:
+			path.move(to: CGPoint(x: rect.minX + radius, y: rect.minY + 0.5))
+			path.addLine(to: CGPoint(x: rect.maxX - radius, y: rect.minY + 0.5))
+			path.addArc(center: CGPoint(x: rect.maxX - radius, y: rect.minY + radius), radius: radius - 0.5, startAngle: .degrees(-90), endAngle: .degrees(0), clockwise: false)
+			path.addLine(to: CGPoint(x: rect.maxX - 0.5, y: rect.maxY))
+			path.move(to: CGPoint(x: rect.minX + 0.5, y: rect.maxY))
+			path.addLine(to: CGPoint(x: rect.minX + 0.5, y: rect.minY + radius))
+			path.addArc(center: CGPoint(x: rect.minX + radius, y: rect.minY + radius), radius: radius - 0.5, startAngle: .degrees(180), endAngle: .degrees(270), clockwise: false)
+		case .middle:
+			path.move(to: CGPoint(x: rect.minX + 0.5, y: rect.minY))
+			path.addLine(to: CGPoint(x: rect.minX + 0.5, y: rect.maxY))
+			path.move(to: CGPoint(x: rect.maxX - 0.5, y: rect.minY))
+			path.addLine(to: CGPoint(x: rect.maxX - 0.5, y: rect.maxY))
+		case .last:
+			path.move(to: CGPoint(x: rect.minX + 0.5, y: rect.minY))
+			path.addLine(to: CGPoint(x: rect.minX + 0.5, y: rect.maxY - radius))
+			path.addArc(center: CGPoint(x: rect.minX + radius, y: rect.maxY - radius), radius: radius - 0.5, startAngle: .degrees(180), endAngle: .degrees(90), clockwise: true)
+			path.addLine(to: CGPoint(x: rect.maxX - radius, y: rect.maxY - 0.5))
+			path.addArc(center: CGPoint(x: rect.maxX - radius, y: rect.maxY - radius), radius: radius - 0.5, startAngle: .degrees(90), endAngle: .degrees(0), clockwise: true)
+			path.addLine(to: CGPoint(x: rect.maxX - 0.5, y: rect.minY))
+		}
+
+		return path
+	}
+}
+
+struct WordlrListSectionRowBackground: View {
+	let position: WordlrListSectionRowPosition
+	let cornerRadius: CGFloat
+	private let materialOpacity = 0.5
+
+	var body: some View {
+		if #available(iOS 26.0, *) {
+			Rectangle()
+				.fill(.ultraThinMaterial)
+				.opacity(materialOpacity)
+				.overlay {
+					WordlrListSectionRowBorderShape(position: position, cornerRadius: cornerRadius)
+						.stroke(.white.opacity(0.08), lineWidth: 1)
+				}
+		} else {
+			Color(uiColor: .secondarySystemBackground)
+		}
+	}
+}
+
+struct WordlrSurfaceModifier: ViewModifier {
+	let cornerRadius: CGFloat
+	let fallbackColor: UIColor
+	private let materialOpacity = 0.5
+
+	func body(content: Content) -> some View {
+		if #available(iOS 26.0, *) {
+			content
+				.background {
+					RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+						.fill(.ultraThinMaterial)
+						.opacity(materialOpacity)
+						.overlay {
+							RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+								.strokeBorder(.white.opacity(0.08), lineWidth: 1)
+						}
+				}
+		} else {
+			content
+				.background {
+					RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+						.foregroundStyle(Color(uiColor: fallbackColor))
+				}
+		}
+	}
+}
+
+extension View {
+	func wordlrListRowBackground() -> some View {
+		self.listRowBackground(WordlrListRowBackground())
+	}
+
+	func wordlrListSectionBackground(cornerRadius: CGFloat = 26) -> some View {
+		self.modifier(WordlrListSectionModifier(cornerRadius: cornerRadius))
+	}
+
+	func wordlrListSectionRowBackground(_ position: WordlrListSectionRowPosition, cornerRadius: CGFloat = 26) -> some View {
+		self.listRowBackground(WordlrListSectionRowBackground(position: position, cornerRadius: cornerRadius))
+	}
+
+	func wordlrListSectionRowBackground(index: Int, count: Int, cornerRadius: CGFloat = 26) -> some View {
+		let position: WordlrListSectionRowPosition = if count <= 1 {
+			.single
+		} else if index == 0 {
+			.first
+		} else if index == count - 1 {
+			.last
+		} else {
+			.middle
+		}
+
+		return self.listRowBackground(WordlrListSectionRowBackground(position: position, cornerRadius: cornerRadius))
+	}
+
+	func wordlrSurface(cornerRadius: CGFloat = 20, fallbackColor: UIColor = .secondarySystemBackground) -> some View {
+		self.modifier(WordlrSurfaceModifier(cornerRadius: cornerRadius, fallbackColor: fallbackColor))
+	}
 }

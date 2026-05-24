@@ -77,7 +77,7 @@ struct StreakChartView: View {
 								.font(.footnote)
 						}
 					}
-					.animation(.easeInOut(duration: 0.5), value: longestStreakPerLetter.streaks.count)
+					.animation(.easeInOut(duration: 1.0), value: longestStreakPerLetter.streaks.count)
 					.frame(minHeight: CGFloat(longestStreakPerLetter.streaks.count * 100))
 				}
 			}

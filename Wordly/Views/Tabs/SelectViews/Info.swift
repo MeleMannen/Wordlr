@@ -85,6 +85,7 @@ struct Info: View {
 					}
 				}
 			}
+			.wordlrListSectionRowBackground(.single)
 		}
 		.scrollContentBackground(.hidden)
 		.darkGradientBackground(colorScheme: colorScheme)

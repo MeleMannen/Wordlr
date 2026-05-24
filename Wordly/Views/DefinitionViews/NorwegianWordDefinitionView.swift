@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct NorwegianWordDefinitionView: View {
+	@Environment(\.colorScheme) private var colorScheme
 	@Environment(AdManager.self) private var adManager
 	@EnvironmentObject private var definitionManager: DefinitionManager
 	@State var processedWords: [NorwegianDefinition] = []
@@ -95,10 +96,7 @@ struct NorwegianWordDefinitionView: View {
 									}
 									.padding(25)
 								}
-								.background {
-									RoundedRectangle(cornerRadius: 20)
-										.foregroundStyle(Color(uiColor: .secondarySystemBackground))
-								}
+									.wordlrSurface(cornerRadius: 20)
 								.overlay(alignment: .bottomTrailing) {
 									if let sourceURL = self.sourceURL {
 										if #available(iOS 26.0, *) {
@@ -137,7 +135,7 @@ struct NorwegianWordDefinitionView: View {
 								} actions: {
 									NavigationLink(destination: NAOBView(word: self.word)) {
 										Text("Search on NAOB")
-											.foregroundColor(.blue)
+											.foregroundStyle(.blue)
 											.font(.headline)
 									}
 									.simultaneousGesture(TapGesture().onEnded {
@@ -162,6 +160,7 @@ struct NorwegianWordDefinitionView: View {
 			}
 		}
 		.navigationTitle("\(self.word)")
+		.darkGradientBackground(colorScheme: colorScheme)
 		.onAppear {
 			definitionManager.getNorwegianDefinition(for: self.word) { result in
 				self.apply(result)

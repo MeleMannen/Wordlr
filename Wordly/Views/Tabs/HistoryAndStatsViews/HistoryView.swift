@@ -98,7 +98,7 @@ struct HistoryView: View {
 			List {
 				ForEach(historyResult.sections) { section in
 					Section {
-						ForEach(section.records, id: \.id) { gameRecordEntity in
+						ForEach(Array(section.records.enumerated()), id: \.element.id) { index, gameRecordEntity in
 							NavigationLink(destination: {
 								GameRecordView(gameRecord: gameRecordEntity.gameRecord)
 							}, label: {
@@ -150,11 +150,23 @@ struct HistoryView: View {
 									Spacer()
 								}
 							})
+							.contextMenu {
+								if gameRecordEntity.gameRecord.mode == .dailyWord,
+								   GameResultShareFormatter.shareText(for: gameRecordEntity.gameRecord) != nil {
+									Button {
+										copyResult(for: gameRecordEntity.gameRecord)
+									} label: {
+										Label("Copy result", systemImage: "doc.on.doc")
+									}
+								}
+							}
+							.wordlrListSectionRowBackground(index: index, count: section.records.count)
 						}
 					} header: {
 						SectionHeaderView(letter: section.title)
 					}
 					.listSectionSeparator(.hidden)
+					.wordlrListSectionBackground()
 				}
 			}
 		}
@@ -175,6 +187,10 @@ struct HistoryView: View {
 			formatter: self.formatter1
 		)
 		return HistorySearchResult(sections: sections)
+	}
+
+	private func copyResult(for gameRecord: GameRecord) {
+		UIPasteboard.general.string = GameResultShareFormatter.shareText(for: gameRecord)
 	}
 }
 
@@ -243,10 +259,10 @@ extension View {
 	func darkGradientBackground(colorScheme: ColorScheme, opacity: Double = 1.0) -> some View {
 		if #available(iOS 26.0, *) {
 			self.background {
-				if colorScheme == .dark {
+				if colorScheme == .dark && UIDevice.current.userInterfaceIdiom == .phone {
 					RadialGradient(
 						colors: [.green.opacity(0.25 * opacity), .clear],
-						center: .topLeading,
+						center: .top,
 						startRadius: 0,
 						endRadius: 420
 					)

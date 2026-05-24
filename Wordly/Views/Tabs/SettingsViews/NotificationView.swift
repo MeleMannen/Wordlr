@@ -32,7 +32,7 @@ struct NotificationView: View {
 				)
 			} else {
 				List {
-					ForEach(self.dailyWordReminders, id: \.id) { reminder in
+					ForEach(Array(self.dailyWordReminders.enumerated()), id: \.element.id) { index, reminder in
 						Button {
 							self.reminderToEdit = reminder
 							self.shouldBeEditing = true
@@ -51,6 +51,7 @@ struct NotificationView: View {
 									AnalyticsManager.shared.logDidActivateAReminderEvent()
 								}
 							}
+						.wordlrListSectionRowBackground(index: index, count: self.dailyWordReminders.count)
 					}
 					.onDelete(perform: deleteReminder)
 				}
@@ -158,6 +159,7 @@ struct AddReminderView: View {
 						}
 					}
 					.pickerStyle(.menu)
+					.wordlrListSectionRowBackground(.first)
 					Picker("Word length", selection: $notificationLetters) {
 						ForEach(1...8, id: \.self) { number in
 							Text(number == 1 ? "\(number) letter" : "\(number) letters")
@@ -167,10 +169,12 @@ struct AddReminderView: View {
 						}
 					}
 					.pickerStyle(.menu)
+					.wordlrListSectionRowBackground(.last)
 					
 				} header: {
 					Text("Reminder details")
 				}
+				.wordlrListSectionBackground()
 				
 				if let reminder, self.isEditing {
 					HStack {
@@ -192,6 +196,7 @@ struct AddReminderView: View {
 						self.notificationLetters = reminder.numberOfLetters
 						self.notificationTime = reminder.timeToFire
 					}
+					.wordlrListSectionRowBackground(.single)
 				}
 				
 				
@@ -229,7 +234,7 @@ struct AddReminderView: View {
 						}
 						.conditionalHaptic(self.isEditing ? .selection : (self.checkIfReminderExists() ? .error : .selection), trigger: self.didTap)
 						.opacity(self.isEditing ? 1.0 : (self.checkIfReminderExists() ? 0.3 : 1.0))
-						.tint(self.isEditing ? .blue : (self.checkIfReminderExists() ? .secondary : .blue))
+						.tint(self.isEditing ? .green : (self.checkIfReminderExists() ? .secondary : .green))
 						.animation(.easeInOut, value: self.isEditing)
 						.animation(.easeInOut, value: self.checkIfReminderExists())
 					} else {
@@ -237,7 +242,7 @@ struct AddReminderView: View {
 							self.saveButtonAction()
 						} label: {
 							Text("Save")
-								.foregroundStyle(.blue)
+								.foregroundStyle(.green)
 								.opacity(self.isEditing ? 1.0 : (self.checkIfReminderExists() ? 0.3 : 1.0))
 						}
 						.conditionalHaptic(self.isEditing ? .selection : (self.checkIfReminderExists() ? .error : .selection), trigger: self.didTap)
@@ -253,14 +258,14 @@ struct AddReminderView: View {
 	
 	private func saveButtonAction() {
 		print("time to fire: \(self.notificationTime.timeIntervalSince1970)")
-			if self.isEditing, let reminder {
-				NotificationManager.cancelDailyWordReminder(reminder: reminder) {
-					reminder.language = self.notificationLanguage
-					reminder.numberOfLetters = self.notificationLetters
-					reminder.timeToFire = self.notificationTime
-					reminder.isEnabled = true
-					NotificationManager.scheduleDailyWordReminder(reminder: reminder, context: context)
-				}
+		if self.isEditing, let reminder {
+			NotificationManager.cancelDailyWordReminder(reminder: reminder) {
+				reminder.language = self.notificationLanguage
+				reminder.numberOfLetters = self.notificationLetters
+				reminder.timeToFire = self.notificationTime
+				reminder.isEnabled = true
+				NotificationManager.scheduleDailyWordReminder(reminder: reminder, context: context)
+			}
 			
 			
 		} else {

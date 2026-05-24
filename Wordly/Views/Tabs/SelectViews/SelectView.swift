@@ -56,7 +56,8 @@ struct SelectView: View {
 							}
 							.background {
 								Capsule()
-									.foregroundStyle(Color(uiColor: .systemGray6))
+									.fill(.ultraThinMaterial)
+									.opacity(0.5)
 							}
 							.glassEffect(.regular.interactive())
 							.conditionalShadow(color: .black.opacity(0.4), radius: 4, x: 4, y: 4)
@@ -106,7 +107,8 @@ struct SelectView: View {
 							}
 							.background {
 								Capsule()
-									.foregroundStyle(Color(uiColor: .systemGray6))
+									.fill(.ultraThinMaterial)
+									.opacity(0.5)
 							}
 							.glassEffect(.regular.interactive())
 							.conditionalShadow(color: .black.opacity(0.4), radius: 4, x: 4, y: 4)
@@ -152,7 +154,7 @@ struct SelectView: View {
 					.padding(.bottom, 25)
 
 					SelectGameModeButton(
-						title: "Free play",
+						title: "Free Play",
 						mode: .normal,
 						appManager: appManager,
 						streak: self.normalStreak,
@@ -173,10 +175,7 @@ struct SelectView: View {
 					}
 				}
 				.padding(20)
-				.background {
-					RoundedRectangle(cornerRadius: 25)
-						.foregroundStyle(Color(uiColor: .secondarySystemBackground))
-				}
+				.wordlrSurface(cornerRadius: 25)
 				.padding(.horizontal)
 			}
 			.safeAreaPadding(.bottom, adManager.isBannerAdLoaded ? (UIDevice.current.userInterfaceIdiom == .pad || UIDevice.current.userInterfaceIdiom == .mac ? 80 : 54) : 0)
@@ -410,17 +409,6 @@ struct ConditionalGlassEffect: ViewModifier {
 		} else {
 			content
 				.tint(.primary)
-		}
-	}
-}
-
-struct ConditionalPadding: ViewModifier {
-	func body(content: Content) -> some View {
-		if #available(iOS 26.0, *) {
-			content
-				.padding(.vertical, 4)
-		} else {
-			content
 		}
 	}
 }

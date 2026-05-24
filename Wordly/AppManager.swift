@@ -650,76 +650,18 @@ final class AppManager: NSObject, FullScreenContentDelegate {
 	}
 	
 	func getShareResult(row: Int, numberOfLetters: Int, date: Date, board: [[Letter]], timeUsedString: String = "") -> String {
-		let dateFormatter = DateFormatter()
-		dateFormatter.dateStyle = .short
-		dateFormatter.timeStyle = .none
-		dateFormatter.timeZone = TimeZone(identifier: "CET")
-		
-		let numberOfRows = rowCount(for: numberOfLetters)
-		
-		var letterString = String(format: NSLocalizedString("share_letter", comment: "Letter"), numberOfLetters)
-		if numberOfLetters > 1 {
-			letterString = String(format: NSLocalizedString("share_letters", comment: "Letters"), numberOfLetters)
-		}
-		
-		let rowString = String(format: NSLocalizedString("share_row", comment: "Row"))
-		let usedString = String(format: NSLocalizedString("share_used", comment: "Used"))
-		
-		
-		var shareText = "Wordlr \(dateFormatter.string(from: date)), \(letterString), \(row)/\(numberOfRows) \(rowString)\(timeUsedString != "" ? ", \(timeUsedString) \(usedString)" : ""):\n"
-		
-		var shouldBreak: Bool = false
-		for row in board {
-			for letter in row {
-				switch letter.state {
-					case .correctPosition:
-						shareText += "🟩"
-					case .correctLetter:
-						shareText += "🟧"
-					case .usedButNotCorrect:
-						shareText += "⬜️"
-					default:
-						shouldBreak = true
-						break
-				}
-			}
-			if shouldBreak {
-				break
-			}
-			shareText += "\n"
-			
-		}
-		return shareText
+		GameResultShareFormatter.shareText(
+			row: row,
+			numberOfLetters: numberOfLetters,
+			maxRows: rowCount(for: numberOfLetters),
+			date: date,
+			board: board,
+			timeUsedString: timeUsedString
+		)
 	}
 	
 	func getTimeUsedString(startDate: Date, endDate: Date) -> String {
-		print("End date: \(endDate)")
-		print("startDate: \(startDate)")
-		let timeInterval = max(0, endDate.timeIntervalSince(startDate))
-		print("Time interval: \(timeInterval)")
-		let hours = Int(timeInterval) / 3600
-		let minutes = (Int(timeInterval) % 3600) / 60
-		let seconds = Int(timeInterval) % 60
-		
-		var timeUsedString = ""
-		if hours > 0 {
-			let hourFormatString = NSLocalizedString("hour_string", comment: "String for the hours")
-			if hourFormatString.contains("%@") {
-				timeUsedString += String(format: hourFormatString, "\(hours)")
-			} else if hourFormatString.contains("%d") || hourFormatString.contains("%ld") {
-				timeUsedString += String(format: hourFormatString, hours)
-			} else {
-				timeUsedString += "\(hours)h "
-			}
-		}
-		if minutes > 0 {
-			timeUsedString += "\(minutes)m "
-		}
-		if seconds > 0 {
-			timeUsedString += "\(seconds)s"
-		}
-		print("Time used string: \(timeUsedString)")
-		return timeUsedString
+		GameResultShareFormatter.timeUsedString(startDate: startDate, endDate: endDate)
 	}
 	
 	

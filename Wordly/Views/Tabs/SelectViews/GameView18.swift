@@ -289,7 +289,7 @@ struct GameView18: View {
 									await HintTip.gamesPlayedEvent.donate()
 								}
 							}, label: {
-								Text(appManager.selectedGameMode == .normal ? "New game" : "Free play")
+								Text(appManager.selectedGameMode == .normal ? LocalizedStringKey("New game") : LocalizedStringKey("Free Play"))
 									.conditionalShadow(color: .black.opacity(0.2), radius: 2, x: 4, y: 4)
 									.font(.title2).bold()
 									.frame(maxWidth: .infinity, minHeight: 40, idealHeight: 45, maxHeight: 50)

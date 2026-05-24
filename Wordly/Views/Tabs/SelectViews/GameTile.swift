@@ -125,14 +125,24 @@ struct AnimatedGameTile: View {
 
     @ViewBuilder
     private var tileBackground: some View {
-        if shouldUseCelebrationGradient {
-            RoundedRectangle(cornerRadius: 5)
-                .foregroundStyle(gradient)
-                .gradientShadow(gradient: shadowGradient, radius: 3, x: 0, y: 0)
-        } else {
-            RoundedRectangle(cornerRadius: 5)
-                .fill(tileFill)
-        }
+		ZStack {
+			RoundedRectangle(cornerRadius: 5)
+				.fill(tileFill)
+
+			RoundedRectangle(cornerRadius: 5)
+				.foregroundStyle(gradient)
+				.opacity(shouldUseCelebrationGradient ? 1 : 0)
+				.gradientShadow(
+					gradient: shadowGradient,
+					radius: shouldUseCelebrationGradient ? 3 : 0,
+					x: 0,
+					y: 0
+				)
+		}
+		.animation(
+			celebrationGradientAnimation,
+			value: shouldUseCelebrationGradient
+		)
     }
 
     private var tileTextColor: Color {
@@ -145,8 +155,17 @@ struct AnimatedGameTile: View {
         selectedGameMode == .dailyWord &&
         didWinGame == .won &&
         isGameOver &&
+        !isResettingBoard &&
         (rowIndex == currentRow - 1 || rowIndex == boardCount)
     }
+
+	private var celebrationGradientAnimation: Animation {
+		if shouldUseCelebrationGradient {
+			.easeInOut(duration: 0.45).delay(Double(colIndex) * 0.06)
+		} else {
+			.linear(duration: 0.001)
+		}
+	}
 
     private var tileFill: Color {
         switch displayedState {

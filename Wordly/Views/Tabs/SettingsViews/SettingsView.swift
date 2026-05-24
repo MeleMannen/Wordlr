@@ -56,9 +56,6 @@ struct SettingsView: View {
 		return components.url
 	}
 	
-	private let aboutRowIconWidth: CGFloat = 28
-	
-	
 	var body: some View {
 		NavigationStack {
 			List {
@@ -71,19 +68,19 @@ struct SettingsView: View {
 									.foregroundStyle(.white)
 									.frame(width: 48, height: 48)
 									.background(.green, in: Circle())
-
+								
 								Text("Upgrade to Pro")
 									.font(.title2).bold()
 									.foregroundStyle(.primary)
-
+								
 								Spacer()
 							}
-
-							Text("Ad-free experience, free hints, and priority support")
+							
+							Text(storeManager.adRemovalProduct?.description ?? String(localized: "Ad-free experience, free hints, and priority support"))
 								.font(.subheadline)
 								.foregroundStyle(.secondary)
 								.frame(maxWidth: .infinity, alignment: .leading)
-
+							
 							Button(action: {
 								Task {
 									await storeManager.purchaseAdRemoval()
@@ -103,11 +100,20 @@ struct SettingsView: View {
 								.foregroundStyle(.white)
 								.frame(maxWidth: .infinity)
 								.padding(.vertical, 14)
-								.background(.green, in: RoundedRectangle(cornerRadius: 14))
+								.background {
+									if #available(iOS 26.0, *) {
+										RoundedRectangle(cornerRadius: 15)
+											.foregroundStyle(Color(uiColor: .systemGreen))
+									} else {
+										RoundedRectangle(cornerRadius: 15)
+											.foregroundStyle(.green)
+									}
+								}
 							})
 							.buttonStyle(.plain)
+							.modifier(UpgradeToProButtonModifier())
 							.disabled(storeManager.isPurchasing || storeManager.adRemovalProduct == nil)
-
+							
 							Button("Restore Purchases") {
 								Task {
 									await storeManager.restorePurchases()
@@ -144,7 +150,7 @@ struct SettingsView: View {
 						}
 					}
 				}
-
+				
 				Section {
 					Button(action: {
 						if let url = URL(string: UIApplication.openSettingsURLString) {
@@ -152,131 +158,139 @@ struct SettingsView: View {
 						}
 					}, label: {
 						HStack {
-							Text("App language")
-								.foregroundStyle(.primary)
-
+							SettingsRowLabel(title: "App language", systemImage: "globe")
+							
 							Spacer(minLength: 0)
-
+							
 							Text("\(Locale.current.localizedString(forIdentifier: String(Locale.preferredLanguages.first?.prefix(2) ?? "en"))?.capitalized ?? "")")
 								.fontWeight(.regular)
-
+							
 							Image(systemName: "arrow.up.right")
 								.font(.caption).bold()
 								.foregroundStyle(.secondary)
 						}
 					})
-					.modifier(ConditionalPadding())
-
-					Picker("App theme", selection: $appTheme) {
+					.wordlrListSectionRowBackground(.first)
+					
+					Picker(selection: $appTheme) {
 						Text("System")
 							.tag(AppTheme.system)
 						Text("Dark")
 							.tag(AppTheme.dark)
 						Text("Light")
 							.tag(AppTheme.light)
-
+						
+					} label: {
+						SettingsRowLabel(title: "App theme", systemImage: "circle.lefthalf.filled")
 					}
-					.modifier(ConditionalPadding())
+					.wordlrListSectionRowBackground(.middle)
 					.pickerStyle(.menu)
 					.conditionalHaptic(.selection, trigger: appTheme)
 					.onChange(of: appTheme) { oldValue, newValue in
 						AnalyticsManager.shared.logDidChangeThemeEvent(newTheme: newValue, oldTheme: oldValue)
 					}
-
-
+					
+					
 					if self.colorScheme == .dark {
-						Picker("Daily Wordlr theme", selection: $userWantsNormalTheme) {
+						Picker(selection: $userWantsNormalTheme) {
 							Text("Standard")
 								.tag(true)
 							Text("Gold")
 								.tag(false)
+						} label: {
+							SettingsRowLabel(title: "Daily Wordlr theme", systemImage: "paintpalette")
 						}
-						.modifier(ConditionalPadding())
+						.wordlrListSectionRowBackground(.middle)
 						.pickerStyle(.menu)
 						.conditionalHaptic(.selection, trigger: userWantsNormalTheme)
 						.onChange(of: userWantsNormalTheme) {
 							AnalyticsManager.shared.logDidChangeDailyWordThemeEvent(newTheme: userWantsNormalTheme ? "Standard" : "Gold")
 						}
 					}
-
-					Toggle("Haptic feedback", isOn: $hapticsEnabled)
-						.modifier(ConditionalPadding())
-						.tint(.green)
+					
+					Toggle(isOn: $hapticsEnabled) {
+						SettingsRowLabel(title: "Haptic feedback", systemImage: "iphone.radiowaves.left.and.right")
+					}
+					.wordlrListSectionRowBackground(.last)
+					.tint(.green)
 				} header: {
 					Text("General")
 				}
-
+				.wordlrListSectionBackground()
+				
 				Section {
-					Toggle("Daily Wordlr reminders", isOn: $notificationsEnabled)
-						.modifier(ConditionalPadding())
-						.tint(.green)
-						.onChange(of: notificationsEnabled) { _, newValue in
-							if newValue {
-								NotificationManager.requestPermission() { result in
-									switch result {
-										case .success(let granted):
-											if granted {
-												print("Permission granted")
-											} else {
-												print("Permission denied")
-												notificationsEnabled = false
-											}
-										case .failure(let error):
-											print("Error requesting permission: \(error)")
+					Toggle(isOn: $notificationsEnabled) {
+						SettingsRowLabel(title: "Daily Wordlr reminders", systemImage: "bell")
+					}
+					.wordlrListSectionRowBackground(notificationsEnabled ? .first : .single)
+					.tint(.green)
+					.onChange(of: notificationsEnabled) { _, newValue in
+						if newValue {
+							NotificationManager.requestPermission() { result in
+								switch result {
+									case .success(let granted):
+										if granted {
+											print("Permission granted")
+										} else {
+											print("Permission denied")
 											notificationsEnabled = false
-											self.showingNotificationSettingsAlert = true
-									}
-									
-								}
-								UNUserNotificationCenter.current().delegate = NotificationsDelegate.shared
-								if dailyWordReminders.isEmpty {
-									let reminder = DailyWordReminder(language: self.defaultLanguage, numberOfLetters: self.defaultNumberOfLetters, timeToFire: self.notificationTime)
-									context.insert(reminder)
-									scheduleNotification(reminder: reminder)
-									try? context.save()
-									
-								} else {
-									for reminder in dailyWordReminders {
-										if reminder.isEnabled {
-											scheduleNotification(reminder: reminder)
 										}
-									}
+									case .failure(let error):
+										print("Error requesting permission: \(error)")
+										notificationsEnabled = false
+										self.showingNotificationSettingsAlert = true
 								}
+								
+							}
+							UNUserNotificationCenter.current().delegate = NotificationsDelegate.shared
+							if dailyWordReminders.isEmpty {
+								let reminder = DailyWordReminder(language: self.defaultLanguage, numberOfLetters: self.defaultNumberOfLetters, timeToFire: self.notificationTime)
+								context.insert(reminder)
+								scheduleNotification(reminder: reminder)
+								try? context.save()
+								
 							} else {
 								for reminder in dailyWordReminders {
 									if reminder.isEnabled {
-										NotificationManager.cancelDailyWordReminder(reminder: reminder)
+										scheduleNotification(reminder: reminder)
 									}
 								}
 							}
-						}
-						.alert("To enable notifications, please go to Settings and allow notifications for this app.", isPresented: $showingNotificationSettingsAlert) {
-							Button("OK", role: .cancel) { }
-							Button("Settings") {
-								if let appSettings = URL(string: UIApplication.openSettingsURLString) {
-									UIApplication.shared.open(appSettings)
+						} else {
+							for reminder in dailyWordReminders {
+								if reminder.isEnabled {
+									NotificationManager.cancelDailyWordReminder(reminder: reminder)
 								}
 							}
-							
 						}
+					}
+					.alert("To enable notifications, please go to Settings and allow notifications for this app.", isPresented: $showingNotificationSettingsAlert) {
+						Button("OK", role: .cancel) { }
+						Button("Settings") {
+							if let appSettings = URL(string: UIApplication.openSettingsURLString) {
+								UIApplication.shared.open(appSettings)
+							}
+						}
+						
+					}
 					
 					if notificationsEnabled {
 						NavigationLink {
 							NotificationView()
 						} label: {
-							Text("Edit daily Wordlr reminders")
-								.foregroundStyle(.primary)
-								.modifier(ConditionalPadding())
+							SettingsRowLabel(title: "Edit daily Wordlr reminders", systemImage: "calendar.badge.clock")
 						}
+						.wordlrListSectionRowBackground(.last)
 						
 						
 					}
 				} header: {
 					Text("Reminders")
 				}
+				.wordlrListSectionBackground()
 				
 				Section {
-					Picker("Word length", selection: $defaultNumberOfLetters) {
+					Picker(selection: $defaultNumberOfLetters) {
 						ForEach(1...8, id: \.self) { number in
 							if number == 1 {
 								Text("\(number) letter")
@@ -286,20 +300,22 @@ struct SettingsView: View {
 									.tag(number)
 							}
 						}
-						
+					} label: {
+						SettingsRowLabel(title: "Word length", systemImage: "textformat.size")
 					}
-					.modifier(ConditionalPadding())
+					.wordlrListSectionRowBackground(.first)
 					.pickerStyle(.menu)
 					.conditionalHaptic(.selection, trigger: defaultNumberOfLetters)
 					
-					Picker("Language", selection: $defaultLanguage) {
+					Picker(selection: $defaultLanguage) {
 						ForEach(LanguageSelection.languages) { language in
 							Text(language.localizedName)
 								.tag(language)
 						}
-						
+					} label: {
+						SettingsRowLabel(title: "Language", systemImage: "globe")
 					}
-					.modifier(ConditionalPadding())
+					.wordlrListSectionRowBackground(.last)
 					.pickerStyle(.menu)
 					.conditionalHaptic(.selection, trigger: defaultLanguage)
 					
@@ -307,9 +323,10 @@ struct SettingsView: View {
 				} header: {
 					Text("Game (default)")
 				}
+				.wordlrListSectionBackground()
 				
 				Section {
-					Picker("Word length", selection: $defaultStatNumberOfLetters) {
+					Picker(selection: $defaultStatNumberOfLetters) {
 						ForEach(1...9, id: \.self) { number in
 							if number == 1 {
 								Text("\(number) letter")
@@ -322,13 +339,14 @@ struct SettingsView: View {
 									.tag(number)
 							}
 						}
-						
+					} label: {
+						SettingsRowLabel(title: "Word length", systemImage: "textformat.size")
 					}
-					.modifier(ConditionalPadding())
+					.wordlrListSectionRowBackground(.first)
 					.pickerStyle(.menu)
 					.conditionalHaptic(.selection, trigger: defaultStatNumberOfLetters)
 					
-					Picker("Language", selection: $defaultStatLanguage) {
+					Picker(selection: $defaultStatLanguage) {
 						ForEach(LanguageSelection.allCases) { language in
 							if language == .all {
 								Text("All")
@@ -338,13 +356,14 @@ struct SettingsView: View {
 									.tag(language)
 							}
 						}
-						
+					} label: {
+						SettingsRowLabel(title: "Language", systemImage: "globe")
 					}
-					.modifier(ConditionalPadding())
+					.wordlrListSectionRowBackground(.middle)
 					.pickerStyle(.menu)
 					.conditionalHaptic(.selection, trigger: defaultStatLanguage)
 					
-					Picker("Gamemode", selection: $defaultStatGameMode) {
+					Picker(selection: $defaultStatGameMode) {
 						ForEach(GameMode.allCases) { mode in
 							if mode == .both {
 								Text("Both")
@@ -354,24 +373,29 @@ struct SettingsView: View {
 									.tag(mode)
 							}
 						}
+					} label: {
+						SettingsRowLabel(title: "Gamemode", systemImage: "gamecontroller")
 					}
-					.modifier(ConditionalPadding())
+					.wordlrListSectionRowBackground(.middle)
 					.pickerStyle(.menu)
 					.conditionalHaptic(.selection, trigger: defaultStatGameMode)
 					
-					Picker("Show if hints used", selection: $defaultStatHintsUsed) {
+					Picker(selection: $defaultStatHintsUsed) {
 						ForEach(ShowsWhenHintsUsed.allCases) { mode in
 							Text(mode.localizedName)
 								.tag(mode)
 						}
+					} label: {
+						SettingsRowLabel(title: "Show if hints used", systemImage: "lightbulb.max.fill")
 					}
-					.modifier(ConditionalPadding())
+					.wordlrListSectionRowBackground(.last)
 					.pickerStyle(.menu)
 					.conditionalHaptic(.selection, trigger: defaultStatHintsUsed)
 					
 				} header: {
 					Text("Stats and history (default)")
 				}
+				.wordlrListSectionBackground()
 				
 				
 				Section {
@@ -382,13 +406,7 @@ struct SettingsView: View {
 						}
 					}, label: {
 						HStack {
-							Image(systemName: "star")
-								.font(.title2)
-								.foregroundStyle(.primary)
-								.frame(width: aboutRowIconWidth, alignment: .center)
-							
-							Text("Want to rate my app?")
-								.foregroundStyle(.primary)
+							SettingsRowLabel(title: "Want to rate my app?", systemImage: "star")
 							
 							Spacer(minLength: 0)
 							
@@ -397,24 +415,20 @@ struct SettingsView: View {
 								.foregroundStyle(.secondary)
 						}
 					})
+					.wordlrListSectionRowBackground(.first)
 					
 					ShareLink(item: URL(string: "https://apps.apple.com/app/id6740833142")!) {
 						HStack {
-							Image(systemName: "square.and.arrow.up")
-								.font(.title2)
-								.foregroundStyle(.primary)
-								.frame(width: aboutRowIconWidth, alignment: .center)
-
-							Text("Share app")
-								.foregroundStyle(.primary)
-
+							SettingsRowLabel(title: "Share app", systemImage: "square.and.arrow.up")
+							
 							Spacer(minLength: 0)
-
+							
 							Image(systemName: "arrow.up.right")
 								.font(.caption).bold()
 								.foregroundStyle(.secondary)
 						}
 					}
+					.wordlrListSectionRowBackground(.middle)
 					.contextMenu {
 						Button {
 							UIPasteboard.general.string = "https://apps.apple.com/app/id6740833142"
@@ -422,18 +436,12 @@ struct SettingsView: View {
 							Label("Copy link", systemImage: "doc.on.doc")
 						}
 					}
-
+					
 					Button(action: {
 						openSupportEmail()
 					}, label: {
 						HStack {
-							Image(systemName: "envelope")
-								.font(.title2)
-								.foregroundStyle(.primary)
-								.frame(width: aboutRowIconWidth, alignment: .center)
-							
-							Text("Send feedback")
-								.foregroundStyle(.primary)
+							SettingsRowLabel(title: "Send feedback", systemImage: "envelope")
 							
 							Spacer(minLength: 0)
 							
@@ -450,6 +458,7 @@ struct SettingsView: View {
 							}
 						}
 					})
+					.wordlrListSectionRowBackground(.middle)
 					
 					Button(action: {
 						Task {
@@ -461,13 +470,7 @@ struct SettingsView: View {
 						}
 					}, label: {
 						HStack {
-							Image(systemName: "hand.raised")
-								.font(.title2)
-								.foregroundStyle(.primary)
-								.frame(width: aboutRowIconWidth, alignment: .center)
-							
-							Text("Privacy options")
-								.foregroundStyle(.primary)
+							SettingsRowLabel(title: "Privacy options", systemImage: "hand.raised")
 							
 							Spacer(minLength: 0)
 							
@@ -477,6 +480,7 @@ struct SettingsView: View {
 						}
 						
 					})
+					.wordlrListSectionRowBackground(.middle)
 					
 #if targetEnvironment(simulator)
 					Button(action: {
@@ -484,13 +488,7 @@ struct SettingsView: View {
 						print("Ad Inspector presented.")
 					}, label: {
 						HStack {
-							Image(systemName: "hammer")
-								.font(.title2)
-								.foregroundStyle(.primary)
-								.frame(width: aboutRowIconWidth, alignment: .center)
-							
-							Text("Ad Inspector")
-								.foregroundStyle(.primary)
+							SettingsRowLabel(title: "Ad Inspector", systemImage: "hammer")
 							
 							
 							Spacer(minLength: 0)
@@ -500,35 +498,32 @@ struct SettingsView: View {
 								.foregroundStyle(.secondary)
 						}
 					})
+					.wordlrListSectionRowBackground(.middle)
 #endif
 					
-					VStack {
-						HStack {
-							Image(systemName: "info.circle")
-								.font(.title2)
-								.foregroundStyle(.primary)
-								.frame(width: aboutRowIconWidth, alignment: .center)
-							Text("Version")
-							
-							Spacer(minLength: 0)
-							
-							Text(appVersionText)
-								.fontWeight(.regular)
-								.foregroundStyle(.secondary)
-								.contextMenu {
-									Button(action: {
-										UIPasteboard.general.string = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "0.0.0"
-									}) {
-										Text("Copy version")
-										Image(systemName: "doc.on.doc")
-									}
+					HStack {
+						SettingsRowLabel(title: "Version", systemImage: "info.circle")
+						
+						Spacer(minLength: 0)
+						
+						Text(appVersionText)
+							.fontWeight(.regular)
+							.foregroundStyle(.secondary)
+							.contextMenu {
+								Button(action: {
+									UIPasteboard.general.string = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "0.0.0"
+								}) {
+									Text("Copy version")
+									Image(systemName: "doc.on.doc")
 								}
-						}
+							}
 					}
+					.wordlrListSectionRowBackground(.last)
 					
 				} header: {
 					Text("About")
 				}
+				.wordlrListSectionBackground()
 			}
 			.fontWeight(.medium)
 			.animation(.easeInOut(duration: 0.4), value: storeManager.isAdRemovalPurchased)
@@ -537,21 +532,33 @@ struct SettingsView: View {
 			.background {
 				if colorScheme == .dark {
 					if #available(iOS 26.0, *) {
-						RadialGradient(
-							colors: [.green.opacity(0.25), .clear],
-							center: .topLeading,
-							startRadius: 0,
-							endRadius: 420
-						)
-						.ignoresSafeArea()
+						GeometryReader { geometry in
+							let isPhone = UIDevice.current.userInterfaceIdiom == .phone
+							let isLandscape = geometry.size.width > geometry.size.height
+							let iPadAndMacOpacity = !storeManager.isAdRemovalPurchased ? max(0, min(1, proSectionMaxY / 300)) : 0
+							let gradientOpacity = isPhone ? 0.25 : 0.25 * iPadAndMacOpacity
+							let endRadius = isPhone ? 420 : min(max(geometry.size.width * 0.85, 520), isLandscape ? 680 : 900)
+							RadialGradient(
+								colors: [.green.opacity(gradientOpacity), .clear],
+								center: .top,
+								startRadius: 0,
+								endRadius: endRadius
+							)
+							.ignoresSafeArea()
+						}
 					} else if !storeManager.isAdRemovalPurchased {
-						RadialGradient(
-							colors: [.green.opacity(0.25 * max(0, min(1, proSectionMaxY / 300))), .clear],
-							center: .topLeading,
-							startRadius: 0,
-							endRadius: 420
-						)
-						.ignoresSafeArea()
+						GeometryReader { geometry in
+							let isPhone = UIDevice.current.userInterfaceIdiom == .phone
+							let isLandscape = geometry.size.width > geometry.size.height
+							let endRadius = isPhone ? 420 : min(max(geometry.size.width * 0.85, 520), isLandscape ? 680 : 900)
+							RadialGradient(
+								colors: [.green.opacity(0.25 * max(0, min(1, proSectionMaxY / 300))), .clear],
+								center: .top,
+								startRadius: 0,
+								endRadius: endRadius
+							)
+							.ignoresSafeArea()
+						}
 					}
 				}
 			}
@@ -596,13 +603,44 @@ struct SettingsView: View {
 	}
 }
 
+private struct SettingsRowLabel: View {
+	private let iconWidth: CGFloat = 24
+	private let rowMinHeight: CGFloat = 34
+	
+	let title: LocalizedStringKey
+	let systemImage: String
+	
+	var body: some View {
+		Label {
+			Text(title)
+		} icon: {
+			Image(systemName: systemImage)
+				.font(.body.weight(.medium))
+				.frame(width: iconWidth, alignment: .center)
+		}
+		.foregroundStyle(.primary)
+		.frame(minHeight: rowMinHeight, alignment: .center)
+	}
+}
+
+private struct UpgradeToProButtonModifier: ViewModifier {
+	func body(content: Content) -> some View {
+		if #available(iOS 26.0, *) {
+			content
+				.glassEffect(.regular.tint(.green).interactive(), in: .rect(cornerRadius: 14))
+		} else {
+			content
+		}
+	}
+}
+
 
 
 struct BannerViewContainer: UIViewRepresentable {
 	typealias UIViewType = BannerView
 	let adSize: AdSize
 	let adManager: AdManager
-
+	
 	init(_ adSize: AdSize, adManager: AdManager) {
 		self.adSize = adSize
 		self.adManager = adManager
@@ -628,16 +666,16 @@ struct BannerViewContainer: UIViewRepresentable {
 	func makeCoordinator() -> BannerCoordinator {
 		return BannerCoordinator(self)
 	}
-
+	
 	class BannerCoordinator: NSObject, BannerViewDelegate {
 		let parent: BannerViewContainer
-
+		
 		init(_ parent: BannerViewContainer) {
 			self.parent = parent
 		}
-
+		
 		// MARK: - GADBannerViewDelegate methods
-
+		
 		func bannerViewDidReceiveAd(_ bannerView: BannerView) {
 			print("DID RECEIVE AD.")
 			Task { @MainActor in
@@ -652,7 +690,7 @@ struct BannerViewContainer: UIViewRepresentable {
 				bannerView.alpha = 1
 			})
 		}
-
+		
 		func bannerView(_ bannerView: BannerView, didFailToReceiveAdWithError error: Error) {
 			Task { @MainActor in
 				withAnimation(.easeInOut(duration: 0.4)) {

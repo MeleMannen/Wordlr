@@ -368,17 +368,13 @@ struct GameRecordView: View {
 						}
 					}
 					
-					if let board = gameRecord.board, gameRecord.mode == .dailyWord {
+					if gameRecord.mode == .dailyWord {
 						HStack {
 							Spacer()
 							
 							Button {
 								withAnimation {
-									if let endDate = gameRecord.endDate {
-										UIPasteboard.general.string = self.getShareResult(row: gameRecord.numberOfGuesses, numberOfLetters: gameRecord.numberOfLetters, maxRows: gameRecord.effectiveMaxRows, date: gameRecord.date, board: board, timeUsedString: self.getTimeUsedString(startDate: self.gameRecord.date, endDate: endDate))
-									} else {
-										UIPasteboard.general.string = self.getShareResult(row: gameRecord.numberOfGuesses, numberOfLetters: gameRecord.numberOfLetters, maxRows: gameRecord.effectiveMaxRows, date: gameRecord.date, board: board)
-									}
+									UIPasteboard.general.string = GameResultShareFormatter.shareText(for: gameRecord)
 									self.hasSharedResult = true
 									self.didTap.toggle()
 								}
@@ -400,10 +396,7 @@ struct GameRecordView: View {
 					
 				}
 				.padding(10)
-				.background {
-					RoundedRectangle(cornerRadius: 20)
-						.foregroundStyle(Color(uiColor: .secondarySystemBackground))
-				}
+				.wordlrSurface(cornerRadius: 20)
 				.padding(.horizontal, 15)
 				.padding(.top, 20)
 				
@@ -416,51 +409,13 @@ struct GameRecordView: View {
 			.onAppear {
 				AnalyticsManager.shared.logScreenViewed(screenName: "GameRecordView")
 				if let endDate = gameRecord.endDate {
-					self.timeUsedString = self.getTimeUsedString(startDate: self.gameRecord.date, endDate: endDate).trimmingCharacters(in: .whitespaces)
+					self.timeUsedString = GameResultShareFormatter.timeUsedString(startDate: self.gameRecord.date, endDate: endDate).trimmingCharacters(in: .whitespaces)
 				}
 			}
 			
 		}
 	}
-	
-	func getShareResult(row: Int, numberOfLetters: Int, maxRows: Int, date: Date, board: [[Letter]], timeUsedString: String = "") -> String {
-		let numberOfRows = maxRows
-		
-		var letterString = String(format: NSLocalizedString("share_letter", comment: "Letter"), numberOfLetters)
-		if numberOfLetters > 1 {
-			letterString = String(format: NSLocalizedString("share_letters", comment: "Letters"), numberOfLetters)
-		}
-		
-		let rowString = String(format: NSLocalizedString("share_row", comment: "Row"))
-		let usedString = String(format: NSLocalizedString("share_used", comment: "Used"))
-		
-		
-		var shareText = "Wordlr \(formatter1.string(from: date)), \(letterString), \(row)/\(numberOfRows) \(rowString)\(timeUsedString != "" ? ", \(timeUsedString) \(usedString)" : ""):\n"
-		
-		var shouldBreak: Bool = false
-		for row in board {
-			for letter in row {
-				switch letter.state {
-					case .correctPosition:
-						shareText += "🟩"
-					case .correctLetter:
-						shareText += "🟧"
-					case .usedButNotCorrect:
-						shareText += "⬜️"
-					default:
-						shouldBreak = true
-						break
-				}
-			}
-			if shouldBreak {
-				break
-			}
-			shareText += "\n"
-			
-		}
-		return shareText
-	}
-	
+
 	func getTimeUsedString(startDate: Date, endDate: Date) -> String {
 		print("End date: \(endDate)")
 		print("startDate: \(startDate)")

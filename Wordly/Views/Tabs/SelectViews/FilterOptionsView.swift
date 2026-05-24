@@ -30,7 +30,7 @@ struct FilterOptionsView: View {
 		
 		NavigationStack {
 			List {
-				VStack {
+					VStack {
 					Toggle(isOn: $appManager.isFilteringSearchWord) {
 						Text("Search")
 							.font(.headline)
@@ -55,10 +55,11 @@ struct FilterOptionsView: View {
 								appManager.isFilteringSearchWord = true
 							}
 						}
-						.modifier(ConditionalGlassEffect())
-				}
-				
-				VStack {
+							.modifier(ConditionalGlassEffect())
+					}
+					.wordlrListSectionRowBackground(.first)
+					
+					VStack {
 					Toggle(isOn: $appManager.isFilteringStartWith) {
 						Text("Starts with")
 							.font(.headline)
@@ -85,10 +86,11 @@ struct FilterOptionsView: View {
 								appManager.isFilteringStartWith = true
 							}
 						}
-						.modifier(ConditionalGlassEffect())
-				}
-				
-				VStack {
+							.modifier(ConditionalGlassEffect())
+					}
+					.wordlrListSectionRowBackground(.middle)
+					
+					VStack {
 					Toggle(isOn: $appManager.isFilteringEndsWith) {
 						Text("Ends with")
 							.font(.headline)
@@ -115,10 +117,11 @@ struct FilterOptionsView: View {
 								appManager.isFilteringEndsWith = true
 							}
 						}
-						.modifier(ConditionalGlassEffect())
-				}
-				
-				VStack {
+							.modifier(ConditionalGlassEffect())
+					}
+					.wordlrListSectionRowBackground(.middle)
+					
+					VStack {
 					Toggle(isOn: $appManager.isFilteringIncludedLetters) {
 						Text("Included letters")
 							.font(.headline)
@@ -181,12 +184,13 @@ struct FilterOptionsView: View {
 								appManager.isFilteringIncludedLetters = true
 							}
 						}
-						.padding(.vertical, 5)
+							.padding(.vertical, 5)
+						}
 					}
-				}
-				
-				
-				VStack {
+					.wordlrListSectionRowBackground(.middle)
+					
+					
+					VStack {
 					Toggle(isOn: $appManager.isFilteringExcludeLetters) {
 						Text("Exclude letters")
 							.font(.headline)
@@ -244,11 +248,12 @@ struct FilterOptionsView: View {
 								appManager.isFilteringExcludeLetters = true
 							}
 						}
-						.padding(.vertical, 5)
+							.padding(.vertical, 5)
+						}
 					}
-				}
-				
-				Button {
+					.wordlrListSectionRowBackground(.middle)
+					
+					Button {
 					self.didTapGameClues.toggle()
 					if storeManager.isAdRemovalPurchased {
 						applyGameInfoToFilters()
@@ -259,22 +264,22 @@ struct FilterOptionsView: View {
 					HStack {
 						Spacer()
 
-						Image(systemName: "sparkles")
-							.font(.headline)
-							.foregroundStyle(.green)
+//						Image(systemName: "sparkles")
+//							.font(.headline)
+//							.foregroundStyle(.green)
 
 						Text("Get from game")
 							.font(.headline)
 							.foregroundStyle(.green)
 							.frame(alignment: .center)
+							.padding(.leading, storeManager.isAdRemovalPurchased ? 0 : 30)
 
 						if !storeManager.isAdRemovalPurchased {
-							Text("PRO")
-								.font(.caption2).bold()
+							Image(systemName: "crown.fill")
+								.font(.caption.weight(.bold))
 								.foregroundStyle(.white)
-								.padding(.horizontal, 6)
-								.padding(.vertical, 2)
-								.background(Capsule().fill(.green))
+								.padding(6)
+								.background(.green, in: Circle())
 						}
 
 						Spacer()
@@ -293,11 +298,12 @@ struct FilterOptionsView: View {
 						}
 				)
 				.conditionalHaptic(.selection, trigger: self.didTapGameClues)
-				.alignmentGuide(.listRowSeparatorLeading) { d in
-					d[.leading]
-				}
+					.alignmentGuide(.listRowSeparatorLeading) { d in
+						d[.leading]
+					}
+					.wordlrListSectionRowBackground(.middle)
 
-				Button {
+					Button {
 					self.didTapReset.toggle()
 					appManager.resetFilters()
 				} label: {
@@ -317,10 +323,11 @@ struct FilterOptionsView: View {
 							self.didTapReset.toggle()
 							appManager.resetFilters()
 						}
-				)
-				.conditionalHaptic(.impact(weight: .medium), trigger: self.didTapReset)
-				.padding(.vertical, 5)
-			}
+					)
+					.conditionalHaptic(.impact(weight: .medium), trigger: self.didTapReset)
+					.padding(.vertical, 5)
+					.wordlrListSectionRowBackground(.last)
+				}
 			.padding(.top, -20)
 			.simultaneousGesture(
 				TapGesture()

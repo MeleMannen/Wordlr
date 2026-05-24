@@ -57,12 +57,14 @@ struct SearchView: View {
 													Label("Use the word", systemImage: "checkmark.circle")
 												}
 											}
+											.wordlrListSectionRowBackground(index: index, count: self.groupedWords[letter]?.count ?? 0)
 										}
 									} header: {
 										SectionHeaderView(letter: letter)
 									}
 									.sectionIndexLabel(letter)
 									.listSectionSeparator(.hidden)
+									.wordlrListSectionBackground()
 									.id(letter)
 								}
 							}
@@ -95,11 +97,13 @@ struct SearchView: View {
 													Label("Use the word", systemImage: "checkmark.circle")
 												}
 											}
+											.wordlrListSectionRowBackground(index: index, count: self.groupedWords[letter]?.count ?? 0)
 										}
 									} header: {
 										SectionHeaderView(letter: letter)
 									}
 									.listSectionSeparator(.hidden)
+									.wordlrListSectionBackground()
 									.id(letter)
 								}
 							}

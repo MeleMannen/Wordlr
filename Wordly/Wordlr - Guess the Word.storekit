@@ -20,7 +20,7 @@
       "internalID" : "6772363447",
       "localizations" : [
         {
-          "description" : "Bez reklam i darmowe podpowiedzi",
+          "description" : "Bez reklam + darmowe podpowiedzi",
           "displayName" : "Pro",
           "locale" : "pl"
         },
@@ -48,7 +48,7 @@
     "_developerTeamID" : "B3ZSP6T559",
     "_disableDialogs" : false,
     "_failTransactionsEnabled" : false,
-    "_lastSynchronizedDate" : 801224195.03808498,
+    "_lastSynchronizedDate" : 801348288.61805606,
     "_locale" : "en_US",
     "_renewalBillingIssuesEnabled" : false,
     "_storefront" : "USA",
