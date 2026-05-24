@@ -145,26 +145,26 @@ struct TabsView: View {
                 let adSize = inlineAdaptiveBanner(width: geometry.size.width - (geometry.size.width / 11), maxHeight: 50)
                 BannerViewContainer(adSize, adManager: adManager)
                     .frame(width: max(0, adSize.size.width), height: max(0, adSize.size.height))
-                    .frame(height: adManager.isBannerAdLoaded ? nil : 0)
+                    .padding(.bottom, adManager.isKeyboardVisible ? 6 : 55)
+                    .frame(height: adManager.isBannerAdLoaded ? nil : 0, alignment: .bottom)
                     .clipped()
                     .allowsHitTesting(adManager.isBannerAdLoaded)
-                    .padding(.bottom, adManager.isBannerAdLoaded ? (adManager.isKeyboardVisible ? 6 : 55) : 0)
             } else if #available(iOS 18.0, *),
                       UIDevice.current.userInterfaceIdiom == .pad || UIDevice.current.userInterfaceIdiom == .mac {
                 let adSize = inlineAdaptiveBanner(width: geometry.size.width, maxHeight: 90)
                 BannerViewContainer(adSize, adManager: adManager)
                     .frame(width: max(0, adSize.size.width), height: max(0, adSize.size.height))
-                    .frame(height: adManager.isBannerAdLoaded ? nil : 0)
+                    .frame(height: adManager.isBannerAdLoaded ? nil : 0, alignment: .bottom)
                     .clipped()
                     .allowsHitTesting(adManager.isBannerAdLoaded)
             } else {
                 let adSize = inlineAdaptiveBanner(width: geometry.size.width, maxHeight: 50)
                 BannerViewContainer(adSize, adManager: adManager)
                     .frame(width: max(0, adSize.size.width), height: max(0, adSize.size.height))
-                    .frame(height: adManager.isBannerAdLoaded ? nil : 0)
+                    .padding(.bottom, adManager.isKeyboardVisible ? 0 : 49)
+                    .frame(height: adManager.isBannerAdLoaded ? nil : 0, alignment: .bottom)
                     .clipped()
                     .allowsHitTesting(adManager.isBannerAdLoaded)
-                    .padding(.bottom, adManager.isBannerAdLoaded ? (adManager.isKeyboardVisible ? 0 : 49) : 0)
             }
         }
     }
