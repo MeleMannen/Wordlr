@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import UIKit
 import GoogleMobileAds
 import TipKit
 
@@ -15,6 +16,8 @@ struct GameView26: View {
 	@Environment(StoreManager.self) private var storeManager
 	@Environment(\.modelContext) private var modelContext
 	@Environment(\.colorScheme) private var colorScheme
+	@Environment(\.accessibilityReduceMotion) private var reduceMotion
+	@Environment(\.dynamicTypeSize) private var dynamicTypeSize
 	@AppStorage("userWantsNormalTheme") private var userWantsNormalTheme: Bool = true
 	@AppStorage("hapticsEnabled") private var hapticsEnabled: Bool = true
 	@AppStorage("notificationsEnabled") private var notificationsEnabled: Bool = false
@@ -28,6 +31,7 @@ struct GameView26: View {
 	@State var alertItem: AlertItem?
 	@State private var hasQueuedNotificationPromptForCurrentWin: Bool = false
 	@State private var showHintButton: Bool = false
+	@State private var lastAnnouncedRevealedRow: Int?
 
 	@Namespace private var namespace
 	
@@ -86,15 +90,20 @@ struct GameView26: View {
 												appManager.applyPendingKeyboardUpdate()
 											} : nil,
 											onRevealComplete: colIndex == appManager.board[rowIndex].count - 1 ? {
-												appManager.applyPendingGameCompletion()
+												handleRowRevealComplete(rowIndex: rowIndex)
 											} : nil
 										)
 									}
 								}
+								.accessibilityElement(children: .ignore)
+								.accessibilityLabel(WordlrAccessibilityFormatter.rowLabel(row: appManager.board[rowIndex], rowIndex: rowIndex, currentRow: appManager.currentRow))
 							}
 						}
 						.padding(.top, 5)
 						.frame(maxWidth: .infinity, maxHeight: (geometry.size.height*3) / 5)
+						.accessibilityElement(children: .contain)
+						.accessibilityLabel(WordlrAccessibilityFormatter.boardLabel(board: appManager.board, currentRow: appManager.currentRow, isGameOver: appManager.isGameOver))
+						.accessibilityValue(WordlrAccessibilityFormatter.boardValue(numberOfLetters: appManager.numberOfLetters, rowCount: appManager.board.count))
 						
 					}
 					GeometryReader { geometry2 in
@@ -111,11 +120,13 @@ struct GameView26: View {
 													if appManager.keyboard.last == keyboardRow && keyboardRow.first?.letter == keyBoardKey.letter {
 														Text("Z")
 															.hidden()
+															.accessibilityHidden(true)
 															.frame(minWidth: geometry2.size.width / CGFloat(14), maxWidth: geometry2.size.width / CGFloat(12), minHeight: geometry2.size.height / CGFloat(10), idealHeight: geometry2.size.height / CGFloat(8), maxHeight: geometry2.size.height / CGFloat(6))
 														
 														
 														Text("Z")
 															.hidden()
+															.accessibilityHidden(true)
 															.frame(minWidth: geometry2.size.width / CGFloat(14), maxWidth: geometry2.size.width / CGFloat(12), minHeight: geometry2.size.height / CGFloat(10), idealHeight: geometry2.size.height / CGFloat(8), maxHeight: geometry2.size.height / CGFloat(6))
 														
 													}
@@ -135,10 +146,12 @@ struct GameView26: View {
 													if appManager.keyboard.last == keyboardRow && keyboardRow.last?.letter == keyBoardKey.letter {
 														Text("Z")
 															.hidden()
+															.accessibilityHidden(true)
 															.frame(minWidth: geometry2.size.width / CGFloat(14), maxWidth: geometry2.size.width / CGFloat(12), minHeight: geometry2.size.height / CGFloat(10), idealHeight: geometry2.size.height / CGFloat(8), maxHeight: geometry2.size.height / CGFloat(6))
 														
 														Text("Z")
 															.hidden()
+															.accessibilityHidden(true)
 															.frame(minWidth: geometry2.size.width / CGFloat(14), maxWidth: geometry2.size.width / CGFloat(12), minHeight: geometry2.size.height / CGFloat(10), idealHeight: geometry2.size.height / CGFloat(8), maxHeight: geometry2.size.height / CGFloat(6))
 													}
 												}
@@ -189,6 +202,9 @@ struct GameView26: View {
 												}
 												.opacity(appManager.selectedGameMode == .dailyWord ? 0.4 : 1.0)
 										})
+										.accessibilityLabel("Restart game")
+										.accessibilityHint("Restarts the current free play game.")
+										.accessibilityInputLabels(["Restart", "Restart game"])
 										.glassEffect(.regular.tint(self.colorForUnused.opacity(appManager.selectedGameMode == .dailyWord ? 0.4 : 1.0)).interactive(), in: .rect(cornerRadius: 10.0))
 										.glassEffectID("reset", in: self.namespace)
 										
@@ -206,6 +222,9 @@ struct GameView26: View {
 											Text("SUBMIT WORD")
 												.conditionalShadow(color: .black.opacity(0.2), radius: 2, x: 3, y: 3)
 												.font(.title).bold()
+												.lineLimit(2)
+												.minimumScaleFactor(0.75)
+												.multilineTextAlignment(.center)
 												.frame(minWidth: (geometry2.size.width*7) / CGFloat(14) + CGFloat(self.device == .pad ? 60 : 30), maxWidth: (geometry2.size.width*7) / CGFloat(12) + CGFloat(self.device == .pad ? 60 : 30), minHeight: geometry2.size.height / CGFloat(10), idealHeight: geometry2.size.height / CGFloat(8), maxHeight: geometry2.size.height / CGFloat(6))
 												.foregroundStyle(.white)
 												.background {
@@ -221,6 +240,10 @@ struct GameView26: View {
 													}
 												}
 										})
+										.accessibilityLabel("Submit word")
+										.accessibilityValue(appManager.wordIsValidForSubmitButton() ? "Ready" : "Not ready")
+										.accessibilityHint("Checks the current guess.")
+										.accessibilityInputLabels(["Submit", "Submit word"])
 										.glassEffectID("submit", in: self.namespace)
 										.glassEffect(!self.userWantsNormalTheme && self.colorScheme == .dark && appManager.selectedGameMode == .dailyWord ? .regular.interactive() : .regular.tint(.green.opacity(appManager.submitOpacity)).interactive(), in: .rect(cornerRadius: 10.0))
 										.animation(.easeInOut(duration: 0.2), value: appManager.submitOpacity)
@@ -256,6 +279,9 @@ struct GameView26: View {
 												}
 										})
 										.buttonRepeatBehavior(.enabled)
+										.accessibilityLabel("Delete letter")
+										.accessibilityHint("Deletes the previous letter.")
+										.accessibilityInputLabels(["Delete", "Delete letter"])
 										.glassEffect(.regular.tint(self.colorForUnused).interactive(), in: .rect(cornerRadius: 10.0))
 										.glassEffectID("delete", in: self.namespace)
 										.conditionalHaptic(.impact, trigger: self.didTapBackButton)
@@ -285,6 +311,9 @@ struct GameView26: View {
 									Text(appManager.selectedGameMode == .normal ? LocalizedStringKey("New game") : LocalizedStringKey("Free Play"))
 										.conditionalShadow(color: .black.opacity(0.2), radius: 2, x: 4, y: 4)
 										.font(.title2).bold()
+										.lineLimit(2)
+										.minimumScaleFactor(0.8)
+										.multilineTextAlignment(.center)
 										.frame(maxWidth: .infinity, minHeight: 40, idealHeight: 45, maxHeight: 50)
 										.foregroundStyle(.white)
 										.background {
@@ -299,6 +328,8 @@ struct GameView26: View {
 												}
 										}
 								})
+								.accessibilityHint("Starts the next game.")
+								.accessibilityInputLabels(["New game", "Free Play"])
 								.glassEffect(self.userWantsNormalTheme || !self.userWantsNormalTheme && self.colorScheme == .dark && appManager.selectedGameMode == .normal ? .regular.tint(.green).interactive() : .regular.interactive(), in: .rect(cornerRadius: 10.0))
 								.glassEffectID("new", in: self.namespace)
 								.padding(.horizontal, 20)
@@ -311,6 +342,9 @@ struct GameView26: View {
 									Text("Show definition")
 										.conditionalShadow(color: .black.opacity(0.2), radius: 2, x: 4, y: 4)
 										.font(.title2).bold()
+										.lineLimit(2)
+										.minimumScaleFactor(0.8)
+										.multilineTextAlignment(.center)
 										.frame(maxWidth: .infinity, minHeight: 40, idealHeight: 45, maxHeight: 50)
 										.foregroundStyle(.white)
 										.background {
@@ -320,6 +354,7 @@ struct GameView26: View {
 										}
 
 								})
+								.accessibilityHint("Opens the definition for the answer.")
 								.simultaneousGesture(TapGesture().onEnded {
 									self.didTapShowDefinitionButton.toggle()
 									adManager.shouldShowAds = true
@@ -340,12 +375,14 @@ struct GameView26: View {
 											UIPasteboard.general.string = appManager.getShareResult(row: appManager.currentRow, numberOfLetters: appManager.numberOfLetters, date: appManager.startDate, board: appManager.board, timeUsedString: appManager.getTimeUsedString(startDate: appManager.startDate, endDate: appManager.endDate))
 										}
 									} label: {
-										Label("Copy result", systemImage: appManager.hasSharedResult ? "doc.on.doc.fill" : "doc.on.doc")
-											.font(.title2).bold()
-											.contentTransition(.symbolEffect(.replace))
+											Label("Copy result", systemImage: appManager.hasSharedResult ? "doc.on.doc.fill" : "doc.on.doc")
+												.font(.title2).bold()
+											.contentTransition(reduceMotion ? .identity : .symbolEffect(.replace))
 											.conditionalShadow(color: .black.opacity(0.5), radius: 4, x: 4, y: 4)
 											.tint(.primary)
 									}
+									.accessibilityHint("Copies your shareable game result.")
+									.accessibilityInputLabels(["Copy result", "Copy"])
 
 									Spacer()
 								}
@@ -506,6 +543,22 @@ struct GameView26: View {
 			}
 		}
 	}
+
+	private func handleRowRevealComplete(rowIndex: Int) {
+		appManager.applyPendingGameCompletion()
+		guard lastAnnouncedRevealedRow != rowIndex,
+			  appManager.board.indices.contains(rowIndex) else {
+			return
+		}
+
+		lastAnnouncedRevealedRow = rowIndex
+		let announcement = WordlrAccessibilityFormatter.rowLabel(
+			row: appManager.board[rowIndex],
+			rowIndex: rowIndex,
+			currentRow: appManager.currentRow
+		)
+		UIAccessibility.post(notification: .announcement, argument: announcement)
+	}
 	
 	private func presentNotificationPromptIfNeeded() {
 		guard appManager.isGameOver,
@@ -600,11 +653,16 @@ struct AdButton: View {
 			}
 			.conditionalHaptic(.selection, trigger: self.didTap)
 
-		if shouldShowHintTip {
-			button.popoverTip(self.hintTip)
-		} else {
-			button
+		Group {
+			if shouldShowHintTip {
+				button.popoverTip(self.hintTip)
+			} else {
+				button
+			}
 		}
+		.accessibilityLabel("Get hint")
+		.accessibilityHint(storeManager.isAdRemovalPurchased ? "Reveals one hint." : "Shows an ad, then reveals one hint.")
+		.accessibilityInputLabels(["Hint", "Get hint", "Lightbulb"])
 	}
 }
 
@@ -615,7 +673,8 @@ struct SearchToolbarItem: View {
 	
 	var body: some View {
 		NavigationLink(destination: SearchView().environment(appManager), label: {
-			Image(systemName: "magnifyingglass")
+			Label("Search", systemImage: "magnifyingglass")
+				.labelStyle(.iconOnly)
 				.contentShape(Rectangle())
 		})
 		.simultaneousGesture(TapGesture().onEnded {
@@ -626,10 +685,15 @@ struct SearchToolbarItem: View {
 		})
 		.conditionalHaptic(.selection, trigger: self.didTapSearchButton)
 		.popoverTip(self.searchTip)
+		.accessibilityLabel("Search")
+		.accessibilityHint("Opens word search.")
+		.accessibilityInputLabels(["Search", "Word search", "Magnifying glass"])
 	}
 }
 
 struct KeyboardKeyButton18: View {
+	@Environment(\.accessibilityDifferentiateWithoutColor) private var differentiateWithoutColor
+
 	let key: KeyBoardLetter
 	let colorForUnused: Color
 	let width: CGFloat
@@ -651,9 +715,22 @@ struct KeyboardKeyButton18: View {
 					RoundedRectangle(cornerRadius: 5)
 						.fill(keyColor)
 				}
+				.overlay(alignment: .bottomTrailing) {
+					if differentiateWithoutColor, let symbolName = key.state.accessibilitySymbolName {
+						Image(systemName: symbolName)
+							.font(.caption2.bold())
+							.foregroundStyle(key.state == .notUsed ? .black : .white)
+							.padding(3)
+							.accessibilityHidden(true)
+					}
+				}
 		}
 		.buttonStyle(ScalingButton())
 		.conditionalHaptic(.impact, trigger: feedbackTrigger)
+		.accessibilityLabel(WordlrAccessibilityFormatter.keyboardKeyLabel(key: key))
+		.accessibilityValue(WordlrAccessibilityFormatter.keyboardKeyValue(key: key))
+		.accessibilityHint(WordlrAccessibilityFormatter.keyboardKeyHint(key: key))
+		.accessibilityInputLabels([LocalizedStringKey(key.letter), LocalizedStringKey(WordlrAccessibilityFormatter.keyboardKeyLabel(key: key))])
 	}
 	
 	private var keyColor: Color {
@@ -672,6 +749,8 @@ struct KeyboardKeyButton18: View {
 
 @available(iOS 26.0, *)
 struct KeyboardKeyButton26: View {
+	@Environment(\.accessibilityDifferentiateWithoutColor) private var differentiateWithoutColor
+
 	let key: KeyBoardLetter
 	let colorForUnused: Color
 	let colorForWhenAppInBackground: Color
@@ -695,8 +774,21 @@ struct KeyboardKeyButton26: View {
 						RoundedRectangle(cornerRadius: 5)
 							.foregroundStyle(backgroundKeyColor)
 				}
+				.overlay(alignment: .bottomTrailing) {
+					if differentiateWithoutColor, let symbolName = key.state.accessibilitySymbolName {
+						Image(systemName: symbolName)
+							.font(.caption2.bold())
+							.foregroundStyle(key.state == .notUsed ? .black : .white)
+							.padding(3)
+							.accessibilityHidden(true)
+					}
+				}
 		}
 		.conditionalHaptic(.impact, trigger: feedbackTrigger)
+		.accessibilityLabel(WordlrAccessibilityFormatter.keyboardKeyLabel(key: key))
+		.accessibilityValue(WordlrAccessibilityFormatter.keyboardKeyValue(key: key))
+		.accessibilityHint(WordlrAccessibilityFormatter.keyboardKeyHint(key: key))
+		.accessibilityInputLabels([LocalizedStringKey(key.letter), LocalizedStringKey(WordlrAccessibilityFormatter.keyboardKeyLabel(key: key))])
 		.glassEffect(.regular.tint(keyColor).interactive(), in: .rect(cornerRadius: 5.0))
 		.glassEffectID("\(key.letter)", in: namespace)
 	}
@@ -729,18 +821,22 @@ struct KeyboardKeyButton26: View {
 }
 
 struct GrowingButton: ButtonStyle {
+	@Environment(\.accessibilityReduceMotion) private var reduceMotion
+
 	func makeBody(configuration: Configuration) -> some View {
 		configuration.label
-			.scaleEffect(configuration.isPressed ? 1.05 : 1)
-			.animation(.easeInOut(duration: 0.1), value: configuration.isPressed)
+			.scaleEffect(configuration.isPressed && !reduceMotion ? 1.05 : 1)
+			.animation(reduceMotion ? nil : .easeInOut(duration: 0.1), value: configuration.isPressed)
 	}
 }
 
 struct ScalingButton: ButtonStyle {
+	@Environment(\.accessibilityReduceMotion) private var reduceMotion
+
 	func makeBody(configuration: Configuration) -> some View {
 		configuration.label
-			.scaleEffect(configuration.isPressed ? 1.1 : 1)
-			.animation(.easeInOut(duration: 0.1), value: configuration.isPressed)
+			.scaleEffect(configuration.isPressed && !reduceMotion ? 1.1 : 1)
+			.animation(reduceMotion ? nil : .easeInOut(duration: 0.1), value: configuration.isPressed)
 	}
 }
 

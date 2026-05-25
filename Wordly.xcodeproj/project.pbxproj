@@ -10,6 +10,7 @@
 		63432AFA2FBD42BB005529C4 /* TelemetryDeck in Frameworks */ = {isa = PBXBuildFile; productRef = 63432AF92FBD42BB005529C4 /* TelemetryDeck */; };
 		63432AFD2FBDDA29005529C4 /* PostHog in Frameworks */ = {isa = PBXBuildFile; productRef = 63432AFC2FBDDA29005529C4 /* PostHog */; };
 		6344F4FF2EB9502300948552 /* KeyPress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6344F4FE2EB9500D00948552 /* KeyPress.swift */; };
+		634900012FC2A00100A11CE5 /* AccessibilitySupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634900002FC2A00100A11CE5 /* AccessibilitySupport.swift */; };
 		635799612FC033F300B31921 /* SelectGameModeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 635799602FC033F300B31921 /* SelectGameModeButton.swift */; };
 		63A1C1012FA0000100A00001 /* StoreManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63A1C1002FA0000100A00001 /* StoreManager.swift */; };
 		63B1E1362F795EA500F36987 /* AdManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B1E1352F795EA500F36987 /* AdManager.swift */; };
@@ -62,6 +63,7 @@
 
 /* Begin PBXFileReference section */
 		6344F4FE2EB9500D00948552 /* KeyPress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyPress.swift; sourceTree = "<group>"; };
+		634900002FC2A00100A11CE5 /* AccessibilitySupport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessibilitySupport.swift; sourceTree = "<group>"; };
 		635799602FC033F300B31921 /* SelectGameModeButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectGameModeButton.swift; sourceTree = "<group>"; };
 		6382E3BC2D12FE0500B61353 /* Wordly.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Wordly.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		63A1C1002FA0000100A00001 /* StoreManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreManager.swift; sourceTree = "<group>"; };
@@ -253,6 +255,7 @@
 			isa = PBXGroup;
 			children = (
 				63BF73DE2F447CCA0065D40B /* AnalyticsManager.swift */,
+				634900002FC2A00100A11CE5 /* AccessibilitySupport.swift */,
 				63B9B4092EA58ED2008483FB /* AppObjects.swift */,
 				63B9B4082EA58ED2008483FB /* AppManager.swift */,
 				63B1E1352F795EA500F36987 /* AdManager.swift */,
@@ -391,6 +394,7 @@
 				63B9B4282EA58ED2008483FB /* GameView.swift in Sources */,
 				63B9B4292EA58ED2008483FB /* AppManager.swift in Sources */,
 				63BF73DF2F447CD50065D40B /* AnalyticsManager.swift in Sources */,
+				634900012FC2A00100A11CE5 /* AccessibilitySupport.swift in Sources */,
 				63B9B42B2EA58ED2008483FB /* AppObjects.swift in Sources */,
 				63B9B42C2EA58ED2008483FB /* TabsView.swift in Sources */,
 				63B9B42D2EA58ED2008483FB /* StatsView.swift in Sources */,

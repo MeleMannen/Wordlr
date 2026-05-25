@@ -9,6 +9,7 @@ import SwiftUI
 
 struct GameRecordView: View {
 	@Environment(\.colorScheme) private var colorScheme
+	@Environment(\.accessibilityReduceMotion) private var reduceMotion
 	@Environment(AdManager.self) private var adManager
 	@AppStorage("userWantsNormalTheme") private var userWantsNormalTheme: Bool = true
 	@AppStorage("userWantsThePhraseNameBack") private var userWantsThePhraseNameBack = false
@@ -61,6 +62,7 @@ struct GameRecordView: View {
 									.simultaneousGesture(TapGesture(count: 1).onEnded {
 										self.didTap.toggle()
 									})
+									.accessibilityHidden(true)
 							} else {
 								Image(systemName: gameRecord.state == .won ? "checkmark" : "xmark")
 									.foregroundStyle(.white)
@@ -81,6 +83,7 @@ struct GameRecordView: View {
 									.simultaneousGesture(TapGesture(count: 1).onEnded {
 										self.didTap.toggle()
 									})
+									.accessibilityHidden(true)
 							}
 						} else {
 							if !self.userWantsNormalTheme && self.colorScheme == .dark && gameRecord.mode == .dailyWord && gameRecord.state == .won {
@@ -103,6 +106,7 @@ struct GameRecordView: View {
 									.simultaneousGesture(TapGesture(count: 1).onEnded {
 										self.didTap.toggle()
 									})
+									.accessibilityHidden(true)
 							} else {
 								Image(systemName: gameRecord.state == .won ? "checkmark" : "xmark")
 									.foregroundStyle(.white)
@@ -122,11 +126,14 @@ struct GameRecordView: View {
 									.simultaneousGesture(TapGesture(count: 1).onEnded {
 										self.didTap.toggle()
 									})
+									.accessibilityHidden(true)
 							}
 						}
 					}
 					.padding(.top)
 					.padding(.horizontal)
+					.accessibilityElement(children: .combine)
+					.accessibilityLabel(WordlrAccessibilityFormatter.gameRecordSummary(gameRecord, timeUsed: self.timeUsedString))
 					
 					
 					VStack(alignment: .leading) {
@@ -263,6 +270,9 @@ struct GameRecordView: View {
 								.foregroundColor(.white)
 								.conditionalShadow(color: .black.opacity(0.5), radius: 4, x: 4, y: 4)
 								.font(.title2).bold()
+								.lineLimit(2)
+								.minimumScaleFactor(0.8)
+								.multilineTextAlignment(.center)
 								.padding(14)
 								.frame(maxWidth: .infinity)
 								.background {
@@ -276,6 +286,7 @@ struct GameRecordView: View {
 									}
 								}
 						}
+						.accessibilityHint("Opens the definition for this word.")
 						.glassEffect(!self.userWantsNormalTheme && self.colorScheme == .dark && gameRecord.mode == .dailyWord && gameRecord.state == .won ? .regular.interactive() : .regular.tint(.green).interactive(), in: .rect(cornerRadius: 15.0))
 						.glassEffectID("definition", in: self.namespace)
 						.simultaneousGesture(TapGesture().onEnded {
@@ -295,6 +306,9 @@ struct GameRecordView: View {
 									.foregroundColor(.white)
 									.conditionalShadow(color: .black.opacity(0.5), radius: 4, x: 4, y: 4)
 									.font(.title2).bold()
+									.lineLimit(2)
+									.minimumScaleFactor(0.8)
+									.multilineTextAlignment(.center)
 									.padding(14)
 									.frame(maxWidth: .infinity)
 									.background {
@@ -304,6 +318,7 @@ struct GameRecordView: View {
 									}
 
 							}
+							.accessibilityHint("Opens the completed board with letter feedback.")
 							.glassEffect(!self.userWantsNormalTheme && self.colorScheme == .dark && gameRecord.mode == .dailyWord && gameRecord.state == .won ? .regular.tint(.green).interactive() : .regular.tint(.orange).interactive(), in: .rect(cornerRadius: 15.0))
 							.glassEffectID("board", in: self.namespace)
 							.simultaneousGesture(TapGesture().onEnded {
@@ -320,6 +335,9 @@ struct GameRecordView: View {
 								.foregroundColor(.white)
 								.conditionalShadow(color: .black.opacity(0.05), radius: 2, x: 1, y: 1)
 								.font(.title2).bold()
+								.lineLimit(2)
+								.minimumScaleFactor(0.8)
+								.multilineTextAlignment(.center)
 								.padding(14)
 								.frame(maxWidth: .infinity)
 								.background {
@@ -335,6 +353,7 @@ struct GameRecordView: View {
 								}
 								.padding(.horizontal, 40)
 						}
+						.accessibilityHint("Opens the definition for this word.")
 						.simultaneousGesture(TapGesture().onEnded {
 							self.didTap.toggle()
 						})
@@ -350,6 +369,9 @@ struct GameRecordView: View {
 									.foregroundColor(.white)
 									.conditionalShadow(color: .black.opacity(0.05), radius: 1.5, x: 1, y: 1)
 									.font(.title2).bold()
+									.lineLimit(2)
+									.minimumScaleFactor(0.8)
+									.multilineTextAlignment(.center)
 									.padding(14)
 									.frame(maxWidth: .infinity)
 									.background {
@@ -358,6 +380,7 @@ struct GameRecordView: View {
 									}
 									.padding(.horizontal, 40)
 							}
+							.accessibilityHint("Opens the completed board with letter feedback.")
 							.simultaneousGesture(TapGesture().onEnded {
 								self.didTap.toggle()
 							})
@@ -381,11 +404,13 @@ struct GameRecordView: View {
 							} label: {
 								Label("Copy result", systemImage: self.hasSharedResult ? "doc.on.doc.fill" : "doc.on.doc")
 									.font(.title2).bold()
-									.contentTransition(.symbolEffect(.replace))
+									.contentTransition(reduceMotion ? .identity : .symbolEffect(.replace))
 									.conditionalShadow(color: .black.opacity(0.5), radius: 4, x: 4, y: 4)
 									.tint(.primary)
 								
 							}
+							.accessibilityHint("Copies the shareable result for this game.")
+							.accessibilityInputLabels(["Copy result", "Copy"])
 							.padding(.vertical, 15)
 							.conditionalHaptic(.impact, trigger: self.didTap)
 							

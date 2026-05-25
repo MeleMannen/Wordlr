@@ -39,12 +39,14 @@ struct Info: View {
 						Text("Correct position")
 							.font(.headline)
 						HStack(spacing: 8) {
-							GameTile(letter: "G", fill: .green, textColor: .white)
+							GameTile(letter: "G", fill: .green, textColor: .white, state: .correctPosition)
 							GameTile(letter: "U", fill: Color(UIColor.lightGray), textColor: .black)
 							GameTile(letter: "E", fill: Color(UIColor.lightGray), textColor: .black)
 							GameTile(letter: "S", fill: Color(UIColor.lightGray), textColor: .black)
 							GameTile(letter: "S", fill: Color(UIColor.lightGray), textColor: .black)
 						}
+						.accessibilityElement(children: .ignore)
+						.accessibilityLabel("Example: G, correct position")
 						Text("Green means the letter is in the word and in the correct spot.")
 							.font(.callout)
 							.multilineTextAlignment(.leading)
@@ -57,9 +59,11 @@ struct Info: View {
 							.font(.headline)
 						HStack(spacing: 8) {
 							GameTile(letter: "T", fill: Color(UIColor.lightGray), textColor: .black)
-							GameTile(letter: "H", fill: .orange, textColor: .white)
+							GameTile(letter: "H", fill: .orange, textColor: .white, state: .correctLetter)
 							GameTile(letter: "E", fill: Color(UIColor.lightGray), textColor: .black)
 						}
+						.accessibilityElement(children: .ignore)
+						.accessibilityLabel("Example: H, in the word, wrong position")
 						Text("Orange means the letter is in the word, but in a different spot.")
 							.font(.callout)
 							.multilineTextAlignment(.leading)
@@ -72,11 +76,13 @@ struct Info: View {
 							.font(.headline)
 						
 						HStack(spacing: 8) {
-							GameTile(letter: "W", fill: Color(uiColor: .darkGray), textColor: .white)
+							GameTile(letter: "W", fill: Color(uiColor: .darkGray), textColor: .white, state: .usedButNotCorrect)
 							GameTile(letter: "O", fill: Color(UIColor.lightGray), textColor: .black)
 							GameTile(letter: "R", fill: Color(UIColor.lightGray), textColor: .black)
 							GameTile(letter: "D", fill: Color(UIColor.lightGray), textColor: .black)
 						}
+						.accessibilityElement(children: .ignore)
+						.accessibilityLabel("Example: W, not in the word")
 						Text("Dark gray means the letter is not in the word at all.")
 							.font(.callout)
 							.multilineTextAlignment(.leading)

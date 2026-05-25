@@ -34,9 +34,13 @@ struct TabsView: View {
                     SelectView(selection: self.$selection)
 
                 }
+				.accessibilityLabel(self.userWantsThePhraseNameBack ? "The Phrase tab" : "Wordlr tab")
+				.accessibilityInputLabels([self.userWantsThePhraseNameBack ? "The Phrase" : "Wordlr", "Home", "Game"])
                 .tag(TabSelection.home)
                 .tabItem {
                     Label(self.userWantsThePhraseNameBack ? "The Phrase" : "Wordlr", systemImage: self.userWantsThePhraseNameBack ? "p.square.fill" : "w.square.fill")
+						.accessibilityLabel(self.userWantsThePhraseNameBack ? "The Phrase" : "Wordlr")
+						.accessibilityInputLabels([self.userWantsThePhraseNameBack ? "The Phrase" : "Wordlr", "Home", "Game"])
                 }
                 .task {
                     try? Tips.configure([.datastoreLocation(.applicationDefault)])
@@ -44,31 +48,42 @@ struct TabsView: View {
                 .tint(.primary)
 
                 StatsView()
+					.accessibilityLabel("Stats tab")
+					.accessibilityInputLabels(["Stats", "Statistics"])
                     .tag(TabSelection.stats)
                     .tabItem {
                         if #available(iOS 18.0, *) {
                             Label("Stats", systemImage: "chart.bar.yaxis")
+								.accessibilityInputLabels(["Stats", "Statistics"])
                         } else {
                             Label("Stats", systemImage: "chart.bar.xaxis")
+								.accessibilityInputLabels(["Stats", "Statistics"])
                         }
                     }
                     .tint(.primary)
 
                 HistoryView()
+					.accessibilityLabel("History tab")
+					.accessibilityInputLabels(["History", "Historikk", "Previous games"])
                     .tag(TabSelection.history)
                     .tabItem {
                         if #available(iOS 18.0, *) {
                             Label("History", systemImage: "clock.arrow.trianglehead.counterclockwise.rotate.90")
+								.accessibilityInputLabels(["History", "Historikk", "Previous games"])
                         } else {
                             Label("History", systemImage: "clock")
+								.accessibilityInputLabels(["History", "Historikk", "Previous games"])
                         }
                     }
                     .tint(.primary)
 
                 SettingsView()
+					.accessibilityLabel("Settings tab")
+					.accessibilityInputLabels(["Settings", "Innstillinger"])
                     .tag(TabSelection.settings)
                     .tabItem {
                         Label("Settings", systemImage: "gear")
+							.accessibilityInputLabels(["Settings", "Innstillinger"])
                     }
                     .tint(.primary)
 

@@ -183,10 +183,14 @@ struct SelectView: View {
 			.toolbar {
 				ToolbarItem(placement: .navigationBarTrailing) {
 					NavigationLink(destination: Info().environment(appManager).environmentObject(appState)) {
-						Image(systemName: "info")
+						Label("Info", systemImage: "info")
+							.labelStyle(.iconOnly)
 							.font(.title2)
 							.foregroundStyle(.primary)
 					}
+					.accessibilityLabel("Info")
+					.accessibilityHint("Shows how to play.")
+					.accessibilityInputLabels(["Info", "How to play"])
 					.simultaneousGesture(TapGesture().onEnded {
 						self.didTapInfoButton.toggle()
 					})

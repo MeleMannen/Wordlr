@@ -26,6 +26,15 @@ struct WordDefinitionView: View {
     }
 }
 
+struct DefinitionLoadingView: View {
+	var body: some View {
+		ProgressView()
+			.progressViewStyle(CircularProgressViewStyle())
+			.font(.largeTitle)
+			.frame(maxWidth: .infinity, maxHeight: .infinity)
+	}
+}
+
 #Preview {
     WordDefinitionView(word: "Hello")
 }

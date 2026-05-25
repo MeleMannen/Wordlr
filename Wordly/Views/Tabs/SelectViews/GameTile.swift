@@ -1,16 +1,20 @@
 import SwiftUI
 
-public struct GameTile: View {
-    public let letter: String
-    public let fill: Color
-    public let textColor: Color
-    public let size: CGFloat = 48
-    public let cornerRadius: CGFloat = 8
+struct GameTile: View {
+	@Environment(\.accessibilityDifferentiateWithoutColor) private var differentiateWithoutColor
 
-	public init(letter: String, fill: Color, textColor: Color) {
+    let letter: String
+    let fill: Color
+    let textColor: Color
+	let state: LetterState?
+    let size: CGFloat = 48
+    let cornerRadius: CGFloat = 8
+
+	init(letter: String, fill: Color, textColor: Color, state: LetterState? = nil) {
         self.letter = letter
         self.fill = fill
         self.textColor = textColor
+		self.state = state
     }
 
     public var body: some View {
@@ -22,10 +26,29 @@ public struct GameTile: View {
                 RoundedRectangle(cornerRadius: cornerRadius)
                     .fill(fill)
             )
+			.overlay(alignment: .bottomTrailing) {
+				if differentiateWithoutColor, let symbolName = state?.accessibilitySymbolName {
+					Image(systemName: symbolName)
+						.font(.caption.bold())
+						.foregroundStyle(textColor)
+						.padding(4)
+						.accessibilityHidden(true)
+				}
+			}
+			.accessibilityLabel(accessibilityLabel)
     }
+
+	private var accessibilityLabel: String {
+		guard let state else { return letter }
+		return "\(letter), \(String(localized: state.accessibilityDescription).lowercased())"
+	}
 }
 
 struct AnimatedGameTile: View {
+	@Environment(\.accessibilityDifferentiateWithoutColor) private var differentiateWithoutColor
+	@Environment(\.accessibilityReduceMotion) private var reduceMotion
+	@ScaledMetric(relativeTo: .largeTitle) private var tileFontSize: CGFloat = 34
+
     let letter: Letter
     let tileSize: CGFloat
     let colIndex: Int
@@ -99,13 +122,23 @@ struct AnimatedGameTile: View {
 
     var body: some View {
         Text(letter.letter)
-            .font(.largeTitle).bold()
+            .font(.system(size: min(tileSize * 0.62, tileFontSize), weight: .bold))
             .foregroundStyle(tileTextColor)
             .frame(width: tileSize, height: tileSize)
             .background(tileBackground)
+			.overlay(alignment: .bottomTrailing) {
+				if differentiateWithoutColor, let symbolName = displayedState.accessibilitySymbolName {
+					Image(systemName: symbolName)
+						.font(.caption.bold())
+						.foregroundStyle(tileTextColor)
+						.padding(4)
+						.accessibilityHidden(true)
+				}
+			}
             .rotationEffect(.degrees(spinDegrees), anchor: .center)
             .scaleEffect(tileScale, anchor: .center)
-            .offset(x: rowIndex == currentRow ? (isShaking ? -15 : 0) : 0)
+            .offset(x: rowIndex == currentRow ? (isShaking && !reduceMotion ? -15 : 0) : 0)
+			.accessibilityHidden(true)
             .onChange(of: letter.id, initial: true) {
                 prepareForCurrentLetterIdentity()
             }
@@ -205,6 +238,17 @@ struct AnimatedGameTile: View {
         DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
             guard generation == animationGeneration else { return }
 
+			if reduceMotion {
+				if let state {
+					displayedState = state
+				}
+				spinDegrees = 0
+				tileScale = 1.0
+				onRevealStart?()
+				onRevealComplete?()
+				return
+			}
+
             var transaction = Transaction()
             transaction.disablesAnimations = true
             withTransaction(transaction) {
@@ -226,6 +270,7 @@ struct AnimatedGameTile: View {
     }
 
     private func animateTap() {
+		guard !reduceMotion else { return }
         tileScale = 1.1
         withAnimation(tileSpring) {
             tileScale = 1.0
@@ -233,6 +278,7 @@ struct AnimatedGameTile: View {
     }
 
     private func animateRemove() {
+		guard !reduceMotion else { return }
         tileScale = 0.87
         withAnimation(tileSpring) {
             tileScale = 1.0

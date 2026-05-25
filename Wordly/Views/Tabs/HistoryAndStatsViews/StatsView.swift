@@ -11,6 +11,7 @@ import SwiftData
 
 struct StatsView: View {
 	@Environment(\.colorScheme) private var colorScheme
+	@Environment(\.accessibilityReduceMotion) private var reduceMotion
 	@Environment(AdManager.self) private var adManager
 	@AppStorage("userWantsNormalTheme") private var userWantsNormalTheme: Bool = true
 	@AppStorage("defaultStatLanguage") private var defaultStatLanguage: LanguageSelection = .all
@@ -71,7 +72,7 @@ struct StatsView: View {
 										AnimatedCountText(value: Double(self.filteredGameRecords.count))
 											.font(.title3)
 											.foregroundStyle(.secondary)
-											.animation(.easeInOut(duration: 1.0), value: self.filteredGameRecords.count)
+											.animation(reduceMotion ? nil : .easeInOut(duration: 1.0), value: self.filteredGameRecords.count)
 									}
 								}
 								.wordlrListSectionRowBackground(.first)
@@ -87,7 +88,7 @@ struct StatsView: View {
 										AnimatedCountText(value: self.winRate, isPercentage: true)
 											.font(.title3)
 											.foregroundStyle(.secondary)
-											.animation(.easeInOut(duration: 1.0), value: self.winRate)
+											.animation(reduceMotion ? nil : .easeInOut(duration: 1.0), value: self.winRate)
 									}
 									
 									Chart {
@@ -104,7 +105,7 @@ struct StatsView: View {
 													.font(.headline)
 													.shadow(color: .black.opacity(0.3), radius: 1, x: 1, y: 1)
 													.opacity(self.showBarLabels ? 1 : 0)
-													.animation(.easeOut(duration: 0.3), value: self.showBarLabels)
+													.animation(reduceMotion ? nil : .easeOut(duration: 0.3), value: self.showBarLabels)
 											}
 										}
 
@@ -121,7 +122,7 @@ struct StatsView: View {
 													.font(.headline)
 													.shadow(color: .black.opacity(0.3), radius: 1, x: 1, y: 1)
 													.opacity(self.showBarLabels ? 1 : 0)
-													.animation(.easeOut(duration: 0.3), value: self.showBarLabels)
+													.animation(reduceMotion ? nil : .easeOut(duration: 0.3), value: self.showBarLabels)
 											}
 										}
 									}
@@ -147,7 +148,9 @@ struct StatsView: View {
 										}
 									}
 									.chartXScale(domain: 0...max(Double(self.totalCount), 1))
-									.animation(.easeOut(duration: 1.0), value: self.filteredGameRecords.count)
+									.animation(reduceMotion ? nil : .easeOut(duration: 1.0), value: self.filteredGameRecords.count)
+									.accessibilityLabel("Win rate chart")
+									.accessibilityValue(WordlrAccessibilityFormatter.winRateChartSummary(wins: self.wonCount, losses: self.lostCount, winRate: self.winRate))
 								}
 								.wordlrListSectionRowBackground(.last)
 							} header: {
@@ -177,7 +180,7 @@ struct StatsView: View {
 														.font(.headline)
 														.shadow(color: .black.opacity(0.3), radius: 1, x: 1, y: 1)
 														.opacity(self.showBarLabels ? 1 : 0)
-														.animation(.easeOut(duration: 0.3), value: self.showBarLabels)
+														.animation(reduceMotion ? nil : .easeOut(duration: 0.3), value: self.showBarLabels)
 												}
 											}
 										}
@@ -189,7 +192,9 @@ struct StatsView: View {
 												.font(.footnote)
 										}
 									}
-									.animation(.easeOut(duration: 1.0), value: self.filteredGameRecords.count)
+									.animation(reduceMotion ? nil : .easeOut(duration: 1.0), value: self.filteredGameRecords.count)
+									.accessibilityLabel("Guesses chart")
+									.accessibilityValue(WordlrAccessibilityFormatter.guessesChartSummary(counts: self.counts))
 									.frame(minHeight: 250)
 								}
 								.wordlrListSectionRowBackground(.single)
@@ -345,7 +350,7 @@ struct StatsView: View {
 		}
 		if isInitialLoad {
 			DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-				withAnimation(.easeOut(duration: 0.3)) {
+				withAnimation(reduceMotion ? nil : .easeOut(duration: 0.3)) {
 					self.showBarLabels = true
 				}
 			}

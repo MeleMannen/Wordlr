@@ -303,7 +303,7 @@ struct FilterOptionsView: View {
 					}
 					.wordlrListSectionRowBackground(.middle)
 
-					Button {
+				Button {
 					self.didTapReset.toggle()
 					appManager.resetFilters()
 				} label: {

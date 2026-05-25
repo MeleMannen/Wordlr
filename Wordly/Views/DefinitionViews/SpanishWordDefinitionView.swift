@@ -232,11 +232,10 @@ struct SpanishWordDefinitionView: View {
 					.safeAreaPadding(.bottom, adManager.isBannerAdLoaded ? (UIDevice.current.userInterfaceIdiom == .pad || UIDevice.current.userInterfaceIdiom == .mac ? 100 : 75) : 0)
 				}
 			} else {
-				ProgressView()
-					.progressViewStyle(CircularProgressViewStyle())
-					.font(.largeTitle)
+				DefinitionLoadingView()
 			}
 		}
+		.frame(maxWidth: .infinity, maxHeight: .infinity)
 		.navigationTitle("\(self.word)")
 		.darkGradientBackground(colorScheme: colorScheme)
 		.onAppear {

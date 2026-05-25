@@ -20,6 +20,7 @@ struct SearchView: View {
 	@State private var sectionKeys: [String] = []
 	@State private var filterButtonID = UUID()
 	@State private var selectedDetent: PresentationDetent = .large
+	@State private var didResetFiltersWithLongPress = false
 	
 	private let filterTip = FilterTip()
 	
@@ -29,7 +30,42 @@ struct SearchView: View {
 		if #available(iOS 17.1, *) {
 			VStack {
 				if self.searchResults.isEmpty && !appManager.searchedWord.isEmpty {
-					ContentUnavailableView.search(text: appManager.searchedWord)
+					ContentUnavailableView {
+						Label("No results for \(appManager.searchedWord)", systemImage: "magnifyingglass")
+							.font(.title2)
+							.foregroundStyle(.primary)
+					} description: {
+						Text("Try changing the search text or removing filters.")
+					} actions: {
+						HStack {
+							Button("Clear search") {
+								clearSearch()
+							}
+							.foregroundStyle(.green)
+						}
+					}
+					.frame(maxWidth: .infinity, maxHeight: .infinity)
+					.darkGradientBackground(colorScheme: colorScheme)
+				} else if self.searchResults.isEmpty {
+					ContentUnavailableView {
+						Label("No words matching current filters", systemImage: "magnifyingglass")
+							.font(.title2)
+							.foregroundStyle(.primary)
+							
+					} description: {
+						Text("There are no words matching the current filters. Try adjusting or removing some filters to see more words.")
+							
+					} actions: {
+						HStack {
+							Button("Reset filters") {
+								resetFiltersFromToolbar()
+							}
+							.foregroundStyle(.green)
+						}
+					}
+					.frame(maxWidth: .infinity, maxHeight: .infinity)
+					.darkGradientBackground(colorScheme: colorScheme)
+
 				} else {
 					HStack(spacing: 0) {
 						if #available(iOS 26, *) {
@@ -146,18 +182,19 @@ struct SearchView: View {
 				//				}
 				if #available(iOS 26.0, *) {
 					ToolbarItem(placement: .navigationBarTrailing) {
-						Button(action: {
-							DispatchQueue.main.async {
-								self.isShowingFilterOptions = true
+						Menu {
+							Button(role: .destructive) {
+								resetFiltersFromToolbar()
+							} label: {
+								Label("Reset filters", systemImage: "arrow.counterclockwise")
 							}
-							self.didTap.toggle()
-							Task {
-								await FilterTip.filterEvent.donate()
-							}
-							AnalyticsManager.shared.logDidUseSearchFiltersEvent(word: appManager.word, language: appManager.selectedLanguage, numberOfLetters: appManager.numberOfLetters, gameMode: appManager.gameMode)
-						}) {
+						} label: {
 							Label("Filter options", systemImage: "slider.horizontal.3")
+						} primaryAction: {
+							openFilterOptions()
 						}
+						.accessibilityHint("Opens filters for word search.")
+						.accessibilityInputLabels(["Filter options", "Filters", "Reset filters"])
 						.conditionalHaptic(.selection, trigger: self.didTap)
 						.popoverTip(self.filterTip, arrowEdge: .top)
 					}
@@ -166,25 +203,26 @@ struct SearchView: View {
 					
 				} else {
 					ToolbarItem(placement: .navigationBarTrailing) {
-						Button(action: {
-							DispatchQueue.main.async {
-								self.isShowingFilterOptions = true
+						Menu {
+							Button(role: .destructive) {
+								resetFiltersFromToolbar()
+							} label: {
+								Label("Reset filters", systemImage: "arrow.counterclockwise")
 							}
-							self.didTap.toggle()
-							Task {
-								await FilterTip.filterEvent.donate()
-							}
-							AnalyticsManager.shared.logDidUseSearchFiltersEvent(word: appManager.word, language: appManager.selectedLanguage, numberOfLetters: appManager.numberOfLetters, gameMode: appManager.gameMode)
-						}) {
+						} label: {
 							Label("Filter options", systemImage: "slider.horizontal.3")
+						} primaryAction: {
+							openFilterOptions()
 						}
+						.accessibilityHint("Opens filters for word search.")
+						.accessibilityInputLabels(["Filter options", "Filters", "Reset filters"])
 						.conditionalHaptic(.selection, trigger: self.didTap)
 						.popoverTip(self.filterTip, arrowEdge: .top)
 					}
 				}
 			}
 			.sheet(isPresented: $isShowingFilterOptions) {
-				
+				filterGameRecords()
 			} content: {
 				if #available(iOS 26.0, *) {
 					FilterOptionsView(isShowingFilterOptions: self.$isShowingFilterOptions)
@@ -290,6 +328,51 @@ struct SearchView: View {
 		self.searchResults = filteredWords
 		self.groupedWords = Dictionary(grouping: self.searchResults.sorted(), by: { String($0.prefix(1)).uppercased() })
 		self.sectionKeys = self.groupedWords.keys.sorted(using: String.Comparator(options: .caseInsensitive, locale: Locale(identifier: "nb"), order: .forward))
+	}
+
+	private func openFilterOptions() {
+		if didResetFiltersWithLongPress {
+			didResetFiltersWithLongPress = false
+			return
+		}
+
+		DispatchQueue.main.async {
+			self.isShowingFilterOptions = true
+		}
+		self.didTap.toggle()
+		Task {
+			await FilterTip.filterEvent.donate()
+		}
+		AnalyticsManager.shared.logDidUseSearchFiltersEvent(word: appManager.word, language: appManager.selectedLanguage, numberOfLetters: appManager.numberOfLetters, gameMode: appManager.gameMode)
+	}
+
+	private func resetFiltersFromToolbar() {
+		didResetFiltersWithLongPress = true
+		appManager.resetFilters()
+		filterGameRecords()
+		isShowingFilterOptions = false
+		didTap.toggle()
+
+		DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+			self.didResetFiltersWithLongPress = false
+		}
+	}
+
+	private func clearSearch() {
+		appManager.searchedWord = ""
+		filterGameRecords()
+		didTap.toggle()
+	}
+
+	private var hasActiveFilters: Bool {
+		appManager.isFilteringStartWith ||
+		appManager.isFilteringEndsWith ||
+		appManager.isFilteringIncludedLetters ||
+		appManager.isFilteringExcludeLetters ||
+		!appManager.startsWithFilter.isEmpty ||
+		!appManager.endsWithFilter.isEmpty ||
+		!appManager.selectedIncludedLetters.isEmpty ||
+		!appManager.selectedExcludedLetters.isEmpty
 	}
 }
 

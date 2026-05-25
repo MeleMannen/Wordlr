@@ -27,6 +27,7 @@ struct SelectGameModeButton: View {
 				NavigationLink(destination: GameView().environment(appManager)) {
 					label
 				}
+				.accessibilityHint("Starts this game mode.")
 				.simultaneousGesture(TapGesture().onEnded {
 					startAction()
 				})
@@ -37,6 +38,8 @@ struct SelectGameModeButton: View {
 					label
 				}
 				.buttonStyle(.plain)
+				.accessibilityValue("Unavailable")
+				.accessibilityHint("Shows why this mode is unavailable.")
 				.conditionalHaptic(.error, trigger: errorTrigger)
 				.selectGameModeButtonStyle(mode: mode, isAvailable: false)
 			}

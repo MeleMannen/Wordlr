@@ -112,6 +112,7 @@ struct SettingsView: View {
 							})
 							.buttonStyle(.plain)
 							.modifier(UpgradeToProButtonModifier())
+							.accessibilityHint("Purchases Pro to remove ads and unlock free hints.")
 							.disabled(storeManager.isPurchasing || storeManager.adRemovalProduct == nil)
 							
 							Button("Restore Purchases") {
@@ -122,6 +123,7 @@ struct SettingsView: View {
 							.buttonStyle(.plain)
 							.font(.subheadline.weight(.medium))
 							.foregroundStyle(.green)
+							.accessibilityHint("Restores previous Pro purchases.")
 						}
 						.padding(16)
 						.background {

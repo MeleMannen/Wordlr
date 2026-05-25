@@ -150,6 +150,8 @@ struct HistoryView: View {
 									Spacer()
 								}
 							})
+							.accessibilityElement(children: .ignore)
+							.accessibilityLabel(WordlrAccessibilityFormatter.gameRecordSummary(gameRecordEntity.gameRecord, timeUsed: nil))
 							.contextMenu {
 								if gameRecordEntity.gameRecord.mode == .dailyWord,
 								   GameResultShareFormatter.shareText(for: gameRecordEntity.gameRecord) != nil {

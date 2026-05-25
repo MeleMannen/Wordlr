@@ -9,6 +9,8 @@ import SwiftUI
 
 struct BoardView: View {
     @Environment(\.colorScheme) private var colorScheme
+	@Environment(\.accessibilityDifferentiateWithoutColor) private var differentiateWithoutColor
+	@Environment(\.accessibilityReduceMotion) private var reduceMotion
 	@Environment(AdManager.self) private var adManager
     @AppStorage("userWantsNormalTheme") private var userWantsNormalTheme: Bool = true
     @State var gameRecord: GameRecord
@@ -89,10 +91,12 @@ struct BoardView: View {
                     if rowIndex == self.keyboardRows.count - 1 {
                         Text("Z")
                             .hidden()
+							.accessibilityHidden(true)
                             .frame(minWidth: geometry.size.width / CGFloat(14), maxWidth: geometry.size.width / CGFloat(12), minHeight: geometry.size.height / CGFloat(10), idealHeight: geometry.size.height / CGFloat(8), maxHeight: geometry.size.height / CGFloat(6))
                         
                         Text("Z")
                             .hidden()
+							.accessibilityHidden(true)
                             .frame(minWidth: geometry.size.width / CGFloat(14), maxWidth: geometry.size.width / CGFloat(12), minHeight: geometry.size.height / CGFloat(10), idealHeight: geometry.size.height / CGFloat(8), maxHeight: geometry.size.height / CGFloat(6))
                     }
                     
@@ -102,6 +106,7 @@ struct BoardView: View {
                             .font(.title3).bold()
                             .foregroundStyle(keyState == .notUsed ? AnyShapeStyle(.black) : AnyShapeStyle(Color.white))
                             .hidden()
+							.accessibilityHidden(true)
                             .frame(minWidth: geometry.size.width / CGFloat(14), maxWidth: geometry.size.width / CGFloat(12), minHeight: geometry.size.height / CGFloat(10), idealHeight: geometry.size.height / CGFloat(8), maxHeight: geometry.size.height / CGFloat(6))
                             .background {
                                 RoundedRectangle(cornerRadius: 5)
@@ -113,10 +118,12 @@ struct BoardView: View {
                     if rowIndex == self.keyboardRows.count - 1 {
                         Text("Z")
                             .hidden()
+							.accessibilityHidden(true)
                             .frame(minWidth: geometry.size.width / CGFloat(14), maxWidth: geometry.size.width / CGFloat(12), minHeight: geometry.size.height / CGFloat(10), idealHeight: geometry.size.height / CGFloat(8), maxHeight: geometry.size.height / CGFloat(6))
                         
                         Text("Z")
                             .hidden()
+							.accessibilityHidden(true)
                             .frame(minWidth: geometry.size.width / CGFloat(14), maxWidth: geometry.size.width / CGFloat(12), minHeight: geometry.size.height / CGFloat(10), idealHeight: geometry.size.height / CGFloat(8), maxHeight: geometry.size.height / CGFloat(6))
                     }
                 }
@@ -125,6 +132,7 @@ struct BoardView: View {
             HStack {
                 Text("Z")
                     .hidden()
+					.accessibilityHidden(true)
                     .frame(minWidth: geometry.size.width / CGFloat(9), maxWidth: geometry.size.width / CGFloat(7), minHeight: geometry.size.height / CGFloat(10), idealHeight: geometry.size.height / CGFloat(8), maxHeight: geometry.size.height / CGFloat(6))
                 
                 Spacer()
@@ -132,12 +140,14 @@ struct BoardView: View {
                 Text("SUBMIT WORD")
                     .font(.title).bold()
                     .hidden()
+					.accessibilityHidden(true)
                     .frame(minWidth: (geometry.size.width * 7) / CGFloat(14) + CGFloat(self.device == .pad ? 60 : 30), maxWidth: (geometry.size.width * 7) / CGFloat(12) + CGFloat(self.device == .pad ? 60 : 30), minHeight: geometry.size.height / CGFloat(10), idealHeight: geometry.size.height / CGFloat(8), maxHeight: geometry.size.height / CGFloat(6))
                 
                 Spacer()
                 
                 Text("Z")
                     .hidden()
+					.accessibilityHidden(true)
                     .frame(minWidth: geometry.size.width / CGFloat(9), maxWidth: geometry.size.width / CGFloat(7), minHeight: geometry.size.height / CGFloat(10), idealHeight: geometry.size.height / CGFloat(8), maxHeight: geometry.size.height / CGFloat(6))
             }
             .padding(.top, 5)
@@ -189,6 +199,9 @@ struct BoardView: View {
 							.foregroundColor(.white)
 							.conditionalShadow(color: .black.opacity(0.5), radius: 4, x: 4, y: 4)
 							.font(.title2).bold()
+							.lineLimit(2)
+							.minimumScaleFactor(0.8)
+							.multilineTextAlignment(.center)
 							.frame(maxWidth: .infinity, minHeight: definitionButtonHeight, maxHeight: definitionButtonHeight)
 							.background {
 								BoardActionButtonBackground(
@@ -200,6 +213,7 @@ struct BoardView: View {
 							}
 					}
 					.modifier(BoardActionGlassModifier(tint: .green))
+					.accessibilityHint("Opens the definition for this word.")
 					.simultaneousGesture(TapGesture().onEnded {
 						didTapAction.toggle()
 					})
@@ -215,10 +229,12 @@ struct BoardView: View {
 							Label("Copy result", systemImage: hasCopiedResult ? "doc.on.doc.fill" : "doc.on.doc")
 								.font(.title2).bold()
 								.frame(height: copyResultHeight)
-								.contentTransition(.symbolEffect(.replace))
+								.contentTransition(reduceMotion ? .identity : .symbolEffect(.replace))
 								.conditionalShadow(color: .black.opacity(0.5), radius: 4, x: 4, y: 4)
 								.tint(.primary)
 						}
+						.accessibilityHint("Copies the shareable result for this game.")
+						.accessibilityInputLabels(["Copy result", "Copy"])
 						.disabled(GameResultShareFormatter.shareText(for: gameRecord) == nil)
 					}
 				}
@@ -254,11 +270,26 @@ struct BoardView: View {
 							.background {
 								tileBackground(for: letter, rowIndex: rowIndex)
 							}
+							.overlay(alignment: .bottomTrailing) {
+								if differentiateWithoutColor, let symbolName = letter.state.accessibilitySymbolName {
+									Image(systemName: symbolName)
+										.font(.caption.bold())
+										.foregroundStyle(letter.state == .notUsed ? .black : .white)
+										.padding(4)
+										.accessibilityHidden(true)
+								}
+							}
+							.accessibilityHidden(true)
 					}
 				}
+				.accessibilityElement(children: .ignore)
+				.accessibilityLabel(WordlrAccessibilityFormatter.rowLabel(row: self.board[rowIndex], rowIndex: rowIndex, currentRow: gameRecord.numberOfGuesses - 1))
 			}
 		}
 		.frame(maxWidth: .infinity, maxHeight: .infinity)
+		.accessibilityElement(children: .contain)
+		.accessibilityLabel(WordlrAccessibilityFormatter.boardLabel(board: board, currentRow: gameRecord.numberOfGuesses - 1, isGameOver: true))
+		.accessibilityValue(WordlrAccessibilityFormatter.boardValue(numberOfLetters: gameRecord.numberOfLetters, rowCount: board.count))
 	}
 
 	private var boardSpacing: CGFloat {

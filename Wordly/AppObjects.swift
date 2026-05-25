@@ -1610,10 +1610,11 @@ extension Date {
 }
 
 struct WordlrListRowBackground: View {
+	@Environment(\.accessibilityReduceTransparency) private var reduceTransparency
 	private let materialOpacity = 0.5
 
 	var body: some View {
-		if #available(iOS 26.0, *) {
+		if #available(iOS 26.0, *), !reduceTransparency {
 			Rectangle()
 				.fill(.ultraThinMaterial)
 				.opacity(materialOpacity)
@@ -1677,12 +1678,13 @@ struct WordlrListSectionRowBorderShape: Shape {
 }
 
 struct WordlrListSectionRowBackground: View {
+	@Environment(\.accessibilityReduceTransparency) private var reduceTransparency
 	let position: WordlrListSectionRowPosition
 	let cornerRadius: CGFloat
 	private let materialOpacity = 0.5
 
 	var body: some View {
-		if #available(iOS 26.0, *) {
+		if #available(iOS 26.0, *), !reduceTransparency {
 			Rectangle()
 				.fill(.ultraThinMaterial)
 				.opacity(materialOpacity)
@@ -1697,12 +1699,13 @@ struct WordlrListSectionRowBackground: View {
 }
 
 struct WordlrSurfaceModifier: ViewModifier {
+	@Environment(\.accessibilityReduceTransparency) private var reduceTransparency
 	let cornerRadius: CGFloat
 	let fallbackColor: UIColor
 	private let materialOpacity = 0.5
 
 	func body(content: Content) -> some View {
-		if #available(iOS 26.0, *) {
+		if #available(iOS 26.0, *), !reduceTransparency {
 			content
 				.background {
 					RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
