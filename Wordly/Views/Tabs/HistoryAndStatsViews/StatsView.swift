@@ -103,6 +103,7 @@ struct StatsView: View {
 												Text("\(self.wonCount)")
 													.foregroundColor(self.wonCount < (self.lostCount / 6) ? .primary : .white)
 													.font(.headline)
+													.frame(minWidth: CGFloat(15*"\(self.wonCount)".count), alignment: .center)
 													.shadow(color: .black.opacity(0.3), radius: 1, x: 1, y: 1)
 													.opacity(self.showBarLabels ? 1 : 0)
 													.animation(reduceMotion ? nil : .easeOut(duration: 0.3), value: self.showBarLabels)
@@ -120,6 +121,7 @@ struct StatsView: View {
 												Text("\(self.lostCount)")
 													.foregroundColor(self.lostCount < (self.wonCount / 6) ? .primary : .white)
 													.font(.headline)
+													.frame(minWidth: CGFloat(15*"\(self.lostCount)".count), alignment: .center)
 													.shadow(color: .black.opacity(0.3), radius: 1, x: 1, y: 1)
 													.opacity(self.showBarLabels ? 1 : 0)
 													.animation(reduceMotion ? nil : .easeOut(duration: 0.3), value: self.showBarLabels)
@@ -178,6 +180,7 @@ struct StatsView: View {
 													Text("\(count)")
 														.foregroundColor(count < (self.maxGuessesPerCount / 6) ? .primary : .white)
 														.font(.headline)
+														.frame(minWidth: CGFloat(15*"\(count)".count), alignment: .center)
 														.shadow(color: .black.opacity(0.3), radius: 1, x: 1, y: 1)
 														.opacity(self.showBarLabels ? 1 : 0)
 														.animation(reduceMotion ? nil : .easeOut(duration: 0.3), value: self.showBarLabels)
@@ -333,21 +336,19 @@ struct StatsView: View {
 		if isInitialLoad {
 			self.showBarLabels = false
 		}
-		withAnimation(.easeOut(duration: 1.0)) {
-			self.filteredGameRecords = filteredRecords
-			self.maxNumberOfRows = maxRows
-			self.wonCount = wonCount
-			self.lostCount = lostCount
-			self.totalCount = totalCount
-			self.winRate = winRate
-			self.counts = guessCounts
-			self.maxGuessesPerCount = maxGuessesPerCount
-			self.longestStreakPerLetters = dailyStreaks
-			self.maxStreakLength = maxStreak
-			self.longestNormalStreakPerLetters = normalStreaks
-			self.maxNormalStreakLength = maxNormalStreak
-			self.hasCompletedInitialLoad = true
-		}
+		self.filteredGameRecords = filteredRecords
+		self.maxNumberOfRows = maxRows
+		self.wonCount = wonCount
+		self.lostCount = lostCount
+		self.totalCount = totalCount
+		self.winRate = winRate
+		self.counts = guessCounts
+		self.maxGuessesPerCount = maxGuessesPerCount
+		self.longestStreakPerLetters = dailyStreaks
+		self.maxStreakLength = maxStreak
+		self.longestNormalStreakPerLetters = normalStreaks
+		self.maxNormalStreakLength = maxNormalStreak
+		self.hasCompletedInitialLoad = true
 		if isInitialLoad {
 			DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
 				withAnimation(reduceMotion ? nil : .easeOut(duration: 0.3)) {

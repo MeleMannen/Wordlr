@@ -2,7 +2,7 @@
 //  AccessibilitySupport.swift
 //  Wordly
 //
-//  Created by OpenAI on 25/05/2026.
+//  Created by Kristoffer Melen on 25/05/2026.
 //
 
 import Foundation

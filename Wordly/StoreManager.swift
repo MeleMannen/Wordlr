@@ -1,6 +1,6 @@
 //
 //  StoreManager.swift
-//  Wordlr
+//  Wordly
 //
 //  Created by Kristoffer Melen on 23/05/2026.
 //

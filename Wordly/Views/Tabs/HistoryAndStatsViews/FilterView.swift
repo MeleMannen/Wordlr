@@ -180,6 +180,8 @@ where T: Hashable {
 		
 		button.showsMenuAsPrimaryAction = true
 		button.changesSelectionAsPrimaryAction = true
+		button.setContentHuggingPriority(.required, for: .horizontal)
+		button.setContentCompressionResistancePriority(.required, for: .horizontal)
 		
 		updateButton(button)
 		

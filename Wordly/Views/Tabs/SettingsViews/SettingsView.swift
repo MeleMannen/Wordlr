@@ -13,10 +13,12 @@ import StoreKit
 struct SettingsView: View {
 	@Environment(\.modelContext) private var context
 	@Environment(\.colorScheme) private var colorScheme
+	@Environment(\.accessibilityReduceMotion) private var reduceMotion
 	@Environment(AdManager.self) private var adManager
 	@Environment(StoreManager.self) private var storeManager
 	@AppStorage("appTheme") private var appTheme: AppTheme = .dark
 	@AppStorage("userWantsNormalTheme") private var userWantsNormalTheme: Bool = true
+	@AppStorage("usesTransparentLists") private var usesTransparentLists: Bool = true
 	@AppStorage("defaultLanguage") private var defaultLanguage: LanguageSelection = .norwegian
 	@AppStorage("defaultNumberOfLetters") private var defaultNumberOfLetters: Int = 5
 	
@@ -30,6 +32,7 @@ struct SettingsView: View {
 	@State private var showingNotificationSettingsAlert: Bool = false
 	@State private var showingSupportEmailUnavailableAlert: Bool = false
 	@State private var proSectionMaxY: CGFloat = 300
+	@State private var gradientVisibility: Double = 0
 	
 	@Query(sort: \DailyWordReminder.timeToFire) private var dailyWordReminders: [DailyWordReminder]
 	
@@ -208,6 +211,15 @@ struct SettingsView: View {
 						.onChange(of: userWantsNormalTheme) {
 							AnalyticsManager.shared.logDidChangeDailyWordThemeEvent(newTheme: userWantsNormalTheme ? "Standard" : "Gold")
 						}
+					}
+
+					if #available(iOS 26.0, *) {
+						Toggle(isOn: $usesTransparentLists) {
+							SettingsRowLabel(title: "Transparent lists", systemImage: "list.bullet.rectangle")
+						}
+						.wordlrListSectionRowBackground(.middle)
+						.tint(.green)
+						.conditionalHaptic(.selection, trigger: usesTransparentLists)
 					}
 					
 					Toggle(isOn: $hapticsEnabled) {
@@ -535,30 +547,41 @@ struct SettingsView: View {
 				if colorScheme == .dark {
 					if #available(iOS 26.0, *) {
 						GeometryReader { geometry in
-							let isPhone = UIDevice.current.userInterfaceIdiom == .phone
-							let isLandscape = geometry.size.width > geometry.size.height
-							let iPadAndMacOpacity = !storeManager.isAdRemovalPurchased ? max(0, min(1, proSectionMaxY / 300)) : 0
-							let gradientOpacity = isPhone ? 0.25 : 0.25 * iPadAndMacOpacity
-							let endRadius = isPhone ? 420 : min(max(geometry.size.width * 0.85, 520), isLandscape ? 680 : 900)
-							RadialGradient(
-								colors: [.green.opacity(gradientOpacity), .clear],
-								center: .top,
-								startRadius: 0,
-								endRadius: endRadius
+								let isPhone = UIDevice.current.userInterfaceIdiom == .phone
+								let isLandscape = geometry.size.width > geometry.size.height
+								let iPadAndMacOpacity = !storeManager.isAdRemovalPurchased ? max(0, min(1, proSectionMaxY / 300)) : 0
+								let gradientOpacity = isPhone ? 0.42 : 0.34 * iPadAndMacOpacity
+								let endRadius = isPhone ? 420 : min(max(geometry.size.width * 0.85, 520), isLandscape ? 680 : 900)
+								RadialGradient(
+									colors: [
+										.green.opacity(gradientOpacity),
+										.green.opacity(gradientOpacity * 0.43),
+										.clear
+									],
+									center: .top,
+									startRadius: 0,
+									endRadius: endRadius
 							)
+							.opacity(isPhone ? 1 : gradientVisibility)
 							.ignoresSafeArea()
 						}
 					} else if !storeManager.isAdRemovalPurchased {
 						GeometryReader { geometry in
 							let isPhone = UIDevice.current.userInterfaceIdiom == .phone
-							let isLandscape = geometry.size.width > geometry.size.height
-							let endRadius = isPhone ? 420 : min(max(geometry.size.width * 0.85, 520), isLandscape ? 680 : 900)
-							RadialGradient(
-								colors: [.green.opacity(0.25 * max(0, min(1, proSectionMaxY / 300))), .clear],
-								center: .top,
-								startRadius: 0,
-								endRadius: endRadius
+								let isLandscape = geometry.size.width > geometry.size.height
+								let endRadius = isPhone ? 420 : min(max(geometry.size.width * 0.85, 520), isLandscape ? 680 : 900)
+								let gradientOpacity = 0.34 * max(0, min(1, proSectionMaxY / 300))
+								RadialGradient(
+									colors: [
+										.green.opacity(gradientOpacity),
+										.green.opacity(gradientOpacity * 0.43),
+										.clear
+									],
+									center: .top,
+									startRadius: 0,
+									endRadius: endRadius
 							)
+							.opacity(gradientVisibility)
 							.ignoresSafeArea()
 						}
 					}
@@ -569,6 +592,7 @@ struct SettingsView: View {
 			.tint(.secondary)
 			.onAppear {
 				AnalyticsManager.shared.logScreenViewed(screenName: "SettingsView")
+				showInitialGradientIfNeeded()
 			}
 			.alert("No mail app available", isPresented: $showingSupportEmailUnavailableAlert) {
 				Button("OK", role: .cancel) { }
@@ -601,6 +625,16 @@ struct SettingsView: View {
 	private func scheduleNotification(reminder: DailyWordReminder) {
 		if notificationsEnabled {
 			NotificationManager.scheduleDailyWordReminder(reminder: reminder, context: context)
+		}
+	}
+
+	private func showInitialGradientIfNeeded() {
+		if reduceMotion {
+			gradientVisibility = 1
+		} else {
+			withAnimation(.easeInOut(duration: 0.8)) {
+				gradientVisibility = 1
+			}
 		}
 	}
 }

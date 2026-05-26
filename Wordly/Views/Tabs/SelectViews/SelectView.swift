@@ -41,28 +41,36 @@ struct SelectView: View {
 							.frame(maxWidth: .infinity, alignment: .leading)
 						
 						if #available(iOS 26.0, *) {
-							Picker(selection: $appManager.numberOfLetters) {
-								ForEach(1...8, id: \.self) { number in
+							HStack {
+								Spacer(minLength: 0)
+
+								UIKitMenuPicker(
+									selection: $appManager.numberOfLetters,
+									options: Array(1...8)
+								) { number in
 									if number == 1 {
-										Text("\(number) letter")
-											.tag(number)
+										return String(
+											format: NSLocalizedString(
+												"%lld letter",
+												comment: "Number of letters singular"
+											),
+											number
+										)
 									} else {
-										Text("\(number) letters")
-											.tag(number)
+										return String(
+											format: NSLocalizedString(
+												"%lld letters",
+												comment: "Number of letters plural"
+											),
+											number
+										)
 									}
 								}
-							} label: {
-								
+								.fixedSize(horizontal: true, vertical: false)
 							}
-							.background {
-								Capsule()
-									.fill(.ultraThinMaterial)
-									.opacity(0.5)
-							}
-							.glassEffect(.regular.interactive())
 							.conditionalShadow(color: .black.opacity(0.4), radius: 4, x: 4, y: 4)
 							.conditionalHaptic(.selection, trigger: appManager.numberOfLetters)
-							.frame(maxWidth: .infinity, alignment: .trailing)
+							.frame(height: 36)
 						} else {
 							Picker(selection: $appManager.numberOfLetters) {
 								ForEach(1...8, id: \.self) { number in
@@ -98,22 +106,19 @@ struct SelectView: View {
 							.frame(maxWidth: .infinity, alignment: .leading)
 						
 						if #available(iOS 26.0, *) {
-							Picker(selection: $appManager.selectedLanguage) {
-								ForEach(LanguageSelection.languages) { language in
-									Text(language.localizedName)
-								}
-							} label: {
-								
+							HStack {
+								Spacer(minLength: 0)
+
+								UIKitMenuPicker(
+									selection: $appManager.selectedLanguage,
+									options: LanguageSelection.languages,
+									title: { $0.localizedName }
+								)
+								.fixedSize(horizontal: true, vertical: false)
 							}
-							.background {
-								Capsule()
-									.fill(.ultraThinMaterial)
-									.opacity(0.5)
-							}
-							.glassEffect(.regular.interactive())
 							.conditionalShadow(color: .black.opacity(0.4), radius: 4, x: 4, y: 4)
 							.conditionalHaptic(.selection, trigger: appManager.selectedLanguage)
-							.frame(maxWidth: .infinity, alignment: .trailing)
+							.frame(height: 36)
 						} else {
 							Picker(selection: $appManager.selectedLanguage) {
 								ForEach(LanguageSelection.languages) { language in

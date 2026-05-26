@@ -78,6 +78,7 @@ struct StreakChartView: View {
 			Text("\(streak.currentStreak)")
 				.foregroundColor(currentDouble < (self.maxStreakLength / 8.0) ? .primary : .white)
 				.font(.headline)
+				.frame(minWidth: CGFloat(15*"\(streak.currentStreak)".count), alignment: .center)
 				.shadow(color: .black.opacity(0.3), radius: 1, x: 1, y: 1)
 				.padding(.leading, streak.currentStreak == 0 ? 3 : 0)
 		}
@@ -96,6 +97,7 @@ struct StreakChartView: View {
 			Text("\(streak.longestStreak)")
 				.foregroundColor(longestDouble < (self.maxStreakLength / 8.0) ? .primary : .white)
 				.font(.headline)
+				.frame(minWidth: CGFloat(15*"\(streak.longestStreak)".count), alignment: .center)
 				.shadow(color: .black.opacity(0.3), radius: 1, x: 1, y: 1)
 		}
 		.position(by: .value("Longest", "Longest"))

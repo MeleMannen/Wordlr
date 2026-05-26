@@ -1611,10 +1611,11 @@ extension Date {
 
 struct WordlrListRowBackground: View {
 	@Environment(\.accessibilityReduceTransparency) private var reduceTransparency
+	@AppStorage("usesTransparentLists") private var usesTransparentLists: Bool = true
 	private let materialOpacity = 0.5
 
 	var body: some View {
-		if #available(iOS 26.0, *), !reduceTransparency {
+		if #available(iOS 26.0, *), !reduceTransparency && usesTransparentLists {
 			Rectangle()
 				.fill(.ultraThinMaterial)
 				.opacity(materialOpacity)
@@ -1679,12 +1680,13 @@ struct WordlrListSectionRowBorderShape: Shape {
 
 struct WordlrListSectionRowBackground: View {
 	@Environment(\.accessibilityReduceTransparency) private var reduceTransparency
+	@AppStorage("usesTransparentLists") private var usesTransparentLists: Bool = true
 	let position: WordlrListSectionRowPosition
 	let cornerRadius: CGFloat
 	private let materialOpacity = 0.5
 
 	var body: some View {
-		if #available(iOS 26.0, *), !reduceTransparency {
+		if #available(iOS 26.0, *), !reduceTransparency && usesTransparentLists {
 			Rectangle()
 				.fill(.ultraThinMaterial)
 				.opacity(materialOpacity)
@@ -1700,12 +1702,13 @@ struct WordlrListSectionRowBackground: View {
 
 struct WordlrSurfaceModifier: ViewModifier {
 	@Environment(\.accessibilityReduceTransparency) private var reduceTransparency
+	@AppStorage("usesTransparentLists") private var usesTransparentLists: Bool = true
 	let cornerRadius: CGFloat
 	let fallbackColor: UIColor
 	private let materialOpacity = 0.5
 
 	func body(content: Content) -> some View {
-		if #available(iOS 26.0, *), !reduceTransparency {
+		if #available(iOS 26.0, *), !reduceTransparency && usesTransparentLists {
 			content
 				.background {
 					RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)

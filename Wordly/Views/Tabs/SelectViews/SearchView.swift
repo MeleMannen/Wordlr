@@ -71,9 +71,8 @@ struct SearchView: View {
 						if #available(iOS 26, *) {
 							List {
 								ForEach(self.sectionKeys, id: \.self) { letter in
-									Section {
-										ForEach(Array((self.groupedWords[letter] ?? []).enumerated()), id: \.offset) { index, word in
-											LazyVStack(spacing: 0) {
+										Section {
+											ForEach(Array((self.groupedWords[letter] ?? []).enumerated()), id: \.offset) { index, word in
 												NavigationLink(destination: {
 													WordDefinitionView(word: word, language: appManager.selectedLanguage)
 												}, label: {
@@ -84,10 +83,9 @@ struct SearchView: View {
 														Spacer()
 													}
 												})
-											}
-											.contextMenu {
-												Button {
-													appManager.useWord(word: word)
+												.contextMenu {
+													Button {
+														appManager.useWord(word: word)
 													dismiss()
 												} label: {
 													Label("Use the word", systemImage: "checkmark.circle")
@@ -111,9 +109,8 @@ struct SearchView: View {
 						} else {
 							List {
 								ForEach(self.sectionKeys, id: \.self) { letter in
-									Section {
-										ForEach(Array((self.groupedWords[letter] ?? []).enumerated()), id: \.offset) { index, word in
-											LazyVStack(spacing: 0) {
+										Section {
+											ForEach(Array((self.groupedWords[letter] ?? []).enumerated()), id: \.offset) { index, word in
 												NavigationLink(destination: {
 													WordDefinitionView(word: word, language: appManager.selectedLanguage)
 												}, label: {
@@ -124,10 +121,9 @@ struct SearchView: View {
 														Spacer()
 													}
 												})
-											}
-											.contextMenu {
-												Button {
-													appManager.useWord(word: word)
+												.contextMenu {
+													Button {
+														appManager.useWord(word: word)
 													dismiss()
 												} label: {
 													Label("Use the word", systemImage: "checkmark.circle")
