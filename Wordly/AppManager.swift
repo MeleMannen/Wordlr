@@ -174,11 +174,11 @@ final class AppManager: NSObject, FullScreenContentDelegate {
 	}
 	
 	func searchableWords() -> [String] {
-		let wordsForLength = self.words?.wordGroups["\(self.numberOfLetters)"] ?? []
+		let wordsForLength = Set(self.words?.wordGroups["\(self.numberOfLetters)"] ?? [])
 		let blockedWords = Set(self.words?.blockedWords ?? [])
 		
 		guard !blockedWords.isEmpty else {
-			return wordsForLength
+			return Array<String>(wordsForLength)
 		}
 		
 		return wordsForLength.filter { !blockedWords.contains($0) }
