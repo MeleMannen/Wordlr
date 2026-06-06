@@ -31,6 +31,7 @@ struct GameView18: View {
 	@State var isShowingCurrentDefinition: Bool = false
 	@State var alertItem: AlertItem?
 	@State private var hasQueuedNotificationPromptForCurrentWin: Bool = false
+	@State private var hasQueuedProPromptForCurrentGame: Bool = false
 	@State private var lastAnnouncedRevealedRow: Int?
 	
 	@Namespace private var namespace
@@ -71,6 +72,7 @@ struct GameView18: View {
 										selectedGameMode: appManager.selectedGameMode,
 										didWinGame: appManager.didWinGame,
 										isGameOver: appManager.isGameOver,
+										shouldShowCelebrationGradient: appManager.shouldShowCelebrationGradient,
 										userWantsNormalTheme: self.userWantsNormalTheme,
 										colorScheme: self.colorScheme,
 										colorForUnused: self.colorForUnused,
@@ -151,10 +153,10 @@ struct GameView18: View {
 									if appManager.selectedGameMode == .normal {
 										self.alertItem = AlertItem(
 											title: Text("Are you sure you want to restart?"),
-											message: Text("You will lose your word and you cannot undo this action!"),
+											message: Text("You will lose your word and you cannot undo this action"),
 											primaryButton: .destructive(Text("Restart")) {
 												self.alertItem = AlertItem(
-													title: Text("The word was: \(appManager.word)!"),
+													title: Text("The word was: \(appManager.word)"),
 													message: Text("Do you want to see the definition?"),
 													primaryButton: .default(Text("Show definition")) {
 														self.isShowingCurrentDefinition = true
@@ -419,10 +421,10 @@ struct GameView18: View {
 								if appManager.selectedGameMode == .normal {
 									self.alertItem = AlertItem(
 										title: Text("Are you sure you want to restart?"),
-										message: Text("You will lose your word and you cannot undo this action!"),
+										message: Text("You will lose your word and you cannot undo this action"),
 										primaryButton: .destructive(Text("Restart")) {
 											self.alertItem = AlertItem(
-												title: Text("The word was: \(appManager.word)!"),
+												title: Text("The word was: \(appManager.word)"),
 												message: Text("Do you want to see the definition?"),
 												primaryButton: .default(Text("Show definition")) {
 													self.isShowingCurrentDefinition = true
@@ -502,15 +504,24 @@ struct GameView18: View {
 			guard shouldPrompt else { return }
 			presentNotificationPromptIfNeeded()
 		}
+		.onChange(of: appManager.shouldPromptForProAfterGameCompletion) { _, shouldPrompt in
+			guard shouldPrompt else { return }
+			presentProPromptIfNeeded()
+		}
 		.onChange(of: appManager.isGameOver) {
 			presentNotificationPromptIfNeeded()
+			presentProPromptIfNeeded()
 		}
 		.onChange(of: appManager.isAnimating) {
 			presentNotificationPromptIfNeeded()
+			presentProPromptIfNeeded()
 		}
 		.onChange(of: self.alertItem?.title) {
 			if self.alertItem != nil {
 				self.didTapResetButton.toggle()
+			} else {
+				presentNotificationPromptIfNeeded()
+				presentProPromptIfNeeded()
 			}
 		}
 		.alert(item: self.$alertItem) { item in
@@ -531,6 +542,7 @@ struct GameView18: View {
 	}
 
 	private func handleRowRevealComplete(rowIndex: Int) {
+		appManager.shouldShowCelebrationGradient = true
 		appManager.applyPendingGameCompletion()
 		guard lastAnnouncedRevealedRow != rowIndex,
 			  appManager.board.indices.contains(rowIndex) else {
@@ -573,6 +585,32 @@ struct GameView18: View {
 				let increment = currentThreshold <= 1 ? 25 : 50
 				UserDefaults.standard.set(currentWins + increment, forKey: "notificationPromptNextWinThreshold")
 				appManager.shouldPromptForNotificationsAfterFirstWin = false
+			}
+		)
+	}
+
+	private func presentProPromptIfNeeded() {
+		guard appManager.isGameOver,
+			  !appManager.isAnimating,
+			  appManager.shouldPromptForProAfterGameCompletion,
+			  !storeManager.isAdRemovalPurchased,
+			  !hasQueuedProPromptForCurrentGame,
+			  alertItem == nil else {
+			return
+		}
+
+		hasQueuedProPromptForCurrentGame = true
+		alertItem = AlertItem(
+			title: Text("Tired of ads?"),
+			message: Text("Upgrade to Pro to remove ads and get free hints."),
+			primaryButton: .default(Text("Go to Settings")) {
+				appManager.shouldPromptForProAfterGameCompletion = false
+				DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+					AppState.shared.navigateToSettingsTrigger = true
+				}
+			},
+			secondaryButton: .cancel(Text("Not now")) {
+				appManager.shouldPromptForProAfterGameCompletion = false
 			}
 		)
 	}

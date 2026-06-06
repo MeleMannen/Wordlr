@@ -168,10 +168,10 @@ final class AdManager {
 			return
 		}
 		
-//#if targetEnvironment(simulator)
+#if targetEnvironment(simulator)
 		let testDeviceIdentifiers = ["96b612b47bebe02c609b509f57174108"]
 		MobileAds.shared.requestConfiguration.testDeviceIdentifiers = testDeviceIdentifiers
-//#endif
+#endif
 		
 		MobileAds.shared.start()
 		isMobileAdsStartCalled = true

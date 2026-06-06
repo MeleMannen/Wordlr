@@ -55,7 +55,7 @@ struct StatsView: View {
 						FilterView(numberOfLetters: $numberOfLetters, selectedLanguage: $selectedLanguage, gameMode: $gameMode, showsWhenHintsUsed: $showsWhenHintsUsed)
 					}
 					if self.filteredGameRecords.isEmpty && self.hasCompletedInitialLoad {
-						ContentUnavailableView.init("No stats available for this selection!", systemImage: "exclamationmark.triangle.fill", description: Text("Try playing a game first or changing the selection."))
+						ContentUnavailableView.init("No stats available for this selection", systemImage: "exclamationmark.triangle.fill", description: Text("Try playing a game first or changing the selection."))
 							.padding(.bottom, 20)
 							.darkGradientBackground(colorScheme: colorScheme)
 					} else {
@@ -104,7 +104,7 @@ struct StatsView: View {
 													.foregroundColor(self.wonCount < (self.lostCount / 6) ? .primary : .white)
 													.font(.headline)
 													.frame(minWidth: CGFloat(15*"\(self.wonCount)".count), alignment: .center)
-													.shadow(color: .black.opacity(0.3), radius: 1, x: 1, y: 1)
+													.shadow(color: .black.opacity(self.wonCount < (self.lostCount / 6) ? 0.0 : 0.3), radius: 1, x: 1, y: 1)
 													.opacity(self.showBarLabels ? 1 : 0)
 													.animation(reduceMotion ? nil : .easeOut(duration: 0.3), value: self.showBarLabels)
 											}
@@ -122,7 +122,7 @@ struct StatsView: View {
 													.foregroundColor(self.lostCount < (self.wonCount / 6) ? .primary : .white)
 													.font(.headline)
 													.frame(minWidth: CGFloat(15*"\(self.lostCount)".count), alignment: .center)
-													.shadow(color: .black.opacity(0.3), radius: 1, x: 1, y: 1)
+													.shadow(color: .black.opacity(self.lostCount < (self.wonCount / 6) ? 0.0 : 0.3), radius: 1, x: 1, y: 1)
 													.opacity(self.showBarLabels ? 1 : 0)
 													.animation(reduceMotion ? nil : .easeOut(duration: 0.3), value: self.showBarLabels)
 											}
@@ -181,7 +181,7 @@ struct StatsView: View {
 														.foregroundColor(count < (self.maxGuessesPerCount / 6) ? .primary : .white)
 														.font(.headline)
 														.frame(minWidth: CGFloat(15*"\(count)".count), alignment: .center)
-														.shadow(color: .black.opacity(0.3), radius: 1, x: 1, y: 1)
+														.shadow(color: .black.opacity(count < (self.maxGuessesPerCount / 6) ? 0.0 : 0.3), radius: 1, x: 1, y: 1)
 														.opacity(self.showBarLabels ? 1 : 0)
 														.animation(reduceMotion ? nil : .easeOut(duration: 0.3), value: self.showBarLabels)
 												}

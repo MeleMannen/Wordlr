@@ -19,6 +19,7 @@ struct HistoryView: View {
 	@State private var showsWhenHintsUsed: ShowsWhenHintsUsed = .both
 	@State private var searchedWord: String = ""
 	@State private var historyResult: HistorySearchResult?
+	@State private var didTap: Bool = false
 	@Query private var gameRecords: [GameRecordEntity]
 	
 	let gradient = LinearGradient(colors: [.orange, .yellow, .yellow, .yellow, .yellow, .white], startPoint: .bottomLeading, endPoint: .topTrailing)
@@ -72,6 +73,7 @@ struct HistoryView: View {
 			.searchToolbarAvoidsHidingContentWhenAvailable()
 			.navigationTitle("History")
 			.navigationBarTitleDisplayMode(.inline)
+			.sensoryFeedback(.selection, trigger: self.didTap)
 			.safeAreaInset(edge: .top, spacing: 0) {
 				if #available(iOS 26.0, *) {
 					FilterView(numberOfLetters: $numberOfLetters, selectedLanguage: $selectedLanguage, gameMode: $gameMode, showsWhenHintsUsed: $showsWhenHintsUsed)
@@ -92,8 +94,23 @@ struct HistoryView: View {
 			ContentUnavailableView.search(text: self.searchedWord)
 				.transition(.opacity)
 		} else if historyResult.isEmpty {
-			ContentUnavailableView.init("History is not available with this selection!", systemImage: "exclamationmark.arrow.trianglehead.counterclockwise.rotate.90", description: Text("Try playing a game first."))
-				.transition(.opacity)
+			ContentUnavailableView {
+				Label("History is not available with this selection", systemImage: "exclamationmark.arrow.trianglehead.counterclockwise.rotate.90")
+					.font(.title2)
+					.foregroundStyle(.primary)
+				
+			} description: {
+				Text("Try playing a game first.")
+				
+			} actions: {
+				Button("Reset filters") {
+					resetFilters()
+				}
+				.foregroundStyle(.red)
+			}
+			.frame(maxWidth: .infinity, maxHeight: .infinity)
+			.transition(.opacity)
+				
 		} else {
 			List {
 				ForEach(historyResult.sections) { section in
@@ -189,6 +206,16 @@ struct HistoryView: View {
 			formatter: self.formatter1
 		)
 		return HistorySearchResult(sections: sections)
+	}
+	
+	private func resetFilters() {
+		self.selectedLanguage = .all
+		self.gameMode = .both
+		self.searchedWord = ""
+		self.numberOfLetters = 9
+		self.showsWhenHintsUsed = .both
+		self.didTap.toggle()
+		
 	}
 
 	private func copyResult(for gameRecord: GameRecord) {

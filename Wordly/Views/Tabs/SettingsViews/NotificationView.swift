@@ -57,9 +57,9 @@ struct NotificationView: View {
 				}
 				.listStyle(.insetGrouped)
 				.scrollContentBackground(.hidden)
-				.darkGradientBackground(colorScheme: colorScheme)
 			}
 		}
+		.darkGradientBackground(colorScheme: colorScheme)
 		.navigationBarTitleDisplayMode(.inline)
 		.navigationTitle("Daily Wordlr reminders")
 		.toolbar {

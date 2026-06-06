@@ -76,7 +76,7 @@ struct OnboardingView: View {
 							hasSeenOnboarding = true
 							isShowingOnboarding = false
                         }, label: {
-                            Text("Got it!")
+                            Text("Got it")
                                 .font(.title2).bold()
                                 .frame(maxWidth: .infinity)
                                 .padding(.vertical, 14)
@@ -91,7 +91,7 @@ struct OnboardingView: View {
 							hasSeenOnboarding = true
 							isShowingOnboarding = false
                         }, label: {
-                            Text("Got it!")
+                            Text("Got it")
                                 .font(.title2).bold()
                                 .frame(maxWidth: .infinity)
                                 .padding(.vertical, 14)

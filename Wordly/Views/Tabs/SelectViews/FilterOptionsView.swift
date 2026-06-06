@@ -13,6 +13,11 @@ enum FilterOptionsFields: Hashable {
 	case endsWith
 }
 
+private enum ActiveFilterOptionsMenu: Equatable {
+	case includedLetters
+	case excludedLetters
+}
+
 struct FilterOptionsView: View {
 	@Environment(AppManager.self) private var appManager
 	@Environment(AdManager.self) private var adManager
@@ -21,6 +26,8 @@ struct FilterOptionsView: View {
 	@State private var didTapGameClues: Bool = false
 	@State private var didTapReset: Bool = false
 	@State private var showProAlert: Bool = false
+	@State private var activeMenu: ActiveFilterOptionsMenu?
+	@State private var isLiquidGlassInteractionDisabled: Bool = false
 	@Binding var isShowingFilterOptions: Bool
 	
 	
@@ -29,7 +36,8 @@ struct FilterOptionsView: View {
 		@Bindable var appManager = appManager
 		
 		NavigationStack {
-			List {
+			ZStack {
+				List {
 					VStack {
 					Toggle(isOn: $appManager.isFilteringSearchWord) {
 						Text("Search")
@@ -40,6 +48,7 @@ struct FilterOptionsView: View {
 					TextField("Search for a word", text: $appManager.searchedWord)
 						.textFieldStyle(WordlrTextFieldStyle())
 						.autocorrectionDisabled()
+						.disabled(activeMenu != nil)
 						.focused($focusedField, equals: .search)
 						.simultaneousGesture(
 							TapGesture()
@@ -55,7 +64,7 @@ struct FilterOptionsView: View {
 								appManager.isFilteringSearchWord = true
 							}
 						}
-							.modifier(ConditionalGlassEffect())
+							.modifier(ConditionalGlassEffect(isInteractive: !isLiquidGlassInteractionDisabled))
 					}
 					.wordlrListSectionRowBackground(.first)
 					
@@ -69,6 +78,7 @@ struct FilterOptionsView: View {
 					TextField("Enter starting letters", text: $appManager.startsWithFilter)
 						.textFieldStyle(WordlrTextFieldStyle())
 						.autocorrectionDisabled()
+						.disabled(activeMenu != nil)
 						.focused($focusedField, equals: .startsWith)
 						.simultaneousGesture(
 							TapGesture()
@@ -86,7 +96,7 @@ struct FilterOptionsView: View {
 								appManager.isFilteringStartWith = true
 							}
 						}
-							.modifier(ConditionalGlassEffect())
+							.modifier(ConditionalGlassEffect(isInteractive: !isLiquidGlassInteractionDisabled))
 					}
 					.wordlrListSectionRowBackground(.middle)
 					
@@ -100,6 +110,7 @@ struct FilterOptionsView: View {
 					TextField("Enter ending letters", text: $appManager.endsWithFilter)
 						.textFieldStyle(WordlrTextFieldStyle())
 						.autocorrectionDisabled()
+						.disabled(activeMenu != nil)
 						.focused($focusedField, equals: .endsWith)
 						.simultaneousGesture(
 							TapGesture()
@@ -117,7 +128,7 @@ struct FilterOptionsView: View {
 								appManager.isFilteringEndsWith = true
 							}
 						}
-							.modifier(ConditionalGlassEffect())
+							.modifier(ConditionalGlassEffect(isInteractive: !isLiquidGlassInteractionDisabled))
 					}
 					.wordlrListSectionRowBackground(.middle)
 					
@@ -131,28 +142,13 @@ struct FilterOptionsView: View {
 					HStack {
 						Spacer()
 						
-						Menu {
-							ForEach(appManager.selectedLanguage.alphabet, id: \.self) { letter in
-								Toggle(
-									isOn: Binding(
-										get: { appManager.selectedIncludedLetters.contains(letter) },
-										set: { isSelected in
-											if isSelected {
-												appManager.selectedIncludedLetters.append(letter)
-											} else {
-												appManager.selectedIncludedLetters.removeAll { $0 == letter }
-											}
-										}
-									)
-								) {
-									Text(letter)
-										.font(.title3)
-								}
-							}
-						} label: {
-							HStack {
-								let includedLettersText = NSLocalizedString("Included letters", comment: "Label for included letters in filter options")
-								Text(appManager.selectedIncludedLetters.isEmpty ? includedLettersText : appManager.selectedIncludedLetters.joined(separator: ", "))
+							Button {
+								activeMenu = .includedLetters
+								focusedField = nil
+							} label: {
+								HStack {
+									let includedLettersText = NSLocalizedString("Included letters", comment: "Label for included letters in filter options")
+									Text(appManager.selectedIncludedLetters.isEmpty ? includedLettersText : appManager.selectedIncludedLetters.joined(separator: ", "))
 									.font(.callout)
 									.padding([.vertical, .leading], 5)
 								
@@ -161,14 +157,32 @@ struct FilterOptionsView: View {
 							}
 							.padding(5)
 							.frame(alignment: .center)
-							.modifier(ConditionalGlassEffect())
-							
-						}
-						.accentColor(.primary)
-						.menuActionDismissBehavior(.disabled)
-						.background {
-							if #unavailable(iOS 26.0, ) {
-								RoundedRectangle(cornerRadius: 10)
+							.modifier(ConditionalGlassEffect(isInteractive: !isLiquidGlassInteractionDisabled))
+								
+							}
+							.buttonStyle(.plain)
+							.accentColor(.primary)
+							.popover(
+								isPresented: Binding(
+									get: { activeMenu == .includedLetters },
+									set: { isPresented in
+										if !isPresented {
+											activeMenu = nil
+										}
+									}
+								),
+								attachmentAnchor: .rect(.bounds),
+								arrowEdge: .bottom
+							) {
+								LetterFilterPopover(
+									letters: appManager.selectedLanguage.alphabet,
+									selectedLetters: $appManager.selectedIncludedLetters
+								)
+								.presentationCompactAdaptation(.popover)
+							}
+							.background {
+								if #unavailable(iOS 26.0, ) {
+									RoundedRectangle(cornerRadius: 10)
 									.foregroundStyle(Color(uiColor: .tertiarySystemBackground))
 									.conditionalShadow(color: .black.opacity(0.5), radius: 4, x: 4, y: 4)
 							}
@@ -200,28 +214,13 @@ struct FilterOptionsView: View {
 					HStack {
 						Spacer()
 						
-						Menu {
-							ForEach(appManager.selectedLanguage.alphabet, id: \.self) { letter in
-								Toggle(
-									isOn: Binding(
-										get: { appManager.selectedExcludedLetters.contains(letter) },
-										set: { isSelected in
-											if isSelected {
-												appManager.selectedExcludedLetters.append(letter)
-											} else {
-												appManager.selectedExcludedLetters.removeAll { $0 == letter }
-											}
-										}
-									)
-								) {
-									Text(letter)
-										.font(.title3)
-								}
-							}
-						} label: {
-							HStack {
-								let excludedLettersText = NSLocalizedString("Excluded letters", comment: "Label for excluded letters in filter options")
-								Text(appManager.selectedExcludedLetters.isEmpty ? excludedLettersText : appManager.selectedExcludedLetters.joined(separator: ", "))
+							Button {
+								activeMenu = .excludedLetters
+								focusedField = nil
+							} label: {
+								HStack {
+									let excludedLettersText = NSLocalizedString("Excluded letters", comment: "Label for excluded letters in filter options")
+									Text(appManager.selectedExcludedLetters.isEmpty ? excludedLettersText : appManager.selectedExcludedLetters.joined(separator: ", "))
 									.font(.callout)
 									.padding([.vertical, .leading], 5)
 								Image(systemName: "chevron.up.chevron.down")
@@ -229,11 +228,29 @@ struct FilterOptionsView: View {
 							}
 							.padding(5)
 							.frame(alignment: .center)
-							.modifier(ConditionalGlassEffect())
-						}
-						.accentColor(.primary)
-						.menuActionDismissBehavior(.disabled)
-						.background {
+								.modifier(ConditionalGlassEffect(isInteractive: !isLiquidGlassInteractionDisabled))
+							}
+							.buttonStyle(.plain)
+							.accentColor(.primary)
+							.popover(
+								isPresented: Binding(
+									get: { activeMenu == .excludedLetters },
+									set: { isPresented in
+										if !isPresented {
+											activeMenu = nil
+										}
+									}
+								),
+								attachmentAnchor: .rect(.bounds),
+								arrowEdge: .bottom
+							) {
+								LetterFilterPopover(
+									letters: appManager.selectedLanguage.alphabet,
+									selectedLetters: $appManager.selectedExcludedLetters
+								)
+								.presentationCompactAdaptation(.popover)
+							}
+							.background {
 							if #unavailable(iOS 26.0, ) {
 								RoundedRectangle(cornerRadius: 10)
 									.foregroundStyle(Color(uiColor: .tertiarySystemBackground))
@@ -256,7 +273,7 @@ struct FilterOptionsView: View {
 					Button {
 					self.didTapGameClues.toggle()
 					if storeManager.isAdRemovalPurchased {
-						applyGameInfoToFilters()
+						appManager.applyGameInfoToFilters()
 					} else {
 						showProAlert = true
 					}
@@ -291,7 +308,7 @@ struct FilterOptionsView: View {
 						.onEnded { _ in
 							self.didTapGameClues.toggle()
 							if storeManager.isAdRemovalPurchased {
-								applyGameInfoToFilters()
+								appManager.applyGameInfoToFilters()
 							} else {
 								showProAlert = true
 							}
@@ -328,6 +345,17 @@ struct FilterOptionsView: View {
 					.padding(.vertical, 5)
 					.wordlrListSectionRowBackground(.last)
 				}
+				.allowsHitTesting(activeMenu == nil)
+				if activeMenu != nil {
+					Color.clear
+						.frame(maxWidth: .infinity, maxHeight: .infinity)
+						.contentShape(Rectangle())
+						.onTapGesture {
+							activeMenu = nil
+						}
+						.accessibilityHidden(true)
+				}
+			}
 			.padding(.top, -20)
 			.simultaneousGesture(
 				TapGesture()
@@ -335,6 +363,15 @@ struct FilterOptionsView: View {
 						focusedField = nil
 					}
 			)
+			.onChange(of: activeMenu) {
+				if activeMenu != nil {
+					DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+						isLiquidGlassInteractionDisabled = true
+					}
+				} else {
+					isLiquidGlassInteractionDisabled = false
+				}
+			}
 			.navigationTitle("Filter options")
 			.navigationBarTitleDisplayMode(.inline)
 			.toolbar {
@@ -385,66 +422,6 @@ struct FilterOptionsView: View {
 		}
 	}
 	
-	private func applyGameInfoToFilters() {
-		var included: Set<String> = []
-		var excluded: Set<String> = []
-
-		for row in appManager.keyboard {
-			for key in row {
-				switch key.state {
-				case .correctPosition, .correctLetter:
-					included.insert(key.letter)
-				case .usedButNotCorrect:
-					excluded.insert(key.letter)
-				case .notUsed:
-					break
-				}
-			}
-		}
-
-		let wordLength = appManager.numberOfLetters
-		var correctPositions = Array(repeating: "", count: wordLength)
-		for row in appManager.board {
-			for (index, letter) in row.enumerated() {
-				if letter.state == .correctPosition && index < wordLength {
-					correctPositions[index] = letter.letter
-				}
-			}
-		}
-
-		var startsWith = ""
-		for letter in correctPositions {
-			if !letter.isEmpty {
-				startsWith += letter
-			} else {
-				break
-			}
-		}
-
-		var endsWith = ""
-		for letter in correctPositions.reversed() {
-			if !letter.isEmpty {
-				endsWith = letter + endsWith
-			} else {
-				break
-			}
-		}
-
-		appManager.searchedWord = ""
-
-		appManager.startsWithFilter = startsWith
-		appManager.isFilteringStartWith = !startsWith.isEmpty
-
-		appManager.endsWithFilter = endsWith
-		appManager.isFilteringEndsWith = !endsWith.isEmpty
-
-		appManager.selectedIncludedLetters = included.sorted()
-		appManager.isFilteringIncludedLetters = !included.isEmpty
-
-		appManager.selectedExcludedLetters = excluded.sorted()
-		appManager.isFilteringExcludeLetters = !excluded.isEmpty
-	}
-
 	func focusNextField() {
 		guard let currentField = focusedField else { return }
 		switch currentField {
@@ -472,6 +449,56 @@ struct WordlrTextFieldStyle: TextFieldStyle {
 					RoundedRectangle(cornerRadius: 8)
 						.stroke(.primary)
 				)
+		}
+	}
+}
+
+private struct LetterFilterPopover: View {
+	let letters: [String]
+	@Binding var selectedLetters: [String]
+	private let columns = Array(repeating: GridItem(.fixed(42), spacing: 8), count: 6)
+
+	var body: some View {
+		LazyVGrid(columns: columns, spacing: 8) {
+				ForEach(letters, id: \.self) { letter in
+					let isSelected = selectedLetters.contains(letter)
+
+					Button {
+						withAnimation(.smooth(duration: 0.18)) {
+							if isSelected {
+								selectedLetters.removeAll { $0 == letter }
+							} else {
+								selectedLetters.append(letter)
+							}
+						}
+					} label: {
+						ZStack(alignment: .topTrailing) {
+							Text(letter)
+								.font(.title3.weight(.medium))
+								.foregroundStyle(.primary)
+								.frame(width: 42, height: 42)
+								.background {
+									RoundedRectangle(cornerRadius: 16)
+										.fill(isSelected ? Color.green.opacity(0.16) : Color.clear)
+								}
+
+							Image(systemName: "checkmark.circle.fill")
+								.font(.caption)
+								.foregroundStyle(.green)
+								.background(.background, in: Circle())
+								.opacity(isSelected ? 1 : 0)
+								.scaleEffect(isSelected ? 1 : 0.65)
+								.offset(x: 4, y: -4)
+						}
+						.contentShape(RoundedRectangle(cornerRadius: 8))
+					}
+					.buttonStyle(.plain)
+				}
+		}
+		.padding(12)
+		.frame(width: 308)
+		.transaction { transaction in
+			transaction.animation = .smooth(duration: 0.18)
 		}
 	}
 }

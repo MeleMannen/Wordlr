@@ -51,10 +51,9 @@ struct SettingsView: View {
 		var components = URLComponents()
 		components.scheme = "mailto"
 		components.path = supportEmailAddress
-		let proStatus = storeManager.isAdRemovalPurchased ? "Pro" : "Free"
 		components.queryItems = [
 			URLQueryItem(name: "subject", value: "Wordlr Feedback"),
-			URLQueryItem(name: "body", value: "\n\n\nApp version: \(appVersionText)\nUser: \(proStatus)")
+			URLQueryItem(name: "body", value: "\n\n\nApp version: \(appVersionText)\(storeManager.isAdRemovalPurchased ? "" : "\nUser: Pro")")
 		]
 		return components.url
 	}
@@ -95,8 +94,10 @@ struct SettingsView: View {
 											.tint(.white)
 									} else if let product = storeManager.adRemovalProduct {
 										Text("Upgrade to Pro - \(product.displayPrice)")
+											.conditionalShadow(color: .black.opacity(0.18), radius: 2, x: 0, y: 1)
 									} else {
 										Text("Upgrade to Pro")
+											.conditionalShadow(color: .black.opacity(0.18), radius: 2, x: 0, y: 1)
 									}
 								}
 								.font(.headline)
@@ -125,7 +126,8 @@ struct SettingsView: View {
 							}
 							.buttonStyle(.plain)
 							.font(.subheadline.weight(.medium))
-							.foregroundStyle(.green)
+							.underline()
+							.foregroundStyle(.secondary)
 							.accessibilityHint("Restores previous Pro purchases.")
 						}
 						.padding(16)
@@ -649,6 +651,9 @@ private struct SettingsRowLabel: View {
 	var body: some View {
 		Label {
 			Text(title)
+				.alignmentGuide(.listRowSeparatorLeading) { dimensions in
+					dimensions[.leading]
+				}
 		} icon: {
 			Image(systemName: systemImage)
 				.font(.body.weight(.medium))

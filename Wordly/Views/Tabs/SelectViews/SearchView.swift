@@ -37,12 +37,10 @@ struct SearchView: View {
 					} description: {
 						Text("Try changing the search text or removing filters.")
 					} actions: {
-						HStack {
-							Button("Clear search") {
-								clearSearch()
-							}
-							.foregroundStyle(.green)
+						Button("Clear search") {
+							clearSearch()
 						}
+						.foregroundStyle(.red)
 					}
 					.frame(maxWidth: .infinity, maxHeight: .infinity)
 					.darkGradientBackground(colorScheme: colorScheme)
@@ -51,17 +49,15 @@ struct SearchView: View {
 						Label("No words matching current filters", systemImage: "magnifyingglass")
 							.font(.title2)
 							.foregroundStyle(.primary)
-							
+						
 					} description: {
 						Text("There are no words matching the current filters. Try adjusting or removing some filters to see more words.")
-							
+						
 					} actions: {
-						HStack {
-							Button("Reset filters") {
-								resetFiltersFromToolbar()
-							}
-							.foregroundStyle(.green)
+						Button("Reset filters") {
+							resetFiltersFromToolbar()
 						}
+						.foregroundStyle(.red)
 					}
 					.frame(maxWidth: .infinity, maxHeight: .infinity)
 					.darkGradientBackground(colorScheme: colorScheme)
@@ -150,72 +146,7 @@ struct SearchView: View {
 			.searchPresentationToolbarBehavior(.avoidHidingContent)
 			.navigationTitle("Search")
 			.toolbar {
-				//				ToolbarItem(placement: .topBarTrailing) {
-				//					if #available(iOS 26.0, *) {
-				//						NavigationLink(destination: FilterOptionsView().environmentObject(appManager).navigationTransition(.zoom(sourceID: "filter", in: namespace)), label: {
-				//							Image(systemName: "slider.horizontal.3")
-				//								.foregroundColor(.white)
-				//								.matchedTransitionSource(id: "filter", in: namespace)
-				//						})
-				////						.transition(.scale)
-				//						.simultaneousGesture(
-				//							LongPressGesture(minimumDuration: 1.2)
-				//								.onEnded { _ in
-				//									appManager.resetFilters()
-				//									self.isShowingFilterOptions.toggle()
-				//								}
-				//						)
-				//						.simultaneousGesture(TapGesture().onEnded {
-				//							self.isShowingFilterOptions.toggle()
-				//							Task {
-				//								await FilterTip.filterEvent.donate()
-				//							}
-				//						})
-				//						.popoverTip(self.filterTip, arrowEdge: .top)
-				//						.conditionalHaptic(.selection, trigger: self.isShowingFilterOptions)
-				//						.id(filterButtonID)
-				//					}
-				//				}
-				if #available(iOS 26.0, *) {
-					ToolbarItem(placement: .navigationBarTrailing) {
-						Menu {
-							Button(role: .destructive) {
-								resetFiltersFromToolbar()
-							} label: {
-								Label("Reset filters", systemImage: "arrow.counterclockwise")
-							}
-						} label: {
-							Label("Filter options", systemImage: "slider.horizontal.3")
-						} primaryAction: {
-							openFilterOptions()
-						}
-						.accessibilityHint("Opens filters for word search.")
-						.accessibilityInputLabels(["Filter options", "Filters", "Reset filters"])
-						.conditionalHaptic(.selection, trigger: self.didTap)
-						.popoverTip(self.filterTip, arrowEdge: .top)
-					}
-					.matchedTransitionSource(id: "filter", in: self.namespace)
-					
-					
-				} else {
-					ToolbarItem(placement: .navigationBarTrailing) {
-						Menu {
-							Button(role: .destructive) {
-								resetFiltersFromToolbar()
-							} label: {
-								Label("Reset filters", systemImage: "arrow.counterclockwise")
-							}
-						} label: {
-							Label("Filter options", systemImage: "slider.horizontal.3")
-						} primaryAction: {
-							openFilterOptions()
-						}
-						.accessibilityHint("Opens filters for word search.")
-						.accessibilityInputLabels(["Filter options", "Filters", "Reset filters"])
-						.conditionalHaptic(.selection, trigger: self.didTap)
-						.popoverTip(self.filterTip, arrowEdge: .top)
-					}
-				}
+				filterToolbar
 			}
 			.sheet(isPresented: $isShowingFilterOptions) {
 				filterGameRecords()
@@ -281,6 +212,30 @@ struct SearchView: View {
 				}
 			}
 		}
+	}
+
+	@ToolbarContentBuilder
+	private var filterToolbar: some ToolbarContent {
+		if #available(iOS 26.0, *) {
+			ToolbarItem(placement: .navigationBarTrailing) {
+				filterOptionsMenu
+			}
+			.matchedTransitionSource(id: "filter", in: self.namespace)
+		} else {
+			ToolbarItem(placement: .navigationBarTrailing) {
+				filterOptionsMenu
+			}
+		}
+	}
+
+	private var filterOptionsMenu: some View {
+		SearchFilterOptionsMenu(
+			didTap: self.didTap,
+			filterTip: self.filterTip,
+			openFilterOptions: openFilterOptions,
+			resetFilters: resetFiltersFromToolbar,
+			applyGameInfo: applyGameInfoFromToolbar
+		)
 	}
 	
 	func filterGameRecords() {
@@ -354,6 +309,13 @@ struct SearchView: View {
 		}
 	}
 
+	private func applyGameInfoFromToolbar() {
+		didTap.toggle()
+		appManager.applyGameInfoToFilters()
+		filterGameRecords()
+		AnalyticsManager.shared.logDidUseSearchFiltersEvent(word: appManager.word, language: appManager.selectedLanguage, numberOfLetters: appManager.numberOfLetters, gameMode: appManager.gameMode)
+	}
+
 	private func clearSearch() {
 		appManager.searchedWord = ""
 		filterGameRecords()
@@ -390,6 +352,62 @@ struct SectionHeaderView: View {
 		.padding(.vertical, 8)
 		.frame(height: 35)
 		.listRowInsets(EdgeInsets())
+	}
+}
+
+private struct SearchFilterOptionsMenu: View {
+	@Environment(StoreManager.self) private var storeManager
+	@State private var showProAlert = false
+
+	let didTap: Bool
+	let filterTip: FilterTip
+	let openFilterOptions: () -> Void
+	let resetFilters: () -> Void
+	let applyGameInfo: () -> Void
+
+	var body: some View {
+		Menu {
+			Button {
+				if storeManager.isAdRemovalPurchased {
+					applyGameInfo()
+				} else {
+					showProAlert = true
+				}
+			} label: {
+				Label {
+					Text("Get from game")
+				} icon: {
+					Image(systemName: "crown.fill")
+						.font(.caption.weight(.bold))
+						.padding(6)
+						.background(.green, in: Circle())
+				}
+			}
+
+			Button(role: .destructive) {
+				resetFilters()
+			} label: {
+				Label("Reset filters", systemImage: "arrow.counterclockwise")
+			}
+		} label: {
+			Label("Filter options", systemImage: "slider.horizontal.3")
+		} primaryAction: {
+			openFilterOptions()
+		}
+		.accessibilityHint("Opens filters for word search.")
+		.accessibilityInputLabels(["Filter options", "Filters", "Reset filters"])
+		.conditionalHaptic(.selection, trigger: didTap)
+		.popoverTip(filterTip, arrowEdge: .top)
+		.alert("Pro Feature", isPresented: $showProAlert) {
+			Button("Go to Settings") {
+				DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+					AppState.shared.navigateToSettingsTrigger = true
+				}
+			}
+			Button("OK", role: .cancel) {}
+		} message: {
+			Text("Game clues automatically fills in filter options based on your current game progress. Upgrade to Pro in Settings to unlock this feature.")
+		}
 	}
 }
 

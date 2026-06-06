@@ -410,11 +410,23 @@ struct ConditionalButtonBackground2: View {
 
 
 struct ConditionalGlassEffect: ViewModifier {
+	let isInteractive: Bool
+	
+	init(isInteractive: Bool = true) {
+		self.isInteractive = isInteractive
+	}
+	
 	func body(content: Content) -> some View {
 		if #available(iOS 26.0, *) {
-			content
-				.tint(.primary)
-				.glassEffect(.regular.interactive())
+			if isInteractive {
+				content
+					.tint(.primary)
+					.glassEffect(.regular.interactive())
+			} else {
+				content
+					.tint(.primary)
+					.glassEffect(.regular)
+			}
 		} else {
 			content
 				.tint(.primary)

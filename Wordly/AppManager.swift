@@ -57,6 +57,7 @@ final class AppManager: NSObject, FullScreenContentDelegate {
 	var currentRow = 0
 	var currentIndex = 0
 	var isGameOver: Bool = false
+	var shouldShowCelebrationGradient: Bool = false
 	var message: String = ""
 	var isAnimating: Bool = false
 	var isShaking: Bool = false
@@ -70,6 +71,7 @@ final class AppManager: NSObject, FullScreenContentDelegate {
 	var hasSharedResult: Bool = false
 	var didWinGame: GameEndState = .lost
 	var shouldPromptForNotificationsAfterFirstWin: Bool = false
+	var shouldPromptForProAfterGameCompletion: Bool = false
 	var searchedWord: String = ""
 	var isSearching: Bool = false
 	
@@ -478,6 +480,7 @@ final class AppManager: NSObject, FullScreenContentDelegate {
 			let guessedWord = self.getWordFromCurrentRow()
 			if wordIsValidForSubmitButton() {
 				self.isAnimating = true
+				self.shouldShowCelebrationGradient = false
 				self.highlightBoardLetters() { success in
 					if success {
 						self.submittedWordWaitingForReveal = guessedWord
@@ -559,7 +562,7 @@ final class AppManager: NSObject, FullScreenContentDelegate {
 		self.isGameOver = true
 		
 		Task { @MainActor in
-			try? await Task.sleep(nanoseconds: 400_000_000)
+			try? await Task.sleep(nanoseconds: 1_000_000_000)
 			
 			self.addGameRecord(
 				gameRecord: GameRecord(
@@ -576,6 +579,7 @@ final class AppManager: NSObject, FullScreenContentDelegate {
 					endDate: completedEndDate
 				)
 			)
+			self.maybePromptForProAfterGameCompletion()
 			
 			if state == .won && completedGameMode == .dailyWord {
 				self.maybePromptForNotificationsAfterFirstWin()
@@ -683,9 +687,11 @@ final class AppManager: NSObject, FullScreenContentDelegate {
 		self.submittedWordWaitingForReveal = nil
 		self.message = ""
 		self.isGameOver = false
+		self.shouldShowCelebrationGradient = false
 		self.hasSharedResult = false
 		self.didWinGame = .lost
 		self.shouldPromptForNotificationsAfterFirstWin = false
+		self.shouldPromptForProAfterGameCompletion = false
 		self.language = self.selectedLanguage
 		self.gameMode = self.selectedGameMode
 		self.resetFilters()
@@ -744,6 +750,60 @@ final class AppManager: NSObject, FullScreenContentDelegate {
 			self.selectedExcludedLetters.removeAll()
 		}
 	}
+
+	func applyGameInfoToFilters() {
+		var included: Set<String> = []
+		var excluded: Set<String> = []
+
+		for row in self.keyboard {
+			for key in row {
+				switch key.state {
+					case .correctPosition, .correctLetter:
+						included.insert(key.letter)
+					case .usedButNotCorrect:
+						excluded.insert(key.letter)
+					case .notUsed:
+						break
+				}
+			}
+		}
+
+		let wordLength = self.numberOfLetters
+		var correctPositions = Array(repeating: "", count: wordLength)
+		for row in self.board {
+			for (index, letter) in row.enumerated() where letter.state == .correctPosition && index < wordLength {
+				correctPositions[index] = letter.letter
+			}
+		}
+
+		var startsWith = ""
+		for letter in correctPositions {
+			if !letter.isEmpty {
+				startsWith += letter
+			} else {
+				break
+			}
+		}
+
+		var endsWith = ""
+		for letter in correctPositions.reversed() {
+			if !letter.isEmpty {
+				endsWith = letter + endsWith
+			} else {
+				break
+			}
+		}
+
+		self.searchedWord = ""
+		self.startsWithFilter = startsWith
+		self.isFilteringStartWith = !startsWith.isEmpty
+		self.endsWithFilter = endsWith
+		self.isFilteringEndsWith = !endsWith.isEmpty
+		self.selectedIncludedLetters = included.sorted()
+		self.isFilteringIncludedLetters = !included.isEmpty
+		self.selectedExcludedLetters = excluded.sorted()
+		self.isFilteringExcludeLetters = !excluded.isEmpty
+	}
 	
 	private func maybePromptForNotificationsAfterFirstWin() {
 		let notificationsEnabled = UserDefaults.standard.bool(forKey: "notificationsEnabled")
@@ -758,6 +818,21 @@ final class AppManager: NSObject, FullScreenContentDelegate {
 		guard currentWins >= nextPromptThreshold else { return }
 		
 		self.shouldPromptForNotificationsAfterFirstWin = true
+	}
+
+	func maybePromptForProAfterGameCompletion() {
+		let promptDismissedKey = "proPromptAfterGamesDismissed"
+		guard !UserDefaults.standard.bool(forKey: promptDismissedKey) else { return }
+
+		let completedGamesKey = "proPromptCompletedGamesCount"
+		let promptThreshold = 15
+		let completedGames = max(UserDefaults.standard.integer(forKey: completedGamesKey) + 1, self.gameRecords.count)
+		UserDefaults.standard.set(completedGames, forKey: completedGamesKey)
+
+		guard completedGames >= promptThreshold else { return }
+
+		self.shouldPromptForProAfterGameCompletion = true
+		UserDefaults.standard.set(true, forKey: promptDismissedKey)
 	}
 	
 	func fetchGameRecords() {

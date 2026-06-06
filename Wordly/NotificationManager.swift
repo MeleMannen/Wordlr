@@ -168,7 +168,7 @@ final class NotificationManager {
 		}
 
 		return String(
-			format: NSLocalizedString("Don't forget to complete today's %d letter, %@ daily Wordlr!", comment: "Body for Daily Wordlr reminder notification"),
+			format: NSLocalizedString("Don't forget to complete today's %d letter, %@ daily Wordlr", comment: "Body for Daily Wordlr reminder notification"),
 			reminder.numberOfLetters,
 			reminder.language.localizedName
 		)

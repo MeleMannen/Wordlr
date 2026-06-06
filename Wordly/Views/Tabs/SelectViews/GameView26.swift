@@ -30,6 +30,7 @@ struct GameView26: View {
 	@State var isShowingCurrentDefinition: Bool = false
 	@State var alertItem: AlertItem?
 	@State private var hasQueuedNotificationPromptForCurrentWin: Bool = false
+	@State private var hasQueuedProPromptForCurrentGame: Bool = false
 	@State private var showHintButton: Bool = false
 	@State private var lastAnnouncedRevealedRow: Int?
 
@@ -40,7 +41,7 @@ struct GameView26: View {
 	var colorForUnused: Color {
 		switch colorScheme {
 			case .light:
-				return Color(UIColor.lightGray)
+				return .white
 			case .dark:
 				return .primary
 			@unknown default:
@@ -51,7 +52,7 @@ struct GameView26: View {
 	var colorForWhenAppInBackground: Color {
 		switch colorScheme {
 			case .light:
-				return Color(UIColor.lightGray)
+				return .white
 			case .dark:
 				return .white
 			@unknown default:
@@ -81,6 +82,7 @@ struct GameView26: View {
 											selectedGameMode: appManager.selectedGameMode,
 											didWinGame: appManager.didWinGame,
 											isGameOver: appManager.isGameOver,
+											shouldShowCelebrationGradient: appManager.shouldShowCelebrationGradient,
 											userWantsNormalTheme: self.userWantsNormalTheme,
 											colorScheme: self.colorScheme,
 											colorForUnused: self.colorForUnused,
@@ -164,10 +166,10 @@ struct GameView26: View {
 											if appManager.selectedGameMode == .normal {
 												self.alertItem = AlertItem(
 													title: Text("Are you sure you want to restart?"),
-													message: Text("You will lose your word and you cannot undo this action!"),
+													message: Text("You will lose your word and you cannot undo this action"),
 													primaryButton: .destructive(Text("Restart")) {
 														self.alertItem = AlertItem(
-															title: Text("The word was: \(appManager.word)!"),
+															title: Text("The word was: \(appManager.word)"),
 															message: Text("Do you want to see the definition?"),
 															primaryButton: .default(Text("Show definition")) {
 																self.isShowingCurrentDefinition = true
@@ -196,17 +198,31 @@ struct GameView26: View {
 													   idealHeight: geometry2.size.height / CGFloat(8),
 													   maxHeight: geometry2.size.height / CGFloat(6))
 												.background {
+													RoundedRectangle(cornerRadius: 10)
+														.foregroundStyle(self.colorForWhenAppInBackground)
+														.opacity(appManager.selectedGameMode == .dailyWord ? 0.4 : 1.0)
+												}
+												.overlay {
+													if colorScheme == .light {
 														RoundedRectangle(cornerRadius: 10)
-															.foregroundStyle(self.colorForWhenAppInBackground)
-															.opacity(appManager.selectedGameMode == .dailyWord ? 0.4 : 1.0)
+															.stroke(Color(uiColor: .systemGray4), lineWidth: 1)
+													}
 												}
 												.opacity(appManager.selectedGameMode == .dailyWord ? 0.4 : 1.0)
 										})
-										.accessibilityLabel("Restart game")
-										.accessibilityHint("Restarts the current free play game.")
-										.accessibilityInputLabels(["Restart", "Restart game"])
-										.glassEffect(.regular.tint(self.colorForUnused.opacity(appManager.selectedGameMode == .dailyWord ? 0.4 : 1.0)).interactive(), in: .rect(cornerRadius: 10.0))
-										.glassEffectID("reset", in: self.namespace)
+											.accessibilityLabel("Restart game")
+											.accessibilityHint("Restarts the current free play game.")
+											.accessibilityInputLabels(["Restart", "Restart game"])
+											.buttonStyle(ScalingButton(isEnabled: colorScheme == .light))
+											.modifier(
+												KeyboardGlassEffect(
+													isEnabled: colorScheme != .light,
+													tint: self.colorForUnused.opacity(appManager.selectedGameMode == .dailyWord ? 0.4 : 1.0),
+													cornerRadius: 10,
+													id: "reset",
+													namespace: self.namespace
+												)
+											)
 										
 										
 										
@@ -277,13 +293,27 @@ struct GameView26: View {
 														RoundedRectangle(cornerRadius: 10)
 															.foregroundStyle(self.colorForWhenAppInBackground)
 												}
+												.overlay {
+													if colorScheme == .light {
+														RoundedRectangle(cornerRadius: 10)
+															.stroke(Color(uiColor: .systemGray4), lineWidth: 1)
+													}
+												}
 										})
 										.buttonRepeatBehavior(.enabled)
-										.accessibilityLabel("Delete letter")
-										.accessibilityHint("Deletes the previous letter.")
-										.accessibilityInputLabels(["Delete", "Delete letter"])
-										.glassEffect(.regular.tint(self.colorForUnused).interactive(), in: .rect(cornerRadius: 10.0))
-										.glassEffectID("delete", in: self.namespace)
+											.accessibilityLabel("Delete letter")
+											.accessibilityHint("Deletes the previous letter.")
+											.accessibilityInputLabels(["Delete", "Delete letter"])
+											.buttonStyle(ScalingButton(isEnabled: colorScheme == .light))
+											.modifier(
+												KeyboardGlassEffect(
+													isEnabled: colorScheme != .light,
+													tint: self.colorForUnused,
+													cornerRadius: 10,
+													id: "delete",
+													namespace: self.namespace
+												)
+											)
 										.conditionalHaptic(.impact, trigger: self.didTapBackButton)
 									}
 									.padding(.top, 5)
@@ -409,10 +439,10 @@ struct GameView26: View {
 									if appManager.selectedGameMode == .normal {
 										self.alertItem = AlertItem(
 											title: Text("Are you sure you want to restart?"),
-											message: Text("You will lose your word and you cannot undo this action!"),
+											message: Text("You will lose your word and you cannot undo this action"),
 											primaryButton: .destructive(Text("Restart")) {
 												self.alertItem = AlertItem(
-													title: Text("The word was: \(appManager.word)!"),
+													title: Text("The word was: \(appManager.word)"),
 													message: Text("Do you want to see the definition?"),
 													primaryButton: .default(Text("Show definition")) {
 														self.isShowingCurrentDefinition = true
@@ -513,15 +543,24 @@ struct GameView26: View {
 				guard shouldPrompt else { return }
 				presentNotificationPromptIfNeeded()
 			}
+			.onChange(of: appManager.shouldPromptForProAfterGameCompletion) { _, shouldPrompt in
+				guard shouldPrompt else { return }
+				presentProPromptIfNeeded()
+			}
 			.onChange(of: appManager.isGameOver) {
 				presentNotificationPromptIfNeeded()
+				presentProPromptIfNeeded()
 			}
 			.onChange(of: appManager.isAnimating) {
 				presentNotificationPromptIfNeeded()
+				presentProPromptIfNeeded()
 			}
 			.onChange(of: self.alertItem?.title) {
 				if self.alertItem != nil {
 					self.didTapResetButton.toggle()
+				} else {
+					presentNotificationPromptIfNeeded()
+					presentProPromptIfNeeded()
 				}
 			}
 			.alert(item: self.$alertItem) { item in
@@ -545,6 +584,7 @@ struct GameView26: View {
 	}
 
 	private func handleRowRevealComplete(rowIndex: Int) {
+		appManager.shouldShowCelebrationGradient = true
 		appManager.applyPendingGameCompletion()
 		guard lastAnnouncedRevealedRow != rowIndex,
 			  appManager.board.indices.contains(rowIndex) else {
@@ -590,6 +630,32 @@ struct GameView26: View {
 			}
 		)
 	}
+
+	private func presentProPromptIfNeeded() {
+		guard appManager.isGameOver,
+			  !appManager.isAnimating,
+			  appManager.shouldPromptForProAfterGameCompletion,
+			  !storeManager.isAdRemovalPurchased,
+			  !hasQueuedProPromptForCurrentGame,
+			  alertItem == nil else {
+			return
+		}
+
+		hasQueuedProPromptForCurrentGame = true
+		alertItem = AlertItem(
+			title: Text("Tired of ads?"),
+			message: Text("Upgrade to Pro to remove ads and get free hints."),
+			primaryButton: .default(Text("Go to Settings")) {
+				appManager.shouldPromptForProAfterGameCompletion = false
+				DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+					AppState.shared.navigateToSettingsTrigger = true
+				}
+			},
+			secondaryButton: .cancel(Text("Not now")) {
+				appManager.shouldPromptForProAfterGameCompletion = false
+			}
+		)
+	}
 	
 	private func createReminderForCurrentDailyWord() {
 		let reminders = NotificationManager.fetchReminders(context: modelContext)
@@ -618,6 +684,7 @@ struct GameView26: View {
 struct AdButton: View {
 	@Environment(AppManager.self) private var appManager
 	@Environment(StoreManager.self) private var storeManager
+	@Environment(\.colorScheme) private var colorScheme
 	@State private var didTap: Bool = false
 	let shouldShowHintTip: Bool
 	let hintTip = HintTip()
@@ -642,7 +709,7 @@ struct AdButton: View {
 					}
 				}
 			}, label: {
-				Image(systemName: "lightbulb.max.fill")
+				Image(systemName: colorScheme == .light ? "lightbulb.max" : "lightbulb.max.fill")
 					.contentShape(Rectangle())
 			})
 			.task {
@@ -691,8 +758,29 @@ struct SearchToolbarItem: View {
 	}
 }
 
+@available(iOS 26.0, *)
+private struct KeyboardGlassEffect: ViewModifier {
+	let isEnabled: Bool
+	let tint: Color
+	let cornerRadius: CGFloat
+	let id: String
+	let namespace: Namespace.ID
+
+	@ViewBuilder
+	func body(content: Content) -> some View {
+		if isEnabled {
+			content
+				.glassEffect(.regular.tint(tint).interactive(), in: .rect(cornerRadius: cornerRadius))
+				.glassEffectID(id, in: namespace)
+		} else {
+			content
+		}
+	}
+}
+
 struct KeyboardKeyButton18: View {
 	@Environment(\.accessibilityDifferentiateWithoutColor) private var differentiateWithoutColor
+	@Environment(\.colorScheme) private var colorScheme
 
 	let key: KeyBoardLetter
 	let colorForUnused: Color
@@ -715,6 +803,12 @@ struct KeyboardKeyButton18: View {
 					RoundedRectangle(cornerRadius: 5)
 						.fill(keyColor)
 				}
+				.overlay {
+					if colorScheme == .light && key.state == .notUsed {
+						RoundedRectangle(cornerRadius: 5)
+							.stroke(Color(uiColor: .systemGray4), lineWidth: 1)
+					}
+				}
 				.overlay(alignment: .bottomTrailing) {
 					if differentiateWithoutColor, let symbolName = key.state.accessibilitySymbolName {
 						Image(systemName: symbolName)
@@ -725,7 +819,7 @@ struct KeyboardKeyButton18: View {
 					}
 				}
 		}
-		.buttonStyle(ScalingButton())
+		.buttonStyle(ScalingButton(isEnabled: colorScheme == .light))
 		.conditionalHaptic(.impact, trigger: feedbackTrigger)
 		.accessibilityLabel(WordlrAccessibilityFormatter.keyboardKeyLabel(key: key))
 		.accessibilityValue(WordlrAccessibilityFormatter.keyboardKeyValue(key: key))
@@ -750,6 +844,7 @@ struct KeyboardKeyButton18: View {
 @available(iOS 26.0, *)
 struct KeyboardKeyButton26: View {
 	@Environment(\.accessibilityDifferentiateWithoutColor) private var differentiateWithoutColor
+	@Environment(\.colorScheme) private var colorScheme
 
 	let key: KeyBoardLetter
 	let colorForUnused: Color
@@ -771,8 +866,14 @@ struct KeyboardKeyButton26: View {
 				.foregroundStyle(key.state == .notUsed ? AnyShapeStyle(.black) : AnyShapeStyle(Color.white))
 				.frame(minWidth: width / CGFloat(14), maxWidth: width / CGFloat(12), minHeight: height / CGFloat(10), idealHeight: height / CGFloat(8), maxHeight: height / CGFloat(6))
 				.background {
+					RoundedRectangle(cornerRadius: 5)
+						.foregroundStyle(backgroundKeyColor)
+				}
+				.overlay {
+					if colorScheme == .light && key.state == .notUsed {
 						RoundedRectangle(cornerRadius: 5)
-							.foregroundStyle(backgroundKeyColor)
+							.stroke(Color(uiColor: .systemGray4), lineWidth: 1)
+					}
 				}
 				.overlay(alignment: .bottomTrailing) {
 					if differentiateWithoutColor, let symbolName = key.state.accessibilitySymbolName {
@@ -784,13 +885,21 @@ struct KeyboardKeyButton26: View {
 					}
 				}
 		}
+		.buttonStyle(ScalingButton())
+		.modifier(
+			KeyboardGlassEffect(
+				isEnabled: colorScheme != .light,
+				tint: keyColor,
+				cornerRadius: 5,
+				id: "\(key.letter)",
+				namespace: namespace
+			)
+		)
 		.conditionalHaptic(.impact, trigger: feedbackTrigger)
 		.accessibilityLabel(WordlrAccessibilityFormatter.keyboardKeyLabel(key: key))
 		.accessibilityValue(WordlrAccessibilityFormatter.keyboardKeyValue(key: key))
 		.accessibilityHint(WordlrAccessibilityFormatter.keyboardKeyHint(key: key))
 		.accessibilityInputLabels([LocalizedStringKey(key.letter), LocalizedStringKey(WordlrAccessibilityFormatter.keyboardKeyLabel(key: key))])
-		.glassEffect(.regular.tint(keyColor).interactive(), in: .rect(cornerRadius: 5.0))
-		.glassEffectID("\(key.letter)", in: namespace)
 	}
 	
 	private var keyColor: Color {
@@ -833,9 +942,11 @@ struct GrowingButton: ButtonStyle {
 struct ScalingButton: ButtonStyle {
 	@Environment(\.accessibilityReduceMotion) private var reduceMotion
 
+	var isEnabled: Bool = true
+
 	func makeBody(configuration: Configuration) -> some View {
 		configuration.label
-			.scaleEffect(configuration.isPressed && !reduceMotion ? 1.1 : 1)
+			.scaleEffect(isEnabled && configuration.isPressed && !reduceMotion ? 1.1 : 1)
 			.animation(reduceMotion ? nil : .easeInOut(duration: 0.1), value: configuration.isPressed)
 	}
 }

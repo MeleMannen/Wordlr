@@ -60,6 +60,7 @@ struct AnimatedGameTile: View {
     let selectedGameMode: GameMode
     let didWinGame: GameEndState
     let isGameOver: Bool
+    let shouldShowCelebrationGradient: Bool
     let userWantsNormalTheme: Bool
     let colorScheme: ColorScheme
     let colorForUnused: Color
@@ -85,6 +86,7 @@ struct AnimatedGameTile: View {
         selectedGameMode: GameMode,
         didWinGame: GameEndState,
         isGameOver: Bool,
+        shouldShowCelebrationGradient: Bool,
         userWantsNormalTheme: Bool,
         colorScheme: ColorScheme,
         colorForUnused: Color,
@@ -104,6 +106,7 @@ struct AnimatedGameTile: View {
         self.selectedGameMode = selectedGameMode
         self.didWinGame = didWinGame
         self.isGameOver = isGameOver
+        self.shouldShowCelebrationGradient = shouldShowCelebrationGradient
         self.userWantsNormalTheme = userWantsNormalTheme
         self.colorScheme = colorScheme
         self.colorForUnused = colorForUnused
@@ -126,6 +129,12 @@ struct AnimatedGameTile: View {
             .foregroundStyle(tileTextColor)
             .frame(width: tileSize, height: tileSize)
             .background(tileBackground)
+			.overlay {
+				if colorScheme == .light && displayedState == .notUsed {
+					RoundedRectangle(cornerRadius: 5)
+						.stroke(Color(uiColor: .systemGray4), lineWidth: 1)
+				}
+			}
 			.overlay(alignment: .bottomTrailing) {
 				if differentiateWithoutColor, let symbolName = displayedState.accessibilitySymbolName {
 					Image(systemName: symbolName)
@@ -188,6 +197,7 @@ struct AnimatedGameTile: View {
         selectedGameMode == .dailyWord &&
         didWinGame == .won &&
         isGameOver &&
+        shouldShowCelebrationGradient &&
         !isResettingBoard &&
         (rowIndex == currentRow - 1 || rowIndex == boardCount)
     }
