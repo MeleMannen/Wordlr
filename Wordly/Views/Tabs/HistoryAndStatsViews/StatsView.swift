@@ -53,6 +53,7 @@ struct StatsView: View {
 				VStack {
 					if #unavailable(iOS 26.0) {
 						FilterView(numberOfLetters: $numberOfLetters, selectedLanguage: $selectedLanguage, gameMode: $gameMode, showsWhenHintsUsed: $showsWhenHintsUsed)
+                            .darkGradientBackground(colorScheme: colorScheme)
 					}
 					if self.filteredGameRecords.isEmpty && self.hasCompletedInitialLoad {
 						ContentUnavailableView.init("No stats available for this selection", systemImage: "exclamationmark.triangle.fill", description: Text("Try playing a game first or changing the selection."))
@@ -149,6 +150,14 @@ struct StatsView: View {
 											}
 										}
 									}
+									.chartXAxis {
+										AxisMarks(preset: .extended, position: .bottom, values: .automatic(minimumStride: 1.0)) { _ in
+											AxisGridLine()
+											AxisTick()
+											AxisValueLabel(centered: false, anchor: .topTrailing)
+												.font(.footnote)
+										}
+									}
 									.chartXScale(domain: 0...max(Double(self.totalCount), 1))
 									.animation(reduceMotion ? nil : .easeOut(duration: 1.0), value: self.filteredGameRecords.count)
 									.accessibilityLabel("Win rate chart")
@@ -195,6 +204,14 @@ struct StatsView: View {
 												.font(.footnote)
 										}
 									}
+									.chartXAxis {
+										AxisMarks(preset: .extended, position: .bottom, values: .automatic(minimumStride: 1.0)) { _ in
+											AxisGridLine()
+											AxisTick()
+											AxisValueLabel(centered: false, anchor: .topTrailing)
+												.font(.footnote)
+										}
+									}
 									.animation(reduceMotion ? nil : .easeOut(duration: 1.0), value: self.filteredGameRecords.count)
 									.accessibilityLabel("Guesses chart")
 									.accessibilityValue(WordlrAccessibilityFormatter.guessesChartSummary(counts: self.counts))
@@ -227,6 +244,7 @@ struct StatsView: View {
 						.safeAreaPadding(.bottom, adManager.isBannerAdLoaded ? (UIDevice.current.userInterfaceIdiom == .pad || UIDevice.current.userInterfaceIdiom == .mac ? 80 : 54) : 0)
 					}
 				}
+                .darkGradientBackground(colorScheme: colorScheme)
 				.navigationTitle("Stats")
 				.navigationBarTitleDisplayMode(.inline)
 				.safeAreaInset(edge: .top) {

@@ -246,7 +246,7 @@ struct SettingsView: View {
 						}
 					}
 
-					if #available(iOS 26.0, *) {
+					if #available(iOS 26.0, *), self.colorScheme == .dark {
 						Toggle(isOn: $usesTransparentLists) {
 							SettingsRowLabel(title: "Transparent lists", systemImage: "list.bullet.rectangle")
 						}

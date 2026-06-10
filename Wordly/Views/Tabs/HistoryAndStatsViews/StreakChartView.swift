@@ -59,6 +59,14 @@ struct StreakChartView: View {
 					.font(.footnote)
 			}
 		}
+		.chartXAxis {
+			AxisMarks(preset: .extended, position: .bottom, values: .automatic(minimumStride: 1.0)) { _ in
+				AxisGridLine()
+				AxisTick()
+				AxisValueLabel(centered: false, anchor: .topTrailing)
+					.font(.footnote)
+			}
+		}
 		.animation(reduceMotion ? nil : .easeInOut(duration: 1.0), value: streaks.count)
 		.accessibilityLabel("\(self.title), \(language.localizedName)")
 		.accessibilityValue(WordlrAccessibilityFormatter.streakChartSummary(title: self.title, language: language, streaks: streaks))

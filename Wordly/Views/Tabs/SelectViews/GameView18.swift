@@ -459,6 +459,7 @@ struct GameView18: View {
 				}
 				.frame(maxWidth: .infinity, maxHeight: (geometry.size.height*3) / 5)
 			}
+			.darkGradientBackground(colorScheme: colorScheme)
 			.navigationDestination(isPresented: self.$isShowingCurrentDefinition, destination: {
 				WordDefinitionView(word: appManager.word)
 					.environment(appManager)

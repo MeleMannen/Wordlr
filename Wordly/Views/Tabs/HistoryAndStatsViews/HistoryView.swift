@@ -60,6 +60,7 @@ struct HistoryView: View {
 				VStack {
 					if #unavailable(iOS 26.0) {
 						FilterView(numberOfLetters: $numberOfLetters, selectedLanguage: $selectedLanguage, gameMode: $gameMode, showsWhenHintsUsed: $showsWhenHintsUsed)
+                            .darkGradientBackground(colorScheme: colorScheme)
 					}
 
 					self.historyContent(historyResult: self.displayedHistoryResult)
@@ -71,6 +72,7 @@ struct HistoryView: View {
 			}
 			.searchable(text: self.$searchedWord, placement: .navigationBarDrawer(displayMode: .always), prompt: "Search for a word")
 			.searchToolbarAvoidsHidingContentWhenAvailable()
+            .darkGradientBackground(colorScheme: colorScheme)
 			.navigationTitle("History")
 			.navigationBarTitleDisplayMode(.inline)
 			.sensoryFeedback(.selection, trigger: self.didTap)

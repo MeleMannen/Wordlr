@@ -302,7 +302,7 @@ struct ReminderRow: View {
 		HStack(spacing: 12) {
 			Image(systemName: "bell")
 				.font(.title).bold()
-				.foregroundStyle(.white)
+				.foregroundStyle(.primary)
 			
 			VStack(alignment: .leading, spacing: 6) {
 				Text(reminder.timeToFire, format: .dateTime.hour().minute())

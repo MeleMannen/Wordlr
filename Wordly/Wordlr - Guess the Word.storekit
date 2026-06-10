@@ -20,23 +20,28 @@
       "internalID" : "6772363447",
       "localizations" : [
         {
-          "description" : "Bez reklam + darmowe podpowiedzi",
-          "displayName" : "Pro",
+          "description" : "Bez reklam, szybkie podpowiedzi i więce",
+          "displayName" : "Wordlr Pro",
           "locale" : "pl"
         },
         {
-          "description" : "Sin anuncios y pistas gratis",
-          "displayName" : "Pro",
+          "description" : "Sin anuncios, pistas instantáneas y más",
+          "displayName" : "Wordlr Pro",
           "locale" : "es_ES"
         },
         {
-          "description" : "Get an ad-free experience with free hints",
-          "displayName" : "Pro",
+          "description" : "Get an ad-free experience, instant hints and more",
+          "displayName" : "Wordlr Pro",
           "locale" : "en_US"
+        },
+        {
+          "description" : "Sans pub, indices instantanés et plus",
+          "displayName" : "Wordlr Pro",
+          "locale" : "fr"
         }
       ],
       "productID" : "SwoshEB.ThePhrase.pro",
-      "referenceName" : "Pro",
+      "referenceName" : "Wordlr Pro",
       "type" : "NonConsumable"
     }
   ],
@@ -48,7 +53,7 @@
     "_developerTeamID" : "B3ZSP6T559",
     "_disableDialogs" : false,
     "_failTransactionsEnabled" : false,
-    "_lastSynchronizedDate" : 801348288.61805606,
+    "_lastSynchronizedDate" : 802821350.22496796,
     "_locale" : "en_US",
     "_renewalBillingIssuesEnabled" : false,
     "_storefront" : "USA",

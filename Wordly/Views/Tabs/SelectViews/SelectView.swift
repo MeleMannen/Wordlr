@@ -50,21 +50,9 @@ struct SelectView: View {
 									options: Array(1...8)
 								) { number in
 									if number == 1 {
-										return String(
-											format: NSLocalizedString(
-												"%lld letter",
-												comment: "Number of letters singular"
-											),
-											number
-										)
+										return String(format: NSLocalizedString("%lld letter", comment: "Number of letters singular"), number)
 									} else {
-										return String(
-											format: NSLocalizedString(
-												"%lld letters",
-												comment: "Number of letters plural"
-											),
-											number
-										)
+										return String(format: NSLocalizedString("%lld letters", comment: "Number of letters plural"), number)
 									}
 								}
 								.fixedSize(horizontal: true, vertical: false)
@@ -87,11 +75,11 @@ struct SelectView: View {
 							.pickerStyle(.menu)
 							.foregroundStyle(.primary)
 							.accentColor(.primary)
-							.background {
-								RoundedRectangle(cornerRadius: 10)
-									.foregroundStyle(Color(uiColor: .tertiarySystemBackground))
-									.conditionalShadow(color: .black.opacity(0.4), radius: 4, x: 4, y: 4)
-							}
+                            .background {
+                                RoundedRectangle(cornerRadius: 10)
+                                    .foregroundStyle(Color(uiColor:  colorScheme == .light ? .systemGray6 : .tertiarySystemBackground))
+                                    .conditionalShadow(color: .black.opacity(0.4), radius: 4, x: 4, y: 4)
+                            }
 							.conditionalHaptic(.selection, trigger: appManager.numberOfLetters)
 							.frame(maxWidth: .infinity, alignment: .trailing)
 						}
@@ -132,9 +120,9 @@ struct SelectView: View {
 							.foregroundStyle(.primary)
 							.accentColor(.primary)
 							.background {
-								RoundedRectangle(cornerRadius: 10)
-									.foregroundStyle(Color(uiColor: .tertiarySystemBackground))
-									.conditionalShadow(color: .black.opacity(0.4), radius: 4, x: 4, y: 4)
+                                RoundedRectangle(cornerRadius: 10)
+                                    .foregroundStyle(Color(uiColor:  colorScheme == .light ? .systemGray6 : .tertiarySystemBackground))
+                                    .conditionalShadow(color: .black.opacity(0.4), radius: 4, x: 4, y: 4)
 							}
 							.conditionalHaptic(.selection, trigger: appManager.selectedLanguage)
 							.frame(maxWidth: .infinity, alignment: .trailing)
