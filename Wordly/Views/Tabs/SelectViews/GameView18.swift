@@ -39,16 +39,10 @@ struct GameView18: View {
 	private let searchTip = SearchTip()
 	
 	private var device : UIUserInterfaceIdiom { UIDevice.current.userInterfaceIdiom }
+	private var gameColorScheme: ColorScheme { .dark }
 	
 	var colorForUnused: Color {
-		switch colorScheme {
-			case .light:
-				return Color(UIColor.lightGray)
-			case .dark:
-				return .primary
-			@unknown default:
-				return .primary
-		}
+		.white
 	}
 	
 	var body: some View {
@@ -56,10 +50,10 @@ struct GameView18: View {
 			VStack {
 				GeometryReader { geometry2 in
 					VStack {
-						ForEach(appManager.board.indices, id: \.self) { rowIndex in
+						ForEach(Array(appManager.board.enumerated()), id: \.offset) { rowIndex, row in
 							HStack {
-								ForEach(appManager.board[rowIndex].indices, id: \.self) { colIndex in
-									let letter = appManager.board[rowIndex][colIndex]
+								ForEach(Array(row.enumerated()), id: \.element.id) { colIndex, letter in
+									let isLastTileInRow = colIndex == row.count - 1
 									AnimatedGameTile(
 										letter: letter,
 										tileSize: geometry2.size.height / CGFloat(appManager.numberOfLetters < 5 ? 6 : appManager.numberOfLetters + 1),
@@ -74,21 +68,21 @@ struct GameView18: View {
 										isGameOver: appManager.isGameOver,
 										shouldShowCelebrationGradient: appManager.shouldShowCelebrationGradient,
 										userWantsNormalTheme: self.userWantsNormalTheme,
-										colorScheme: self.colorScheme,
+										colorScheme: self.gameColorScheme,
 										colorForUnused: self.colorForUnused,
 										gradient: appManager.gradient,
 										shadowGradient: appManager.shadowGradient,
-										onRevealStart: colIndex == appManager.board[rowIndex].count - 1 ? {
+										onRevealStart: isLastTileInRow ? {
 											appManager.applyPendingKeyboardUpdate()
 										} : nil,
-										onRevealComplete: colIndex == appManager.board[rowIndex].count - 1 ? {
+										onRevealComplete: isLastTileInRow ? {
 											handleRowRevealComplete(rowIndex: rowIndex)
 										} : nil
 									)
 								}
 							}
 							.accessibilityElement(children: .ignore)
-							.accessibilityLabel(WordlrAccessibilityFormatter.rowLabel(row: appManager.board[rowIndex], rowIndex: rowIndex, currentRow: appManager.currentRow))
+							.accessibilityLabel(WordlrAccessibilityFormatter.rowLabel(row: row, rowIndex: rowIndex, currentRow: appManager.currentRow))
 						}
 					}
 					.padding(.top, 5)
@@ -124,6 +118,7 @@ struct GameView18: View {
 										KeyboardKeyButton18(
 											key: keyBoardKey,
 											colorForUnused: self.colorForUnused,
+											colorScheme: self.gameColorScheme,
 											width: geometry2.size.width,
 											height: geometry2.size.height
 										) {
@@ -215,7 +210,7 @@ struct GameView18: View {
 									.frame(minWidth: (geometry2.size.width*7) / CGFloat(14) + CGFloat(self.device == .pad ? 60 : 30), maxWidth: (geometry2.size.width*7) / CGFloat(12) + CGFloat(self.device == .pad ? 60 : 30), minHeight: geometry2.size.height / CGFloat(10), idealHeight: geometry2.size.height / CGFloat(8), maxHeight: geometry2.size.height / CGFloat(6))
 										.foregroundStyle(.white)
 										.background {
-											if !self.userWantsNormalTheme && self.colorScheme == .dark && appManager.selectedGameMode == .dailyWord {
+											if !self.userWantsNormalTheme && self.gameColorScheme == .dark && appManager.selectedGameMode == .dailyWord {
 												RoundedRectangle(cornerRadius: 10)
 													.foregroundStyle(appManager.gradient)
 													.gradientShadow(gradient: appManager.shadowGradient, radius: 3, x: 0, y: 0)
@@ -340,7 +335,7 @@ struct GameView18: View {
 							Spacer()
 							
 							NavigationLink(destination: WordDefinitionView(word: appManager.word, language: appManager.selectedLanguage), label: {
-								if !self.userWantsNormalTheme && self.colorScheme == .dark && appManager.selectedGameMode == .dailyWord {
+								if !self.userWantsNormalTheme && self.gameColorScheme == .dark && appManager.selectedGameMode == .dailyWord {
 									Text("Show definition")
 										.conditionalShadow(color: .black.opacity(0.2), radius: 2, x: 4, y: 4)
 										.font(.title2).bold()
@@ -486,11 +481,7 @@ struct GameView18: View {
 		}
 		.onAppear {
 			AnalyticsManager.shared.logScreenViewed(screenName: "GameView18")
-			if appManager.word.isEmpty || appManager.selectedLanguage != appManager.language || appManager.gameMode != appManager.selectedGameMode || appManager.message == "" && appManager.isGameOver {
-				appManager.getWords()
-			} else if appManager.word.count != appManager.numberOfLetters {
-				appManager.resetBoard()
-			}
+			appManager.prepareGameForSelectedOptions()
 			adManager.currentSelectView = .gameView
 			DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
 				adManager.shouldShowAds = false

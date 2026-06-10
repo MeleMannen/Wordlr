@@ -286,18 +286,23 @@ private enum HistorySectionBuilder {
 extension View {
 	@ViewBuilder
 	func darkGradientBackground(colorScheme: ColorScheme, opacity: Double = 1.0) -> some View {
-		if #available(iOS 26.0, *) {
+		if colorScheme == .light {
 			self.background {
-					if colorScheme == .dark && UIDevice.current.userInterfaceIdiom == .phone {
-						RadialGradient(
-							colors: [
-								.green.opacity(0.42 * opacity),
-								.green.opacity(0.18 * opacity),
-								.clear
-							],
-							center: .top,
-							startRadius: 0,
-							endRadius: 420
+				Color(uiColor: .secondarySystemBackground)
+					.ignoresSafeArea()
+			}
+		} else if #available(iOS 26.0, *) {
+			self.background {
+				if UIDevice.current.userInterfaceIdiom == .phone {
+					RadialGradient(
+						colors: [
+							.green.opacity(0.42 * opacity),
+							.green.opacity(0.18 * opacity),
+							.clear
+						],
+						center: .top,
+						startRadius: 0,
+						endRadius: 420
 					)
 					.ignoresSafeArea()
 				}

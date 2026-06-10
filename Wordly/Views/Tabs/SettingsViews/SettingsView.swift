@@ -57,6 +57,34 @@ struct SettingsView: View {
 		]
 		return components.url
 	}
+
+	private var appThemeTitle: String {
+		switch appTheme {
+			case .system: return String(localized: "System")
+			case .dark: return String(localized: "Dark")
+			case .light: return String(localized: "Light")
+		}
+	}
+
+	private func letterCountTitle(_ number: Int) -> String {
+		if number == 1 {
+			return String(format: NSLocalizedString("%lld letter", comment: "Number of letters singular"), number)
+		}
+
+		return String(format: NSLocalizedString("%lld letters", comment: "Number of letters plural"), number)
+	}
+
+	private func statLetterCountTitle(_ number: Int) -> String {
+		number == 9 ? String(localized: "Any length") : letterCountTitle(number)
+	}
+
+	private func statLanguageTitle(_ language: LanguageSelection) -> String {
+		language == .all ? String(localized: "All") : language.localizedName
+	}
+
+	private func statGameModeTitle(_ mode: GameMode) -> String {
+		mode == .both ? String(localized: "Both") : mode.localizedName
+	}
 	
 	var body: some View {
 		NavigationStack {
@@ -78,7 +106,7 @@ struct SettingsView: View {
 								Spacer()
 							}
 							
-							Text(storeManager.adRemovalProduct?.description ?? String(localized: "Ad-free experience, free hints, and priority support"))
+							Text("Get an ad-free experience, instant hints, and easier word filtering")
 								.font(.subheadline)
 								.foregroundStyle(.secondary)
 								.frame(maxWidth: .infinity, alignment: .leading)
@@ -179,19 +207,20 @@ struct SettingsView: View {
 					})
 					.wordlrListSectionRowBackground(.first)
 					
-					Picker(selection: $appTheme) {
+					SettingsMenuPicker(
+						title: "App theme",
+						systemImage: "circle.lefthalf.filled",
+						selection: $appTheme,
+						value: appThemeTitle
+					) {
 						Text("System")
 							.tag(AppTheme.system)
 						Text("Dark")
 							.tag(AppTheme.dark)
 						Text("Light")
 							.tag(AppTheme.light)
-						
-					} label: {
-						SettingsRowLabel(title: "App theme", systemImage: "circle.lefthalf.filled")
 					}
 					.wordlrListSectionRowBackground(.middle)
-					.pickerStyle(.menu)
 					.conditionalHaptic(.selection, trigger: appTheme)
 					.onChange(of: appTheme) { oldValue, newValue in
 						AnalyticsManager.shared.logDidChangeThemeEvent(newTheme: newValue, oldTheme: oldValue)
@@ -199,16 +228,18 @@ struct SettingsView: View {
 					
 					
 					if self.colorScheme == .dark {
-						Picker(selection: $userWantsNormalTheme) {
+						SettingsMenuPicker(
+							title: "Daily Wordlr theme",
+							systemImage: "paintpalette",
+							selection: $userWantsNormalTheme,
+							value: userWantsNormalTheme ? String(localized: "Standard") : String(localized: "Gold")
+						) {
 							Text("Standard")
 								.tag(true)
 							Text("Gold")
 								.tag(false)
-						} label: {
-							SettingsRowLabel(title: "Daily Wordlr theme", systemImage: "paintpalette")
 						}
 						.wordlrListSectionRowBackground(.middle)
-						.pickerStyle(.menu)
 						.conditionalHaptic(.selection, trigger: userWantsNormalTheme)
 						.onChange(of: userWantsNormalTheme) {
 							AnalyticsManager.shared.logDidChangeDailyWordThemeEvent(newTheme: userWantsNormalTheme ? "Standard" : "Gold")
@@ -306,7 +337,12 @@ struct SettingsView: View {
 				.wordlrListSectionBackground()
 				
 				Section {
-					Picker(selection: $defaultNumberOfLetters) {
+					SettingsMenuPicker(
+						title: "Word length",
+						systemImage: "textformat.size",
+						selection: $defaultNumberOfLetters,
+						value: letterCountTitle(defaultNumberOfLetters)
+					) {
 						ForEach(1...8, id: \.self) { number in
 							if number == 1 {
 								Text("\(number) letter")
@@ -316,23 +352,22 @@ struct SettingsView: View {
 									.tag(number)
 							}
 						}
-					} label: {
-						SettingsRowLabel(title: "Word length", systemImage: "textformat.size")
 					}
 					.wordlrListSectionRowBackground(.first)
-					.pickerStyle(.menu)
 					.conditionalHaptic(.selection, trigger: defaultNumberOfLetters)
 					
-					Picker(selection: $defaultLanguage) {
+					SettingsMenuPicker(
+						title: "Language",
+						systemImage: "globe",
+						selection: $defaultLanguage,
+						value: defaultLanguage.localizedName
+					) {
 						ForEach(LanguageSelection.languages) { language in
 							Text(language.localizedName)
 								.tag(language)
 						}
-					} label: {
-						SettingsRowLabel(title: "Language", systemImage: "globe")
 					}
 					.wordlrListSectionRowBackground(.last)
-					.pickerStyle(.menu)
 					.conditionalHaptic(.selection, trigger: defaultLanguage)
 					
 					
@@ -342,7 +377,12 @@ struct SettingsView: View {
 				.wordlrListSectionBackground()
 				
 				Section {
-					Picker(selection: $defaultStatNumberOfLetters) {
+					SettingsMenuPicker(
+						title: "Word length",
+						systemImage: "textformat.size",
+						selection: $defaultStatNumberOfLetters,
+						value: statLetterCountTitle(defaultStatNumberOfLetters)
+					) {
 						ForEach(1...9, id: \.self) { number in
 							if number == 1 {
 								Text("\(number) letter")
@@ -355,14 +395,16 @@ struct SettingsView: View {
 									.tag(number)
 							}
 						}
-					} label: {
-						SettingsRowLabel(title: "Word length", systemImage: "textformat.size")
 					}
 					.wordlrListSectionRowBackground(.first)
-					.pickerStyle(.menu)
 					.conditionalHaptic(.selection, trigger: defaultStatNumberOfLetters)
 					
-					Picker(selection: $defaultStatLanguage) {
+					SettingsMenuPicker(
+						title: "Language",
+						systemImage: "globe",
+						selection: $defaultStatLanguage,
+						value: statLanguageTitle(defaultStatLanguage)
+					) {
 						ForEach(LanguageSelection.allCases) { language in
 							if language == .all {
 								Text("All")
@@ -372,14 +414,16 @@ struct SettingsView: View {
 									.tag(language)
 							}
 						}
-					} label: {
-						SettingsRowLabel(title: "Language", systemImage: "globe")
 					}
 					.wordlrListSectionRowBackground(.middle)
-					.pickerStyle(.menu)
 					.conditionalHaptic(.selection, trigger: defaultStatLanguage)
 					
-					Picker(selection: $defaultStatGameMode) {
+					SettingsMenuPicker(
+						title: "Gamemode",
+						systemImage: "gamecontroller",
+						selection: $defaultStatGameMode,
+						value: statGameModeTitle(defaultStatGameMode)
+					) {
 						ForEach(GameMode.allCases) { mode in
 							if mode == .both {
 								Text("Both")
@@ -389,23 +433,22 @@ struct SettingsView: View {
 									.tag(mode)
 							}
 						}
-					} label: {
-						SettingsRowLabel(title: "Gamemode", systemImage: "gamecontroller")
 					}
 					.wordlrListSectionRowBackground(.middle)
-					.pickerStyle(.menu)
 					.conditionalHaptic(.selection, trigger: defaultStatGameMode)
 					
-					Picker(selection: $defaultStatHintsUsed) {
+					SettingsMenuPicker(
+						title: "Show if hints used",
+                        systemImage: colorScheme == .dark ? "lightbulb.max.fill" : "lightbulb.max",
+						selection: $defaultStatHintsUsed,
+						value: defaultStatHintsUsed.localizedName
+					) {
 						ForEach(ShowsWhenHintsUsed.allCases) { mode in
 							Text(mode.localizedName)
 								.tag(mode)
 						}
-					} label: {
-						SettingsRowLabel(title: "Show if hints used", systemImage: "lightbulb.max.fill")
 					}
 					.wordlrListSectionRowBackground(.last)
-					.pickerStyle(.menu)
 					.conditionalHaptic(.selection, trigger: defaultStatHintsUsed)
 					
 				} header: {
@@ -546,7 +589,10 @@ struct SettingsView: View {
 			.coordinateSpace(name: "settingsList")
 			.scrollContentBackground(.hidden)
 			.background {
-				if colorScheme == .dark {
+				if colorScheme == .light {
+					Color(uiColor: .secondarySystemBackground)
+						.ignoresSafeArea()
+				} else {
 					if #available(iOS 26.0, *) {
 						GeometryReader { geometry in
 								let isPhone = UIDevice.current.userInterfaceIdiom == .phone
@@ -651,6 +697,8 @@ private struct SettingsRowLabel: View {
 	var body: some View {
 		Label {
 			Text(title)
+				.lineLimit(nil)
+				.fixedSize(horizontal: false, vertical: true)
 				.alignmentGuide(.listRowSeparatorLeading) { dimensions in
 					dimensions[.leading]
 				}
@@ -661,6 +709,43 @@ private struct SettingsRowLabel: View {
 		}
 		.foregroundStyle(.primary)
 		.frame(minHeight: rowMinHeight, alignment: .center)
+	}
+}
+
+private struct SettingsMenuPicker<SelectionValue: Hashable, Content: View>: View {
+	let title: LocalizedStringKey
+	let systemImage: String
+	@Binding var selection: SelectionValue
+	let value: String
+	@ViewBuilder let content: () -> Content
+
+	var body: some View {
+		HStack(alignment: .center, spacing: 12) {
+			SettingsRowLabel(title: title, systemImage: systemImage)
+				.layoutPriority(1)
+
+			Spacer(minLength: 8)
+
+			Menu {
+				Picker("", selection: $selection) {
+					content()
+				}
+			} label: {
+				HStack(spacing: 6) {
+					Text(value)
+						.lineLimit(1)
+						.truncationMode(.tail)
+
+					Image(systemName: "chevron.up.chevron.down")
+						.font(.caption.weight(.semibold))
+				}
+				.fontWeight(.regular)
+				.foregroundStyle(.secondary)
+			}
+			.fixedSize(horizontal: true, vertical: false)
+			.accessibilityLabel(title)
+			.accessibilityValue(value)
+		}
 	}
 }
 

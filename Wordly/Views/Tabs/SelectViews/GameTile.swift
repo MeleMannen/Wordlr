@@ -129,12 +129,12 @@ struct AnimatedGameTile: View {
             .foregroundStyle(tileTextColor)
             .frame(width: tileSize, height: tileSize)
             .background(tileBackground)
-			.overlay {
-				if colorScheme == .light && displayedState == .notUsed {
-					RoundedRectangle(cornerRadius: 5)
-						.stroke(Color(uiColor: .systemGray4), lineWidth: 1)
-				}
-			}
+//			.overlay {
+//				if colorScheme == .light && displayedState == .notUsed {
+//					RoundedRectangle(cornerRadius: 5)
+//						.stroke(Color(uiColor: .systemGray4), lineWidth: 1)
+//				}
+//			}
 			.overlay(alignment: .bottomTrailing) {
 				if differentiateWithoutColor, let symbolName = displayedState.accessibilitySymbolName {
 					Image(systemName: symbolName)

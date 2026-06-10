@@ -10,6 +10,7 @@ import SwiftUI
 struct SelectGameModeButton: View {
 	@Environment(\.colorScheme) private var colorScheme
 	@AppStorage("userWantsNormalTheme") private var userWantsNormalTheme: Bool = true
+	@State private var isShowingGameView = false
 	
 	let title: LocalizedStringKey
 	let mode: GameMode
@@ -24,13 +25,18 @@ struct SelectGameModeButton: View {
 	var body: some View {
 		Group {
 			if isAvailable {
-				NavigationLink(destination: GameView().environment(appManager)) {
+				Button {
+					startAction()
+					isShowingGameView = true
+				} label: {
 					label
 				}
+				.buttonStyle(.plain)
 				.accessibilityHint("Starts this game mode.")
-				.simultaneousGesture(TapGesture().onEnded {
-					startAction()
-				})
+				.navigationDestination(isPresented: $isShowingGameView) {
+					GameView()
+						.environment(appManager)
+				}
 				.conditionalHaptic(.impact, trigger: impactTrigger)
 				.selectGameModeButtonStyle(mode: mode, isAvailable: true)
 			} else {

@@ -345,6 +345,8 @@ enum LanguageSelection: String, Codable, CaseIterable, Identifiable {
     case english
 	case spanish
 	case norwegian
+	case french
+	case polish
     case all
     var id: Self { self }
     
@@ -353,6 +355,8 @@ enum LanguageSelection: String, Codable, CaseIterable, Identifiable {
             case .english: return NSLocalizedString("language_english", comment: "English language")
 			case .spanish: return NSLocalizedString("language_spanish", comment: "Spanish language")
 			case .norwegian: return NSLocalizedString("language_norwegian", comment: "Norwegian language")
+			case .french: return NSLocalizedString("French", comment: "French language")
+			case .polish: return NSLocalizedString("Polish", comment: "Polish language")
             case .all: return NSLocalizedString("language_all", comment: "All languages")
         }
     }
@@ -362,6 +366,8 @@ enum LanguageSelection: String, Codable, CaseIterable, Identifiable {
 			case .english: return "englishWords"
 			case .spanish: return "spanishWords"
 			case .norwegian: return "norwegianWords"
+			case .french: return "frenchWords"
+			case .polish: return "polishWords"
 			case .all: return "BadBadError"
 		}
 	}
@@ -371,13 +377,26 @@ enum LanguageSelection: String, Codable, CaseIterable, Identifiable {
 			case .english: return ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
 			case .spanish: return ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "Ñ", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
 			case .norwegian: return ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "Æ", "Ø", "Å"]
+			case .french: return ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
+			case .polish: return ["A", "Ą", "B", "C", "Ć", "D", "E", "Ę", "F", "G", "H", "I", "J", "K", "L", "Ł", "M", "N", "Ń", "O", "Ó", "P", "R", "S", "Ś", "T", "U", "W", "Y", "Z", "Ź", "Ż"]
 			case .all: return ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
 		}
 	}
     
     static var languages: [LanguageSelection] {
-		return [.english, .spanish, .norwegian]
+		return [.english, .spanish, .norwegian, .french, .polish]
     }
+
+	var dictionaryCode: String? {
+		switch self {
+			case .english: return "en"
+			case .spanish: return "es"
+			case .norwegian: return nil
+			case .french: return "fr"
+			case .polish: return "pl"
+			case .all: return nil
+		}
+	}
     
 }
 
@@ -405,22 +424,29 @@ struct ShortedContent: Codable {
 }
 
 struct Words: Decodable {
-    var wordGroups: [String: [String]]
+    var dailyWords: [String: [String]]
+    var expertWords: [String: [String]]
     var blockedWords: [String]
 
-    init(wordGroups: [String: [String]], blockedWords: [String] = []) {
-        self.wordGroups = wordGroups
+    init(dailyWords: [String: [String]], expertWords: [String: [String]] = [:], blockedWords: [String] = []) {
+        self.dailyWords = dailyWords
+        self.expertWords = expertWords
         self.blockedWords = blockedWords
     }
 
     private enum CodingKeys: String, CodingKey {
+        case dailyWords
+        case expertWords
         case wordGroups
         case blockedWords
     }
 
     init(from decoder: any Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.wordGroups = try container.decode([String: [String]].self, forKey: .wordGroups)
+        self.dailyWords = try container.decodeIfPresent([String: [String]].self, forKey: .dailyWords)
+            ?? container.decodeIfPresent([String: [String]].self, forKey: .wordGroups)
+            ?? [:]
+        self.expertWords = try container.decodeIfPresent([String: [String]].self, forKey: .expertWords) ?? [:]
         self.blockedWords = try container.decodeIfPresent([String].self, forKey: .blockedWords) ?? []
     }
 }
@@ -826,6 +852,8 @@ struct SpanishDefinition: Codable, Identifiable {
 		case source
 	}
 }
+
+typealias FreeDictionaryDefinition = SpanishDefinition
 
 // MARK: - Entry
 struct Entry2: Codable, Identifiable {
@@ -1599,6 +1627,119 @@ extension WordleDataManager {
 			}
 		}.resume()
 	}
+
+	func fetchFreeDictionaryDefinition(for word: String, language: LanguageSelection, completion: @escaping (DefinitionFetchResult<FreeDictionaryDefinition>) -> Void) {
+		guard let languageCode = language.dictionaryCode else {
+			completion(.notFound)
+			return
+		}
+
+		let searchTerms = [
+			word.lowercased(),
+			word,
+			word.capitalized
+		].reduce(into: [String]()) { result, term in
+			if !result.contains(term) {
+				result.append(term)
+			}
+		}
+
+		let requests = searchTerms.map {
+			(urlString: "https://freedictionaryapi.com/api/v1/entries/\(languageCode)/\($0)", usesFallbackSchema: false)
+		} + searchTerms.map {
+			(urlString: "https://api.dictionaryapi.dev/api/v2/entries/\(languageCode)/\($0)", usesFallbackSchema: true)
+		}
+
+		self.fetchFreeDictionaryDefinition(from: requests, index: 0, hadReachableResponse: false, completion: completion)
+	}
+
+	private func fetchFreeDictionaryDefinition(from requests: [(urlString: String, usesFallbackSchema: Bool)], index: Int, hadReachableResponse: Bool, completion: @escaping (DefinitionFetchResult<FreeDictionaryDefinition>) -> Void) {
+		guard index < requests.count else {
+			completion(hadReachableResponse ? .notFound : .networkError)
+			return
+		}
+
+		let request = requests[index]
+		print("urlString: \(request.urlString)")
+		guard let url = URL(string: request.urlString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? request.urlString) else {
+			self.fetchFreeDictionaryDefinition(from: requests, index: index + 1, hadReachableResponse: hadReachableResponse, completion: completion)
+			return
+		}
+
+		URLSession.shared.dataTask(with: url) { data, response, error in
+			guard let data = data, error == nil else {
+				self.fetchFreeDictionaryDefinition(from: requests, index: index + 1, hadReachableResponse: hadReachableResponse, completion: completion)
+				return
+			}
+
+			do {
+				let result: FreeDictionaryDefinition
+				if request.usesFallbackSchema {
+					let fallbackDefinitions = try JSONDecoder().decode([EnglishDefinition].self, from: data)
+					result = self.convertDictionaryAPIDefinitions(fallbackDefinitions)
+				} else {
+					result = try JSONDecoder().decode(FreeDictionaryDefinition.self, from: data)
+				}
+
+				if self.hasUsableFreeDictionaryDefinition(result) {
+					completion(.success(result))
+				} else {
+					self.fetchFreeDictionaryDefinition(from: requests, index: index + 1, hadReachableResponse: true, completion: completion)
+				}
+			} catch {
+				print("Error decoding FreeDictionary Definition: \(error)")
+				self.fetchFreeDictionaryDefinition(from: requests, index: index + 1, hadReachableResponse: true, completion: completion)
+			}
+		}.resume()
+	}
+
+	private func convertDictionaryAPIDefinitions(_ definitions: [EnglishDefinition]) -> FreeDictionaryDefinition {
+		let word = definitions.first?.word ?? ""
+		let entries = definitions.flatMap { definition in
+			definition.meanings.map { meaning in
+				Entry2(
+					language: Language(code: "", name: ""),
+					partOfSpeech: meaning.partOfSpeech,
+					pronunciations: definition.phonetics.compactMap { phonetic in
+						guard let text = phonetic.text, !text.isEmpty else { return nil }
+						return Pronunciation2(type: "ipa", text: text, tags: [])
+					},
+					forms: [],
+					senses: meaning.definitions.map { definition in
+						Sense(
+							definition: definition.definition,
+							tags: [],
+							examples: definition.example.map { [$0] } ?? [],
+							quotes: [],
+							synonyms: definition.synonyms,
+							antonyms: definition.antonyms
+						)
+					},
+					synonyms: meaning.synonyms,
+					antonyms: meaning.antonyms
+				)
+			}
+		}
+
+		let sourceURL = definitions.first?.sourceUrls.first ?? "https://dictionaryapi.dev/"
+		return FreeDictionaryDefinition(
+			word: word,
+			entries: entries,
+			source: Source(
+				url: sourceURL,
+				license: License2(
+					name: definitions.first?.license.name ?? "dictionaryapi.dev",
+					url: definitions.first?.license.url ?? "https://dictionaryapi.dev/"
+				)
+			)
+		)
+	}
+
+	private func hasUsableFreeDictionaryDefinition(_ definition: FreeDictionaryDefinition) -> Bool {
+		definition.entries.contains { entry in
+			entry.senses.contains { !$0.definition.isEmpty }
+		}
+	}
 }
 
 
@@ -1615,7 +1756,9 @@ struct WordlrListRowBackground: View {
 	private let materialOpacity = 0.5
 
 	var body: some View {
-		if #available(iOS 26.0, *), !reduceTransparency && usesTransparentLists {
+		if UITraitCollection.current.userInterfaceStyle == .light {
+			Color(uiColor: .systemBackground)
+		} else if #available(iOS 26.0, *), !reduceTransparency && usesTransparentLists {
 			Rectangle()
 				.fill(.ultraThinMaterial)
 				.opacity(materialOpacity)
@@ -1721,7 +1864,9 @@ struct WordlrListSectionRowBackground: View {
 	private let materialOpacity = 0.5
 
 	var body: some View {
-		if #available(iOS 26.0, *), !reduceTransparency && usesTransparentLists {
+		if UITraitCollection.current.userInterfaceStyle == .light {
+			Color(uiColor: .systemBackground)
+		} else if #available(iOS 26.0, *), !reduceTransparency && usesTransparentLists {
 			WordlrListSectionRowClipShape(position: position, cornerRadius: cornerRadius)
 				.fill(.ultraThinMaterial)
 				.opacity(materialOpacity)
@@ -1743,7 +1888,13 @@ struct WordlrSurfaceModifier: ViewModifier {
 	private let materialOpacity = 0.5
 
 	func body(content: Content) -> some View {
-		if #available(iOS 26.0, *), !reduceTransparency && usesTransparentLists {
+		if UITraitCollection.current.userInterfaceStyle == .light {
+			content
+				.background {
+					RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+						.foregroundStyle(Color(uiColor: .systemBackground))
+				}
+		} else if #available(iOS 26.0, *), !reduceTransparency && usesTransparentLists {
 			content
 				.background {
 					RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)

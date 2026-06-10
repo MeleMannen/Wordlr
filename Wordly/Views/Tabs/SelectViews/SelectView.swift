@@ -16,6 +16,7 @@ struct SelectView: View {
 	@StateObject var appState = AppState.shared
 	@AppStorage("hasFixedLanguage") private var hasFixedLanguage: Bool = false
 	@AppStorage("userWantsThePhraseNameBack") private var userWantsThePhraseNameBack = false
+	@AppStorage("expertModeEnabled") private var expertModeEnabled = false
 	@State var hasFixedDefualtValues: Bool = false
 	@State var hasFixedContextAndFetched: Bool = false
 	@State var didTapPlayDailyWordButton: Bool = false
@@ -170,6 +171,17 @@ struct SelectView: View {
 						blockedAction: self.showChangeGameAlert
 					)
 					.padding(.horizontal, 30)
+					.padding(.bottom, 25)
+
+					Toggle(isOn: $expertModeEnabled) {
+						Text("Expert Mode")
+							.font(.headline)
+					}
+					.toggleStyle(.switch)
+					.tint(.green)
+					.conditionalHaptic(.selection, trigger: expertModeEnabled)
+					.accessibilityHint("Only affects Free Play.")
+					.padding(.horizontal, 35)
 					.padding(.bottom, 10)
 				}
 				.alert(item: self.$alertItem) { item in
@@ -206,12 +218,10 @@ struct SelectView: View {
 		.navigationTitle(self.userWantsThePhraseNameBack ? "The Phrase" : "Wordlr")
 		.onChange(of: appState.navigateHomeTrigger) {
 			if appState.selectedLanguageName != nil {
-				if appState.selectedLanguageName == LanguageSelection.english.rawValue {
-					appManager.selectedLanguage = .english
-				} else if appState.selectedLanguageName == LanguageSelection.norwegian.rawValue {
-					appManager.selectedLanguage = .norwegian
-				} else if appState.selectedLanguageName == LanguageSelection.spanish.rawValue {
-					appManager.selectedLanguage = .spanish
+				if let selectedLanguageName = appState.selectedLanguageName,
+				   let selectedLanguage = LanguageSelection(rawValue: selectedLanguageName),
+				   selectedLanguage != .all {
+					appManager.selectedLanguage = selectedLanguage
 				}
 			}
 			appManager.numberOfLetters = appState.numberOfLetters ?? 5
@@ -243,7 +253,11 @@ struct SelectView: View {
 		.onChange(of: appManager.numberOfLetters) {
 			self.isAllowedToChooseGameModeAgain = true
 		}
+		.onChange(of: expertModeEnabled) {
+			appManager.isExpertModeEnabled = expertModeEnabled
+		}
 		.onAppear {
+			appManager.isExpertModeEnabled = expertModeEnabled
 			appManager.message = ""
 			if appManager.selectedGameMode != .dailyWord {
 				self.isAllowedToPlayDailyWordAgain = false
@@ -304,7 +318,9 @@ struct SelectView: View {
 	
 	private func startNormalGame() {
 		self.didTapPlayNormalButton.toggle()
+		appManager.isExpertModeEnabled = expertModeEnabled
 		appManager.selectedGameMode = .normal
+		appManager.prepareGameForSelectedOptions()
 		Task {
 			await HintTip.gamesPlayedEvent.donate()
 		}
@@ -312,7 +328,9 @@ struct SelectView: View {
 	
 	private func startDailyWordGame() {
 		self.didTapPlayDailyWordButton.toggle()
+		appManager.isExpertModeEnabled = false
 		appManager.selectedGameMode = .dailyWord
+		appManager.prepareGameForSelectedOptions()
 		Task {
 			await HintTip.gamesPlayedEvent.donate()
 		}

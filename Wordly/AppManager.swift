@@ -48,6 +48,9 @@ final class AppManager: NSObject, FullScreenContentDelegate {
 	var language: LanguageSelection = .norwegian
 	var gameMode: GameMode = .normal
 	var selectedGameMode: GameMode = .normal
+	var isExpertModeEnabled: Bool = false
+	private var gameExpertModeEnabled: Bool = false
+	private var loadedWordsLanguage: LanguageSelection?
 	var numberOfLetters: Int = 5
 	var word: String = ""
 	var words: Words?
@@ -101,17 +104,73 @@ final class AppManager: NSObject, FullScreenContentDelegate {
 	@ObservationIgnored private var isLoadingAd = false
 	
 	func getWords() {
+		self.loadWords(resetBoardAfterLoading: true)
+	}
+
+	func ensureWordsLoadedForSearch() {
+		if self.words == nil || self.loadedWordsLanguage != self.selectedLanguage {
+			self.loadWords(resetBoardAfterLoading: false)
+		}
+	}
+
+	private func loadWords(resetBoardAfterLoading: Bool) {
 		if let words = WordleDataManager.shared.loadWordsFromJSONFile(selectedLanguage: selectedLanguage) {
 			self.words = words
 			self.dailyWords = words
-			if self.numberOfLetters == 5 && self.userWantsThePhraseNameBack {
-				self.words?.wordGroups["5"]?.append(contentsOf: self.valid5LetterNames)
-			} else if self.numberOfLetters == 6 && self.userWantsThePhraseNameBack {
-				self.words?.wordGroups["6"]?.append(contentsOf: self.valid6LetterNames)
-			} else if self.numberOfLetters == 8 && self.userWantsThePhraseNameBack {
-				self.words?.wordGroups["8"]?.append(contentsOf: self.valid8LetterNames)
+			self.loadedWordsLanguage = selectedLanguage
+			if resetBoardAfterLoading {
+				self.resetBoard()
 			}
+		} else {
+			self.words = Words(dailyWords: [:])
+			self.dailyWords = self.words
+			self.loadedWordsLanguage = selectedLanguage
+			if resetBoardAfterLoading {
+				self.resetBoard()
+			}
+		}
+	}
+
+	func prepareGameForSelectedOptions() {
+		let expertModeChangedForNormalGame = self.selectedGameMode == .normal &&
+			self.gameMode == .normal &&
+			self.gameExpertModeEnabled != self.isExpertModeEnabled
+		self.normalizeSelectedOptions()
+
+		if self.word.isEmpty ||
+			self.selectedLanguage != self.language ||
+			self.gameMode != self.selectedGameMode ||
+			expertModeChangedForNormalGame ||
+			self.message == "" && self.isGameOver {
+			self.getWords()
+		} else if self.word.count != self.numberOfLetters || !self.hasExpectedBoardShape || !self.hasExpectedKeyboardShape {
 			self.resetBoard()
+		}
+	}
+
+	func repairGameIfNeeded() {
+		self.normalizeSelectedOptions()
+		if self.word.isEmpty || !self.hasExpectedBoardShape || !self.hasExpectedKeyboardShape {
+			self.getWords()
+		}
+	}
+
+	private var hasExpectedBoardShape: Bool {
+		self.board.count == rowCount(for: self.numberOfLetters) &&
+		self.board.allSatisfy { $0.count == self.numberOfLetters }
+	}
+
+	private var hasExpectedKeyboardShape: Bool {
+		!self.keyboard.isEmpty &&
+		self.keyboard.allSatisfy { !$0.isEmpty }
+	}
+
+	private func normalizeSelectedOptions() {
+		if !(1...8).contains(self.numberOfLetters) {
+			self.numberOfLetters = 5
+		}
+		if self.selectedLanguage == .all {
+			self.selectedLanguage = .norwegian
 		}
 	}
 	
@@ -167,43 +226,131 @@ final class AppManager: NSObject, FullScreenContentDelegate {
 		let currentDate = Date()
 		let daysSinceStart = calendar.dateComponents([.day], from: startDate, to: currentDate).day!
 		
-		if let count = dailyWords?.wordGroups["\(numberOfLetters)"]?.count {
+		let dailyWords = self.dailyAnswerWords()
+		if !dailyWords.isEmpty {
+			let count = dailyWords.count
 			let dailyWordIndex = daysSinceStart % count
-			return self.dailyWords?.wordGroups["\(numberOfLetters)"]?[dailyWordIndex] ?? "PIANO"
+			return dailyWords[dailyWordIndex]
 		} else {
 			return "PIANO"
 		}
 	}
 	
 	func searchableWords() -> [String] {
-		let wordsForLength = Set(self.words?.wordGroups["\(self.numberOfLetters)"] ?? [])
-		let blockedWords = Set(self.words?.blockedWords ?? [])
-		
-		guard !blockedWords.isEmpty else {
-			return Array<String>(wordsForLength)
-		}
-		
-		return wordsForLength.filter { !blockedWords.contains($0) }
+		let blockedWords = Set(self.blockedWords.map(comparisonKey))
+		return self.uniqueWords(self.searchableWordPoolForCurrentMode())
+			.filter { !blockedWords.contains(self.comparisonKey($0)) }
+			.sorted(using: String.Comparator(options: .caseInsensitive, locale: self.searchSortLocale, order: .forward))
 	}
 	
 	private func getRandomNormalModeWord() -> String {
-		let availableWords = self.searchableWords()
+		let availableWords = self.normalModeAnswerWords()
 		if let randomWord = availableWords.randomElement() {
 			return randomWord
 		}
 		
-		return self.words?.wordGroups["\(numberOfLetters)"]?.randomElement() ?? "PIANO"
+		return self.dailyAnswerWords().randomElement() ?? "PIANO"
+	}
+
+	private var dailyWordsForCurrentLength: [String] {
+		self.words?.dailyWords["\(self.numberOfLetters)"] ?? []
+	}
+
+	private var expertWordsForCurrentLength: [String] {
+		self.words?.expertWords["\(self.numberOfLetters)"] ?? []
+	}
+
+	private var blockedWords: [String] {
+		self.words?.blockedWords ?? []
+	}
+
+	private var phraseNamesForCurrentLength: [String] {
+		guard self.userWantsThePhraseNameBack else {
+			return []
+		}
+
+		switch self.numberOfLetters {
+			case 5:
+				return self.valid5LetterNames
+			case 6:
+				return self.valid6LetterNames
+			case 8:
+				return self.valid8LetterNames
+			default:
+				return []
+		}
+	}
+
+	private var searchSortLocale: Locale {
+		switch self.selectedLanguage {
+			case .french:
+				return Locale(identifier: "fr")
+			case .spanish:
+				return Locale(identifier: "es")
+			case .norwegian:
+				return Locale(identifier: "nb")
+			case .polish:
+				return Locale(identifier: "pl")
+			default:
+				return Locale.current
+		}
+	}
+
+	private func normalModeAnswerWords() -> [String] {
+		let answerWords = self.isExpertModeEnabled
+			? self.dailyWordsForCurrentLength + self.expertWordsForCurrentLength
+			: self.dailyWordsForCurrentLength
+		return self.answerCandidateWords(answerWords + self.phraseNamesForCurrentLength)
+	}
+
+	private func searchableWordPoolForCurrentMode() -> [String] {
+		if self.selectedGameMode == .normal && self.isExpertModeEnabled {
+			return self.dailyWordsForCurrentLength + self.expertWordsForCurrentLength
+		}
+
+		return self.dailyWordsForCurrentLength
+	}
+
+	private func dailyAnswerWords() -> [String] {
+		self.answerCandidateWords(self.dailyWordsForCurrentLength)
+	}
+
+	private func answerCandidateWords(_ words: [String]) -> [String] {
+		let blockedWords = Set(self.blockedWords.map(comparisonKey))
+		return self.uniqueWords(words)
+			.filter { !blockedWords.contains(self.comparisonKey($0)) }
+	}
+
+	private func uniqueWords(_ words: [String]) -> [String] {
+		var seen: Set<String> = []
+		var uniqueWords: [String] = []
+
+		for word in words {
+			let key = self.comparisonKey(word)
+			if seen.insert(key).inserted {
+				uniqueWords.append(word)
+			}
+		}
+
+		return uniqueWords
 	}
 	
 	func fixKeyboard() {
 		var newKeyboard: [[KeyBoardLetter]] = []
 		var keyBoardCharacters: [[String]] = []
-		if self.selectedLanguage == .english {
-			keyBoardCharacters = [["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"], ["A", "S", "D", "F", "G", "H", "J", "K", "L"], ["Z", "X", "C", "V", "B", "N", "M"]]
-		} else if self.selectedLanguage == .norwegian {
-			keyBoardCharacters = [["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P", "Å"], ["A", "S", "D", "F", "G", "H", "J", "K", "L", "Ø", "Æ"], ["Z", "X", "C", "V", "B", "N", "M"]]
-		} else {
-			keyBoardCharacters = [["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"], ["A", "S", "D", "F", "G", "H", "J", "K", "L", "Ñ"], ["Z", "X", "C", "V", "B", "N", "M"]]
+		switch self.selectedLanguage {
+			case .english:
+				keyBoardCharacters = [["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"], ["A", "S", "D", "F", "G", "H", "J", "K", "L"], ["Z", "X", "C", "V", "B", "N", "M"]]
+			case .french:
+				keyBoardCharacters = [["A", "Z", "E", "R", "T", "Y", "U", "I", "O", "P"], ["Q", "S", "D", "F", "G", "H", "J", "K", "L", "M"], ["W", "X", "C", "V", "B", "N"]]
+			case .norwegian:
+				keyBoardCharacters = [["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P", "Å"], ["A", "S", "D", "F", "G", "H", "J", "K", "L", "Ø", "Æ"], ["Z", "X", "C", "V", "B", "N", "M"]]
+			case .spanish:
+				keyBoardCharacters = [["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"], ["A", "S", "D", "F", "G", "H", "J", "K", "L", "Ñ"], ["Z", "X", "C", "V", "B", "N", "M"]]
+			case .polish:
+				keyBoardCharacters = [["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"], ["A", "S", "D", "F", "G", "H", "J", "K", "L"], ["Z", "X", "C", "V", "B", "N", "M"]]
+			case .all:
+				keyBoardCharacters = [["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"], ["A", "S", "D", "F", "G", "H", "J", "K", "L"], ["Z", "X", "C", "V", "B", "N", "M"]]
 		}
 		
 		for row in keyBoardCharacters {
@@ -230,6 +377,39 @@ final class AppManager: NSObject, FullScreenContentDelegate {
 		return word
 	}
 	
+	private func comparisonKey(_ value: String) -> String {
+		guard self.selectedLanguage == .french else {
+			return value.uppercased()
+		}
+		return value
+			.folding(options: [.diacriticInsensitive, .caseInsensitive], locale: Locale(identifier: "fr_FR"))
+			.uppercased()
+	}
+
+	private func lettersMatch(_ lhs: String, _ rhs: String) -> Bool {
+		self.comparisonKey(lhs) == self.comparisonKey(rhs)
+	}
+
+	private func wordsMatch(_ lhs: String, _ rhs: String) -> Bool {
+		self.comparisonKey(lhs) == self.comparisonKey(rhs)
+	}
+
+	private func containsWord(_ word: String, in words: [String]?) -> Bool {
+		guard let words else {
+			return false
+		}
+		guard self.selectedLanguage == .french else {
+			return words.contains(word)
+		}
+
+		let normalizedWord = self.comparisonKey(word)
+		return words.contains { self.comparisonKey($0) == normalizedWord }
+	}
+
+	private func wordContainsComparableLetter(_ letter: String) -> Bool {
+		self.word.contains { self.lettersMatch(String($0), letter) }
+	}
+
 	private func canAccessCurrentBoardCell(at index: Int? = nil) -> Bool {
 		guard self.board.indices.contains(self.currentRow) else {
 			return false
@@ -271,7 +451,7 @@ final class AppManager: NSObject, FullScreenContentDelegate {
 	
 	func findKeyPosition(letter: String) -> (row: Int, col: Int)? {
 		for (rowIndex, row) in keyboard.enumerated() {
-			if let colIndex = row.firstIndex(where: { $0.letter == letter }) {
+			if let colIndex = row.firstIndex(where: { self.lettersMatch($0.letter, letter) }) {
 				return (row: rowIndex, col: colIndex)
 			}
 		}
@@ -287,50 +467,43 @@ final class AppManager: NSObject, FullScreenContentDelegate {
 		}
 		
 		var updatedBoard = self.board
-		var changableWord = self.word
+		let answerLetters = Array(self.word)
+		var remainingLetters = answerLetters.map { Optional(self.comparisonKey(String($0))) }
 		for i in 0..<updatedBoard[self.currentRow].count {
-			let letterIndex = self.word.index(self.word.startIndex, offsetBy: i)
-			let letter = String(self.word[letterIndex])
+			guard remainingLetters.indices.contains(i) else {
+				completion(false)
+				return
+			}
+			let letter = answerLetters[i]
 			let guessedLetter = updatedBoard[self.currentRow][i].letter
 			guard self.findKeyPosition(letter: guessedLetter) != nil else {
 				completion(false)
 				return
 			}
-			if guessedLetter == letter {
+			if self.lettersMatch(guessedLetter, String(letter)) {
 				updatedBoard[self.currentRow][i].isCorrectPosition = true
-				if let index = changableWord.firstIndex(of: Character(letter)) {
-					changableWord.remove(at: index)
-					
-				} else {
-					changableWord = changableWord.replacingOccurrences(of: guessedLetter, with: "")
-				}
+				remainingLetters[i] = nil
 			}
 		}
 		
 		for i in 0..<updatedBoard[self.currentRow].count {
-			let letterIndex = self.word.index(self.word.startIndex, offsetBy: i)
-			let letter = String(self.word[letterIndex])
+			guard answerLetters.indices.contains(i) else {
+				completion(false)
+				return
+			}
+			let letter = String(answerLetters[i])
 			let guessedLetter = updatedBoard[self.currentRow][i].letter
 			guard self.findKeyPosition(letter: guessedLetter) != nil else {
 				completion(false)
 				return
 			}
-			if guessedLetter == letter {
+			if self.lettersMatch(guessedLetter, letter) {
 				continue
-			} else if changableWord.contains(guessedLetter) {
+			} else if let matchIndex = remainingLetters.firstIndex(where: { $0 == self.comparisonKey(guessedLetter) }) {
 				updatedBoard[self.currentRow][i].isCorrectLetter = true
-				if let index = changableWord.firstIndex(of: Character(guessedLetter)) {
-					changableWord.remove(at: index)
-				} else {
-					changableWord = changableWord.replacingOccurrences(of: guessedLetter, with: "")
-				}
+				remainingLetters[matchIndex] = nil
 			} else {
 				updatedBoard[self.currentRow][i].isUsedButNotCorrect = true
-				if let index = changableWord.firstIndex(of: Character(guessedLetter)) {
-					changableWord.remove(at: index)
-				} else {
-					changableWord = changableWord.replacingOccurrences(of: guessedLetter, with: "")
-				}
 			}
 		}
 		
@@ -429,10 +602,11 @@ final class AppManager: NSObject, FullScreenContentDelegate {
 	}
 	
 	func useWord(word: String) {
-		for i in 0..<word.count {
-			self.board[self.currentRow][i].letter = String(word[word.index(word.startIndex, offsetBy: i)])
+		let playableWord = self.comparisonKey(word)
+		for i in 0..<playableWord.count {
+			self.board[self.currentRow][i].letter = String(playableWord[playableWord.index(playableWord.startIndex, offsetBy: i)])
 		}
-		self.currentIndex = word.count
+		self.currentIndex = playableWord.count
 	}
 	
 	
@@ -466,6 +640,14 @@ final class AppManager: NSObject, FullScreenContentDelegate {
 			self.selectedLanguage = .spanish
 			self.language = .spanish
 			self.defaultLanguage = .spanish
+		} else if pre == "fr" || pre.hasPrefix("fr-") {
+			self.selectedLanguage = .french
+			self.language = .french
+			self.defaultLanguage = .french
+		} else if pre == "pl" || pre.hasPrefix("pl-") {
+			self.selectedLanguage = .polish
+			self.language = .polish
+			self.defaultLanguage = .polish
 		} else {
 			self.selectedLanguage = .english
 			self.language = .english
@@ -519,7 +701,7 @@ final class AppManager: NSObject, FullScreenContentDelegate {
 				return
 			}
 
-			let isWin = self.word == guessedWord
+			let isWin = self.wordsMatch(self.word, guessedWord)
 			let isLoss = !isWin && self.currentRow == self.board.count
 
 			if isWin {
@@ -644,10 +826,13 @@ final class AppManager: NSObject, FullScreenContentDelegate {
 			return true
 		}
 		let currentWord = self.getWordFromCurrentRow()
-		if self.words?.wordGroups["\(self.numberOfLetters)"]?.contains(currentWord) == true {
+		if self.containsWord(currentWord, in: self.dailyWordsForCurrentLength) {
 			return true
 		}
-		if self.words?.blockedWords.contains(currentWord) == true {
+		if self.containsWord(currentWord, in: self.expertWordsForCurrentLength) {
+			return true
+		}
+		if self.containsWord(currentWord, in: self.blockedWords) {
 			return true
 		}
 		return false
@@ -670,6 +855,7 @@ final class AppManager: NSObject, FullScreenContentDelegate {
 	
 	
 	func resetBoard(animated: Bool = false) {
+		self.normalizeSelectedOptions()
 		let shouldAnimateReset = animated && !self.board.isEmpty
 		self.isResettingBoard = shouldAnimateReset
 		var noAnimation = Transaction()
@@ -694,6 +880,7 @@ final class AppManager: NSObject, FullScreenContentDelegate {
 		self.shouldPromptForProAfterGameCompletion = false
 		self.language = self.selectedLanguage
 		self.gameMode = self.selectedGameMode
+		self.gameExpertModeEnabled = self.isExpertModeEnabled
 		self.resetFilters()
 		self.startDate = Date()
 		
@@ -873,6 +1060,7 @@ final class AppManager: NSObject, FullScreenContentDelegate {
 	func setDefaultValues() {
 		self.selectedLanguage = self.defaultLanguage
 		self.numberOfLetters = self.defaultNumberOfLetters
+		self.normalizeSelectedOptions()
 	}
 	
 	
@@ -881,7 +1069,7 @@ final class AppManager: NSObject, FullScreenContentDelegate {
 		var foundKey: Bool = false
 		for (index, row) in self.keyboard.enumerated() {
 			for (index2, key) in row.enumerated() {
-				if key.state == .notUsed && self.word.contains(key.letter) {
+				if key.state == .notUsed && self.wordContainsComparableLetter(key.letter) {
 					DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
 						withAnimation(.easeIn(duration: 0.4)) {
 							self.keyboard[index][index2].state = .correctLetter

@@ -56,6 +56,14 @@ final class DefinitionManager: NSObject, ObservableObject {
             }
         }
 	}
+
+	func getFreeDictionaryDefinition(for word: String, language: LanguageSelection, completion: @escaping (DefinitionFetchResult<FreeDictionaryDefinition>) -> Void) {
+		WordleDataManager.shared.fetchFreeDictionaryDefinition(for: word, language: language) { result in
+			DispatchQueue.main.async {
+				completion(result)
+			}
+		}
+	}
     
     
 }

@@ -32,8 +32,8 @@ struct StatsView: View {
 	@State private var counts: [Int] = Array(repeating: 0, count: 6)
 	@State private var maxGuessesPerCount: Int = 0
 	@State private var selectedStreakLanguage: LanguageSelection = .norwegian
-	@State private var longestStreakPerLetters: [(language: LanguageSelection, streaks: [(index: Int, currentStreak: Int, longestStreak: Int)])] = [(language: .english, streaks: []), (language: .spanish, streaks: []), (language: .norwegian, streaks: [])]
-	@State private var longestNormalStreakPerLetters: [(language: LanguageSelection, streaks: [(index: Int, currentStreak: Int, longestStreak: Int)])] = [(language: .english, streaks: []), (language: .spanish, streaks: []), (language: .norwegian, streaks: [])]
+	@State private var longestStreakPerLetters: [(language: LanguageSelection, streaks: [(index: Int, currentStreak: Int, longestStreak: Int)])] = LanguageSelection.languages.map { (language: $0, streaks: []) }
+	@State private var longestNormalStreakPerLetters: [(language: LanguageSelection, streaks: [(index: Int, currentStreak: Int, longestStreak: Int)])] = LanguageSelection.languages.map { (language: $0, streaks: []) }
 	@State private var maxStreakLength: Double = 0.0
 	@State private var maxNormalStreakLength: Double = 0.0
 	@State private var hasCompletedInitialLoad: Bool = false
@@ -300,7 +300,7 @@ struct StatsView: View {
 		let winRate = totalCount > 0 ? Double(wonCount) / Double(totalCount) : 0.0
 		let maxGuessesPerCount = guessCounts.max() ?? 0
 
-		let languages: [LanguageSelection] = [.english, .spanish, .norwegian]
+		let languages = LanguageSelection.languages
 		var dailyStreaks: [(language: LanguageSelection, streaks: [(index: Int, currentStreak: Int, longestStreak: Int)])] = []
 		var normalStreaks: [(language: LanguageSelection, streaks: [(index: Int, currentStreak: Int, longestStreak: Int)])] = []
 		var maxStreak: Double = 0

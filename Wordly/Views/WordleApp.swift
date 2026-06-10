@@ -18,19 +18,6 @@ struct WordleApp: App {
     @AppStorage("hasSeenOnboarding") private var hasSeenOnboarding: Bool = false
     @State private var showingOnboarding = false
 
-    init() {
-        FirebaseApp.configure()
-        Analytics.setAnalyticsCollectionEnabled(false)
-
-		TelemetryDeck.initialize(config: .init(appID: "2CB2FADD-4FFE-4E4E-A41A-701488B32556"))
-
-		let postHogConfig = PostHogConfig(projectToken: "phc_chCgS3rwJ0RaoaDMl61jK881N1oHxvRWpS6ok5aQJmX", host: "https://eu.i.posthog.com")
-		postHogConfig.captureScreenViews = false
-		postHogConfig.debug = true
-		postHogConfig.reuseAnonymousId = true
-		PostHogSDK.shared.setup(postHogConfig)
-    }
-
     var body: some Scene {
         WindowGroup {
             TabsView()
@@ -38,6 +25,7 @@ struct WordleApp: App {
                     OnboardingView(isShowingOnboarding: $showingOnboarding)
                 }
                 .task {
+					StartupServices.configureIfNeeded()
                     showingOnboarding = !hasSeenOnboarding
                 }
                 .tint(.primary)
@@ -45,4 +33,25 @@ struct WordleApp: App {
         }
         .modelContainer(for: [GameRecordEntity.self, GameRecord.self, DailyWordReminder.self])
     }
+}
+
+private enum StartupServices {
+	private static var hasConfigured = false
+
+	@MainActor
+	static func configureIfNeeded() {
+		guard !hasConfigured else { return }
+		hasConfigured = true
+
+		FirebaseApp.configure()
+		Analytics.setAnalyticsCollectionEnabled(false)
+
+		TelemetryDeck.initialize(config: .init(appID: "2CB2FADD-4FFE-4E4E-A41A-701488B32556"))
+
+		let postHogConfig = PostHogConfig(projectToken: "phc_chCgS3rwJ0RaoaDMl61jK881N1oHxvRWpS6ok5aQJmX", host: "https://eu.i.posthog.com")
+		postHogConfig.captureScreenViews = false
+		postHogConfig.debug = false
+		postHogConfig.reuseAnonymousId = true
+		PostHogSDK.shared.setup(postHogConfig)
+	}
 }

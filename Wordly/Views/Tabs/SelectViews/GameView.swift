@@ -23,6 +23,9 @@ struct GameView: View {
                     .safeAreaPadding(.bottom, adManager.isBannerAdLoaded ? (UIDevice.current.userInterfaceIdiom == .pad || UIDevice.current.userInterfaceIdiom == .mac ? 98 : 72) : 0)
             }
         }
+		.task {
+			appManager.repairGameIfNeeded()
+		}
     }
 }
 
