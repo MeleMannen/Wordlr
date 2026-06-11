@@ -14,7 +14,6 @@ struct SearchView: View {
     @Environment(AdManager.self) private var adManager
     @Namespace private var namespace
     @State private var isShowingFilterOptions: Bool = false
-    @State private var didTap: Bool = false
     @State private var searchResults: [String] = []
     @State private var groupedWords: [String: [String]] = [:]
     @State private var sectionKeys: [String] = []
@@ -90,14 +89,12 @@ struct SearchView: View {
                         Button(action: openFilterOptions) {
                             Label("Filter options", systemImage: "slider.horizontal.3")
                         }
-                        .sensoryFeedback(.selection, trigger: didTap)
                         .popoverTip(filterTip, arrowEdge: .top)
                         .matchedTransitionSource(id: "filter", in: namespace)
                     } else {
                         Button(action: openFilterOptions) {
                             Label("Filter options", systemImage: "slider.horizontal.3")
                         }
-                        .sensoryFeedback(.selection, trigger: didTap)
                         .popoverTip(filterTip, arrowEdge: .top)
                     }
                 }
@@ -298,7 +295,6 @@ struct SearchView: View {
             return
         }
         
-        didTap.toggle()
         DispatchQueue.main.async {
             self.isShowingFilterOptions = true
         }

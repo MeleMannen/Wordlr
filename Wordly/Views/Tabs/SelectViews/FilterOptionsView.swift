@@ -378,23 +378,19 @@ struct FilterOptionsView: View {
 				if #available(iOS 26.0, *) {
 					ToolbarItem(placement: .cancellationAction) {
 						Button("Cancel", systemImage: "xmark") {
-							self.didTapGameClues.toggle()
 							DispatchQueue.main.async {
 								self.isShowingFilterOptions = false
 							}
 						}
-						.conditionalHaptic(.selection, trigger: self.didTapGameClues)
 					}
 					
 				} else {
 					ToolbarItem(placement: .cancellationAction) {
 						Button("Back", role: .cancel) {
-							self.didTapGameClues.toggle()
 							DispatchQueue.main.async {
 								self.isShowingFilterOptions = false
 							}
 						}
-						.conditionalHaptic(.selection, trigger: self.didTapGameClues)
 					}
 				}
 			}

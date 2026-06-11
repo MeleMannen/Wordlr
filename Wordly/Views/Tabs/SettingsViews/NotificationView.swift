@@ -12,7 +12,6 @@ struct NotificationView: View {
 	@Environment(\.modelContext) private var context
 	@Environment(\.colorScheme) private var colorScheme
 	@AppStorage("notificationsEnabled") private var notificationsEnabled: Bool = false
-	@State private var didTapAddReminder: Bool = false
 	@State private var shouldShowSheet: Bool = false
 	@State private var shouldBeEditing: Bool = false
 	@State private var reminderToEdit: DailyWordReminder?
@@ -63,30 +62,26 @@ struct NotificationView: View {
 		.navigationBarTitleDisplayMode(.inline)
 		.navigationTitle("Daily Wordlr reminders")
 		.toolbar {
-			if #available(iOS 26.0, *) {
-				ToolbarItem(placement: .navigationBarTrailing) {
-					Button(action: {
-						self.didTapAddReminder.toggle()
-						self.shouldShowSheet = true
-						self.isPresentingFromAdd = true
-					}) {
-						Label("Add reminder", systemImage: "plus")
-					}
-					.conditionalHaptic(.selection, trigger: self.didTapAddReminder)
-				}
-				.matchedTransitionSource(id: "add", in: self.namespace)
-				
-			} else {
-				ToolbarItem(placement: .navigationBarTrailing) {
-					Button(action: {
-						self.didTapAddReminder.toggle()
-						self.shouldShowSheet = true
-					}) {
-						Label("Add reminder", systemImage: "plus")
-					}
-					.conditionalHaptic(.selection, trigger: self.didTapAddReminder)
-				}
-			}
+            ToolbarItem(placement: .navigationBarTrailing) {
+                if #available(iOS 26.0, *) {
+                    Button {
+                        DispatchQueue.main.async {
+                            self.isPresentingFromAdd = true
+                            self.shouldShowSheet = true
+                        }
+                    } label: {
+                        Label("Add reminder", systemImage: "plus")
+                    }
+                    .matchedTransitionSource(id: "add", in: self.namespace)
+                    
+                } else {
+                    Button {
+                        self.shouldShowSheet = true
+                    } label: {
+                        Label("Add reminder", systemImage: "plus")
+                    }
+                }
+            }
 		}
 		.sheet(isPresented: $shouldShowSheet) {
 			self.reminderToEdit = nil
