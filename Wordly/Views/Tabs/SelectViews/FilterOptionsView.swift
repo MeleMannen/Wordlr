@@ -271,50 +271,40 @@ struct FilterOptionsView: View {
 					.wordlrListSectionRowBackground(.middle)
 					
 					Button {
-					self.didTapGameClues.toggle()
-					if storeManager.isAdRemovalPurchased {
-						appManager.applyGameInfoToFilters()
-					} else {
-						showProAlert = true
-					}
-				} label: {
-					HStack {
-						Spacer()
+						useGameClues()
+					} label: {
+						HStack {
+							Spacer()
 
 //						Image(systemName: "sparkles")
 //							.font(.headline)
 //							.foregroundStyle(.green)
 
-						Text("Get from game")
-							.font(.headline)
-							.foregroundStyle(.green)
-							.frame(alignment: .center)
-							.padding(.leading, storeManager.isAdRemovalPurchased ? 0 : 30)
+							Text("Get from game")
+								.font(.headline)
+								.foregroundStyle(.green)
+								.frame(alignment: .center)
+								.padding(.leading, storeManager.isAdRemovalPurchased ? 0 : 30)
 
-						if !storeManager.isAdRemovalPurchased {
-							Image(systemName: "crown.fill")
-								.font(.caption.weight(.bold))
-								.foregroundStyle(.white)
-								.padding(6)
-								.background(.green, in: Circle())
-						}
-
-						Spacer()
-					}
-					.padding(.vertical, 5)
-				}
-				.simultaneousGesture(
-					TapGesture()
-						.onEnded { _ in
-							self.didTapGameClues.toggle()
-							if storeManager.isAdRemovalPurchased {
-								appManager.applyGameInfoToFilters()
-							} else {
-								showProAlert = true
+							if !storeManager.isAdRemovalPurchased {
+								Image(systemName: "crown.fill")
+									.font(.caption.weight(.bold))
+									.foregroundStyle(.white)
+									.padding(6)
+									.background(.green, in: Circle())
 							}
+
+							Spacer()
 						}
-				)
-				.conditionalHaptic(.selection, trigger: self.didTapGameClues)
+						.padding(.vertical, 5)
+					}
+					.simultaneousGesture(
+						TapGesture()
+							.onEnded { _ in
+								self.didTapGameClues.toggle()
+							}
+					)
+					.conditionalHaptic(.selection, trigger: self.didTapGameClues)
 					.alignmentGuide(.listRowSeparatorLeading) { d in
 						d[.leading]
 					}
@@ -427,6 +417,16 @@ struct FilterOptionsView: View {
 				focusedField = .endsWith
 			case .endsWith:
 				focusedField = nil
+		}
+	}
+
+	private func useGameClues() {
+		self.didTapGameClues.toggle()
+		if storeManager.isAdRemovalPurchased {
+			AnalyticsManager.shared.logDidUseGameCluesEvent()
+			appManager.applyGameInfoToFilters()
+		} else {
+			showProAlert = true
 		}
 	}
 }

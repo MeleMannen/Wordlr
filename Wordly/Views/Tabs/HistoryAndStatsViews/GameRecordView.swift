@@ -398,6 +398,7 @@ struct GameRecordView: View {
 							Button {
 								withAnimation {
 									UIPasteboard.general.string = GameResultShareFormatter.shareText(for: gameRecord)
+									AnalyticsManager.shared.logDidCopyResultEvent(copySource: "game_record_button")
 									self.hasSharedResult = true
 									self.didTap.toggle()
 								}

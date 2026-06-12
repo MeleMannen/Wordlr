@@ -222,6 +222,7 @@ struct HistoryView: View {
 
 	private func copyResult(for gameRecord: GameRecord) {
 		UIPasteboard.general.string = GameResultShareFormatter.shareText(for: gameRecord)
+		AnalyticsManager.shared.logDidCopyResultEvent(copySource: "history_context_menu")
 	}
 }
 

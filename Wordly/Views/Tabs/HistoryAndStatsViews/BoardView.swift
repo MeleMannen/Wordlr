@@ -226,6 +226,7 @@ struct BoardView: View {
 						Button {
 							withAnimation {
 								UIPasteboard.general.string = GameResultShareFormatter.shareText(for: gameRecord)
+								AnalyticsManager.shared.logDidCopyResultEvent(copySource: "board_detail_button")
 								hasCopiedResult = true
 								didTapAction.toggle()
 							}

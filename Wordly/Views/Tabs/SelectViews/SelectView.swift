@@ -243,6 +243,7 @@ struct SelectView: View {
 		}
 		.onChange(of: expertModeEnabled) {
 			appManager.isExpertModeEnabled = expertModeEnabled
+			AnalyticsManager.shared.logDidToggleExpertModeEvent(isEnabled: expertModeEnabled)
 		}
 		.onAppear {
 			appManager.isExpertModeEnabled = expertModeEnabled

@@ -379,6 +379,7 @@ struct GameView18: View {
 										appManager.hasSharedResult = true
 										self.didTapBackButton.toggle()
 										UIPasteboard.general.string = appManager.getShareResult(row: appManager.currentRow, numberOfLetters: appManager.numberOfLetters, date: appManager.startDate, board: appManager.board, timeUsedString: appManager.getTimeUsedString(startDate: appManager.startDate, endDate: appManager.endDate))
+										AnalyticsManager.shared.logDidCopyResultEvent(copySource: "current_game_button")
 										
 										
 									}
@@ -451,6 +452,7 @@ struct GameView18: View {
 										appManager.hasSharedResult = true
 										self.didTapBackButton.toggle()
 										UIPasteboard.general.string = appManager.getShareResult(row: appManager.currentRow, numberOfLetters: appManager.numberOfLetters, date: appManager.startDate, board: appManager.board, timeUsedString: appManager.getTimeUsedString(startDate: appManager.startDate, endDate: appManager.endDate))
+										AnalyticsManager.shared.logDidCopyResultEvent(copySource: "current_game_keyboard_shortcut")
 									}
 								}
 							}

@@ -14,24 +14,27 @@ final class AnalyticsManager {
 
 	static let shared = AnalyticsManager()
 
-	func logGameStartedEvent(word: String, language: LanguageSelection, numberOfLetters: Int, gameMode: GameMode) {
+	func logGameStartedEvent(word: String, language: LanguageSelection, numberOfLetters: Int, gameMode: GameMode, isExpertModeEnabled: Bool) {
 		let parameters: [String: String] = [
 			"word": word,
 			"language": language.rawValue,
 			"number_of_letters": "\(numberOfLetters)",
-			"game_mode": gameMode.rawValue
+			"game_mode": gameMode.rawValue,
+			"expert_mode": "\(isExpertModeEnabled)"
 		]
 		Analytics.logEvent("game_started", parameters: parameters)
 		TelemetryDeck.signal("game_started", parameters: parameters)
 		PostHogSDK.shared.capture("game_started", properties: parameters)
 	}
 
-	func logGameEndedEvent(word: String, language: LanguageSelection, numberOfLetters: Int, gameMode: GameMode, won: Bool, attemptsNeeded: Int, gameDurationSeconds: Int, currentStreak: Int) {
+	func logGameEndedEvent(word: String, language: LanguageSelection, numberOfLetters: Int, gameMode: GameMode, isExpertModeEnabled: Bool, won: Bool, attemptsNeeded: Int, gameDurationSeconds: Int, currentStreak: Int) {
 		Analytics.logEvent("game_ended", parameters: [
 			"word": word,
 			"language": language.rawValue,
 			"number_of_letters": numberOfLetters,
 			"game_mode": gameMode.rawValue,
+			"expert_mode": isExpertModeEnabled ? "true" : "false",
+			"expert_mode_numeric": isExpertModeEnabled ? 1 : 0,
 			"won": won ? "true" : "false",
 			"won_numeric" : won ? 1 : 0,
 			"attempts_needed": attemptsNeeded,
@@ -43,6 +46,7 @@ final class AnalyticsManager {
 			"language": language.rawValue,
 			"number_of_letters": "\(numberOfLetters)",
 			"game_mode": gameMode.rawValue,
+			"expert_mode": "\(isExpertModeEnabled)",
 			"won": won ? "true" : "false",
 			"attempts_needed": "\(attemptsNeeded)",
 			"game_duration_seconds": "\(gameDurationSeconds)",
@@ -190,5 +194,68 @@ final class AnalyticsManager {
 		Analytics.logEvent("did_tap_rate_app", parameters: nil)
 		TelemetryDeck.signal("did_tap_rate_app")
         PostHogSDK.shared.screen("did_tap_rate_app")
+	}
+
+	func logDidTapUpgradeToProEvent() {
+		Analytics.logEvent("did_tap_upgrade_to_pro", parameters: nil)
+		TelemetryDeck.signal("did_tap_upgrade_to_pro")
+		PostHogSDK.shared.capture("did_tap_upgrade_to_pro")
+	}
+
+	func logDidBuyProEvent() {
+		Analytics.logEvent("did_buy_pro", parameters: nil)
+		TelemetryDeck.signal("did_buy_pro")
+		PostHogSDK.shared.capture("did_buy_pro")
+	}
+
+	func logDidTapRestorePurchasesEvent() {
+		Analytics.logEvent("did_tap_restore_purchases", parameters: nil)
+		TelemetryDeck.signal("did_tap_restore_purchases")
+		PostHogSDK.shared.capture("did_tap_restore_purchases")
+	}
+
+	func logDidUseGameCluesEvent() {
+		Analytics.logEvent("did_use_game_clues", parameters: nil)
+		TelemetryDeck.signal("did_use_game_clues")
+		PostHogSDK.shared.capture("did_use_game_clues")
+	}
+
+	func logDidTurnOnHapticsEvent() {
+		Analytics.logEvent("did_turn_on_haptics", parameters: nil)
+		TelemetryDeck.signal("did_turn_on_haptics")
+		PostHogSDK.shared.capture("did_turn_on_haptics")
+	}
+    
+    func logDidTurnOffHapticsEvent() {
+        Analytics.logEvent("did_turn_off_haptics", parameters: nil)
+        TelemetryDeck.signal("did_turn_off_haptics")
+        PostHogSDK.shared.capture("did_turn_off_haptics")
+    }
+
+	func logDidTapShareAppEvent() {
+		Analytics.logEvent("did_tap_share_app", parameters: nil)
+		TelemetryDeck.signal("did_tap_share_app")
+		PostHogSDK.shared.capture("did_tap_share_app")
+	}
+
+	func logDidToggleTransparentListsEvent(isEnabled: Bool) {
+		let parameters: [String: String] = ["is_enabled": "\(isEnabled)"]
+		Analytics.logEvent("did_toggle_transparent_lists", parameters: parameters)
+		TelemetryDeck.signal("did_toggle_transparent_lists", parameters: parameters)
+		PostHogSDK.shared.capture("did_toggle_transparent_lists", properties: parameters)
+	}
+
+	func logDidToggleExpertModeEvent(isEnabled: Bool) {
+		let parameters: [String: String] = ["is_enabled": "\(isEnabled)"]
+		Analytics.logEvent("did_toggle_expert_mode", parameters: parameters)
+		TelemetryDeck.signal("did_toggle_expert_mode", parameters: parameters)
+		PostHogSDK.shared.capture("did_toggle_expert_mode", properties: parameters)
+	}
+
+	func logDidCopyResultEvent(copySource: String) {
+		let parameters: [String: String] = ["copy_source": copySource]
+		Analytics.logEvent("did_copy_result", parameters: parameters)
+		TelemetryDeck.signal("did_copy_result", parameters: parameters)
+		PostHogSDK.shared.capture("did_copy_result", properties: parameters)
 	}
 }

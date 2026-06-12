@@ -216,7 +216,13 @@ final class AppManager: NSObject, FullScreenContentDelegate {
 		}
 		print("Ordet er \(self.word)")
 		self.dailyWordHasBeenPlayed = self.checkIfDailyWordIsAlreadyPlayed()
-		AnalyticsManager.shared.logGameStartedEvent(word: self.word, language: self.selectedLanguage, numberOfLetters: self.numberOfLetters, gameMode: self.selectedGameMode)
+		AnalyticsManager.shared.logGameStartedEvent(
+			word: self.word,
+			language: self.selectedLanguage,
+			numberOfLetters: self.numberOfLetters,
+			gameMode: self.selectedGameMode,
+			isExpertModeEnabled: self.selectedGameMode == .normal && self.isExpertModeEnabled
+		)
 	}
 	
 	
@@ -740,6 +746,7 @@ final class AppManager: NSObject, FullScreenContentDelegate {
 		let completedNumberOfGuesses = self.currentRow
 		let completedHintsUsed = self.hintsUsed
 		let completedBoard = self.board
+		let completedExpertModeEnabled = completedGameMode == .normal && self.gameExpertModeEnabled
 		
 		self.isGameOver = true
 		
@@ -793,6 +800,7 @@ final class AppManager: NSObject, FullScreenContentDelegate {
 				language: completedLanguage,
 				numberOfLetters: completedNumberOfLetters,
 				gameMode: completedGameMode,
+				isExpertModeEnabled: completedExpertModeEnabled,
 				won: state == .won,
 				attemptsNeeded: completedNumberOfGuesses,
 				gameDurationSeconds: Int(completedEndDate.timeIntervalSince(completedStartDate)),

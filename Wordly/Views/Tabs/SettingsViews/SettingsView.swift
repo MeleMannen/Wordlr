@@ -115,6 +115,7 @@ struct SettingsView: View {
 								.frame(maxWidth: .infinity, alignment: .leading)
 							
 							Button(action: {
+								AnalyticsManager.shared.logDidTapUpgradeToProEvent()
 								Task {
 									await storeManager.purchaseAdRemoval()
 								}
@@ -151,6 +152,7 @@ struct SettingsView: View {
 							.disabled(storeManager.isPurchasing || storeManager.adRemovalProduct == nil)
 							
 							Button("Restore Purchases") {
+								AnalyticsManager.shared.logDidTapRestorePurchasesEvent()
 								Task {
 									await storeManager.restorePurchases()
 								}
@@ -256,6 +258,9 @@ struct SettingsView: View {
 						.wordlrListSectionRowBackground(.middle)
 						.tint(.green)
 						.conditionalHaptic(.selection, trigger: usesTransparentLists)
+						.onChange(of: usesTransparentLists) { _, newValue in
+							AnalyticsManager.shared.logDidToggleTransparentListsEvent(isEnabled: newValue)
+						}
 					}
 					
 					Toggle(isOn: $hapticsEnabled) {
@@ -263,6 +268,13 @@ struct SettingsView: View {
 					}
 					.wordlrListSectionRowBackground(.last)
 					.tint(.green)
+					.onChange(of: hapticsEnabled) { _, newValue in
+						if newValue {
+							AnalyticsManager.shared.logDidTurnOnHapticsEvent()
+                        } else {
+                            AnalyticsManager.shared.logDidTurnOffHapticsEvent()
+                        }
+					}
 				} header: {
 					Text("General")
 				}
@@ -490,6 +502,9 @@ struct SettingsView: View {
 								.foregroundStyle(.secondary)
 						}
 					}
+					.simultaneousGesture(TapGesture().onEnded {
+						AnalyticsManager.shared.logDidTapShareAppEvent()
+					})
 					.wordlrListSectionRowBackground(.middle)
 					.contextMenu {
 						Button {

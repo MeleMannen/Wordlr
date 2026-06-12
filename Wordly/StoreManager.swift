@@ -55,6 +55,7 @@ final class StoreManager {
 					if case .verified(let transaction) = verification {
 						await transaction.finish()
 						await updatePurchaseStatus()
+						AnalyticsManager.shared.logDidBuyProEvent()
 					}
 				case .userCancelled, .pending:
 					break
