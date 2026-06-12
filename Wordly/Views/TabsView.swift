@@ -20,6 +20,7 @@ struct TabsView: View {
     @AppStorage("notificationsEnabled") private var notificationsEnabled: Bool = false
     @AppStorage("userWantsThePhraseNameBack") private var userWantsThePhraseNameBack = false
     @AppStorage("hasSeenOnboarding") private var hasSeenOnboarding: Bool = false
+    @AppStorage("proAdsEnabled") private var proAdsEnabled: Bool = false
     @State var selection: TabSelection = .home
     @State var tintColor: Color = .green
     @State private var isResolvingStartupPrivacyFlow = false
@@ -108,7 +109,19 @@ struct TabsView: View {
                 }
             }
             .onChange(of: storeManager.isAdRemovalPurchased) { _, purchased in
-                if purchased {
+                if purchased && !shouldDisplayAds {
+                    withAnimation {
+                        adManager.isBannerAdLoaded = false
+                    }
+                }
+            }
+            .onChange(of: proAdsEnabled) { _, _ in
+                if shouldDisplayAds {
+                    adManager.startMonitoringConnectivity()
+                    Task {
+                        await resolveTrackingAndPrepareAdsIfNeeded()
+                    }
+                } else {
                     withAnimation {
                         adManager.isBannerAdLoaded = false
                     }
@@ -121,7 +134,7 @@ struct TabsView: View {
                 }
             }
             .task {
-                if !storeManager.isAdRemovalPurchased {
+                if shouldDisplayAds {
                     adManager.startMonitoringConnectivity()
                 }
             }
@@ -155,7 +168,7 @@ struct TabsView: View {
         let canRequestAds = adManager.canRequestAds
         let isAdsReady = adManager.isAdsReady
 
-        if canRequestAds && isAdsReady && !storeManager.isAdRemovalPurchased {
+        if canRequestAds && isAdsReady && shouldDisplayAds {
             if #available(iOS 26.0, *), UIDevice.current.userInterfaceIdiom == .phone {
                 let adSize = inlineAdaptiveBanner(width: geometry.size.width - (geometry.size.width / 11), maxHeight: 50)
                 BannerViewContainer(adSize, adManager: adManager)
@@ -184,8 +197,12 @@ struct TabsView: View {
         }
     }
 
+    private var shouldDisplayAds: Bool {
+        !storeManager.isAdRemovalPurchased || proAdsEnabled
+    }
+
 	private func resolveTrackingAndPrepareAdsIfNeeded() async {
-		guard scenePhase == .active, !isResolvingStartupPrivacyFlow, hasSeenOnboarding, !storeManager.isAdRemovalPurchased else { return }
+		guard scenePhase == .active, !isResolvingStartupPrivacyFlow, hasSeenOnboarding, shouldDisplayAds else { return }
 		
 		isResolvingStartupPrivacyFlow = true
 		defer {

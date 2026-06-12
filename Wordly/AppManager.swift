@@ -39,7 +39,7 @@ final class AppManager: NSObject, FullScreenContentDelegate {
 			UserDefaults.standard.set(newValue, forKey: "userWantsThePhraseNameBack")
 		}
 	}
-	
+
 	var gameRecords: [GameRecordEntity] = []
 	@ObservationIgnored var modelContext: ModelContext?
 	@ObservationIgnored var gameRecordManager: GameRecordManager?
@@ -1013,7 +1013,7 @@ final class AppManager: NSObject, FullScreenContentDelegate {
 
 		let completedGamesKey = "proPromptCompletedGamesCount"
 		let promptThreshold = 15
-		let completedGames = max(UserDefaults.standard.integer(forKey: completedGamesKey) + 1, self.gameRecords.count)
+		let completedGames = UserDefaults.standard.integer(forKey: completedGamesKey) + 1
 		UserDefaults.standard.set(completedGames, forKey: completedGamesKey)
 
 		guard completedGames >= promptThreshold else { return }

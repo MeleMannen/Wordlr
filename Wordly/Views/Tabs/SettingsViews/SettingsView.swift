@@ -21,6 +21,7 @@ struct SettingsView: View {
 	@AppStorage("usesTransparentLists") private var usesTransparentLists: Bool = true
 	@AppStorage("defaultLanguage") private var defaultLanguage: LanguageSelection = .norwegian
 	@AppStorage("defaultNumberOfLetters") private var defaultNumberOfLetters: Int = 5
+	@AppStorage("proAdsEnabled") private var proAdsEnabled: Bool = false
 	
 	@AppStorage("defaultStatLanguage") private var defaultStatLanguage: LanguageSelection = .all
 	@AppStorage("defaultStatNumberOfLetters") private var defaultStatNumberOfLetters: Int = 9
@@ -33,6 +34,8 @@ struct SettingsView: View {
 	@State private var showingSupportEmailUnavailableAlert: Bool = false
 	@State private var proSectionMaxY: CGFloat = 300
 	@State private var gradientVisibility: Double = 0
+	@State private var versionTapCount: Int = 0
+	@State private var lastVersionTapDate: Date?
 	
 	@Query(sort: \DailyWordReminder.timeToFire) private var dailyWordReminders: [DailyWordReminder]
 	
@@ -53,7 +56,7 @@ struct SettingsView: View {
 		components.path = supportEmailAddress
 		components.queryItems = [
 			URLQueryItem(name: "subject", value: "Wordlr Feedback"),
-			URLQueryItem(name: "body", value: "\n\n\nApp version: \(appVersionText)\(storeManager.isAdRemovalPurchased ? "" : "\nUser: Pro")")
+			URLQueryItem(name: "body", value: "\n\n\nApp version: \(appVersionText)\(storeManager.isAdRemovalPurchased ? "\nUser: Pro" : "")")
 		]
 		return components.url
 	}
@@ -577,6 +580,10 @@ struct SettingsView: View {
 								}
 							}
 					}
+					.contentShape(Rectangle())
+					.onTapGesture {
+						handleVersionRowTap()
+					}
 					.wordlrListSectionRowBackground(.last)
 					
 				} header: {
@@ -636,7 +643,7 @@ struct SettingsView: View {
 				}
 			}
 			.navigationTitle("Settings")
-			.safeAreaPadding(.bottom, adManager.isBannerAdLoaded && !storeManager.isAdRemovalPurchased ? (UIDevice.current.userInterfaceIdiom == .pad || UIDevice.current.userInterfaceIdiom == .mac ? 80 : 54) : 0)
+			.safeAreaPadding(.bottom, adManager.isBannerAdLoaded && shouldDisplayAds ? (UIDevice.current.userInterfaceIdiom == .pad || UIDevice.current.userInterfaceIdiom == .mac ? 80 : 54) : 0)
 			.tint(.secondary)
 			.onAppear {
 				AnalyticsManager.shared.logScreenViewed(screenName: "SettingsView")
@@ -684,6 +691,46 @@ struct SettingsView: View {
 				gradientVisibility = 1
 			}
 		}
+	}
+
+	private var shouldDisplayAds: Bool {
+		!storeManager.isAdRemovalPurchased || proAdsEnabled
+	}
+
+	private func handleVersionRowTap() {
+		guard storeManager.isAdRemovalPurchased else {
+			resetVersionTapSequence()
+			return
+		}
+
+		let now = Date()
+		if let lastVersionTapDate, now.timeIntervalSince(lastVersionTapDate) <= 0.75 {
+			versionTapCount += 1
+		} else {
+			versionTapCount = 1
+		}
+		lastVersionTapDate = now
+
+		guard versionTapCount >= 10 else { return }
+
+		proAdsEnabled.toggle()
+		resetVersionTapSequence()
+
+		if proAdsEnabled {
+			adManager.startMonitoringConnectivity()
+			Task {
+				await adManager.prepareAdsIfNeeded()
+			}
+		} else {
+			withAnimation {
+				adManager.isBannerAdLoaded = false
+			}
+		}
+	}
+
+	private func resetVersionTapSequence() {
+		versionTapCount = 0
+		lastVersionTapDate = nil
 	}
 }
 
