@@ -26,6 +26,7 @@ struct WordleApp: App {
         
         let postHogConfig = PostHogConfig(projectToken: "phc_chCgS3rwJ0RaoaDMl61jK881N1oHxvRWpS6ok5aQJmX", host: "https://eu.i.posthog.com")
         postHogConfig.captureScreenViews = false
+        postHogConfig.optOut = true
         postHogConfig.debug = false
         postHogConfig.reuseAnonymousId = true
         PostHogSDK.shared.setup(postHogConfig)
