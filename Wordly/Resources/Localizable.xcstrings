@@ -8541,41 +8541,6 @@
         }
       }
     },
-    "Unlimited - %lld🔥" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Unlimited - %lld🔥"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ilimitado - %lld🔥"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Illimité - %lld🔥"
-          }
-        },
-        "nb" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Fritt spill - %lld🔥"
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Bez ograniczeń - %lld🔥"
-          }
-        }
-      }
-    },
     "Unlimited streaks 🔥" : {
       "comment" : "Title for unlimited mode streaks chart in stats view",
       "localizations" : {
@@ -8714,39 +8679,29 @@
       }
     },
     "Upgrade to Pro  -  %@" : {
-
-    },
-    "Upgrade to Pro - %@" : {
-      "extractionState" : "stale",
       "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Upgrade to Pro - %@"
-          }
-        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Mejora a Pro - %@"
+            "value" : "Mejora a Pro  -  %@"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Passer à Pro - %@"
+            "value" : "Passer à Pro  -  %@"
           }
         },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Oppgrader til Pro - %@"
+            "value" : "Oppgrader til Pro  -  %@"
           }
         },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Przejdź na Pro - %@"
+            "value" : "Przejdź na Pro  -  %@"
           }
         }
       }
@@ -8815,41 +8770,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Użyj filtrów"
-          }
-        }
-      }
-    },
-    "Use game clues" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Use game clues"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Usar pistas del juego"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Utiliser les indices du jeu"
-          }
-        },
-        "nb" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Bruk spillets ledetråder"
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Użyj wskazówek z gry"
           }
         }
       }
