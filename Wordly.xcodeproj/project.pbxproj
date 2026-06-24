@@ -57,7 +57,7 @@
 		63D084C62FD77DA900FBBBE8 /* englishWords.json in Resources */ = {isa = PBXBuildFile; fileRef = 63D084C52FD77DA900FBBBE8 /* englishWords.json */; };
 		63D084C82FD77E0100FBBBE8 /* spanishWords.json in Resources */ = {isa = PBXBuildFile; fileRef = 63D084C72FD77E0100FBBBE8 /* spanishWords.json */; };
 		63D084CC2FD7847C00FBBBE8 /* frenchWords.json in Resources */ = {isa = PBXBuildFile; fileRef = 63D084CB2FD7847C00FBBBE8 /* frenchWords.json */; };
-		63D7F69C2FD826A7009386C9 /* polishWords.json in Resources */ = {isa = PBXBuildFile; fileRef = 63D7F69B2FD826A7009386C9 /* polishWords.json */; };
+		63E7298B2FEC760500D5DF48 /* polishWords.json in Resources */ = {isa = PBXBuildFile; fileRef = 63E7298A2FEC760500D5DF48 /* polishWords.json */; };
 		63F225952E53B24100248D30 /* GoogleUserMessagingPlatform in Frameworks */ = {isa = PBXBuildFile; productRef = 63F225942E53B24100248D30 /* GoogleUserMessagingPlatform */; };
 		63F697CB2E05A328008B0B6E /* GoogleMobileAds in Frameworks */ = {isa = PBXBuildFile; productRef = 63F697CA2E05A328008B0B6E /* GoogleMobileAds */; };
 		63F98B4B2FC11F17000ECFB0 /* Wordlr - Guess the Word.storekit in Resources */ = {isa = PBXBuildFile; fileRef = 63F98B4A2FC11F17000ECFB0 /* Wordlr - Guess the Word.storekit */; };
@@ -115,7 +115,7 @@
 		63D084C52FD77DA900FBBBE8 /* englishWords.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = englishWords.json; sourceTree = "<group>"; };
 		63D084C72FD77E0100FBBBE8 /* spanishWords.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = spanishWords.json; sourceTree = "<group>"; };
 		63D084CB2FD7847C00FBBBE8 /* frenchWords.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = frenchWords.json; sourceTree = "<group>"; };
-		63D7F69B2FD826A7009386C9 /* polishWords.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = polishWords.json; sourceTree = "<group>"; };
+		63E7298A2FEC760500D5DF48 /* polishWords.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = polishWords.json; sourceTree = "<group>"; };
 		63F98B4A2FC11F17000ECFB0 /* Wordlr - Guess the Word.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Wordlr - Guess the Word.storekit"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -176,7 +176,7 @@
 				63027ED42FD8DEE70007A5BF /* norwegianWords.json */,
 				63D084C72FD77E0100FBBBE8 /* spanishWords.json */,
 				63D084CB2FD7847C00FBBBE8 /* frenchWords.json */,
-				63D7F69B2FD826A7009386C9 /* polishWords.json */,
+				63E7298A2FEC760500D5DF48 /* polishWords.json */,
 				63B9B3E62EA58ED2008483FB /* shortedNorwegainWords.json */,
 				63B9B3DF2EA58ED2008483FB /* Assets.xcassets */,
 				63BF73D92F4477E80065D40B /* GoogleService-Info.plist */,
@@ -369,7 +369,7 @@
 				63F98B4B2FC11F17000ECFB0 /* Wordlr - Guess the Word.storekit in Resources */,
 				63B9B4422EA58ED2008483FB /* shortedNorwegainWords.json in Resources */,
 				63027ED52FD8DEE70007A5BF /* norwegianWords.json in Resources */,
-				63D7F69C2FD826A7009386C9 /* polishWords.json in Resources */,
+				63E7298B2FEC760500D5DF48 /* polishWords.json in Resources */,
 				63D084CC2FD7847C00FBBBE8 /* frenchWords.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
