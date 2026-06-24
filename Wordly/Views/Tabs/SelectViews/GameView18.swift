@@ -312,7 +312,7 @@ struct GameView18: View {
 									await HintTip.gamesPlayedEvent.donate()
 								}
 							}, label: {
-								Text(appManager.selectedGameMode == .normal ? LocalizedStringKey("New game") : LocalizedStringKey("Free Play"))
+								Text(appManager.selectedGameMode == .normal ? LocalizedStringKey("New word") : LocalizedStringKey("Unlimited"))
 									.conditionalShadow(color: .black.opacity(0.2), radius: 2, x: 4, y: 4)
 									.font(.title2).bold()
 									.lineLimit(2)
@@ -326,7 +326,7 @@ struct GameView18: View {
 									}
 							})
 							.accessibilityHint("Starts the next game.")
-							.accessibilityInputLabels(["New game", "Free Play"])
+							.accessibilityInputLabels(["New word", "Unlimited"])
 							.padding(.horizontal, 20)
 							.conditionalHaptic(.impact, trigger: self.didTapNewGameButton)
 							.buttonStyle(GrowingButton())
@@ -466,7 +466,7 @@ struct GameView18: View {
 				WordDefinitionView(word: appManager.word)
 					.environment(appManager)
 			})
-			.navigationTitle(appManager.numberOfLetters == 1 ? "Guess the letter" : "Guess the Word")
+			.navigationTitle(appManager.numberOfLetters == 1 ? "Guess the letter" : "Guess the word")
 			.navigationBarTitleDisplayMode(.inline)
 			.toolbar {
 				if appManager.isHintAvailable() && (appManager.shouldShowAdButton || storeManager.isAdRemovalPurchased) {

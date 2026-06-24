@@ -60,12 +60,10 @@ struct HistoryView: View {
 				VStack {
 					if #unavailable(iOS 26.0) {
 						FilterView(numberOfLetters: $numberOfLetters, selectedLanguage: $selectedLanguage, gameMode: $gameMode, showsWhenHintsUsed: $showsWhenHintsUsed)
-                            .darkGradientBackground(colorScheme: colorScheme)
 					}
 
 					self.historyContent(historyResult: self.displayedHistoryResult)
 						.scrollContentBackground(.hidden)
-						.darkGradientBackground(colorScheme: colorScheme)
 						.safeAreaPadding(.bottom, adManager.isBannerAdLoaded ? (UIDevice.current.userInterfaceIdiom == .pad || UIDevice.current.userInterfaceIdiom == .mac ? 80 : 54) : 0)
 						.transition(.opacity)
 				}
@@ -181,6 +179,13 @@ struct HistoryView: View {
 									}
 								}
 							}
+//							.swipeActions(edge: .trailing, allowsFullSwipe: true) {
+//								Button(role: .destructive) {
+//									deleteGameRecord(gameRecordEntity)
+//								} label: {
+//									Label("Delete", systemImage: "trash")
+//								}
+//							}
 							.wordlrListSectionRowBackground(index: index, count: section.records.count)
 						}
 					} header: {
@@ -224,6 +229,14 @@ struct HistoryView: View {
 		UIPasteboard.general.string = GameResultShareFormatter.shareText(for: gameRecord)
 		AnalyticsManager.shared.logDidCopyResultEvent(copySource: "history_context_menu")
 	}
+
+//	private func deleteGameRecord(_ gameRecordEntity: GameRecordEntity) {
+//		withAnimation(.smooth(duration: 0.12)) {
+//			self.modelContext.delete(gameRecordEntity)
+//			try? self.modelContext.save()
+//			self.historyResult = self.makeHistoryResult(using: self.historyFilter)
+//		}
+//	}
 }
 
 private struct HistorySearchResult {
@@ -296,18 +309,8 @@ extension View {
 			}
 		} else if #available(iOS 26.0, *) {
 			self.background {
-				if UIDevice.current.userInterfaceIdiom == .phone {
-					RadialGradient(
-						colors: [
-							.green.opacity(0.42 * opacity),
-							.green.opacity(0.18 * opacity),
-							.clear
-						],
-						center: .top,
-						startRadius: 0,
-						endRadius: 420
-					)
-					.ignoresSafeArea()
+				if UIDevice.current.userInterfaceIdiom == .phone || UIDevice.current.userInterfaceIdiom == .pad {
+					WordlrGreenBackgroundGradient(opacity: opacity)
 				}
 			}
 		} else {
@@ -334,6 +337,55 @@ extension View {
 		} else {
 			self
 		}
+	}
+}
+
+struct WordlrGreenBackgroundGradient: View {
+	let opacity: Double
+
+	var body: some View {
+		GeometryReader { geometry in
+			let isPhone = UIDevice.current.userInterfaceIdiom == .phone
+			let isLandscape = geometry.size.width > geometry.size.height
+			let centerEndRadius = isPhone ? 420 : min(max(geometry.size.width * 0.72, 520), isLandscape ? 680 : 900)
+			let cornerEndRadius = min(max(geometry.size.width * 0.42, 360), 560)
+
+			ZStack {
+				greenGradient(
+					opacity: isPhone ? 0.42 * opacity : 0.34 * opacity,
+					center: .top,
+					endRadius: centerEndRadius
+				)
+
+				if !isPhone && isLandscape {
+					greenGradient(
+						opacity: 0.26 * opacity,
+						center: .topLeading,
+						endRadius: cornerEndRadius
+					)
+
+					greenGradient(
+						opacity: 0.26 * opacity,
+						center: .topTrailing,
+						endRadius: cornerEndRadius
+					)
+				}
+			}
+			.ignoresSafeArea()
+		}
+	}
+
+	private func greenGradient(opacity: Double, center: UnitPoint, endRadius: CGFloat) -> some View {
+		RadialGradient(
+			colors: [
+				.green.opacity(opacity),
+				.green.opacity(opacity * 0.43),
+				.clear
+			],
+			center: center,
+			startRadius: 0,
+			endRadius: endRadius
+		)
 	}
 }
 

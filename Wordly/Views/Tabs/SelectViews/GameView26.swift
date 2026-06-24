@@ -327,7 +327,7 @@ struct GameView26: View {
 										await HintTip.gamesPlayedEvent.donate()
 									}
 								}, label: {
-									Text(appManager.selectedGameMode == .normal ? LocalizedStringKey("New game") : LocalizedStringKey("Free Play"))
+									Text(appManager.selectedGameMode == .normal ? LocalizedStringKey("New word") : LocalizedStringKey("Unlimited"))
 										.conditionalShadow(color: .black.opacity(0.2), radius: 2, x: 4, y: 4)
 										.font(.title2).bold()
 										.lineLimit(2)
@@ -348,7 +348,7 @@ struct GameView26: View {
 										}
 								})
 								.accessibilityHint("Starts the next game.")
-								.accessibilityInputLabels(["New game", "Free Play"])
+								.accessibilityInputLabels(["New word", "Unlimited"])
 								.glassEffect(self.userWantsNormalTheme || !self.userWantsNormalTheme && self.gameColorScheme == .dark && appManager.selectedGameMode == .normal ? .regular.tint(.green).interactive() : .regular.interactive(), in: .rect(cornerRadius: 10.0))
 								.glassEffectID("new", in: self.namespace)
 								.padding(.horizontal, 20)
@@ -478,7 +478,7 @@ struct GameView26: View {
 					WordDefinitionView(word: appManager.word, language: appManager.language)
 						.environment(appManager)
 				})
-				.navigationTitle(appManager.numberOfLetters == 1 ? "Guess the letter" : "Guess the Word")
+				.navigationTitle(appManager.numberOfLetters == 1 ? "Guess the letter" : "Guess the word")
 				.navigationBarTitleDisplayMode(.inline)
 				.toolbar {
 					ToolbarItemGroup(placement: .topBarTrailing) {

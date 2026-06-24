@@ -49,15 +49,15 @@ struct TabsView: View {
                 .tint(.primary)
 
                 StatsView()
-					.accessibilityLabel("Stats tab")
+					.accessibilityLabel("Statistics tab")
 					.accessibilityInputLabels(["Stats", "Statistics"])
                     .tag(TabSelection.stats)
                     .tabItem {
                         if #available(iOS 18.0, *) {
-                            Label("Stats", systemImage: "chart.bar.yaxis")
+                            Label("Statistics", systemImage: "chart.bar.yaxis")
 								.accessibilityInputLabels(["Stats", "Statistics"])
                         } else {
-                            Label("Stats", systemImage: "chart.bar.xaxis")
+                            Label("Statistics", systemImage: "chart.bar.xaxis")
 								.accessibilityInputLabels(["Stats", "Statistics"])
                         }
                     }

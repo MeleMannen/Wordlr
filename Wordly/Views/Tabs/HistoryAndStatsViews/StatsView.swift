@@ -31,6 +31,7 @@ struct StatsView: View {
 	@State private var winRate: Double = 0.0
 	@State private var counts: [Int] = Array(repeating: 0, count: 6)
 	@State private var maxGuessesPerCount: Int = 0
+	@State private var averageGuessesNeeded: Double = 0.0
 	@State private var selectedStreakLanguage: LanguageSelection = .norwegian
 	@State private var longestStreakPerLetters: [(language: LanguageSelection, streaks: [(index: Int, currentStreak: Int, longestStreak: Int)])] = LanguageSelection.languages.map { (language: $0, streaks: []) }
 	@State private var longestNormalStreakPerLetters: [(language: LanguageSelection, streaks: [(index: Int, currentStreak: Int, longestStreak: Int)])] = LanguageSelection.languages.map { (language: $0, streaks: []) }
@@ -53,12 +54,10 @@ struct StatsView: View {
 				VStack {
 					if #unavailable(iOS 26.0) {
 						FilterView(numberOfLetters: $numberOfLetters, selectedLanguage: $selectedLanguage, gameMode: $gameMode, showsWhenHintsUsed: $showsWhenHintsUsed)
-                            .darkGradientBackground(colorScheme: colorScheme)
 					}
 					if self.filteredGameRecords.isEmpty && self.hasCompletedInitialLoad {
 						ContentUnavailableView.init("No stats available for this selection", systemImage: "exclamationmark.triangle.fill", description: Text("Try playing a game first or changing the selection."))
 							.padding(.bottom, 20)
-							.darkGradientBackground(colorScheme: colorScheme)
 					} else {
 						List {
 							Section {
@@ -171,10 +170,19 @@ struct StatsView: View {
 							
 							Section {
 								VStack(alignment: .leading) {
-									Text("Number of guesses needed")
-										.font(.title3).bold()
-										.conditionalShadow(color: .black.opacity(0.05), radius: 2, x: 1, y: 1)
-										.padding(.top, 3)
+									HStack {
+										Text("Number of guesses needed")
+											.font(.title3).bold()
+											.conditionalShadow(color: .black.opacity(0.05), radius: 2, x: 1, y: 1)
+											.padding(.top, 3)
+										
+										Spacer()
+										
+										AnimatedCountText(value: self.averageGuessesNeeded, fractionLength: 1)
+											.font(.title3)
+											.foregroundStyle(.secondary)
+											.animation(reduceMotion ? nil : .easeInOut(duration: 1.0), value: self.averageGuessesNeeded)
+									}
 									
 									Chart {
 										ForEach(Array(self.counts.enumerated()), id: \.offset) { index, count in
@@ -225,11 +233,11 @@ struct StatsView: View {
 							if self.maxStreakLength > 0 || self.maxNormalStreakLength > 0 {
 								Section {
 									if self.maxStreakLength > 0 && (self.gameMode == .both || self.gameMode == .dailyWord) {
-										StreakChartView(title: NSLocalizedString("Daily Wordlr streaks 🔥", comment: "Title for daily word streaks chart in stats view"), longestStreakPerLetters: self.$longestStreakPerLetters, maxStreakLength: self.$maxStreakLength)
+										StreakChartView(title: NSLocalizedString("Daily word streaks 🔥", comment: "Title for daily word streaks chart in stats view"), longestStreakPerLetters: self.$longestStreakPerLetters, maxStreakLength: self.$maxStreakLength)
 											.wordlrListSectionRowBackground((self.maxNormalStreakLength > 0 && (self.gameMode == .both || self.gameMode == .normal)) ? .first : .single)
 									}
 									if self.maxNormalStreakLength > 0 && (self.gameMode == .both || self.gameMode == .normal) {
-											StreakChartView(title: NSLocalizedString("Free play streaks 🔥", comment: "Title for free play streaks chart in stats view"), longestStreakPerLetters: self.$longestNormalStreakPerLetters, maxStreakLength: self.$maxNormalStreakLength)
+											StreakChartView(title: NSLocalizedString("Unlimited streaks 🔥", comment: "Title for unlimited mode streaks chart in stats view"), longestStreakPerLetters: self.$longestNormalStreakPerLetters, maxStreakLength: self.$maxNormalStreakLength)
 											.wordlrListSectionRowBackground((self.maxStreakLength > 0 && (self.gameMode == .both || self.gameMode == .dailyWord)) ? .last : .single)
 									}
 								} header: {
@@ -240,12 +248,11 @@ struct StatsView: View {
 							
 						}
 						.scrollContentBackground(.hidden)
-						.darkGradientBackground(colorScheme: colorScheme)
 						.safeAreaPadding(.bottom, adManager.isBannerAdLoaded ? (UIDevice.current.userInterfaceIdiom == .pad || UIDevice.current.userInterfaceIdiom == .mac ? 80 : 54) : 0)
 					}
 				}
                 .darkGradientBackground(colorScheme: colorScheme)
-				.navigationTitle("Stats")
+				.navigationTitle("Statistics")
 				.navigationBarTitleDisplayMode(.inline)
 				.safeAreaInset(edge: .top) {
 					if #available(iOS 26.0, *) {
@@ -301,11 +308,13 @@ struct StatsView: View {
 		let maxRows = max(rowCount(for: numberOfLetters == 9 ? 0 : numberOfLetters), filteredRecords.map { $0.gameRecord.effectiveMaxRows }.max() ?? 0)
 		var wonCount = 0
 		var lostCount = 0
+		var totalGuessesNeeded = 0
 		var guessCounts = Array(repeating: 0, count: maxRows)
 		for entity in filteredRecords {
 			let game = entity.gameRecord
 			if game.state == .won {
 				wonCount += 1
+				totalGuessesNeeded += game.numberOfGuesses
 				let guessIndex = game.numberOfGuesses - 1
 				if guessIndex >= 0 && guessIndex < maxRows {
 					guessCounts[guessIndex] += 1
@@ -316,6 +325,7 @@ struct StatsView: View {
 		}
 		let totalCount = wonCount + lostCount
 		let winRate = totalCount > 0 ? Double(wonCount) / Double(totalCount) : 0.0
+		let averageGuessesNeeded = wonCount > 0 ? Double(totalGuessesNeeded) / Double(wonCount) : 0.0
 		let maxGuessesPerCount = guessCounts.max() ?? 0
 
 		let languages = LanguageSelection.languages
@@ -362,6 +372,7 @@ struct StatsView: View {
 		self.winRate = winRate
 		self.counts = guessCounts
 		self.maxGuessesPerCount = maxGuessesPerCount
+		self.averageGuessesNeeded = averageGuessesNeeded
 		self.longestStreakPerLetters = dailyStreaks
 		self.maxStreakLength = maxStreak
 		self.longestNormalStreakPerLetters = normalStreaks
@@ -388,6 +399,7 @@ struct StatsView: View {
 struct AnimatedCountText: View, Animatable {
 	var value: Double
 	var isPercentage: Bool = false
+	var fractionLength: Int = 0
 
 	var animatableData: Double {
 		get { value }
@@ -397,6 +409,8 @@ struct AnimatedCountText: View, Animatable {
 	var body: some View {
 		if isPercentage {
 			Text(String(format: "%.0f%%", value * 100))
+		} else if fractionLength > 0 {
+			Text(value.formatted(.number.precision(.fractionLength(fractionLength))))
 		} else {
 			Text("\(Int(value))")
 		}

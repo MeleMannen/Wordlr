@@ -60,7 +60,7 @@ struct NotificationView: View {
 		}
 		.darkGradientBackground(colorScheme: colorScheme)
 		.navigationBarTitleDisplayMode(.inline)
-		.navigationTitle("Daily Wordlr reminders")
+		.navigationTitle("Daily word reminders")
 		.toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 if #available(iOS 26.0, *) {

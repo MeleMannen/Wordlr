@@ -193,7 +193,7 @@ struct SearchView: View {
         if #available(iOS 26.0, *) {
             FilterOptionsView(isShowingFilterOptions: $isShowingFilterOptions)
                 .environment(appManager)
-                .presentationDetents([.large, .fraction(0.8)], selection: $selectedDetent)
+                .presentationDetents(UIDevice.current.userInterfaceIdiom == .phone ? [.large, .fraction(0.8)] : [.large], selection: $selectedDetent)
                 .presentationDragIndicator(.hidden)
                 .navigationTransition(.zoom(sourceID: "filter", in: namespace))
         } else {
@@ -264,9 +264,27 @@ struct SearchView: View {
                 excludedCharacters.isDisjoint(with: word.uppercased())
             }
         }
-        self.searchResults = filteredWords
-        self.groupedWords = Dictionary(grouping: self.searchResults.sorted(), by: { String($0.prefix(1)).uppercased() })
-        self.sectionKeys = self.groupedWords.keys.sorted(using: String.Comparator(options: .caseInsensitive, locale: Locale(identifier: "nb"), order: .forward))
+        let sortComparator = String.Comparator(options: .caseInsensitive, locale: appManager.selectedLanguage.sortLocale, order: .forward)
+        let sortedWords = filteredWords.sorted(using: sortComparator)
+        self.searchResults = sortedWords
+        self.groupedWords = Dictionary(grouping: sortedWords, by: { String($0.prefix(1)).uppercased() })
+        self.sectionKeys = self.sortedSectionKeys(Array(self.groupedWords.keys), using: sortComparator)
+    }
+
+    private func sortedSectionKeys(_ keys: [String], using sortComparator: String.Comparator) -> [String] {
+        let alphabetOrder = Dictionary(uniqueKeysWithValues: appManager.selectedLanguage.alphabet.enumerated().map { ($0.element, $0.offset) })
+        return keys.sorted { lhs, rhs in
+            switch (alphabetOrder[lhs], alphabetOrder[rhs]) {
+                case let (lhsIndex?, rhsIndex?):
+                    return lhsIndex < rhsIndex
+                case (_?, nil):
+                    return true
+                case (nil, _?):
+                    return false
+                case (nil, nil):
+                    return sortComparator.compare(lhs, rhs) == .orderedAscending
+            }
+        }
     }
     
     private func searchTextChanged() {

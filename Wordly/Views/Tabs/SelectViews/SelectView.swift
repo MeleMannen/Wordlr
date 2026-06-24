@@ -134,7 +134,7 @@ struct SelectView: View {
 					Spacer()
 					
 					SelectGameModeButton(
-						title: "Daily Wordlr",
+						title: "Daily word",
 						mode: .dailyWord,
 						appManager: appManager,
 						streak: self.dailyWordStreak,
@@ -148,7 +148,7 @@ struct SelectView: View {
 					.padding(.bottom, 25)
 
 					SelectGameModeButton(
-						title: "Free Play",
+						title: "Unlimited",
 						mode: .normal,
 						appManager: appManager,
 						streak: self.normalStreak,
@@ -162,13 +162,13 @@ struct SelectView: View {
 					.padding(.bottom, 25)
 
 					Toggle(isOn: $expertModeEnabled) {
-						Text("Expert Mode")
+						Text("Expert mode")
 							.font(.headline)
 					}
 					.toggleStyle(.switch)
 					.tint(.green)
 					.conditionalHaptic(.selection, trigger: expertModeEnabled)
-					.accessibilityHint("Only affects Free Play.")
+					.accessibilityHint("Only affects Unlimited.")
 					.padding(.horizontal, 35)
 					.padding(.bottom, 10)
 				}

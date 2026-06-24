@@ -328,8 +328,8 @@ enum GameMode: String, Codable, CaseIterable, Identifiable {
     
     var localizedName: String {
         switch self {
-            case .dailyWord: return NSLocalizedString("game_mode_daily_word", comment: "Daily Wordlr mode")
-            case .normal: return NSLocalizedString("game_mode_unlimited", comment: "Free play mode")
+            case .dailyWord: return NSLocalizedString("game_mode_daily_word", comment: "Daily word mode")
+            case .normal: return NSLocalizedString("game_mode_unlimited", comment: "Unlimited mode")
             case .both: return NSLocalizedString("game_mode_both", comment: "Both modes")
         }
     }
@@ -382,9 +382,20 @@ enum LanguageSelection: String, Codable, CaseIterable, Identifiable {
 			case .all: return ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
 		}
 	}
+
+	var sortLocale: Locale {
+		switch self {
+			case .english: return Locale(identifier: "en")
+			case .spanish: return Locale(identifier: "es")
+			case .norwegian: return Locale(identifier: "nb")
+			case .french: return Locale(identifier: "fr")
+			case .polish: return Locale(identifier: "pl")
+			case .all: return Locale.current
+		}
+	}
     
     static var languages: [LanguageSelection] {
-		return [.english, .spanish, .norwegian, .french, .polish]
+		return [.english, .spanish, .french, .polish, .norwegian]
     }
 
 	var dictionaryCode: String? {

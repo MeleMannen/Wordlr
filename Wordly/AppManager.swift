@@ -288,18 +288,7 @@ final class AppManager: NSObject, FullScreenContentDelegate {
 	}
 
 	private var searchSortLocale: Locale {
-		switch self.selectedLanguage {
-			case .french:
-				return Locale(identifier: "fr")
-			case .spanish:
-				return Locale(identifier: "es")
-			case .norwegian:
-				return Locale(identifier: "nb")
-			case .polish:
-				return Locale(identifier: "pl")
-			default:
-				return Locale.current
-		}
+		self.selectedLanguage.sortLocale
 	}
 
 	private func normalModeAnswerWords() -> [String] {
@@ -456,12 +445,31 @@ final class AppManager: NSObject, FullScreenContentDelegate {
 	}
 	
 	func findKeyPosition(letter: String) -> (row: Int, col: Int)? {
+		let lookupLetter = self.keyboardLookupLetter(for: letter)
 		for (rowIndex, row) in keyboard.enumerated() {
-			if let colIndex = row.firstIndex(where: { self.lettersMatch($0.letter, letter) }) {
+			if let colIndex = row.firstIndex(where: { self.lettersMatch($0.letter, lookupLetter) }) {
 				return (row: rowIndex, col: colIndex)
 			}
 		}
 		return nil
+	}
+
+	private func keyboardLookupLetter(for letter: String) -> String {
+		guard self.selectedLanguage == .polish else {
+			return letter
+		}
+
+		switch letter {
+			case "Ą": return "A"
+			case "Ć": return "C"
+			case "Ę": return "E"
+			case "Ł": return "L"
+			case "Ń": return "N"
+			case "Ó": return "O"
+			case "Ś": return "S"
+			case "Ź", "Ż": return "Z"
+			default: return letter
+		}
 	}
 	
 	

@@ -151,7 +151,7 @@ struct SettingsView: View {
 							.accessibilityHint("Purchases Pro to remove ads and unlock free hints.")
 							.disabled(storeManager.isPurchasing || storeManager.adRemovalProduct == nil)
 							
-							Button("Restore Purchases") {
+							Button("Restore purchases") {
 								AnalyticsManager.shared.logDidTapRestorePurchasesEvent()
 								Task {
 									await storeManager.restorePurchases()
@@ -234,7 +234,7 @@ struct SettingsView: View {
 					
 					if self.colorScheme == .dark {
 						SettingsMenuPicker(
-							title: "Daily Wordlr theme",
+							title: "Daily word theme",
 							systemImage: "paintpalette",
 							selection: $userWantsNormalTheme,
 							value: userWantsNormalTheme ? String(localized: "Standard") : String(localized: "Gold")
@@ -282,7 +282,7 @@ struct SettingsView: View {
 				
 				Section {
 					Toggle(isOn: $notificationsEnabled) {
-						SettingsRowLabel(title: "Daily Wordlr reminders", systemImage: "bell")
+						SettingsRowLabel(title: "Daily word reminders", systemImage: "bell")
 					}
 					.wordlrListSectionRowBackground(notificationsEnabled ? .first : .single)
 					.tint(.green)
@@ -467,7 +467,7 @@ struct SettingsView: View {
 					.conditionalHaptic(.selection, trigger: defaultStatHintsUsed)
 					
 				} header: {
-					Text("Stats and history (default)")
+					Text("Statistics and history (default)")
 				}
 				.wordlrListSectionBackground()
 				
@@ -565,7 +565,7 @@ struct SettingsView: View {
 						print("Ad Inspector presented.")
 					}, label: {
 						HStack {
-							SettingsRowLabel(title: "Ad Inspector", systemImage: "hammer")
+							SettingsRowLabel(title: "Ad inspector", systemImage: "hammer")
 							
 							
 							Spacer(minLength: 0)
@@ -616,25 +616,15 @@ struct SettingsView: View {
 						.ignoresSafeArea()
 				} else {
 					if #available(iOS 26.0, *) {
-						GeometryReader { geometry in
-								let isPhone = UIDevice.current.userInterfaceIdiom == .phone
-								let isLandscape = geometry.size.width > geometry.size.height
-								let iPadAndMacOpacity = !storeManager.isAdRemovalPurchased ? max(0, min(1, proSectionMaxY / 300)) : 0
-								let gradientOpacity = isPhone ? 0.42 : 0.34 * iPadAndMacOpacity
-								let endRadius = isPhone ? 420 : min(max(geometry.size.width * 0.85, 520), isLandscape ? 680 : 900)
-								RadialGradient(
-									colors: [
-										.green.opacity(gradientOpacity),
-										.green.opacity(gradientOpacity * 0.43),
-										.clear
-									],
-									center: .top,
-									startRadius: 0,
-									endRadius: endRadius
-							)
-							.opacity(isPhone ? 1 : gradientVisibility)
+						let userInterfaceIdiom = UIDevice.current.userInterfaceIdiom
+						let isPhone = userInterfaceIdiom == .phone
+						let isIPad = userInterfaceIdiom == .pad
+						let iPadAndMacOpacity = !storeManager.isAdRemovalPurchased ? max(0, min(1, proSectionMaxY / 300)) : 0
+						let gradientOpacity = isPhone || isIPad ? 1 : iPadAndMacOpacity
+
+						WordlrGreenBackgroundGradient(opacity: gradientOpacity)
+							.opacity(isPhone || isIPad ? 1 : gradientVisibility)
 							.ignoresSafeArea()
-						}
 					} else if !storeManager.isAdRemovalPurchased {
 						GeometryReader { geometry in
 							let isPhone = UIDevice.current.userInterfaceIdiom == .phone

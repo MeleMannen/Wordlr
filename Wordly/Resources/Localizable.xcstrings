@@ -1640,30 +1640,30 @@
         }
       }
     },
-    "Daily Wordlr" : {
+    "Daily word" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Daily Wordlr"
+            "value" : "Daily word"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Palabra Diaria"
+            "value" : "Palabra diaria"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Mot quotidien"
+            "value" : "Mot du jour"
           }
         },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Dagens Ord"
+            "value" : "Dagens ord"
           }
         },
         "pl" : {
@@ -1674,19 +1674,19 @@
         }
       }
     },
-    "Daily Wordlr - %lld🔥" : {
+    "Daily word - %lld🔥" : {
       "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Daily Wordlr - %lld🔥"
+            "value" : "Daily word - %lld🔥"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Palabra Diaria - %lld🔥"
+            "value" : "Palabra diaria - %lld🔥"
           }
         },
         "fr" : {
@@ -1698,7 +1698,7 @@
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Dagens Ord - %lld🔥"
+            "value" : "Dagens ord - %lld🔥"
           }
         },
         "pl" : {
@@ -1709,8 +1709,8 @@
         }
       }
     },
-    "Daily Wordlr reminder" : {
-      "comment" : "Title for Daily Wordlr reminder notification",
+    "Daily word reminder" : {
+      "comment" : "Title for daily word reminder notification",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1744,12 +1744,12 @@
         }
       }
     },
-    "Daily Wordlr reminders" : {
+    "Daily word reminders" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Daily Wordlr reminders"
+            "value" : "Daily word reminders"
           }
         },
         "es" : {
@@ -1778,19 +1778,19 @@
         }
       }
     },
-    "Daily Wordlr streaks 🔥" : {
+    "Daily word streaks 🔥" : {
       "comment" : "Title for daily word streaks chart in stats view",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Daily Wordlr streaks 🔥"
+            "value" : "Daily word streaks 🔥"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Rachas de Palabra Diaria 🔥"
+            "value" : "Rachas de palabra diaria 🔥"
           }
         },
         "fr" : {
@@ -1802,7 +1802,7 @@
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Dagens Ord-streaks 🔥"
+            "value" : "Dagens ord-streaks 🔥"
           }
         },
         "pl" : {
@@ -1813,18 +1813,18 @@
         }
       }
     },
-    "Daily Wordlr theme" : {
+    "Daily word theme" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Daily Wordlr theme"
+            "value" : "Daily word theme"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Tema de Palabra Diaria"
+            "value" : "Tema de palabra diaria"
           }
         },
         "fr" : {
@@ -1836,7 +1836,7 @@
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Dagens Ord-tema"
+            "value" : "Dagens ord-tema"
           }
         },
         "pl" : {
@@ -2153,8 +2153,8 @@
         }
       }
     },
-    "Don't forget to complete today's %d letter, %@ daily Wordlr" : {
-      "comment" : "Body for Daily Wordlr reminder notification",
+    "Don't forget to complete today's %d letter, %@ daily word" : {
+      "comment" : "Body for daily word reminder notification",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2665,12 +2665,12 @@
         }
       }
     },
-    "Expert Mode" : {
+    "Expert mode" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Expert Mode"
+            "value" : "Expert mode"
           }
         },
         "es" : {
@@ -2802,123 +2802,88 @@
         }
       }
     },
-    "Free play" : {
+    "Unlimited" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unlimited"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ilimitado"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Illimité"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fritt spill"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bez ograniczeń"
+          }
+        }
+      }
+    },
+    "Unlimited - %lld🔥" : {
       "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Free Play"
+            "value" : "Unlimited - %lld🔥"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Juego Libre"
+            "value" : "Ilimitado - %lld🔥"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Jeu libre"
+            "value" : "Illimité - %lld🔥"
           }
         },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Spill Fritt"
+            "value" : "Fritt spill - %lld🔥"
           }
         },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Gra dowolna"
+            "value" : "Bez ograniczeń - %lld🔥"
           }
         }
       }
     },
-    "Free Play" : {
+    "Unlimited streaks 🔥" : {
+      "comment" : "Title for unlimited mode streaks chart in stats view",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Free Play"
+            "value" : "Unlimited streaks 🔥"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Juego Libre"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Jeu libre"
-          }
-        },
-        "nb" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Spill Fritt"
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Gra dowolna"
-          }
-        }
-      }
-    },
-    "Free play - %lld🔥" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Free Play - %lld🔥"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Juego Libre - %lld🔥"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Jeu libre - %lld🔥"
-          }
-        },
-        "nb" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Spill Fritt - %lld🔥"
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Gra dowolna - %lld🔥"
-          }
-        }
-      }
-    },
-    "Free play streaks 🔥" : {
-      "comment" : "Title for free play streaks chart in stats view",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Free Play streaks 🔥"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Rachas de Juego Libre 🔥"
+            "value" : "Rachas ilimitadas 🔥"
           }
         },
         "fr" : {
@@ -2930,7 +2895,7 @@
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Spill Fritt-streaks 🔥"
+            "value" : "Fritt spill-streaks 🔥"
           }
         },
         "pl" : {
@@ -3182,30 +3147,30 @@
       }
     },
     "game_mode_daily_word" : {
-      "comment" : "Daily Wordlr mode",
+      "comment" : "Daily word mode",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Daily Wordlr"
+            "value" : "Daily word"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Palabra Diaria"
+            "value" : "Palabra diaria"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Mot quotidien"
+            "value" : "Mot du jour"
           }
         },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Dagens Ord"
+            "value" : "Dagens ord"
           }
         },
         "pl" : {
@@ -3217,36 +3182,36 @@
       }
     },
     "game_mode_unlimited" : {
-      "comment" : "Free play mode",
+      "comment" : "Unlimited mode",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Free Play"
+            "value" : "Unlimited"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Juego Libre"
+            "value" : "Ilimitado"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Jeu libre"
+            "value" : "Illimité"
           }
         },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Spill Fritt"
+            "value" : "Fritt spill"
           }
         },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Gra dowolna"
+            "value" : "Bez ograniczeń"
           }
         }
       }
@@ -3659,18 +3624,18 @@
         }
       }
     },
-    "Guess the Word" : {
+    "Guess the word" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Guess the Word"
+            "value" : "Guess the word"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Adivina la Palabra"
+            "value" : "Adivina la palabra"
           }
         },
         "fr" : {
@@ -3682,7 +3647,7 @@
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Gjett Ordet"
+            "value" : "Gjett ordet"
           }
         },
         "pl" : {
@@ -4184,13 +4149,13 @@
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Pestaña Historial"
+            "value" : "Pestaña historial"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Onglet Historique"
+            "value" : "Onglet historique"
           }
         },
         "nb" : {
@@ -5029,36 +4994,36 @@
         }
       }
     },
-    "New game" : {
+    "New word" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "New game"
+            "value" : "New word"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Nuevo juego"
+            "value" : "Nueva palabra"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Nouvelle partie"
+            "value" : "Nouveau mot"
           }
         },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Spill på nytt"
+            "value" : "Nytt ord"
           }
         },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Nowa gra"
+            "value" : "Nowe słowo"
           }
         }
       }
@@ -5713,18 +5678,18 @@
         }
       }
     },
-    "Only affects Free Play." : {
+    "Only affects Unlimited." : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Only affects Free Play."
+            "value" : "Only affects Unlimited."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Solo afecta al Juego Libre."
+            "value" : "Solo afecta al modo ilimitado."
           }
         },
         "fr" : {
@@ -5736,7 +5701,7 @@
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Påvirker bare Spill Fritt."
+            "value" : "Påvirker bare fritt spill."
           }
         },
         "pl" : {
@@ -6192,24 +6157,24 @@
         }
       }
     },
-    "Pro Feature" : {
+    "Pro feature" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Pro Feature"
+            "value" : "Pro feature"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Función Pro"
+            "value" : "Función pro"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Fonction Pro"
+            "value" : "Fonction pro"
           }
         },
         "nb" : {
@@ -6221,7 +6186,7 @@
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Funkcja Pro"
+            "value" : "Funkcja pro"
           }
         }
       }
@@ -6328,8 +6293,8 @@
         }
       }
     },
-    "Remember to play today's %d letter, %@ daily Wordlr to not lose your %d🔥 day streak." : {
-      "comment" : "Body for Daily Wordlr streak reminder notification",
+    "Remember to play today's %d letter, %@ daily word to not lose your %d🔥 day streak." : {
+      "comment" : "Body for daily word streak reminder notification",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -6340,7 +6305,7 @@
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Recuerda jugar hoy la Palabra Diaria de %d letras en %@ para no perder tu racha de %d🔥 días."
+            "value" : "Recuerda jugar hoy la palabra diaria de %d letras en %@ para no perder tu racha de %d🔥 días."
           }
         },
         "fr" : {
@@ -6352,7 +6317,7 @@
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Husk å spille dagens %d bokstaver, %@ Dagens Ord, så du ikke mister streaken din på %d🔥 dager."
+            "value" : "Husk å spille dagens %d bokstaver, %@ dagens ord, så du ikke mister streaken din på %d🔥 dager."
           }
         },
         "pl" : {
@@ -6601,12 +6566,12 @@
         }
       }
     },
-    "Restore Purchases" : {
+    "Restore purchases" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Restore Purchases"
+            "value" : "Restore purchases"
           }
         },
         "es" : {
@@ -7020,13 +6985,13 @@
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Pestaña Ajustes"
+            "value" : "Pestaña ajustes"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Onglet Réglages"
+            "value" : "Onglet réglages"
           }
         },
         "nb" : {
@@ -7596,7 +7561,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Stats"
+            "value" : "Statistics"
           }
         },
         "es" : {
@@ -7608,7 +7573,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Stats"
+            "value" : "Statistiques"
           }
         },
         "nb" : {
@@ -7625,12 +7590,12 @@
         }
       }
     },
-    "Stats and history (default)" : {
+    "Statistics and history (default)" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Stats and history (default)"
+            "value" : "Statistics and history (default)"
           }
         },
         "es" : {
@@ -7642,7 +7607,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Stats et historique (par défaut)"
+            "value" : "Statistiques et historique (par défaut)"
           }
         },
         "nb" : {
@@ -7659,24 +7624,24 @@
         }
       }
     },
-    "Stats tab" : {
+    "Statistics tab" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Stats tab"
+            "value" : "Statistics tab"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Pestaña Estadísticas"
+            "value" : "Pestaña estadísticas"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Onglet Stats"
+            "value" : "Onglet statistiques"
           }
         },
         "nb" : {

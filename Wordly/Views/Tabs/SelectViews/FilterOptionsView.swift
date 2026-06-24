@@ -31,7 +31,6 @@ struct FilterOptionsView: View {
 	@Binding var isShowingFilterOptions: Bool
 	
 	
-	
 	var body: some View {
 		@Bindable var appManager = appManager
 		
@@ -373,7 +372,6 @@ struct FilterOptionsView: View {
 							}
 						}
 					}
-					
 				} else {
 					ToolbarItem(placement: .cancellationAction) {
 						Button("Back", role: .cancel) {
@@ -385,7 +383,7 @@ struct FilterOptionsView: View {
 				}
 			}
 		}
-		.alert("Pro Feature", isPresented: $showProAlert) {
+		.alert("Pro feature", isPresented: $showProAlert) {
 			Button("Go to Settings") {
 				self.isShowingFilterOptions = false
 				DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {

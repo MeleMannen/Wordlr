@@ -164,11 +164,11 @@ final class NotificationManager {
 
 	private static func notificationBody(for reminder: ReminderSnapshot, streak: Int?) -> String {
 		if let streak, streak >= 3 {
-			return String(format: NSLocalizedString("Remember to play today's %d letter, %@ daily Wordlr to not lose your %d🔥 day streak.", comment: "Body for Daily Wordlr streak reminder notification"), reminder.numberOfLetters, reminder.language.localizedName, streak)
+			return String(format: NSLocalizedString("Remember to play today's %d letter, %@ daily word to not lose your %d🔥 day streak.", comment: "Body for daily word streak reminder notification"), reminder.numberOfLetters, reminder.language.localizedName, streak)
 		}
 
 		return String(
-			format: NSLocalizedString("Don't forget to complete today's %d letter, %@ daily Wordlr", comment: "Body for Daily Wordlr reminder notification"),
+			format: NSLocalizedString("Don't forget to complete today's %d letter, %@ daily word", comment: "Body for daily word reminder notification"),
 			reminder.numberOfLetters,
 			reminder.language.localizedName
 		)
@@ -188,7 +188,7 @@ final class NotificationManager {
 				center.removePendingNotificationRequests(withIdentifiers: reminderRequestIds)
 			}
 			
-			let title = NSLocalizedString("Daily Wordlr reminder", comment: "Title for Daily Wordlr reminder notification")
+			let title = NSLocalizedString("Daily word reminder", comment: "Title for daily word reminder notification")
 			var requestsToAdd: [UNNotificationRequest] = []
 			var didScheduleFirstEligibleReminder = false
 			
