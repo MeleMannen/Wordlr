@@ -125,14 +125,14 @@ struct SettingsView: View {
 										ProgressView()
 											.tint(.white)
 									} else if let product = storeManager.adRemovalProduct {
-										Text("Upgrade to Pro - \(product.displayPrice)")
+										Text("Upgrade to Pro  -  \(product.displayPrice)")
 											.conditionalShadow(color: .black.opacity(0.18), radius: 2, x: 0, y: 1)
 									} else {
 										Text("Upgrade to Pro")
 											.conditionalShadow(color: .black.opacity(0.18), radius: 2, x: 0, y: 1)
 									}
 								}
-								.font(.headline)
+                                .font(.title3).bold()
 								.foregroundStyle(.white)
 								.frame(maxWidth: .infinity)
 								.padding(.vertical, 14)
