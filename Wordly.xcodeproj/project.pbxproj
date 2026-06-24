@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		63027ED52FD8DEE70007A5BF /* norwegianWords.json in Resources */ = {isa = PBXBuildFile; fileRef = 63027ED42FD8DEE70007A5BF /* norwegianWords.json */; };
 		63432AFA2FBD42BB005529C4 /* TelemetryDeck in Frameworks */ = {isa = PBXBuildFile; productRef = 63432AF92FBD42BB005529C4 /* TelemetryDeck */; };
-		63432AFD2FBDDA29005529C4 /* PostHog in Frameworks */ = {isa = PBXBuildFile; productRef = 63432AFC2FBDDA29005529C4 /* PostHog */; };
 		6344F4FF2EB9502300948552 /* KeyPress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6344F4FE2EB9500D00948552 /* KeyPress.swift */; };
 		634900012FC2A00100A11CE5 /* AccessibilitySupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634900002FC2A00100A11CE5 /* AccessibilitySupport.swift */; };
 		635799612FC033F300B31921 /* SelectGameModeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 635799602FC033F300B31921 /* SelectGameModeButton.swift */; };
@@ -126,7 +125,6 @@
 			files = (
 				63F225952E53B24100248D30 /* GoogleUserMessagingPlatform in Frameworks */,
 				63F697CB2E05A328008B0B6E /* GoogleMobileAds in Frameworks */,
-				63432AFD2FBDDA29005529C4 /* PostHog in Frameworks */,
 				63BF73DD2F4479CB0065D40B /* FirebaseAnalytics in Frameworks */,
 				63432AFA2FBD42BB005529C4 /* TelemetryDeck in Frameworks */,
 			);
@@ -303,7 +301,6 @@
 				63F225942E53B24100248D30 /* GoogleUserMessagingPlatform */,
 				63BF73DC2F4479CB0065D40B /* FirebaseAnalytics */,
 				63432AF92FBD42BB005529C4 /* TelemetryDeck */,
-				63432AFC2FBDDA29005529C4 /* PostHog */,
 			);
 			productName = Wordle;
 			productReference = 6382E3BC2D12FE0500B61353 /* Wordly.app */;
@@ -342,7 +339,6 @@
 				63F225932E53B24100248D30 /* XCRemoteSwiftPackageReference "swift-package-manager-google-user-messaging-platform" */,
 				63BF73DB2F4479CB0065D40B /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				63432AF82FBD42BB005529C4 /* XCRemoteSwiftPackageReference "SwiftSDK" */,
-				63432AFB2FBDDA29005529C4 /* XCRemoteSwiftPackageReference "posthog-ios" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 6382E3BD2D12FE0500B61353 /* Products */;
@@ -684,14 +680,6 @@
 				minimumVersion = 2.13.0;
 			};
 		};
-		63432AFB2FBDDA29005529C4 /* XCRemoteSwiftPackageReference "posthog-ios" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/PostHog/posthog-ios";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 3.58.3;
-			};
-		};
 		63BF73DB2F4479CB0065D40B /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
@@ -723,11 +711,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 63432AF82FBD42BB005529C4 /* XCRemoteSwiftPackageReference "SwiftSDK" */;
 			productName = TelemetryDeck;
-		};
-		63432AFC2FBDDA29005529C4 /* PostHog */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 63432AFB2FBDDA29005529C4 /* XCRemoteSwiftPackageReference "posthog-ios" */;
-			productName = PostHog;
 		};
 		63BF73DC2F4479CB0065D40B /* FirebaseAnalytics */ = {
 			isa = XCSwiftPackageProductDependency;

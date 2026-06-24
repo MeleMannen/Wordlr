@@ -10,7 +10,7 @@ import GoogleMobileAds
 import UserMessagingPlatform
 import AppTrackingTransparency
 import FirebaseAnalytics
-import PostHog
+// import PostHog
 
 extension Notification.Name {
 	static let rewardedAdDidLoad = Notification.Name("rewardedAdDidLoad")
@@ -103,7 +103,7 @@ final class AdManager {
 			try await gatherConsent()
 			
 			updateFirebaseAnalyticsConsent()
-            PostHogSDK.shared.optIn()
+            // PostHogSDK.shared.optIn()
 			guard canRequestAds else {
 				print("Ads cannot be requested yet.")
 				return
