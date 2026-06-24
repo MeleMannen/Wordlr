@@ -650,7 +650,7 @@ final class AppManager: NSObject, FullScreenContentDelegate {
 			self.selectedLanguage = .norwegian
 			self.language = .norwegian
 			self.defaultLanguage = .norwegian
-		} else if pre == "es" || pre == "es-ES" || pre == "es-MX" || pre == "es-AR" {
+        } else if pre == "es" || pre.hasPrefix("es-") {
 			self.selectedLanguage = .spanish
 			self.language = .spanish
 			self.defaultLanguage = .spanish

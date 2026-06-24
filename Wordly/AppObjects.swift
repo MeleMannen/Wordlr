@@ -344,9 +344,9 @@ enum GameMode: String, Codable, CaseIterable, Identifiable {
 enum LanguageSelection: String, Codable, CaseIterable, Identifiable {
     case english
 	case spanish
-	case norwegian
 	case french
 	case polish
+    case norwegian
     case all
     var id: Self { self }
     
@@ -387,9 +387,9 @@ enum LanguageSelection: String, Codable, CaseIterable, Identifiable {
 		switch self {
 			case .english: return Locale(identifier: "en")
 			case .spanish: return Locale(identifier: "es")
-			case .norwegian: return Locale(identifier: "nb")
 			case .french: return Locale(identifier: "fr")
 			case .polish: return Locale(identifier: "pl")
+            case .norwegian: return Locale(identifier: "nb")
 			case .all: return Locale.current
 		}
 	}
