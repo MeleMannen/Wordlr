@@ -132,7 +132,7 @@ struct SettingsView: View {
 											.conditionalShadow(color: .black.opacity(0.18), radius: 2, x: 0, y: 1)
 									}
 								}
-                                .font(.title3).bold()
+                                .font(.headline).bold()
 								.foregroundStyle(.white)
 								.frame(maxWidth: .infinity)
 								.padding(.vertical, 14)
