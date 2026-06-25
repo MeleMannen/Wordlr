@@ -581,41 +581,6 @@
         }
       }
     },
-    "Ad-free experience, free hints, and priority support" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ad-free experience, free hints, and priority support"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sin anuncios, pistas gratis y soporte prioritario"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Expérience sans publicité, indices gratuits et assistance prioritaire"
-          }
-        },
-        "nb" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Uten reklame, gratis hint og prioritert støtte"
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Bez reklam, darmowe podpowiedzi i priorytetowe wsparcie"
-          }
-        }
-      }
-    },
     "Add reminder" : {
       "localizations" : {
         "en" : {
@@ -680,41 +645,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Wszystko"
-          }
-        }
-      }
-    },
-    "All letters" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "All letters"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Todas las letras"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Toutes les lettres"
-          }
-        },
-        "nb" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Alle bokstaver"
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Wszystkie litery"
           }
         }
       }
@@ -1060,41 +990,6 @@
         }
       }
     },
-    "Both hint usage" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Both hint usage"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Uso de ambas pistas"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Les deux utilisations des indices"
-          }
-        },
-        "nb" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Begge hint valg"
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Oba użycia podpowiedzi"
-          }
-        }
-      }
-    },
     "Cancel" : {
       "localizations" : {
         "en" : {
@@ -1329,41 +1224,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Kopiuj e-mail"
-          }
-        }
-      }
-    },
-    "Copy email address" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Copy email address"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Copiar dirección de correo electrónico"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Copier l’adresse e-mail"
-          }
-        },
-        "nb" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Kopier e-postadresse"
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Kopiuj adres e-mail"
           }
         }
       }
@@ -1670,41 +1530,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Codzienne słowo"
-          }
-        }
-      }
-    },
-    "Daily word - %lld🔥" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Daily word - %lld🔥"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Palabra diaria - %lld🔥"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Mot quotidien - %lld🔥"
-          }
-        },
-        "nb" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Dagens ord - %lld🔥"
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Codzienne słowo - %lld🔥"
           }
         }
       }
@@ -2767,41 +2592,6 @@
         }
       }
     },
-    "Filters" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Filters"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Filtros"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Filtres"
-          }
-        },
-        "nb" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Filtre"
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Filtry"
-          }
-        }
-      }
-    },
     "French" : {
       "comment" : "French language",
       "localizations" : {
@@ -3754,41 +3544,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Podpowiedź"
-          }
-        }
-      }
-    },
-    "Hints never used" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Hints never used"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Pistas nunca usadas"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Indices jamais utilisés"
-          }
-        },
-        "nb" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Hint aldri brukt"
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Podpowiedzi nigdy nieużyte"
           }
         }
       }
@@ -5400,41 +5155,6 @@
         }
       }
     },
-    "Number of letters" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Number of letters"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Número de letras"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Nombre de lettres"
-          }
-        },
-        "nb" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Antall bokstaver"
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Liczba liter"
-          }
-        }
-      }
-    },
     "number_letters" : {
       "comment" : "Daily Word Mode with number of letters",
       "localizations" : {
@@ -5604,76 +5324,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Dotyczy tylko gry dowolnej."
-          }
-        }
-      }
-    },
-    "Only when hints was used" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Only when hints was used"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Solo cuando se usaron pistas"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Seulement quand des indices ont été utilisés"
-          }
-        },
-        "nb" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Bare når hint var brukt"
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tylko gdy użyto podpowiedzi"
-          }
-        }
-      }
-    },
-    "Opens filters for word search." : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Opens filters for word search."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Abre los filtros para buscar palabras."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ouvre les filtres de recherche de mots."
-          }
-        },
-        "nb" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Åpner filtre for ordsøk."
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Otwiera filtry wyszukiwania słów."
           }
         }
       }
@@ -8680,6 +8330,12 @@
     },
     "Upgrade to Pro  -  %@" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Upgrade to Pro  -  %@"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
