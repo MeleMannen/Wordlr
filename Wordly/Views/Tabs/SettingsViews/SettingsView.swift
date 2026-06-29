@@ -88,7 +88,7 @@ struct SettingsView: View {
 	private func statGameModeTitle(_ mode: GameMode) -> String {
 		mode == .both ? String(localized: "Both") : mode.localizedName
 	}
-	
+
 	var body: some View {
 		NavigationStack {
 			List {
@@ -128,7 +128,7 @@ struct SettingsView: View {
 										Text("Upgrade to Pro  -  \(product.displayPrice)")
 											.conditionalShadow(color: .black.opacity(0.18), radius: 2, x: 0, y: 1)
 									} else {
-										Text("Upgrade to Pro")
+										Text("Loading...")
 											.conditionalShadow(color: .black.opacity(0.18), radius: 2, x: 0, y: 1)
 									}
 								}
@@ -479,32 +479,26 @@ struct SettingsView: View {
 							UIApplication.shared.open(url)
 						}
 					}, label: {
-						HStack {
+						LabeledContent {
+							ExternalLinkIndicator()
+						} label: {
 							SettingsRowLabel(title: "Want to rate my app?", systemImage: "star")
-							
-							Spacer(minLength: 0)
-							
-							Image(systemName: "arrow.up.right")
-								.font(.caption).bold()
-								.foregroundStyle(.secondary)
 						}
 					})
+                    .alignmentGuide(.listRowSeparatorLeading) { _ in 40 }
 					.wordlrListSectionRowBackground(.first)
 					
 					ShareLink(item: URL(string: "https://apps.apple.com/app/id6740833142")!) {
-						HStack {
+						LabeledContent {
+							ExternalLinkIndicator()
+						} label: {
 							SettingsRowLabel(title: "Share app", systemImage: "square.and.arrow.up")
-							
-							Spacer(minLength: 0)
-							
-							Image(systemName: "arrow.up.right")
-								.font(.caption).bold()
-								.foregroundStyle(.secondary)
 						}
 					}
 					.simultaneousGesture(TapGesture().onEnded {
 						AnalyticsManager.shared.logDidTapShareAppEvent()
 					})
+                    .alignmentGuide(.listRowSeparatorLeading) { _ in 40 }
 					.wordlrListSectionRowBackground(.middle)
 					.contextMenu {
 						Button {
@@ -517,14 +511,10 @@ struct SettingsView: View {
 					Button(action: {
 						openSupportEmail()
 					}, label: {
-						HStack {
+						LabeledContent {
+							ExternalLinkIndicator()
+						} label: {
 							SettingsRowLabel(title: "Send feedback", systemImage: "envelope")
-							
-							Spacer(minLength: 0)
-							
-							Image(systemName: "arrow.up.right")
-								.font(.caption).bold()
-								.foregroundStyle(.secondary)
 						}
 						.contextMenu {
 							Button(action: {
@@ -535,7 +525,25 @@ struct SettingsView: View {
 							}
 						}
 					})
+                    .alignmentGuide(.listRowSeparatorLeading) { _ in 40 }
 					.wordlrListSectionRowBackground(.middle)
+
+					Link(destination: URL(string: "https://x.com/WordlrApp")!) {
+						LabeledContent {
+							ExternalLinkIndicator()
+						} label: {
+							SettingsAssetRowLabel(title: "Follow for updates", imageName: "x_logo")
+						}
+					}
+                    .alignmentGuide(.listRowSeparatorLeading) { _ in 40 }
+					.wordlrListSectionRowBackground(.middle)
+					.contextMenu {
+						Button {
+							UIPasteboard.general.string = "https://x.com/WordlrApp"
+						} label: {
+							Label("Copy link", systemImage: "doc.on.doc")
+						}
+					}
 					
 					Button(action: {
 						Task {
@@ -546,17 +554,14 @@ struct SettingsView: View {
 							}
 						}
 					}, label: {
-						HStack {
+						LabeledContent {
+							ExternalLinkIndicator()
+						} label: {
 							SettingsRowLabel(title: "Privacy options", systemImage: "hand.raised")
-							
-							Spacer(minLength: 0)
-							
-							Image(systemName: "arrow.up.right")
-								.font(.caption).bold()
-								.foregroundStyle(.secondary)
 						}
 						
 					})
+                    .alignmentGuide(.listRowSeparatorLeading) { _ in 40 }
 					.wordlrListSectionRowBackground(.middle)
 					
 #if targetEnvironment(simulator)
@@ -564,25 +569,17 @@ struct SettingsView: View {
 						adManager.presentAdInspector()
 						print("Ad Inspector presented.")
 					}, label: {
-						HStack {
+						LabeledContent {
+							ExternalLinkIndicator()
+						} label: {
 							SettingsRowLabel(title: "Ad inspector", systemImage: "hammer")
-							
-							
-							Spacer(minLength: 0)
-							
-							Image(systemName: "arrow.up.right")
-								.font(.caption).bold()
-								.foregroundStyle(.secondary)
 						}
 					})
+                    .alignmentGuide(.listRowSeparatorLeading) { _ in 40 }
 					.wordlrListSectionRowBackground(.middle)
 #endif
 					
-					HStack {
-						SettingsRowLabel(title: "Version", systemImage: "info.circle")
-						
-						Spacer(minLength: 0)
-						
+					LabeledContent {
 						Text(appVersionText)
 							.fontWeight(.regular)
 							.foregroundStyle(.secondary)
@@ -594,7 +591,10 @@ struct SettingsView: View {
 									Image(systemName: "doc.on.doc")
 								}
 							}
+					} label: {
+						SettingsRowLabel(title: "Version", systemImage: "info.circle")
 					}
+                    .alignmentGuide(.listRowSeparatorLeading) { _ in 40 }
 					.contentShape(Rectangle())
 					.onTapGesture {
 						handleVersionRowTap()
@@ -616,20 +616,10 @@ struct SettingsView: View {
 						.ignoresSafeArea()
 				} else {
 					if #available(iOS 26.0, *) {
-						let userInterfaceIdiom = UIDevice.current.userInterfaceIdiom
-						let isPhone = userInterfaceIdiom == .phone
-						let isIPad = userInterfaceIdiom == .pad
-						let iPadAndMacOpacity = !storeManager.isAdRemovalPurchased ? max(0, min(1, proSectionMaxY / 300)) : 0
-						let gradientOpacity = isPhone || isIPad ? 1 : iPadAndMacOpacity
-
-						WordlrGreenBackgroundGradient(opacity: gradientOpacity)
-							.opacity(isPhone || isIPad ? 1 : gradientVisibility)
-							.ignoresSafeArea()
-					} else if !storeManager.isAdRemovalPurchased {
-						GeometryReader { geometry in
-							let isPhone = UIDevice.current.userInterfaceIdiom == .phone
+						if ProcessInfo.processInfo.isiOSAppOnMac && !storeManager.isAdRemovalPurchased {
+							GeometryReader { geometry in
 								let isLandscape = geometry.size.width > geometry.size.height
-								let endRadius = isPhone ? 420 : min(max(geometry.size.width * 0.85, 520), isLandscape ? 680 : 900)
+								let endRadius = min(max(geometry.size.width * 0.85, 520), isLandscape ? 680 : 900)
 								let gradientOpacity = 0.34 * max(0, min(1, proSectionMaxY / 300))
 								RadialGradient(
 									colors: [
@@ -640,9 +630,39 @@ struct SettingsView: View {
 									center: .top,
 									startRadius: 0,
 									endRadius: endRadius
+								)
+									.opacity(gradientVisibility)
+									.ignoresSafeArea()
+							}
+						} else {
+							let userInterfaceIdiom = UIDevice.current.userInterfaceIdiom
+							let isPhone = userInterfaceIdiom == .phone
+							let isIPad = userInterfaceIdiom == .pad
+							let iPadAndMacOpacity = !storeManager.isAdRemovalPurchased ? max(0, min(1, proSectionMaxY / 300)) : 0
+							let gradientOpacity = isPhone || isIPad ? 1 : iPadAndMacOpacity
+
+							WordlrGreenBackgroundGradient(opacity: gradientOpacity)
+								.opacity(isPhone || isIPad ? 1 : gradientVisibility)
+								.ignoresSafeArea()
+						}
+					} else if !storeManager.isAdRemovalPurchased {
+						GeometryReader { geometry in
+							let isPhone = UIDevice.current.userInterfaceIdiom == .phone
+							let isLandscape = geometry.size.width > geometry.size.height
+							let endRadius = isPhone ? 420 : min(max(geometry.size.width * 0.85, 520), isLandscape ? 680 : 900)
+							let gradientOpacity = 0.34 * max(0, min(1, proSectionMaxY / 300))
+							RadialGradient(
+								colors: [
+									.green.opacity(gradientOpacity),
+									.green.opacity(gradientOpacity * 0.43),
+									.clear
+								],
+								center: .top,
+								startRadius: 0,
+								endRadius: endRadius
 							)
-							.opacity(gradientVisibility)
-							.ignoresSafeArea()
+								.opacity(gradientVisibility)
+								.ignoresSafeArea()
 						}
 					}
 				}
@@ -751,16 +771,49 @@ private struct SettingsRowLabel: View {
 			Text(title)
 				.lineLimit(nil)
 				.fixedSize(horizontal: false, vertical: true)
-				.alignmentGuide(.listRowSeparatorLeading) { dimensions in
-					dimensions[.leading]
-				}
 		} icon: {
 			Image(systemName: systemImage)
 				.font(.body.weight(.medium))
 				.frame(width: iconWidth, alignment: .center)
+
 		}
 		.foregroundStyle(.primary)
 		.frame(minHeight: rowMinHeight, alignment: .center)
+	}
+}
+
+private struct SettingsAssetRowLabel: View {
+	private let iconWidth: CGFloat = 24
+	private let rowMinHeight: CGFloat = 34
+
+	let title: LocalizedStringKey
+	let imageName: String
+
+	var body: some View {
+		Label {
+			Text(title)
+				.lineLimit(nil)
+				.fixedSize(horizontal: false, vertical: true)
+		} icon: {
+			Image(imageName)
+				.renderingMode(.template)
+				.resizable()
+				.scaledToFit()
+				.frame(width: 20, height: 20)
+				.frame(width: iconWidth, alignment: .center)
+                
+		}
+
+		.foregroundStyle(.primary)
+		.frame(minHeight: rowMinHeight, alignment: .center)
+	}
+}
+
+private struct ExternalLinkIndicator: View {
+	var body: some View {
+		Image(systemName: "arrow.up.right")
+			.font(.caption).bold()
+			.foregroundStyle(.secondary)
 	}
 }
 
@@ -772,12 +825,7 @@ private struct SettingsMenuPicker<SelectionValue: Hashable, Content: View>: View
 	@ViewBuilder let content: () -> Content
 
 	var body: some View {
-		HStack(alignment: .center, spacing: 12) {
-			SettingsRowLabel(title: title, systemImage: systemImage)
-				.layoutPriority(1)
-
-			Spacer(minLength: 8)
-
+		LabeledContent {
 			Menu {
 				Picker("", selection: $selection) {
 					content()
@@ -797,6 +845,9 @@ private struct SettingsMenuPicker<SelectionValue: Hashable, Content: View>: View
 			.fixedSize(horizontal: true, vertical: false)
 			.accessibilityLabel(title)
 			.accessibilityValue(value)
+		} label: {
+			SettingsRowLabel(title: title, systemImage: systemImage)
+				.layoutPriority(1)
 		}
 	}
 }

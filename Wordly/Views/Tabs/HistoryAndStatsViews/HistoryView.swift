@@ -46,6 +46,13 @@ struct HistoryView: View {
 		self.historyResult ?? self.makeHistoryResult(using: self.historyFilter)
 	}
 
+	private var canResetHistoryFilters: Bool {
+        self.numberOfLetters != 9 ||
+        self.selectedLanguage != .all ||
+        self.gameMode != .both ||
+        self.showsWhenHintsUsed != .both
+	}
+
 	init() {
 		let defaults = UserDefaults.standard
 		self._numberOfLetters = State(initialValue: defaults.object(forKey: "defaultStatNumberOfLetters") as? Int ?? 9)
@@ -103,10 +110,12 @@ struct HistoryView: View {
 				Text("Try playing a game first.")
 				
 			} actions: {
-				Button("Reset filters") {
-					resetFilters()
+				if self.canResetHistoryFilters {
+					Button("Reset filters") {
+						resetFilters()
+					}
+					.foregroundStyle(.red)
 				}
-				.foregroundStyle(.red)
 			}
 			.frame(maxWidth: .infinity, maxHeight: .infinity)
 			.transition(.opacity)
@@ -309,7 +318,8 @@ extension View {
 			}
 		} else if #available(iOS 26.0, *) {
 			self.background {
-				if UIDevice.current.userInterfaceIdiom == .phone || UIDevice.current.userInterfaceIdiom == .pad {
+				if !ProcessInfo.processInfo.isiOSAppOnMac &&
+					(UIDevice.current.userInterfaceIdiom == .phone || UIDevice.current.userInterfaceIdiom == .pad) {
 					WordlrGreenBackgroundGradient(opacity: opacity)
 				}
 			}
