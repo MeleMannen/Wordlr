@@ -24,6 +24,99 @@ func legacyRowCount(for numberOfLetters: Int) -> Int {
     }
 }
 
+enum GameResultShareFormatter {
+	private static let cetTimeZone = TimeZone(identifier: "CET")
+
+	static func timeUsedString(startDate: Date, endDate: Date) -> String {
+		let timeInterval = max(0, endDate.timeIntervalSince(startDate))
+		let hours = Int(timeInterval) / 3600
+		let minutes = (Int(timeInterval) % 3600) / 60
+		let seconds = Int(timeInterval) % 60
+
+		var timeUsedString = ""
+		if hours > 0 {
+			let hourFormatString = NSLocalizedString("hour_string", comment: "String for the hours")
+			if hourFormatString.contains("%@") {
+				timeUsedString += String(format: hourFormatString, "\(hours)")
+			} else if hourFormatString.contains("%d") || hourFormatString.contains("%ld") {
+				timeUsedString += String(format: hourFormatString, hours)
+			} else {
+				timeUsedString += "\(hours)h "
+			}
+		}
+		if minutes > 0 {
+			timeUsedString += "\(minutes)m "
+		}
+		if seconds > 0 {
+			timeUsedString += "\(seconds)s"
+		}
+		return timeUsedString
+	}
+
+	static func shareText(
+		row: Int,
+		numberOfLetters: Int,
+		maxRows: Int,
+		date: Date,
+		board: [[Letter]],
+		timeUsedString: String = ""
+	) -> String {
+		let dateFormatter = DateFormatter()
+		dateFormatter.dateStyle = .short
+		dateFormatter.timeStyle = .none
+		dateFormatter.timeZone = cetTimeZone
+
+		var letterString = String(format: NSLocalizedString("share_letter", comment: "Letter"), numberOfLetters)
+		if numberOfLetters > 1 {
+			letterString = String(format: NSLocalizedString("share_letters", comment: "Letters"), numberOfLetters)
+		}
+
+		let rowString = String(format: NSLocalizedString("share_row", comment: "Row"))
+		let usedString = String(format: NSLocalizedString("share_used", comment: "Used"))
+
+		var shareText = "Wordlr \(dateFormatter.string(from: date)), \(letterString), \(row)/\(maxRows) \(rowString)\(timeUsedString.isEmpty ? "" : ", \(timeUsedString) \(usedString)"):\n"
+		var shouldBreak = false
+
+		for row in board {
+			for letter in row {
+				switch letter.state {
+				case .correctPosition:
+					shareText += "🟩"
+				case .correctLetter:
+					shareText += "🟧"
+				case .usedButNotCorrect:
+					shareText += "⬜️"
+				default:
+					shouldBreak = true
+					break
+				}
+			}
+			if shouldBreak {
+				break
+			}
+			shareText += "\n"
+		}
+
+		return shareText
+	}
+
+	static func shareText(for gameRecord: GameRecord) -> String? {
+		guard let board = gameRecord.board else { return nil }
+		let timeUsedString = gameRecord.endDate.map {
+			self.timeUsedString(startDate: gameRecord.date, endDate: $0)
+		} ?? ""
+
+		return self.shareText(
+			row: gameRecord.numberOfGuesses,
+			numberOfLetters: gameRecord.numberOfLetters,
+			maxRows: gameRecord.effectiveMaxRows,
+			date: gameRecord.date,
+			board: board,
+			timeUsedString: timeUsedString
+		)
+	}
+}
+
 enum CurrentSelectView {
 	case selectView
 	case gameView
@@ -235,8 +328,8 @@ enum GameMode: String, Codable, CaseIterable, Identifiable {
     
     var localizedName: String {
         switch self {
-            case .dailyWord: return NSLocalizedString("game_mode_daily_word", comment: "Daily Wordlr mode")
-            case .normal: return NSLocalizedString("game_mode_unlimited", comment: "Free play mode")
+            case .dailyWord: return NSLocalizedString("game_mode_daily_word", comment: "Daily word mode")
+            case .normal: return NSLocalizedString("game_mode_unlimited", comment: "Unlimited mode")
             case .both: return NSLocalizedString("game_mode_both", comment: "Both modes")
         }
     }
@@ -251,7 +344,9 @@ enum GameMode: String, Codable, CaseIterable, Identifiable {
 enum LanguageSelection: String, Codable, CaseIterable, Identifiable {
     case english
 	case spanish
-	case norwegian
+	case french
+	case polish
+    case norwegian
     case all
     var id: Self { self }
     
@@ -260,6 +355,8 @@ enum LanguageSelection: String, Codable, CaseIterable, Identifiable {
             case .english: return NSLocalizedString("language_english", comment: "English language")
 			case .spanish: return NSLocalizedString("language_spanish", comment: "Spanish language")
 			case .norwegian: return NSLocalizedString("language_norwegian", comment: "Norwegian language")
+			case .french: return NSLocalizedString("French", comment: "French language")
+			case .polish: return NSLocalizedString("Polish", comment: "Polish language")
             case .all: return NSLocalizedString("language_all", comment: "All languages")
         }
     }
@@ -269,6 +366,8 @@ enum LanguageSelection: String, Codable, CaseIterable, Identifiable {
 			case .english: return "englishWords"
 			case .spanish: return "spanishWords"
 			case .norwegian: return "norwegianWords"
+			case .french: return "frenchWords"
+			case .polish: return "polishWords"
 			case .all: return "BadBadError"
 		}
 	}
@@ -278,13 +377,37 @@ enum LanguageSelection: String, Codable, CaseIterable, Identifiable {
 			case .english: return ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
 			case .spanish: return ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "Ñ", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
 			case .norwegian: return ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "Æ", "Ø", "Å"]
+			case .french: return ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
+			case .polish: return ["A", "Ą", "B", "C", "Ć", "D", "E", "Ę", "F", "G", "H", "I", "J", "K", "L", "Ł", "M", "N", "Ń", "O", "Ó", "P", "R", "S", "Ś", "T", "U", "W", "Y", "Z", "Ź", "Ż"]
 			case .all: return ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
+		}
+	}
+
+	var sortLocale: Locale {
+		switch self {
+			case .english: return Locale(identifier: "en")
+			case .spanish: return Locale(identifier: "es")
+			case .french: return Locale(identifier: "fr")
+			case .polish: return Locale(identifier: "pl")
+            case .norwegian: return Locale(identifier: "nb")
+			case .all: return Locale.current
 		}
 	}
     
     static var languages: [LanguageSelection] {
-		return [.english, .spanish, .norwegian]
+		return [.english, .spanish, .french, .polish, .norwegian]
     }
+
+	var dictionaryCode: String? {
+		switch self {
+			case .english: return "en"
+			case .spanish: return "es"
+			case .norwegian: return nil
+			case .french: return "fr"
+			case .polish: return "pl"
+			case .all: return nil
+		}
+	}
     
 }
 
@@ -312,22 +435,29 @@ struct ShortedContent: Codable {
 }
 
 struct Words: Decodable {
-    var wordGroups: [String: [String]]
+    var dailyWords: [String: [String]]
+    var expertWords: [String: [String]]
     var blockedWords: [String]
 
-    init(wordGroups: [String: [String]], blockedWords: [String] = []) {
-        self.wordGroups = wordGroups
+    init(dailyWords: [String: [String]], expertWords: [String: [String]] = [:], blockedWords: [String] = []) {
+        self.dailyWords = dailyWords
+        self.expertWords = expertWords
         self.blockedWords = blockedWords
     }
 
     private enum CodingKeys: String, CodingKey {
+        case dailyWords
+        case expertWords
         case wordGroups
         case blockedWords
     }
 
     init(from decoder: any Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.wordGroups = try container.decode([String: [String]].self, forKey: .wordGroups)
+        self.dailyWords = try container.decodeIfPresent([String: [String]].self, forKey: .dailyWords)
+            ?? container.decodeIfPresent([String: [String]].self, forKey: .wordGroups)
+            ?? [:]
+        self.expertWords = try container.decodeIfPresent([String: [String]].self, forKey: .expertWords) ?? [:]
         self.blockedWords = try container.decodeIfPresent([String].self, forKey: .blockedWords) ?? []
     }
 }
@@ -733,6 +863,8 @@ struct SpanishDefinition: Codable, Identifiable {
 		case source
 	}
 }
+
+typealias FreeDictionaryDefinition = SpanishDefinition
 
 // MARK: - Entry
 struct Entry2: Codable, Identifiable {
@@ -1506,6 +1638,119 @@ extension WordleDataManager {
 			}
 		}.resume()
 	}
+
+	func fetchFreeDictionaryDefinition(for word: String, language: LanguageSelection, completion: @escaping (DefinitionFetchResult<FreeDictionaryDefinition>) -> Void) {
+		guard let languageCode = language.dictionaryCode else {
+			completion(.notFound)
+			return
+		}
+
+		let searchTerms = [
+			word.lowercased(),
+			word,
+			word.capitalized
+		].reduce(into: [String]()) { result, term in
+			if !result.contains(term) {
+				result.append(term)
+			}
+		}
+
+		let requests = searchTerms.map {
+			(urlString: "https://freedictionaryapi.com/api/v1/entries/\(languageCode)/\($0)", usesFallbackSchema: false)
+		} + searchTerms.map {
+			(urlString: "https://api.dictionaryapi.dev/api/v2/entries/\(languageCode)/\($0)", usesFallbackSchema: true)
+		}
+
+		self.fetchFreeDictionaryDefinition(from: requests, index: 0, hadReachableResponse: false, completion: completion)
+	}
+
+	private func fetchFreeDictionaryDefinition(from requests: [(urlString: String, usesFallbackSchema: Bool)], index: Int, hadReachableResponse: Bool, completion: @escaping (DefinitionFetchResult<FreeDictionaryDefinition>) -> Void) {
+		guard index < requests.count else {
+			completion(hadReachableResponse ? .notFound : .networkError)
+			return
+		}
+
+		let request = requests[index]
+		print("urlString: \(request.urlString)")
+		guard let url = URL(string: request.urlString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? request.urlString) else {
+			self.fetchFreeDictionaryDefinition(from: requests, index: index + 1, hadReachableResponse: hadReachableResponse, completion: completion)
+			return
+		}
+
+		URLSession.shared.dataTask(with: url) { data, response, error in
+			guard let data = data, error == nil else {
+				self.fetchFreeDictionaryDefinition(from: requests, index: index + 1, hadReachableResponse: hadReachableResponse, completion: completion)
+				return
+			}
+
+			do {
+				let result: FreeDictionaryDefinition
+				if request.usesFallbackSchema {
+					let fallbackDefinitions = try JSONDecoder().decode([EnglishDefinition].self, from: data)
+					result = self.convertDictionaryAPIDefinitions(fallbackDefinitions)
+				} else {
+					result = try JSONDecoder().decode(FreeDictionaryDefinition.self, from: data)
+				}
+
+				if self.hasUsableFreeDictionaryDefinition(result) {
+					completion(.success(result))
+				} else {
+					self.fetchFreeDictionaryDefinition(from: requests, index: index + 1, hadReachableResponse: true, completion: completion)
+				}
+			} catch {
+				print("Error decoding FreeDictionary Definition: \(error)")
+				self.fetchFreeDictionaryDefinition(from: requests, index: index + 1, hadReachableResponse: true, completion: completion)
+			}
+		}.resume()
+	}
+
+	private func convertDictionaryAPIDefinitions(_ definitions: [EnglishDefinition]) -> FreeDictionaryDefinition {
+		let word = definitions.first?.word ?? ""
+		let entries = definitions.flatMap { definition in
+			definition.meanings.map { meaning in
+				Entry2(
+					language: Language(code: "", name: ""),
+					partOfSpeech: meaning.partOfSpeech,
+					pronunciations: definition.phonetics.compactMap { phonetic in
+						guard let text = phonetic.text, !text.isEmpty else { return nil }
+						return Pronunciation2(type: "ipa", text: text, tags: [])
+					},
+					forms: [],
+					senses: meaning.definitions.map { definition in
+						Sense(
+							definition: definition.definition,
+							tags: [],
+							examples: definition.example.map { [$0] } ?? [],
+							quotes: [],
+							synonyms: definition.synonyms,
+							antonyms: definition.antonyms
+						)
+					},
+					synonyms: meaning.synonyms,
+					antonyms: meaning.antonyms
+				)
+			}
+		}
+
+		let sourceURL = definitions.first?.sourceUrls.first ?? "https://dictionaryapi.dev/"
+		return FreeDictionaryDefinition(
+			word: word,
+			entries: entries,
+			source: Source(
+				url: sourceURL,
+				license: License2(
+					name: definitions.first?.license.name ?? "dictionaryapi.dev",
+					url: definitions.first?.license.url ?? "https://dictionaryapi.dev/"
+				)
+			)
+		)
+	}
+
+	private func hasUsableFreeDictionaryDefinition(_ definition: FreeDictionaryDefinition) -> Bool {
+		definition.entries.contains { entry in
+			entry.senses.contains { !$0.definition.isEmpty }
+		}
+	}
 }
 
 
@@ -1514,4 +1759,201 @@ extension Date {
         let timezoneOffset = TimeInterval(TimeZone.current.secondsFromGMT(for: self))
         return self.addingTimeInterval(-timezoneOffset)
     }
+}
+
+struct WordlrListRowBackground: View {
+	@Environment(\.accessibilityReduceTransparency) private var reduceTransparency
+	@AppStorage("usesTransparentLists") private var usesTransparentLists: Bool = true
+	private let materialOpacity = 0.5
+
+	var body: some View {
+		if UITraitCollection.current.userInterfaceStyle == .light {
+			Color(uiColor: .systemBackground)
+		} else if #available(iOS 26.0, *), !reduceTransparency && usesTransparentLists {
+			Rectangle()
+				.fill(.ultraThinMaterial)
+				.opacity(materialOpacity)
+		} else {
+			Color(uiColor: .secondarySystemBackground)
+		}
+	}
+}
+
+struct WordlrListSectionModifier: ViewModifier {
+	let cornerRadius: CGFloat
+
+	func body(content: Content) -> some View {
+		content
+			.listRowBackground(WordlrListRowBackground())
+	}
+}
+
+enum WordlrListSectionRowPosition {
+	case single
+	case first
+	case middle
+	case last
+}
+
+struct WordlrListSectionRowBorderShape: Shape {
+	let position: WordlrListSectionRowPosition
+	let cornerRadius: CGFloat
+
+	func path(in rect: CGRect) -> Path {
+		let radius = min(cornerRadius, min(rect.width, rect.height) / 2)
+		var path = Path()
+
+		switch position {
+		case .single:
+			path.addRoundedRect(in: rect.insetBy(dx: 0.5, dy: 0.5), cornerSize: CGSize(width: radius, height: radius))
+		case .first:
+			path.move(to: CGPoint(x: rect.minX + radius, y: rect.minY + 0.5))
+			path.addLine(to: CGPoint(x: rect.maxX - radius, y: rect.minY + 0.5))
+			path.addArc(center: CGPoint(x: rect.maxX - radius, y: rect.minY + radius), radius: radius - 0.5, startAngle: .degrees(-90), endAngle: .degrees(0), clockwise: false)
+			path.addLine(to: CGPoint(x: rect.maxX - 0.5, y: rect.maxY))
+			path.move(to: CGPoint(x: rect.minX + 0.5, y: rect.maxY))
+			path.addLine(to: CGPoint(x: rect.minX + 0.5, y: rect.minY + radius))
+			path.addArc(center: CGPoint(x: rect.minX + radius, y: rect.minY + radius), radius: radius - 0.5, startAngle: .degrees(180), endAngle: .degrees(270), clockwise: false)
+		case .middle:
+			path.move(to: CGPoint(x: rect.minX + 0.5, y: rect.minY))
+			path.addLine(to: CGPoint(x: rect.minX + 0.5, y: rect.maxY))
+			path.move(to: CGPoint(x: rect.maxX - 0.5, y: rect.minY))
+			path.addLine(to: CGPoint(x: rect.maxX - 0.5, y: rect.maxY))
+		case .last:
+			path.move(to: CGPoint(x: rect.minX + 0.5, y: rect.minY))
+			path.addLine(to: CGPoint(x: rect.minX + 0.5, y: rect.maxY - radius))
+			path.addArc(center: CGPoint(x: rect.minX + radius, y: rect.maxY - radius), radius: radius - 0.5, startAngle: .degrees(180), endAngle: .degrees(90), clockwise: true)
+			path.addLine(to: CGPoint(x: rect.maxX - radius, y: rect.maxY - 0.5))
+			path.addArc(center: CGPoint(x: rect.maxX - radius, y: rect.maxY - radius), radius: radius - 0.5, startAngle: .degrees(90), endAngle: .degrees(0), clockwise: true)
+			path.addLine(to: CGPoint(x: rect.maxX - 0.5, y: rect.minY))
+		}
+
+		return path
+	}
+}
+
+struct WordlrListSectionRowClipShape: Shape {
+	let position: WordlrListSectionRowPosition
+	let cornerRadius: CGFloat
+
+	func path(in rect: CGRect) -> Path {
+		let radius = min(cornerRadius, min(rect.width, rect.height) / 2)
+		var path = Path()
+
+		switch position {
+		case .single:
+			path.addRoundedRect(in: rect, cornerSize: CGSize(width: radius, height: radius))
+		case .first:
+			path.move(to: CGPoint(x: rect.minX, y: rect.maxY))
+			path.addLine(to: CGPoint(x: rect.minX, y: rect.minY + radius))
+			path.addArc(center: CGPoint(x: rect.minX + radius, y: rect.minY + radius), radius: radius, startAngle: .degrees(180), endAngle: .degrees(270), clockwise: false)
+			path.addLine(to: CGPoint(x: rect.maxX - radius, y: rect.minY))
+			path.addArc(center: CGPoint(x: rect.maxX - radius, y: rect.minY + radius), radius: radius, startAngle: .degrees(270), endAngle: .degrees(0), clockwise: false)
+			path.addLine(to: CGPoint(x: rect.maxX, y: rect.maxY))
+			path.closeSubpath()
+		case .middle:
+			path.addRect(rect)
+		case .last:
+			path.move(to: CGPoint(x: rect.minX, y: rect.minY))
+			path.addLine(to: CGPoint(x: rect.maxX, y: rect.minY))
+			path.addLine(to: CGPoint(x: rect.maxX, y: rect.maxY - radius))
+			path.addArc(center: CGPoint(x: rect.maxX - radius, y: rect.maxY - radius), radius: radius, startAngle: .degrees(0), endAngle: .degrees(90), clockwise: false)
+			path.addLine(to: CGPoint(x: rect.minX + radius, y: rect.maxY))
+			path.addArc(center: CGPoint(x: rect.minX + radius, y: rect.maxY - radius), radius: radius, startAngle: .degrees(90), endAngle: .degrees(180), clockwise: false)
+			path.closeSubpath()
+		}
+
+		return path
+	}
+}
+
+struct WordlrListSectionRowBackground: View {
+	@Environment(\.accessibilityReduceTransparency) private var reduceTransparency
+	@AppStorage("usesTransparentLists") private var usesTransparentLists: Bool = true
+	let position: WordlrListSectionRowPosition
+	let cornerRadius: CGFloat
+	private let materialOpacity = 0.5
+
+	var body: some View {
+		if UITraitCollection.current.userInterfaceStyle == .light {
+			Color(uiColor: .systemBackground)
+		} else if #available(iOS 26.0, *), !reduceTransparency && usesTransparentLists {
+			WordlrListSectionRowClipShape(position: position, cornerRadius: cornerRadius)
+				.fill(.ultraThinMaterial)
+				.opacity(materialOpacity)
+				.overlay {
+					WordlrListSectionRowBorderShape(position: position, cornerRadius: cornerRadius)
+						.stroke(.white.opacity(0.08), lineWidth: 1)
+				}
+		} else {
+			Color(uiColor: .secondarySystemBackground)
+		}
+	}
+}
+
+struct WordlrSurfaceModifier: ViewModifier {
+	@Environment(\.accessibilityReduceTransparency) private var reduceTransparency
+	@AppStorage("usesTransparentLists") private var usesTransparentLists: Bool = true
+	let cornerRadius: CGFloat
+	let fallbackColor: UIColor
+	private let materialOpacity = 0.5
+
+	func body(content: Content) -> some View {
+		if UITraitCollection.current.userInterfaceStyle == .light {
+			content
+				.background {
+					RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+						.foregroundStyle(Color(uiColor: .systemBackground))
+				}
+		} else if #available(iOS 26.0, *), !reduceTransparency && usesTransparentLists {
+			content
+				.background {
+					RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+						.fill(.ultraThinMaterial)
+						.opacity(materialOpacity)
+						.overlay {
+							RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+								.strokeBorder(.white.opacity(0.08), lineWidth: 1)
+						}
+				}
+		} else {
+			content
+				.background {
+					RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+						.foregroundStyle(Color(uiColor: fallbackColor))
+				}
+		}
+	}
+}
+
+extension View {
+	func wordlrListRowBackground() -> some View {
+		self.listRowBackground(WordlrListRowBackground())
+	}
+
+	func wordlrListSectionBackground(cornerRadius: CGFloat = 26) -> some View {
+		self.modifier(WordlrListSectionModifier(cornerRadius: cornerRadius))
+	}
+
+	func wordlrListSectionRowBackground(_ position: WordlrListSectionRowPosition, cornerRadius: CGFloat = 26) -> some View {
+		self.listRowBackground(WordlrListSectionRowBackground(position: position, cornerRadius: cornerRadius))
+	}
+
+	func wordlrListSectionRowBackground(index: Int, count: Int, cornerRadius: CGFloat = 26) -> some View {
+		let position: WordlrListSectionRowPosition = if count <= 1 {
+			.single
+		} else if index == 0 {
+			.first
+		} else if index == count - 1 {
+			.last
+		} else {
+			.middle
+		}
+
+		return self.listRowBackground(WordlrListSectionRowBackground(position: position, cornerRadius: cornerRadius))
+	}
+
+	func wordlrSurface(cornerRadius: CGFloat = 20, fallbackColor: UIColor = .secondarySystemBackground) -> some View {
+		self.modifier(WordlrSurfaceModifier(cornerRadius: cornerRadius, fallbackColor: fallbackColor))
+	}
 }

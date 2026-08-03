@@ -9,8 +9,8 @@ import SwiftUI
 
 struct SelectGameModeButton: View {
 	@Environment(\.colorScheme) private var colorScheme
-	@Environment(\.scenePhase) private var scenePhase
 	@AppStorage("userWantsNormalTheme") private var userWantsNormalTheme: Bool = true
+	@State private var isShowingGameView = false
 	
 	let title: LocalizedStringKey
 	let mode: GameMode
@@ -25,20 +25,28 @@ struct SelectGameModeButton: View {
 	var body: some View {
 		Group {
 			if isAvailable {
-				NavigationLink(destination: GameView().environment(appManager)) {
+				Button {
+					startAction()
+					isShowingGameView = true
+				} label: {
 					label
 				}
-				.simultaneousGesture(TapGesture().onEnded {
-					startAction()
-				})
-				.sensoryFeedback(.impact, trigger: impactTrigger)
+				.buttonStyle(.plain)
+				.accessibilityHint("Starts this game mode.")
+				.navigationDestination(isPresented: $isShowingGameView) {
+					GameView()
+						.environment(appManager)
+				}
+				.conditionalHaptic(.impact, trigger: impactTrigger)
 				.selectGameModeButtonStyle(mode: mode, isAvailable: true)
 			} else {
 				Button(action: blockedAction) {
 					label
 				}
 				.buttonStyle(.plain)
-				.sensoryFeedback(.error, trigger: errorTrigger)
+				.accessibilityValue("Unavailable")
+				.accessibilityHint("Shows why this mode is unavailable.")
+				.conditionalHaptic(.error, trigger: errorTrigger)
 				.selectGameModeButtonStyle(mode: mode, isAvailable: false)
 			}
 		}
@@ -83,10 +91,8 @@ struct SelectGameModeButton: View {
 		let useGreen = !userWantsNormalTheme && colorScheme == .dark
 		if isAvailable {
 			if #available(iOS 26.0, *) {
-//				if scenePhase == .background {
 					RoundedRectangle(cornerRadius: 15)
 						.foregroundStyle(Color(uiColor: useGreen ? .systemGreen : .systemOrange))
-//				}
 			} else {
 				RoundedRectangle(cornerRadius: 15)
 					.foregroundStyle(useGreen ? .green : .orange)
@@ -107,10 +113,8 @@ struct SelectGameModeButton: View {
 				.gradientShadow(gradient: appManager.shadowGradient, radius: 3, x: 0, y: 0)
 		} else if isAvailable {
 			if #available(iOS 26.0, *) {
-//				if scenePhase == .background {
 					RoundedRectangle(cornerRadius: 15)
 						.foregroundStyle(Color(uiColor: .systemGreen))
-//				}
 			} else {
 				RoundedRectangle(cornerRadius: 15)
 					.foregroundStyle(.green)

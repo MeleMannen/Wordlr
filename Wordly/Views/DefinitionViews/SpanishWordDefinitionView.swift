@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct SpanishWordDefinitionView: View {
+	@Environment(\.colorScheme) private var colorScheme
 	@Environment(AdManager.self) private var adManager
 	@EnvironmentObject private var definitionManager: DefinitionManager
 	@State var spanishDefinition: SpanishDefinition?
@@ -179,10 +180,7 @@ struct SpanishWordDefinitionView: View {
 									}
 									.padding(25)
 								}
-								.background {
-									RoundedRectangle(cornerRadius: 20)
-										.foregroundStyle(Color(uiColor: .secondarySystemBackground))
-								}
+									.wordlrSurface(cornerRadius: 20)
 								.overlay(alignment: .bottomTrailing) {
 									if let sourceURL = URL(string: spanishDefinition.source.url) {
 										if #available(iOS 26.0, *) {
@@ -234,12 +232,12 @@ struct SpanishWordDefinitionView: View {
 					.safeAreaPadding(.bottom, adManager.isBannerAdLoaded ? (UIDevice.current.userInterfaceIdiom == .pad || UIDevice.current.userInterfaceIdiom == .mac ? 100 : 75) : 0)
 				}
 			} else {
-				ProgressView()
-					.progressViewStyle(CircularProgressViewStyle())
-					.font(.largeTitle)
+				DefinitionLoadingView()
 			}
 		}
+		.frame(maxWidth: .infinity, maxHeight: .infinity)
 		.navigationTitle("\(self.word)")
+		.darkGradientBackground(colorScheme: colorScheme)
 		.onAppear {
 			definitionManager.getSpanishDefinition(for: self.word) { result in
 				self.apply(result)

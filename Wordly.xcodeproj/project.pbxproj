@@ -7,10 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		63027ED52FD8DEE70007A5BF /* norwegianWords.json in Resources */ = {isa = PBXBuildFile; fileRef = 63027ED42FD8DEE70007A5BF /* norwegianWords.json */; };
 		63432AFA2FBD42BB005529C4 /* TelemetryDeck in Frameworks */ = {isa = PBXBuildFile; productRef = 63432AF92FBD42BB005529C4 /* TelemetryDeck */; };
-		63432AFD2FBDDA29005529C4 /* PostHog in Frameworks */ = {isa = PBXBuildFile; productRef = 63432AFC2FBDDA29005529C4 /* PostHog */; };
 		6344F4FF2EB9502300948552 /* KeyPress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6344F4FE2EB9500D00948552 /* KeyPress.swift */; };
+		634900012FC2A00100A11CE5 /* AccessibilitySupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634900002FC2A00100A11CE5 /* AccessibilitySupport.swift */; };
 		635799612FC033F300B31921 /* SelectGameModeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 635799602FC033F300B31921 /* SelectGameModeButton.swift */; };
+		63A1C1012FA0000100A00001 /* StoreManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63A1C1002FA0000100A00001 /* StoreManager.swift */; };
 		63B1E1362F795EA500F36987 /* AdManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B1E1352F795EA500F36987 /* AdManager.swift */; };
 		63B9B4152EA58ED2008483FB /* FilterOptionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B9B3F72EA58ED2008483FB /* FilterOptionsView.swift */; };
 		63B9B4162EA58ED2008483FB /* GameTile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B9B3F82EA58ED2008483FB /* GameTile.swift */; };
@@ -43,32 +45,34 @@
 		63B9B4332EA58ED2008483FB /* Tips.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B9B4122EA58ED2008483FB /* Tips.swift */; };
 		63B9B4342EA58ED2008483FB /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B9B3FD2EA58ED2008483FB /* OnboardingView.swift */; };
 		63B9B4352EA58ED2008483FB /* StreakChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B9B3F52EA58ED2008483FB /* StreakChartView.swift */; };
-		63B9B4362EA58ED2008483FB /* norwegianWords.json in Resources */ = {isa = PBXBuildFile; fileRef = 63B9B3E12EA58ED2008483FB /* norwegianWords.json */; };
 		63B9B4372EA58ED2008483FB /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 63B9B3DD2EA58ED2008483FB /* Preview Assets.xcassets */; };
-		63B9B43B2EA58ED2008483FB /* spanishWords.json in Resources */ = {isa = PBXBuildFile; fileRef = 63B9B3E22EA58ED2008483FB /* spanishWords.json */; };
 		63B9B43C2EA58ED2008483FB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 63B9B3DF2EA58ED2008483FB /* Assets.xcassets */; };
 		63B9B43F2EA58ED2008483FB /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 63B9B40F2EA58ED2008483FB /* PrivacyInfo.xcprivacy */; };
-		63B9B4402EA58ED2008483FB /* englishWords.json in Resources */ = {isa = PBXBuildFile; fileRef = 63B9B3E02EA58ED2008483FB /* englishWords.json */; };
 		63B9B4412EA58ED2008483FB /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 63B9B3E42EA58ED2008483FB /* Localizable.xcstrings */; };
 		63B9B4422EA58ED2008483FB /* shortedNorwegainWords.json in Resources */ = {isa = PBXBuildFile; fileRef = 63B9B3E62EA58ED2008483FB /* shortedNorwegainWords.json */; };
 		63BF73DA2F4477E80065D40B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 63BF73D92F4477E80065D40B /* GoogleService-Info.plist */; };
 		63BF73DD2F4479CB0065D40B /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 63BF73DC2F4479CB0065D40B /* FirebaseAnalytics */; };
 		63BF73DF2F447CD50065D40B /* AnalyticsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63BF73DE2F447CCA0065D40B /* AnalyticsManager.swift */; };
+		63D084C62FD77DA900FBBBE8 /* englishWords.json in Resources */ = {isa = PBXBuildFile; fileRef = 63D084C52FD77DA900FBBBE8 /* englishWords.json */; };
+		63D084C82FD77E0100FBBBE8 /* spanishWords.json in Resources */ = {isa = PBXBuildFile; fileRef = 63D084C72FD77E0100FBBBE8 /* spanishWords.json */; };
+		63D084CC2FD7847C00FBBBE8 /* frenchWords.json in Resources */ = {isa = PBXBuildFile; fileRef = 63D084CB2FD7847C00FBBBE8 /* frenchWords.json */; };
+		63E7298B2FEC760500D5DF48 /* polishWords.json in Resources */ = {isa = PBXBuildFile; fileRef = 63E7298A2FEC760500D5DF48 /* polishWords.json */; };
 		63F225952E53B24100248D30 /* GoogleUserMessagingPlatform in Frameworks */ = {isa = PBXBuildFile; productRef = 63F225942E53B24100248D30 /* GoogleUserMessagingPlatform */; };
 		63F697CB2E05A328008B0B6E /* GoogleMobileAds in Frameworks */ = {isa = PBXBuildFile; productRef = 63F697CA2E05A328008B0B6E /* GoogleMobileAds */; };
+		63F98B4B2FC11F17000ECFB0 /* Wordlr - Guess the Word.storekit in Resources */ = {isa = PBXBuildFile; fileRef = 63F98B4A2FC11F17000ECFB0 /* Wordlr - Guess the Word.storekit */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		63027ED42FD8DEE70007A5BF /* norwegianWords.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = norwegianWords.json; sourceTree = "<group>"; };
 		6344F4FE2EB9500D00948552 /* KeyPress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyPress.swift; sourceTree = "<group>"; };
+		634900002FC2A00100A11CE5 /* AccessibilitySupport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessibilitySupport.swift; sourceTree = "<group>"; };
 		635799602FC033F300B31921 /* SelectGameModeButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectGameModeButton.swift; sourceTree = "<group>"; };
 		6382E3BC2D12FE0500B61353 /* Wordly.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Wordly.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		63A1C1002FA0000100A00001 /* StoreManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreManager.swift; sourceTree = "<group>"; };
 		63B0C6502E056A710047E4E9 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS26.0.sdk/System/Library/Frameworks/WebKit.framework; sourceTree = DEVELOPER_DIR; };
 		63B1E1352F795EA500F36987 /* AdManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdManager.swift; sourceTree = "<group>"; };
 		63B9B3DD2EA58ED2008483FB /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		63B9B3DF2EA58ED2008483FB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		63B9B3E02EA58ED2008483FB /* englishWords.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = englishWords.json; sourceTree = "<group>"; };
-		63B9B3E12EA58ED2008483FB /* norwegianWords.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = norwegianWords.json; sourceTree = "<group>"; };
-		63B9B3E22EA58ED2008483FB /* spanishWords.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = spanishWords.json; sourceTree = "<group>"; };
 		63B9B3E42EA58ED2008483FB /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		63B9B3E62EA58ED2008483FB /* shortedNorwegainWords.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = shortedNorwegainWords.json; sourceTree = "<group>"; };
 		63B9B3EA2EA58ED2008483FB /* EnglishWordDefinitionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnglishWordDefinitionView.swift; sourceTree = "<group>"; };
@@ -107,6 +111,11 @@
 		63B9B4132EA58ED2008483FB /* Wordly.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Wordly.entitlements; sourceTree = "<group>"; };
 		63BF73D92F4477E80065D40B /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		63BF73DE2F447CCA0065D40B /* AnalyticsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsManager.swift; sourceTree = "<group>"; };
+		63D084C52FD77DA900FBBBE8 /* englishWords.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = englishWords.json; sourceTree = "<group>"; };
+		63D084C72FD77E0100FBBBE8 /* spanishWords.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = spanishWords.json; sourceTree = "<group>"; };
+		63D084CB2FD7847C00FBBBE8 /* frenchWords.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = frenchWords.json; sourceTree = "<group>"; };
+		63E7298A2FEC760500D5DF48 /* polishWords.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = polishWords.json; sourceTree = "<group>"; };
+		63F98B4A2FC11F17000ECFB0 /* Wordlr - Guess the Word.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Wordlr - Guess the Word.storekit"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -116,7 +125,6 @@
 			files = (
 				63F225952E53B24100248D30 /* GoogleUserMessagingPlatform in Frameworks */,
 				63F697CB2E05A328008B0B6E /* GoogleMobileAds in Frameworks */,
-				63432AFD2FBDDA29005529C4 /* PostHog in Frameworks */,
 				63BF73DD2F4479CB0065D40B /* FirebaseAnalytics in Frameworks */,
 				63432AFA2FBD42BB005529C4 /* TelemetryDeck in Frameworks */,
 			);
@@ -162,9 +170,11 @@
 			isa = PBXGroup;
 			children = (
 				63B9B3E42EA58ED2008483FB /* Localizable.xcstrings */,
-				63B9B3E02EA58ED2008483FB /* englishWords.json */,
-				63B9B3E12EA58ED2008483FB /* norwegianWords.json */,
-				63B9B3E22EA58ED2008483FB /* spanishWords.json */,
+				63D084C52FD77DA900FBBBE8 /* englishWords.json */,
+				63027ED42FD8DEE70007A5BF /* norwegianWords.json */,
+				63D084C72FD77E0100FBBBE8 /* spanishWords.json */,
+				63D084CB2FD7847C00FBBBE8 /* frenchWords.json */,
+				63E7298A2FEC760500D5DF48 /* polishWords.json */,
 				63B9B3E62EA58ED2008483FB /* shortedNorwegainWords.json */,
 				63B9B3DF2EA58ED2008483FB /* Assets.xcassets */,
 				63BF73D92F4477E80065D40B /* GoogleService-Info.plist */,
@@ -249,9 +259,12 @@
 			isa = PBXGroup;
 			children = (
 				63BF73DE2F447CCA0065D40B /* AnalyticsManager.swift */,
+				634900002FC2A00100A11CE5 /* AccessibilitySupport.swift */,
 				63B9B4092EA58ED2008483FB /* AppObjects.swift */,
 				63B9B4082EA58ED2008483FB /* AppManager.swift */,
 				63B1E1352F795EA500F36987 /* AdManager.swift */,
+				63A1C1002FA0000100A00001 /* StoreManager.swift */,
+				63F98B4A2FC11F17000ECFB0 /* Wordlr - Guess the Word.storekit */,
 				63B9B40A2EA58ED2008483FB /* DefinitionManager.swift */,
 				63B9B40B2EA58ED2008483FB /* GameRecordManager.swift */,
 				63B9B40E2EA58ED2008483FB /* NotificationManager.swift */,
@@ -288,7 +301,6 @@
 				63F225942E53B24100248D30 /* GoogleUserMessagingPlatform */,
 				63BF73DC2F4479CB0065D40B /* FirebaseAnalytics */,
 				63432AF92FBD42BB005529C4 /* TelemetryDeck */,
-				63432AFC2FBDDA29005529C4 /* PostHog */,
 			);
 			productName = Wordle;
 			productReference = 6382E3BC2D12FE0500B61353 /* Wordly.app */;
@@ -317,6 +329,8 @@
 				Base,
 				nb,
 				es,
+				fr,
+				pl,
 			);
 			mainGroup = 6382E3B32D12FE0500B61353;
 			minimizedProjectReferenceProxies = 1;
@@ -325,7 +339,6 @@
 				63F225932E53B24100248D30 /* XCRemoteSwiftPackageReference "swift-package-manager-google-user-messaging-platform" */,
 				63BF73DB2F4479CB0065D40B /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				63432AF82FBD42BB005529C4 /* XCRemoteSwiftPackageReference "SwiftSDK" */,
-				63432AFB2FBDDA29005529C4 /* XCRemoteSwiftPackageReference "posthog-ios" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 6382E3BD2D12FE0500B61353 /* Products */;
@@ -342,15 +355,18 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				63B9B4362EA58ED2008483FB /* norwegianWords.json in Resources */,
 				63B9B4372EA58ED2008483FB /* Preview Assets.xcassets in Resources */,
 				63BF73DA2F4477E80065D40B /* GoogleService-Info.plist in Resources */,
-				63B9B43B2EA58ED2008483FB /* spanishWords.json in Resources */,
 				63B9B43C2EA58ED2008483FB /* Assets.xcassets in Resources */,
 				63B9B43F2EA58ED2008483FB /* PrivacyInfo.xcprivacy in Resources */,
-				63B9B4402EA58ED2008483FB /* englishWords.json in Resources */,
+				63D084C82FD77E0100FBBBE8 /* spanishWords.json in Resources */,
 				63B9B4412EA58ED2008483FB /* Localizable.xcstrings in Resources */,
+				63D084C62FD77DA900FBBBE8 /* englishWords.json in Resources */,
+				63F98B4B2FC11F17000ECFB0 /* Wordlr - Guess the Word.storekit in Resources */,
 				63B9B4422EA58ED2008483FB /* shortedNorwegainWords.json in Resources */,
+				63027ED52FD8DEE70007A5BF /* norwegianWords.json in Resources */,
+				63E7298B2FEC760500D5DF48 /* polishWords.json in Resources */,
+				63D084CC2FD7847C00FBBBE8 /* frenchWords.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -384,10 +400,12 @@
 				63B9B4282EA58ED2008483FB /* GameView.swift in Sources */,
 				63B9B4292EA58ED2008483FB /* AppManager.swift in Sources */,
 				63BF73DF2F447CD50065D40B /* AnalyticsManager.swift in Sources */,
+				634900012FC2A00100A11CE5 /* AccessibilitySupport.swift in Sources */,
 				63B9B42B2EA58ED2008483FB /* AppObjects.swift in Sources */,
 				63B9B42C2EA58ED2008483FB /* TabsView.swift in Sources */,
 				63B9B42D2EA58ED2008483FB /* StatsView.swift in Sources */,
 				63B1E1362F795EA500F36987 /* AdManager.swift in Sources */,
+				63A1C1012FA0000100A00001 /* StoreManager.swift in Sources */,
 				63B9B42E2EA58ED2008483FB /* SelectView.swift in Sources */,
 				635799612FC033F300B31921 /* SelectGameModeButton.swift in Sources */,
 				63B9B42F2EA58ED2008483FB /* HistoryView.swift in Sources */,
@@ -568,7 +586,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 15.0;
-				MARKETING_VERSION = 2.0.10;
+				MARKETING_VERSION = 3.0.2;
 				PRODUCT_BUNDLE_IDENTIFIER = SwoshEB.ThePhrase;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
@@ -617,7 +635,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 15.0;
-				MARKETING_VERSION = 2.0.10;
+				MARKETING_VERSION = 3.0.2;
 				PRODUCT_BUNDLE_IDENTIFIER = SwoshEB.ThePhrase;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
@@ -662,14 +680,6 @@
 				minimumVersion = 2.13.0;
 			};
 		};
-		63432AFB2FBDDA29005529C4 /* XCRemoteSwiftPackageReference "posthog-ios" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/PostHog/posthog-ios";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 3.58.3;
-			};
-		};
 		63BF73DB2F4479CB0065D40B /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
@@ -701,11 +711,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 63432AF82FBD42BB005529C4 /* XCRemoteSwiftPackageReference "SwiftSDK" */;
 			productName = TelemetryDeck;
-		};
-		63432AFC2FBDDA29005529C4 /* PostHog */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 63432AFB2FBDDA29005529C4 /* XCRemoteSwiftPackageReference "posthog-ios" */;
-			productName = PostHog;
 		};
 		63BF73DC2F4479CB0065D40B /* FirebaseAnalytics */ = {
 			isa = XCSwiftPackageProductDependency;

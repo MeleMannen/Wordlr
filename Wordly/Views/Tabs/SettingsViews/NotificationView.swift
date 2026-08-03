@@ -10,8 +10,8 @@ import SwiftData
 
 struct NotificationView: View {
 	@Environment(\.modelContext) private var context
+	@Environment(\.colorScheme) private var colorScheme
 	@AppStorage("notificationsEnabled") private var notificationsEnabled: Bool = false
-	@State private var didTapAddReminder: Bool = false
 	@State private var shouldShowSheet: Bool = false
 	@State private var shouldBeEditing: Bool = false
 	@State private var reminderToEdit: DailyWordReminder?
@@ -31,7 +31,7 @@ struct NotificationView: View {
 				)
 			} else {
 				List {
-					ForEach(self.dailyWordReminders, id: \.id) { reminder in
+					ForEach(Array(self.dailyWordReminders.enumerated()), id: \.element.id) { index, reminder in
 						Button {
 							self.reminderToEdit = reminder
 							self.shouldBeEditing = true
@@ -50,39 +50,38 @@ struct NotificationView: View {
 									AnalyticsManager.shared.logDidActivateAReminderEvent()
 								}
 							}
+						.wordlrListSectionRowBackground(index: index, count: self.dailyWordReminders.count)
 					}
 					.onDelete(perform: deleteReminder)
 				}
 				.listStyle(.insetGrouped)
+				.scrollContentBackground(.hidden)
 			}
 		}
+		.darkGradientBackground(colorScheme: colorScheme)
 		.navigationBarTitleDisplayMode(.inline)
-		.navigationTitle("Daily Wordlr reminders")
+		.navigationTitle("Daily word reminders")
 		.toolbar {
-			if #available(iOS 26.0, *) {
-				ToolbarItem(placement: .navigationBarTrailing) {
-					Button(action: {
-						self.didTapAddReminder.toggle()
-						self.shouldShowSheet = true
-						self.isPresentingFromAdd = true
-					}) {
-						Label("Add reminder", systemImage: "plus")
-					}
-					.sensoryFeedback(.selection, trigger: self.didTapAddReminder)
-				}
-				.matchedTransitionSource(id: "add", in: self.namespace)
-				
-			} else {
-				ToolbarItem(placement: .navigationBarTrailing) {
-					Button(action: {
-						self.didTapAddReminder.toggle()
-						self.shouldShowSheet = true
-					}) {
-						Label("Add reminder", systemImage: "plus")
-					}
-					.sensoryFeedback(.selection, trigger: self.didTapAddReminder)
-				}
-			}
+            ToolbarItem(placement: .navigationBarTrailing) {
+                if #available(iOS 26.0, *) {
+                    Button {
+                        DispatchQueue.main.async {
+                            self.isPresentingFromAdd = true
+                            self.shouldShowSheet = true
+                        }
+                    } label: {
+                        Label("Add reminder", systemImage: "plus")
+                    }
+                    .matchedTransitionSource(id: "add", in: self.namespace)
+                    
+                } else {
+                    Button {
+                        self.shouldShowSheet = true
+                    } label: {
+                        Label("Add reminder", systemImage: "plus")
+                    }
+                }
+            }
 		}
 		.sheet(isPresented: $shouldShowSheet) {
 			self.reminderToEdit = nil
@@ -155,6 +154,7 @@ struct AddReminderView: View {
 						}
 					}
 					.pickerStyle(.menu)
+					.wordlrListSectionRowBackground(.first)
 					Picker("Word length", selection: $notificationLetters) {
 						ForEach(1...8, id: \.self) { number in
 							Text(number == 1 ? "\(number) letter" : "\(number) letters")
@@ -164,10 +164,12 @@ struct AddReminderView: View {
 						}
 					}
 					.pickerStyle(.menu)
+					.wordlrListSectionRowBackground(.last)
 					
 				} header: {
 					Text("Reminder details")
 				}
+				.wordlrListSectionBackground()
 				
 				if let reminder, self.isEditing {
 					HStack {
@@ -189,11 +191,12 @@ struct AddReminderView: View {
 						self.notificationLetters = reminder.numberOfLetters
 						self.notificationTime = reminder.timeToFire
 					}
+					.wordlrListSectionRowBackground(.single)
 				}
 				
 				
 				
-				
+					
 			}
 			.scrollContentBackground(.hidden)
 			.tint(.secondary)
@@ -206,7 +209,7 @@ struct AddReminderView: View {
 						Button("Cancel", systemImage: "xmark") {
 							self.isPresented = false
 						}
-						.sensoryFeedback(.selection, trigger: self.didTap)
+						.conditionalHaptic(.selection, trigger: self.didTap)
 					}
 					
 				} else {
@@ -214,7 +217,7 @@ struct AddReminderView: View {
 						Button("Cancel", role: .cancel) {
 							self.isPresented = false
 						}
-						.sensoryFeedback(.selection, trigger: self.didTap)
+						.conditionalHaptic(.selection, trigger: self.didTap)
 						.tint(.red)
 					}
 				}
@@ -224,9 +227,9 @@ struct AddReminderView: View {
 						Button("Save", systemImage: "checkmark") {
 							self.saveButtonAction()
 						}
-						.sensoryFeedback(self.isEditing ? .selection : (self.checkIfReminderExists() ? .error : .selection), trigger: self.didTap)
+						.conditionalHaptic(self.isEditing ? .selection : (self.checkIfReminderExists() ? .error : .selection), trigger: self.didTap)
 						.opacity(self.isEditing ? 1.0 : (self.checkIfReminderExists() ? 0.3 : 1.0))
-						.tint(self.isEditing ? .blue : (self.checkIfReminderExists() ? .secondary : .blue))
+						.tint(self.isEditing ? .green : (self.checkIfReminderExists() ? .secondary : .green))
 						.animation(.easeInOut, value: self.isEditing)
 						.animation(.easeInOut, value: self.checkIfReminderExists())
 					} else {
@@ -234,10 +237,10 @@ struct AddReminderView: View {
 							self.saveButtonAction()
 						} label: {
 							Text("Save")
-								.foregroundStyle(.blue)
+								.foregroundStyle(.green)
 								.opacity(self.isEditing ? 1.0 : (self.checkIfReminderExists() ? 0.3 : 1.0))
 						}
-						.sensoryFeedback(self.isEditing ? .selection : (self.checkIfReminderExists() ? .error : .selection), trigger: self.didTap)
+						.conditionalHaptic(self.isEditing ? .selection : (self.checkIfReminderExists() ? .error : .selection), trigger: self.didTap)
 						.animation(.easeInOut, value: self.isEditing)
 						.animation(.easeInOut, value: self.checkIfReminderExists())
 					}
@@ -250,14 +253,14 @@ struct AddReminderView: View {
 	
 	private func saveButtonAction() {
 		print("time to fire: \(self.notificationTime.timeIntervalSince1970)")
-			if self.isEditing, let reminder {
-				NotificationManager.cancelDailyWordReminder(reminder: reminder) {
-					reminder.language = self.notificationLanguage
-					reminder.numberOfLetters = self.notificationLetters
-					reminder.timeToFire = self.notificationTime
-					reminder.isEnabled = true
-					NotificationManager.scheduleDailyWordReminder(reminder: reminder, context: context)
-				}
+		if self.isEditing, let reminder {
+			NotificationManager.cancelDailyWordReminder(reminder: reminder) {
+				reminder.language = self.notificationLanguage
+				reminder.numberOfLetters = self.notificationLetters
+				reminder.timeToFire = self.notificationTime
+				reminder.isEnabled = true
+				NotificationManager.scheduleDailyWordReminder(reminder: reminder, context: context)
+			}
 			
 			
 		} else {
@@ -294,7 +297,7 @@ struct ReminderRow: View {
 		HStack(spacing: 12) {
 			Image(systemName: "bell")
 				.font(.title).bold()
-				.foregroundStyle(.white)
+				.foregroundStyle(.primary)
 			
 			VStack(alignment: .leading, spacing: 6) {
 				Text(reminder.timeToFire, format: .dateTime.hour().minute())

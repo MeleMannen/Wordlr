@@ -9,12 +9,14 @@ import SwiftUI
 
 struct SelectView: View {
 	@Environment(\.modelContext) var modelContext
+	@Environment(\.colorScheme) private var colorScheme
 	@Environment(AdManager.self) private var adManager
 	@State private var appManager = AppManager()
 	@StateObject var reviewManager = ReviewManager()
 	@StateObject var appState = AppState.shared
 	@AppStorage("hasFixedLanguage") private var hasFixedLanguage: Bool = false
 	@AppStorage("userWantsThePhraseNameBack") private var userWantsThePhraseNameBack = false
+	@AppStorage("expertModeEnabled") private var expertModeEnabled = false
 	@State var hasFixedDefualtValues: Bool = false
 	@State var hasFixedContextAndFetched: Bool = false
 	@State var didTapPlayDailyWordButton: Bool = false
@@ -40,27 +42,24 @@ struct SelectView: View {
 							.frame(maxWidth: .infinity, alignment: .leading)
 						
 						if #available(iOS 26.0, *) {
-							Picker(selection: $appManager.numberOfLetters) {
-								ForEach(1...8, id: \.self) { number in
+							HStack {
+								Spacer(minLength: 0)
+
+								UIKitMenuPicker(
+									selection: $appManager.numberOfLetters,
+									options: Array(1...8)
+								) { number in
 									if number == 1 {
-										Text("\(number) letter")
-											.tag(number)
+										return String(format: NSLocalizedString("%lld letter", comment: "Number of letters singular"), number)
 									} else {
-										Text("\(number) letters")
-											.tag(number)
+										return String(format: NSLocalizedString("%lld letters", comment: "Number of letters plural"), number)
 									}
 								}
-							} label: {
-								
+								.fixedSize(horizontal: true, vertical: false)
 							}
-							.background {
-								Capsule()
-									.foregroundStyle(Color(uiColor: .systemGray6))
-							}
-							.glassEffect(.regular.interactive())
 							.conditionalShadow(color: .black.opacity(0.4), radius: 4, x: 4, y: 4)
-							.sensoryFeedback(.selection, trigger: appManager.numberOfLetters)
-							.frame(maxWidth: .infinity, alignment: .trailing)
+							.conditionalHaptic(.selection, trigger: appManager.numberOfLetters)
+							.frame(height: 36)
 						} else {
 							Picker(selection: $appManager.numberOfLetters) {
 								ForEach(1...8, id: \.self) { number in
@@ -76,12 +75,12 @@ struct SelectView: View {
 							.pickerStyle(.menu)
 							.foregroundStyle(.primary)
 							.accentColor(.primary)
-							.background {
-								RoundedRectangle(cornerRadius: 10)
-									.foregroundStyle(Color(uiColor: .tertiarySystemBackground))
-									.conditionalShadow(color: .black.opacity(0.4), radius: 4, x: 4, y: 4)
-							}
-							.sensoryFeedback(.selection, trigger: appManager.numberOfLetters)
+                            .background {
+                                RoundedRectangle(cornerRadius: 10)
+                                    .foregroundStyle(Color(uiColor:  colorScheme == .light ? .systemGray6 : .tertiarySystemBackground))
+                                    .conditionalShadow(color: .black.opacity(0.4), radius: 4, x: 4, y: 4)
+                            }
+							.conditionalHaptic(.selection, trigger: appManager.numberOfLetters)
 							.frame(maxWidth: .infinity, alignment: .trailing)
 						}
 					}
@@ -96,21 +95,19 @@ struct SelectView: View {
 							.frame(maxWidth: .infinity, alignment: .leading)
 						
 						if #available(iOS 26.0, *) {
-							Picker(selection: $appManager.selectedLanguage) {
-								ForEach(LanguageSelection.languages) { language in
-									Text(language.localizedName)
-								}
-							} label: {
-								
+							HStack {
+								Spacer(minLength: 0)
+
+								UIKitMenuPicker(
+									selection: $appManager.selectedLanguage,
+									options: LanguageSelection.languages,
+									title: { $0.localizedName }
+								)
+								.fixedSize(horizontal: true, vertical: false)
 							}
-							.background {
-								Capsule()
-									.foregroundStyle(Color(uiColor: .systemGray6))
-							}
-							.glassEffect(.regular.interactive())
 							.conditionalShadow(color: .black.opacity(0.4), radius: 4, x: 4, y: 4)
-							.sensoryFeedback(.selection, trigger: appManager.selectedLanguage)
-							.frame(maxWidth: .infinity, alignment: .trailing)
+							.conditionalHaptic(.selection, trigger: appManager.selectedLanguage)
+							.frame(height: 36)
 						} else {
 							Picker(selection: $appManager.selectedLanguage) {
 								ForEach(LanguageSelection.languages) { language in
@@ -123,11 +120,11 @@ struct SelectView: View {
 							.foregroundStyle(.primary)
 							.accentColor(.primary)
 							.background {
-								RoundedRectangle(cornerRadius: 10)
-									.foregroundStyle(Color(uiColor: .tertiarySystemBackground))
-									.conditionalShadow(color: .black.opacity(0.4), radius: 4, x: 4, y: 4)
+                                RoundedRectangle(cornerRadius: 10)
+                                    .foregroundStyle(Color(uiColor:  colorScheme == .light ? .systemGray6 : .tertiarySystemBackground))
+                                    .conditionalShadow(color: .black.opacity(0.4), radius: 4, x: 4, y: 4)
 							}
-							.sensoryFeedback(.selection, trigger: appManager.selectedLanguage)
+							.conditionalHaptic(.selection, trigger: appManager.selectedLanguage)
 							.frame(maxWidth: .infinity, alignment: .trailing)
 						}
 					}
@@ -137,7 +134,7 @@ struct SelectView: View {
 					Spacer()
 					
 					SelectGameModeButton(
-						title: "Daily Wordlr",
+						title: "Daily word",
 						mode: .dailyWord,
 						appManager: appManager,
 						streak: self.dailyWordStreak,
@@ -151,7 +148,7 @@ struct SelectView: View {
 					.padding(.bottom, 25)
 
 					SelectGameModeButton(
-						title: "Free play",
+						title: "Unlimited",
 						mode: .normal,
 						appManager: appManager,
 						streak: self.normalStreak,
@@ -162,6 +159,17 @@ struct SelectView: View {
 						blockedAction: self.showChangeGameAlert
 					)
 					.padding(.horizontal, 30)
+					.padding(.bottom, 25)
+
+					Toggle(isOn: $expertModeEnabled) {
+						Text("Expert mode")
+							.font(.headline)
+					}
+					.toggleStyle(.switch)
+					.tint(.green)
+					.conditionalHaptic(.selection, trigger: expertModeEnabled)
+					.accessibilityHint("Only affects Unlimited.")
+					.padding(.horizontal, 35)
 					.padding(.bottom, 10)
 				}
 				.alert(item: self.$alertItem) { item in
@@ -172,36 +180,36 @@ struct SelectView: View {
 					}
 				}
 				.padding(20)
-				.background {
-					RoundedRectangle(cornerRadius: 25)
-						.foregroundStyle(Color(uiColor: .secondarySystemBackground))
-				}
+				.wordlrSurface(cornerRadius: 25)
 				.padding(.horizontal)
 			}
 			.safeAreaPadding(.bottom, adManager.isBannerAdLoaded ? (UIDevice.current.userInterfaceIdiom == .pad || UIDevice.current.userInterfaceIdiom == .mac ? 80 : 54) : 0)
+			.darkGradientBackground(colorScheme: colorScheme)
 			.toolbar {
 				ToolbarItem(placement: .navigationBarTrailing) {
 					NavigationLink(destination: Info().environment(appManager).environmentObject(appState)) {
-						Image(systemName: "info")
+						Label("Info", systemImage: "info")
+							.labelStyle(.iconOnly)
 							.font(.title2)
 							.foregroundStyle(.primary)
 					}
+					.accessibilityLabel("Info")
+					.accessibilityHint("Shows how to play.")
+					.accessibilityInputLabels(["Info", "How to play"])
 					.simultaneousGesture(TapGesture().onEnded {
 						self.didTapInfoButton.toggle()
 					})
-					.sensoryFeedback(.selection, trigger: self.didTapInfoButton)
+					.conditionalHaptic(.selection, trigger: self.didTapInfoButton)
 				}
 			}
 		}
 		.navigationTitle(self.userWantsThePhraseNameBack ? "The Phrase" : "Wordlr")
 		.onChange(of: appState.navigateHomeTrigger) {
 			if appState.selectedLanguageName != nil {
-				if appState.selectedLanguageName == LanguageSelection.english.rawValue {
-					appManager.selectedLanguage = .english
-				} else if appState.selectedLanguageName == LanguageSelection.norwegian.rawValue {
-					appManager.selectedLanguage = .norwegian
-				} else if appState.selectedLanguageName == LanguageSelection.spanish.rawValue {
-					appManager.selectedLanguage = .spanish
+				if let selectedLanguageName = appState.selectedLanguageName,
+				   let selectedLanguage = LanguageSelection(rawValue: selectedLanguageName),
+				   selectedLanguage != .all {
+					appManager.selectedLanguage = selectedLanguage
 				}
 			}
 			appManager.numberOfLetters = appState.numberOfLetters ?? 5
@@ -233,7 +241,12 @@ struct SelectView: View {
 		.onChange(of: appManager.numberOfLetters) {
 			self.isAllowedToChooseGameModeAgain = true
 		}
+		.onChange(of: expertModeEnabled) {
+			appManager.isExpertModeEnabled = expertModeEnabled
+			AnalyticsManager.shared.logDidToggleExpertModeEvent(isEnabled: expertModeEnabled)
+		}
 		.onAppear {
+			appManager.isExpertModeEnabled = expertModeEnabled
 			appManager.message = ""
 			if appManager.selectedGameMode != .dailyWord {
 				self.isAllowedToPlayDailyWordAgain = false
@@ -294,7 +307,9 @@ struct SelectView: View {
 	
 	private func startNormalGame() {
 		self.didTapPlayNormalButton.toggle()
+		appManager.isExpertModeEnabled = expertModeEnabled
 		appManager.selectedGameMode = .normal
+		appManager.prepareGameForSelectedOptions()
 		Task {
 			await HintTip.gamesPlayedEvent.donate()
 		}
@@ -302,7 +317,9 @@ struct SelectView: View {
 	
 	private func startDailyWordGame() {
 		self.didTapPlayDailyWordButton.toggle()
+		appManager.isExpertModeEnabled = false
 		appManager.selectedGameMode = .dailyWord
+		appManager.prepareGameForSelectedOptions()
 		Task {
 			await HintTip.gamesPlayedEvent.donate()
 		}
@@ -346,6 +363,7 @@ final class AppState: ObservableObject {
 	static let shared = AppState()
 	
 	@Published var navigateHomeTrigger = UUID()
+	@Published var navigateToSettingsTrigger = false
 	@Published var selectedLanguageName: String?
 	@Published var numberOfLetters: Int?
 	
@@ -399,25 +417,26 @@ struct ConditionalButtonBackground2: View {
 
 
 struct ConditionalGlassEffect: ViewModifier {
-	func body(content: Content) -> some View {
-		if #available(iOS 26.0, *) {
-			content
-				.tint(.primary)
-				.glassEffect(.regular.interactive())
-		} else {
-			content
-				.tint(.primary)
-		}
+	let isInteractive: Bool
+	
+	init(isInteractive: Bool = true) {
+		self.isInteractive = isInteractive
 	}
-}
-
-struct ConditionalPadding: ViewModifier {
+	
 	func body(content: Content) -> some View {
 		if #available(iOS 26.0, *) {
-			content
-				.padding(.vertical, 4)
+			if isInteractive {
+				content
+					.tint(.primary)
+					.glassEffect(.regular.interactive())
+			} else {
+				content
+					.tint(.primary)
+					.glassEffect(.regular)
+			}
 		} else {
 			content
+				.tint(.primary)
 		}
 	}
 }

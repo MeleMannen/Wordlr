@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct NorwegianWordDefinitionView: View {
-	@Environment(\.scenePhase) private var scenePhase
+	@Environment(\.colorScheme) private var colorScheme
 	@Environment(AdManager.self) private var adManager
 	@EnvironmentObject private var definitionManager: DefinitionManager
 	@State var processedWords: [NorwegianDefinition] = []
@@ -96,10 +96,7 @@ struct NorwegianWordDefinitionView: View {
 									}
 									.padding(25)
 								}
-								.background {
-									RoundedRectangle(cornerRadius: 20)
-										.foregroundStyle(Color(uiColor: .secondarySystemBackground))
-								}
+									.wordlrSurface(cornerRadius: 20)
 								.overlay(alignment: .bottomTrailing) {
 									if let sourceURL = self.sourceURL {
 										if #available(iOS 26.0, *) {
@@ -138,13 +135,13 @@ struct NorwegianWordDefinitionView: View {
 								} actions: {
 									NavigationLink(destination: NAOBView(word: self.word)) {
 										Text("Search on NAOB")
-											.foregroundColor(.blue)
+											.foregroundStyle(.blue)
 											.font(.headline)
 									}
 									.simultaneousGesture(TapGesture().onEnded {
 										self.didTap.toggle()
 									})
-									.sensoryFeedback(.impact, trigger: self.didTap)
+									.conditionalHaptic(.impact, trigger: self.didTap)
 								}
 							}
 						}
@@ -157,12 +154,12 @@ struct NorwegianWordDefinitionView: View {
 					.safeAreaPadding(.bottom, adManager.isBannerAdLoaded ? (UIDevice.current.userInterfaceIdiom == .pad || UIDevice.current.userInterfaceIdiom == .mac ? 100 : 75) : 0)
 				}
 			} else {
-				ProgressView()
-					.progressViewStyle(CircularProgressViewStyle())
-				
+				DefinitionLoadingView()
 			}
 		}
+		.frame(maxWidth: .infinity, maxHeight: .infinity)
 		.navigationTitle("\(self.word)")
+		.darkGradientBackground(colorScheme: colorScheme)
 		.onAppear {
 			definitionManager.getNorwegianDefinition(for: self.word) { result in
 				self.apply(result)

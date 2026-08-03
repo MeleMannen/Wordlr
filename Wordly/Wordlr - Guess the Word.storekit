@@ -1,0 +1,72 @@
+{
+  "appPolicies" : {
+    "eula" : "",
+    "policies" : [
+      {
+        "locale" : "en_US",
+        "policyText" : "",
+        "policyURL" : ""
+      }
+    ]
+  },
+  "identifier" : "B76FF1D2",
+  "nonRenewingSubscriptions" : [
+
+  ],
+  "products" : [
+    {
+      "displayPrice" : "2.99",
+      "familyShareable" : false,
+      "internalID" : "6772363447",
+      "localizations" : [
+        {
+          "description" : "Bez reklam, szybkie podpowiedzi i więce",
+          "displayName" : "Wordlr Pro",
+          "locale" : "pl"
+        },
+        {
+          "description" : "Sin anuncios, pistas instantáneas y más",
+          "displayName" : "Wordlr Pro",
+          "locale" : "es_ES"
+        },
+        {
+          "description" : "Get an ad-free experience, instant hints and more",
+          "displayName" : "Wordlr Pro",
+          "locale" : "en_US"
+        },
+        {
+          "description" : "Sans pub, indices instantanés et plus",
+          "displayName" : "Wordlr Pro",
+          "locale" : "fr"
+        }
+      ],
+      "productID" : "SwoshEB.ThePhrase.pro",
+      "referenceName" : "Wordlr Pro",
+      "type" : "NonConsumable"
+    }
+  ],
+  "settings" : {
+    "_applicationInternalID" : "6740833142",
+    "_askToBuyEnabled" : false,
+    "_billingGracePeriodEnabled" : false,
+    "_billingIssuesEnabled" : false,
+    "_developerTeamID" : "B3ZSP6T559",
+    "_disableDialogs" : false,
+    "_failTransactionsEnabled" : false,
+    "_lastSynchronizedDate" : 802821350.22496796,
+    "_locale" : "en_US",
+    "_renewalBillingIssuesEnabled" : false,
+    "_storefront" : "USA",
+    "_storeKitErrors" : [
+
+    ],
+    "_timeRate" : 0
+  },
+  "subscriptionGroups" : [
+
+  ],
+  "version" : {
+    "major" : 5,
+    "minor" : 0
+  }
+}

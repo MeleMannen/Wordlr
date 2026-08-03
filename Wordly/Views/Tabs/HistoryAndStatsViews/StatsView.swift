@@ -11,6 +11,7 @@ import SwiftData
 
 struct StatsView: View {
 	@Environment(\.colorScheme) private var colorScheme
+	@Environment(\.accessibilityReduceMotion) private var reduceMotion
 	@Environment(AdManager.self) private var adManager
 	@AppStorage("userWantsNormalTheme") private var userWantsNormalTheme: Bool = true
 	@AppStorage("defaultStatLanguage") private var defaultStatLanguage: LanguageSelection = .all
@@ -28,14 +29,17 @@ struct StatsView: View {
 	@State private var lostCount: Int = 0
 	@State private var totalCount: Int = 0
 	@State private var winRate: Double = 0.0
-	@State private var counts: [Int] = []
+	@State private var counts: [Int] = Array(repeating: 0, count: 6)
 	@State private var maxGuessesPerCount: Int = 0
+	@State private var averageGuessesNeeded: Double = 0.0
 	@State private var selectedStreakLanguage: LanguageSelection = .norwegian
-	@State private var longestStreakPerLetters: [(language: LanguageSelection, streaks: [(index: Int, currentStreak: Int, longestStreak: Int)])] = [(language: .english, streaks: []), (language: .spanish, streaks: []), (language: .norwegian, streaks: [])]
-	@State private var longestNormalStreakPerLetters: [(language: LanguageSelection, streaks: [(index: Int, currentStreak: Int, longestStreak: Int)])] = [(language: .english, streaks: []), (language: .spanish, streaks: []), (language: .norwegian, streaks: [])]
+	@State private var longestStreakPerLetters: [(language: LanguageSelection, streaks: [(index: Int, currentStreak: Int, longestStreak: Int)])] = LanguageSelection.languages.map { (language: $0, streaks: []) }
+	@State private var longestNormalStreakPerLetters: [(language: LanguageSelection, streaks: [(index: Int, currentStreak: Int, longestStreak: Int)])] = LanguageSelection.languages.map { (language: $0, streaks: []) }
 	@State private var maxStreakLength: Double = 0.0
 	@State private var maxNormalStreakLength: Double = 0.0
-	
+	@State private var hasCompletedInitialLoad: Bool = false
+	@State private var showBarLabels: Bool = false
+
 	@Query private var gameRecords: [GameRecordEntity]
 
 	private let gradient = LinearGradient(colors: [.orange, .yellow, .yellow, .yellow, .yellow, .white], startPoint: .bottomLeading, endPoint: .topTrailing)
@@ -51,8 +55,8 @@ struct StatsView: View {
 					if #unavailable(iOS 26.0) {
 						FilterView(numberOfLetters: $numberOfLetters, selectedLanguage: $selectedLanguage, gameMode: $gameMode, showsWhenHintsUsed: $showsWhenHintsUsed)
 					}
-					if self.filteredGameRecords.isEmpty {
-						ContentUnavailableView.init("No stats available for this selection!", systemImage: "exclamationmark.triangle.fill", description: Text("Try playing a game first or changing the selection."))
+					if self.filteredGameRecords.isEmpty && self.hasCompletedInitialLoad {
+						ContentUnavailableView.init("No stats available for this selection", systemImage: "exclamationmark.triangle.fill", description: Text("Try playing a game first or changing the selection."))
 							.padding(.bottom, 20)
 					} else {
 						List {
@@ -65,11 +69,13 @@ struct StatsView: View {
 										
 										Spacer()
 										
-										Text("\(self.filteredGameRecords.count)")
+										AnimatedCountText(value: Double(self.filteredGameRecords.count))
 											.font(.title3)
 											.foregroundStyle(.secondary)
+											.animation(reduceMotion ? nil : .easeInOut(duration: 1.0), value: self.filteredGameRecords.count)
 									}
 								}
+								.wordlrListSectionRowBackground(.first)
 								VStack(alignment: .leading) {
 									HStack {
 										Text("Win rate")
@@ -79,9 +85,10 @@ struct StatsView: View {
 										
 										Spacer()
 										
-										Text("\(String(format: "%.0f%%", self.winRate * 100))")
+										AnimatedCountText(value: self.winRate, isPercentage: true)
 											.font(.title3)
 											.foregroundStyle(.secondary)
+											.animation(reduceMotion ? nil : .easeInOut(duration: 1.0), value: self.winRate)
 									}
 									
 									Chart {
@@ -90,13 +97,16 @@ struct StatsView: View {
 											y: .value("State", "won"),
 											width: .fixed(20.0)
 										)
-										.foregroundStyle(useGradientTheme ? AnyShapeStyle(gradient) : AnyShapeStyle(Color.green))
+										.foregroundStyle(Color.green)
 										.annotation(position: self.wonCount < (self.lostCount / 6) ? .trailing : .overlay) {
 											if self.wonCount > 0 {
 												Text("\(self.wonCount)")
 													.foregroundColor(self.wonCount < (self.lostCount / 6) ? .primary : .white)
 													.font(.headline)
-													.shadow(color: .black.opacity(0.3), radius: 1, x: 1, y: 1)
+													.frame(minWidth: CGFloat(15*"\(self.wonCount)".count), alignment: .center)
+													.shadow(color: .black.opacity(self.wonCount < (self.lostCount / 6) ? 0.0 : 0.3), radius: 1, x: 1, y: 1)
+													.opacity(self.showBarLabels ? 1 : 0)
+													.animation(reduceMotion ? nil : .easeOut(duration: 0.3), value: self.showBarLabels)
 											}
 										}
 
@@ -111,7 +121,10 @@ struct StatsView: View {
 												Text("\(self.lostCount)")
 													.foregroundColor(self.lostCount < (self.wonCount / 6) ? .primary : .white)
 													.font(.headline)
-													.shadow(color: .black.opacity(0.3), radius: 1, x: 1, y: 1)
+													.frame(minWidth: CGFloat(15*"\(self.lostCount)".count), alignment: .center)
+													.shadow(color: .black.opacity(self.lostCount < (self.wonCount / 6) ? 0.0 : 0.3), radius: 1, x: 1, y: 1)
+													.opacity(self.showBarLabels ? 1 : 0)
+													.animation(reduceMotion ? nil : .easeOut(duration: 0.3), value: self.showBarLabels)
 											}
 										}
 									}
@@ -123,7 +136,7 @@ struct StatsView: View {
 														Image(systemName: "checkmark.square.fill")
 															.font(.title2)
 															.symbolRenderingMode(.palette)
-															.foregroundStyle(.white, useGradientTheme ? AnyShapeStyle(gradient) : AnyShapeStyle(Color.green))
+															.foregroundStyle(.white, Color.green)
 															.shadow(color: .black.opacity(0.3), radius: 1, x: 1, y: 1)
 													} else {
 														Image(systemName: "xmark.square.fill")
@@ -136,19 +149,40 @@ struct StatsView: View {
 											}
 										}
 									}
-									.chartXScale(domain: 0...Double(self.totalCount))
-									.animation(.easeInOut(duration: 0.5), value: self.filteredGameRecords.count)
+									.chartXAxis {
+										AxisMarks(preset: .extended, position: .bottom, values: .automatic(minimumStride: 1.0)) { _ in
+											AxisGridLine()
+											AxisTick()
+											AxisValueLabel(centered: false, anchor: .topTrailing)
+												.font(.footnote)
+										}
+									}
+									.chartXScale(domain: 0...max(Double(self.totalCount), 1))
+									.animation(reduceMotion ? nil : .easeOut(duration: 1.0), value: self.filteredGameRecords.count)
+									.accessibilityLabel("Win rate chart")
+									.accessibilityValue(WordlrAccessibilityFormatter.winRateChartSummary(wins: self.wonCount, losses: self.lostCount, winRate: self.winRate))
 								}
+								.wordlrListSectionRowBackground(.last)
 							} header: {
 								Text("Played")
 							}
+							.wordlrListSectionBackground()
 							
 							Section {
 								VStack(alignment: .leading) {
-									Text("Number of guesses needed")
-										.font(.title3).bold()
-										.conditionalShadow(color: .black.opacity(0.05), radius: 2, x: 1, y: 1)
-										.padding(.top, 3)
+									HStack {
+										Text("Number of guesses needed")
+											.font(.title3).bold()
+											.conditionalShadow(color: .black.opacity(0.05), radius: 2, x: 1, y: 1)
+											.padding(.top, 3)
+										
+										Spacer()
+										
+										AnimatedCountText(value: self.averageGuessesNeeded, fractionLength: 1)
+											.font(.title3)
+											.foregroundStyle(.secondary)
+											.animation(reduceMotion ? nil : .easeInOut(duration: 1.0), value: self.averageGuessesNeeded)
+									}
 									
 									Chart {
 										ForEach(Array(self.counts.enumerated()), id: \.offset) { index, count in
@@ -157,48 +191,68 @@ struct StatsView: View {
 												y: .value("Number of guesses", " \(index+1) "),
 												width: .fixed(20.0)
 											)
-											.foregroundStyle(useGradientTheme ? AnyShapeStyle(gradient) : AnyShapeStyle(Color.green))
+											.foregroundStyle(Color.green)
 											.annotation(position: count < (self.maxGuessesPerCount / 6) ? .trailing : .overlay) {
 												if count > 0 {
 													Text("\(count)")
 														.foregroundColor(count < (self.maxGuessesPerCount / 6) ? .primary : .white)
 														.font(.headline)
-														.shadow(color: .black.opacity(0.3), radius: 1, x: 1, y: 1)
+														.frame(minWidth: CGFloat(15*"\(count)".count), alignment: .center)
+														.shadow(color: .black.opacity(count < (self.maxGuessesPerCount / 6) ? 0.0 : 0.3), radius: 1, x: 1, y: 1)
+														.opacity(self.showBarLabels ? 1 : 0)
+														.animation(reduceMotion ? nil : .easeOut(duration: 0.3), value: self.showBarLabels)
 												}
 											}
 										}
 									}
-									.chartXScale(domain: 0...Double(self.maxGuessesPerCount))
+									.chartXScale(domain: 0...max(Double(self.maxGuessesPerCount), 1))
 									.chartYAxis {
 										AxisMarks(preset: .extended, position: .leading) { _ in
 											AxisValueLabel(horizontalSpacing: 15)
 												.font(.footnote)
 										}
 									}
-									.animation(.easeInOut(duration: 0.5), value: self.filteredGameRecords.count)
+									.chartXAxis {
+										AxisMarks(preset: .extended, position: .bottom, values: .automatic(minimumStride: 1.0)) { _ in
+											AxisGridLine()
+											AxisTick()
+											AxisValueLabel(centered: false, anchor: .topTrailing)
+												.font(.footnote)
+										}
+									}
+									.animation(reduceMotion ? nil : .easeOut(duration: 1.0), value: self.filteredGameRecords.count)
+									.accessibilityLabel("Guesses chart")
+									.accessibilityValue(WordlrAccessibilityFormatter.guessesChartSummary(counts: self.counts))
 									.frame(minHeight: 250)
 								}
+								.wordlrListSectionRowBackground(.single)
 							} header: {
 								Text("Guesses")
 							}
+							.wordlrListSectionBackground()
 							if self.maxStreakLength > 0 || self.maxNormalStreakLength > 0 {
 								Section {
 									if self.maxStreakLength > 0 && (self.gameMode == .both || self.gameMode == .dailyWord) {
-										StreakChartView(title: NSLocalizedString("Daily Wordlr streaks 🔥", comment: "Title for daily word streaks chart in stats view"), longestStreakPerLetters: self.$longestStreakPerLetters, maxStreakLength: self.$maxStreakLength)
+										StreakChartView(title: NSLocalizedString("Daily word streaks 🔥", comment: "Title for daily word streaks chart in stats view"), longestStreakPerLetters: self.$longestStreakPerLetters, maxStreakLength: self.$maxStreakLength)
+											.wordlrListSectionRowBackground((self.maxNormalStreakLength > 0 && (self.gameMode == .both || self.gameMode == .normal)) ? .first : .single)
 									}
 									if self.maxNormalStreakLength > 0 && (self.gameMode == .both || self.gameMode == .normal) {
-											StreakChartView(title: NSLocalizedString("Free play streaks 🔥", comment: "Title for free play streaks chart in stats view"), longestStreakPerLetters: self.$longestNormalStreakPerLetters, maxStreakLength: self.$maxNormalStreakLength)
+											StreakChartView(title: NSLocalizedString("Unlimited streaks 🔥", comment: "Title for unlimited mode streaks chart in stats view"), longestStreakPerLetters: self.$longestNormalStreakPerLetters, maxStreakLength: self.$maxNormalStreakLength)
+											.wordlrListSectionRowBackground((self.maxStreakLength > 0 && (self.gameMode == .both || self.gameMode == .dailyWord)) ? .last : .single)
 									}
 								} header: {
 									Text("Streaks")
 								}
+								.wordlrListSectionBackground()
 							}
 							
 						}
+						.scrollContentBackground(.hidden)
 						.safeAreaPadding(.bottom, adManager.isBannerAdLoaded ? (UIDevice.current.userInterfaceIdiom == .pad || UIDevice.current.userInterfaceIdiom == .mac ? 80 : 54) : 0)
 					}
 				}
-				.navigationTitle("Stats")
+                .darkGradientBackground(colorScheme: colorScheme)
+				.navigationTitle("Statistics")
 				.navigationBarTitleDisplayMode(.inline)
 				.safeAreaInset(edge: .top) {
 					if #available(iOS 26.0, *) {
@@ -225,109 +279,111 @@ struct StatsView: View {
 				self.setDefaultValues()
 				self.hasFixedDefualtValues = true
 			}
-			
-			self.filterGameRecords()
+
+			Task {
+				self.filterGameRecords()
+			}
 			AnalyticsManager.shared.logScreenViewed(screenName: "StatsView")
 		}
 	}
 	
+	@MainActor
 	func filterGameRecords() {
-		var filteredRecords = self.gameRecords
-		
-		if self.numberOfLetters != 9 {
-			filteredRecords = filteredRecords.filter { $0.gameRecord.numberOfLetters == self.numberOfLetters }
+		let numberOfLetters = self.numberOfLetters
+		let selectedLanguage = self.selectedLanguage
+		let gameMode = self.gameMode
+		let showsWhenHintsUsed = self.showsWhenHintsUsed
+		let allRecords = self.gameRecords
+
+		let filteredRecords = allRecords.filter { entity in
+			let game = entity.gameRecord
+			if numberOfLetters != 9 && game.numberOfLetters != numberOfLetters { return false }
+			if selectedLanguage != .all && game.language != selectedLanguage { return false }
+			if gameMode != .both && game.mode != gameMode { return false }
+			if showsWhenHintsUsed == .neverUsed && (game.hintsUsed ?? 0) != 0 { return false }
+			if showsWhenHintsUsed == .onlyWhenUsed && (game.hintsUsed ?? 0) == 0 { return false }
+			return true
 		}
-		
-		if self.selectedLanguage != .all {
-			filteredRecords = filteredRecords.filter { $0.gameRecord.language == self.selectedLanguage }
+
+		let maxRows = max(rowCount(for: numberOfLetters == 9 ? 0 : numberOfLetters), filteredRecords.map { $0.gameRecord.effectiveMaxRows }.max() ?? 0)
+		var wonCount = 0
+		var lostCount = 0
+		var totalGuessesNeeded = 0
+		var guessCounts = Array(repeating: 0, count: maxRows)
+		for entity in filteredRecords {
+			let game = entity.gameRecord
+			if game.state == .won {
+				wonCount += 1
+				totalGuessesNeeded += game.numberOfGuesses
+				let guessIndex = game.numberOfGuesses - 1
+				if guessIndex >= 0 && guessIndex < maxRows {
+					guessCounts[guessIndex] += 1
+				}
+			} else if game.state == .lost {
+				lostCount += 1
+			}
 		}
-		
-		if self.gameMode != .both {
-			filteredRecords = filteredRecords.filter { $0.gameRecord.mode == self.gameMode }
+		let totalCount = wonCount + lostCount
+		let winRate = totalCount > 0 ? Double(wonCount) / Double(totalCount) : 0.0
+		let averageGuessesNeeded = wonCount > 0 ? Double(totalGuessesNeeded) / Double(wonCount) : 0.0
+		let maxGuessesPerCount = guessCounts.max() ?? 0
+
+		let languages = LanguageSelection.languages
+		var dailyStreaks: [(language: LanguageSelection, streaks: [(index: Int, currentStreak: Int, longestStreak: Int)])] = []
+		var normalStreaks: [(language: LanguageSelection, streaks: [(index: Int, currentStreak: Int, longestStreak: Int)])] = []
+		var maxStreak: Double = 0
+		var maxNormalStreak: Double = 0
+
+		for language in languages {
+			var dStreaks: [(index: Int, currentStreak: Int, longestStreak: Int)] = []
+			var nStreaks: [(index: Int, currentStreak: Int, longestStreak: Int)] = []
+			for index in 1...8 {
+				if numberOfLetters != 9 && numberOfLetters != index { continue }
+				if selectedLanguage != .all && selectedLanguage != language { continue }
+
+				if gameMode == .both || gameMode == .dailyWord {
+					let summary = GameRecordStreakCalculator.dailySummary(records: allRecords, language: language, numberOfLetters: index)
+					if summary.longestStreak > 0 {
+						dStreaks.append((index: index, currentStreak: summary.currentStreak, longestStreak: summary.longestStreak))
+						maxStreak = max(maxStreak, Double(summary.longestStreak))
+					}
+				}
+				if gameMode == .both || gameMode == .normal {
+					let summary = GameRecordStreakCalculator.normalSummary(records: allRecords, language: language, numberOfLetters: index)
+					if summary.longestStreak > 0 {
+						nStreaks.append((index: index, currentStreak: summary.currentStreak, longestStreak: summary.longestStreak))
+						maxNormalStreak = max(maxNormalStreak, Double(summary.longestStreak))
+					}
+				}
+			}
+			dailyStreaks.append((language: language, streaks: dStreaks))
+			normalStreaks.append((language: language, streaks: nStreaks))
 		}
-		
-		if self.showsWhenHintsUsed == .neverUsed {
-			filteredRecords = filteredRecords.filter { $0.gameRecord.hintsUsed ?? 0 == 0 }
-		} else if self.showsWhenHintsUsed == .onlyWhenUsed {
-			filteredRecords = filteredRecords.filter { $0.gameRecord.hintsUsed ?? 0 > 0 }
+
+		let isInitialLoad = !self.hasCompletedInitialLoad
+		if isInitialLoad {
+			self.showBarLabels = false
 		}
 		self.filteredGameRecords = filteredRecords
-		self.maxNumberOfRows = max(rowCount(for: self.numberOfLetters == 9 ? 0 : self.numberOfLetters), filteredRecords.map { $0.gameRecord.effectiveMaxRows }.max() ?? 0)
-		print("Selected game records: \(self.filteredGameRecords.count)")
-		self.wonCount = self.filteredGameRecords.filter { $0.gameRecord.state == .won }.count
-		self.lostCount = self.filteredGameRecords.filter { $0.gameRecord.state == .lost }.count
-		self.totalCount = self.wonCount + self.lostCount
-		self.winRate = self.totalCount > 0 ? Double(self.wonCount) / Double(self.totalCount) : 0.0
-		
-		self.counts.removeAll()
-		for i in 1...self.maxNumberOfRows {
-			self.counts.append(self.filteredGameRecords.filter { $0.gameRecord.numberOfGuesses == i && $0.gameRecord.state == .won }.count)
-		}
-		self.maxGuessesPerCount = self.counts.max() ?? 0
-		
-		// Streaks
-		self.maxStreakLength = 0
-		var i = 0
-		for longestStreak in self.longestStreakPerLetters {
-			self.longestStreakPerLetters[i].streaks.removeAll()
-			for index in 1...8 {
-				if self.numberOfLetters != 9 && self.numberOfLetters != index {
-					continue
-				}
-				
-				if self.selectedLanguage != .all && self.selectedLanguage != longestStreak.language {
-					continue
-				}
-				
-				let summary = GameRecordStreakCalculator.dailySummary(
-					records: self.gameRecords,
-					language: longestStreak.language,
-					numberOfLetters: index
-				)
-				
-				guard summary.longestStreak > 0 else {
-					continue
-				}
-				
-				self.longestStreakPerLetters[i].streaks.append((index: index, currentStreak: summary.currentStreak, longestStreak: summary.longestStreak))
-				let longestDouble = Double(summary.longestStreak)
-				if longestDouble > self.maxStreakLength {
-					self.maxStreakLength = longestDouble
+		self.maxNumberOfRows = maxRows
+		self.wonCount = wonCount
+		self.lostCount = lostCount
+		self.totalCount = totalCount
+		self.winRate = winRate
+		self.counts = guessCounts
+		self.maxGuessesPerCount = maxGuessesPerCount
+		self.averageGuessesNeeded = averageGuessesNeeded
+		self.longestStreakPerLetters = dailyStreaks
+		self.maxStreakLength = maxStreak
+		self.longestNormalStreakPerLetters = normalStreaks
+		self.maxNormalStreakLength = maxNormalStreak
+		self.hasCompletedInitialLoad = true
+		if isInitialLoad {
+			DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+				withAnimation(reduceMotion ? nil : .easeOut(duration: 0.3)) {
+					self.showBarLabels = true
 				}
 			}
-			i += 1
-		}
-		
-		i = 0
-		self.maxNormalStreakLength = 0
-		for longestStreak in self.longestNormalStreakPerLetters {
-			self.longestNormalStreakPerLetters[i].streaks.removeAll()
-			for index in 1...8 {
-				if self.numberOfLetters != 9 && self.numberOfLetters != index {
-					continue
-				}
-				
-				if self.selectedLanguage != .all && self.selectedLanguage != longestStreak.language {
-					continue
-				}
-				
-				let summary = GameRecordStreakCalculator.normalSummary(
-					records: self.gameRecords,
-					language: longestStreak.language,
-					numberOfLetters: index
-				)
-				
-				guard summary.longestStreak > 0 else {
-					continue
-				}
-				
-				self.longestNormalStreakPerLetters[i].streaks.append((index: index, currentStreak: summary.currentStreak, longestStreak: summary.longestStreak))
-				let longestDouble = Double(summary.longestStreak)
-				if longestDouble > self.maxNormalStreakLength {
-					self.maxNormalStreakLength = longestDouble
-				}
-			}
-			i += 1
 		}
 	}
 	
@@ -337,6 +393,27 @@ struct StatsView: View {
 		self.gameMode = self.defaultStatGameMode
 		self.showsWhenHintsUsed = self.defaultStatHintsUsed
 		self.selectedStreakLanguage = self.defaultStatLanguage
+	}
+}
+
+struct AnimatedCountText: View, Animatable {
+	var value: Double
+	var isPercentage: Bool = false
+	var fractionLength: Int = 0
+
+	var animatableData: Double {
+		get { value }
+		set { value = newValue }
+	}
+
+	var body: some View {
+		if isPercentage {
+			Text(String(format: "%.0f%%", value * 100))
+		} else if fractionLength > 0 {
+			Text(value.formatted(.number.precision(.fractionLength(fractionLength))))
+		} else {
+			Text("\(Int(value))")
+		}
 	}
 }
 

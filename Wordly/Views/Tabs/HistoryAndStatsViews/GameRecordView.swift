@@ -9,7 +9,7 @@ import SwiftUI
 
 struct GameRecordView: View {
 	@Environment(\.colorScheme) private var colorScheme
-	@Environment(\.scenePhase) private var scenePhase
+	@Environment(\.accessibilityReduceMotion) private var reduceMotion
 	@Environment(AdManager.self) private var adManager
 	@AppStorage("userWantsNormalTheme") private var userWantsNormalTheme: Bool = true
 	@AppStorage("userWantsThePhraseNameBack") private var userWantsThePhraseNameBack = false
@@ -62,16 +62,15 @@ struct GameRecordView: View {
 									.simultaneousGesture(TapGesture(count: 1).onEnded {
 										self.didTap.toggle()
 									})
+									.accessibilityHidden(true)
 							} else {
 								Image(systemName: gameRecord.state == .won ? "checkmark" : "xmark")
 									.foregroundStyle(.white)
 									.conditionalShadow(color: .black.opacity(0.4), radius: 2, x: 2, y: 2)
 									.padding(12)
 									.background {
-//										if self.scenePhase == .background {
 											Circle()
 												.foregroundStyle(gameRecord.state == .won ? Color(uiColor: .systemGreen) : Color(uiColor: .systemRed))
-//										}
 									}
 									.glassEffect(.regular.tint(gameRecord.state == .won ? Color(uiColor: .systemGreen) : Color(uiColor: .systemRed)).interactive())
 									.font(.largeTitle).bold()
@@ -84,6 +83,7 @@ struct GameRecordView: View {
 									.simultaneousGesture(TapGesture(count: 1).onEnded {
 										self.didTap.toggle()
 									})
+									.accessibilityHidden(true)
 							}
 						} else {
 							if !self.userWantsNormalTheme && self.colorScheme == .dark && gameRecord.mode == .dailyWord && gameRecord.state == .won {
@@ -106,6 +106,7 @@ struct GameRecordView: View {
 									.simultaneousGesture(TapGesture(count: 1).onEnded {
 										self.didTap.toggle()
 									})
+									.accessibilityHidden(true)
 							} else {
 								Image(systemName: gameRecord.state == .won ? "checkmark" : "xmark")
 									.foregroundStyle(.white)
@@ -125,11 +126,14 @@ struct GameRecordView: View {
 									.simultaneousGesture(TapGesture(count: 1).onEnded {
 										self.didTap.toggle()
 									})
+									.accessibilityHidden(true)
 							}
 						}
 					}
 					.padding(.top)
 					.padding(.horizontal)
+					.accessibilityElement(children: .combine)
+					.accessibilityLabel(WordlrAccessibilityFormatter.gameRecordSummary(gameRecord, timeUsed: self.timeUsedString))
 					
 					
 					VStack(alignment: .leading) {
@@ -145,11 +149,10 @@ struct GameRecordView: View {
 							} else {
 								Text("\(String(formatter1.string(from: gameRecord.date)))")
 									.font(.title2)
-								
 							}
 						}
 						.padding(.bottom, 5)
-						
+
 						HStack(alignment: .bottom) {
 							Text("Word length")
 								.foregroundStyle(.secondary)
@@ -163,12 +166,12 @@ struct GameRecordView: View {
 								Text("\(gameRecord.numberOfLetters)")
 									.font(.title2)
 							}
-							
+
 						}
 						.padding(.bottom, 5)
-						
-						
-						
+
+
+
 						HStack(alignment: .bottom) {
 							Text("Language")
 								.foregroundStyle(.secondary)
@@ -182,10 +185,10 @@ struct GameRecordView: View {
 								Text("\(gameRecord.language.localizedName)")
 									.font(.title2)
 							}
-							
+
 						}
 						.padding(.bottom, 5)
-						
+
 						HStack(alignment: .bottom) {
 							Text("Mode")
 								.foregroundStyle(.secondary)
@@ -195,14 +198,14 @@ struct GameRecordView: View {
 								Text("\(gameRecord.mode.localizedName)")
 									.font(.title2)
 									.conditionalShadow(color: .black.opacity(0.5), radius: 4, x: 4, y: 4)
-								
+
 							} else {
 								Text("\(gameRecord.mode.localizedName)")
 									.font(.title2)
 							}
 						}
 						.padding(.bottom, 5)
-						
+
 						HStack(alignment: .bottom) {
 							Text("Number of guesses")
 								.foregroundStyle(.secondary)
@@ -212,16 +215,16 @@ struct GameRecordView: View {
 								Text("\(gameRecord.numberOfGuesses)")
 									.font(.title2)
 									.conditionalShadow(color: .black.opacity(0.5), radius: 4, x: 4, y: 4)
-								
+
 							} else {
 								Text("\(gameRecord.numberOfGuesses)")
 									.font(.title2)
 							}
-							
+
 						}
 						.padding(.bottom, 5)
-						
-						
+
+
 						if let hintsUsed = gameRecord.hintsUsed, hintsUsed > 0 {
 							HStack(alignment: .bottom) {
 								Text("Hints used")
@@ -232,7 +235,7 @@ struct GameRecordView: View {
 									Text("\(hintsUsed)")
 										.font(.title2)
 										.conditionalShadow(color: .black.opacity(0.5), radius: 4, x: 4, y: 4)
-									
+
 								} else {
 									Text("\(hintsUsed)")
 										.font(.title2)
@@ -240,7 +243,7 @@ struct GameRecordView: View {
 							}
 							.padding(.bottom, 5)
 						}
-						
+
 						if !self.timeUsedString.isEmpty {
 							HStack(alignment: .bottom) {
 								Text("Time used")
@@ -267,6 +270,9 @@ struct GameRecordView: View {
 								.foregroundColor(.white)
 								.conditionalShadow(color: .black.opacity(0.5), radius: 4, x: 4, y: 4)
 								.font(.title2).bold()
+								.lineLimit(2)
+								.minimumScaleFactor(0.8)
+								.multilineTextAlignment(.center)
 								.padding(14)
 								.frame(maxWidth: .infinity)
 								.background {
@@ -280,6 +286,7 @@ struct GameRecordView: View {
 									}
 								}
 						}
+						.accessibilityHint("Opens the definition for this word.")
 						.glassEffect(!self.userWantsNormalTheme && self.colorScheme == .dark && gameRecord.mode == .dailyWord && gameRecord.state == .won ? .regular.interactive() : .regular.tint(.green).interactive(), in: .rect(cornerRadius: 15.0))
 						.glassEffectID("definition", in: self.namespace)
 						.simultaneousGesture(TapGesture().onEnded {
@@ -288,7 +295,7 @@ struct GameRecordView: View {
 						.padding(.vertical, 10)
 						
 						.padding(.horizontal, 40)
-						.sensoryFeedback(.impact, trigger: self.didTap)
+						.conditionalHaptic(.impact, trigger: self.didTap)
 						//						.buttonStyle(GrowingButton())
 						.conditionalShadow(color: .black.opacity(0.5), radius: 4, x: 4, y: 4)
 						
@@ -299,17 +306,19 @@ struct GameRecordView: View {
 									.foregroundColor(.white)
 									.conditionalShadow(color: .black.opacity(0.5), radius: 4, x: 4, y: 4)
 									.font(.title2).bold()
+									.lineLimit(2)
+									.minimumScaleFactor(0.8)
+									.multilineTextAlignment(.center)
 									.padding(14)
 									.frame(maxWidth: .infinity)
 									.background {
-//										if self.scenePhase == .background {
 											let useGreen = !self.userWantsNormalTheme && self.colorScheme == .dark && gameRecord.mode == .dailyWord && gameRecord.state == .won
 											RoundedRectangle(cornerRadius: 15)
 												.foregroundStyle(Color(uiColor: useGreen ? .systemGreen : .systemOrange))
-//										}
 									}
 
 							}
+							.accessibilityHint("Opens the completed board with letter feedback.")
 							.glassEffect(!self.userWantsNormalTheme && self.colorScheme == .dark && gameRecord.mode == .dailyWord && gameRecord.state == .won ? .regular.tint(.green).interactive() : .regular.tint(.orange).interactive(), in: .rect(cornerRadius: 15.0))
 							.glassEffectID("board", in: self.namespace)
 							.simultaneousGesture(TapGesture().onEnded {
@@ -317,7 +326,7 @@ struct GameRecordView: View {
 							})
 							.padding(.vertical, 10)
 							.padding(.horizontal, 40)
-							.sensoryFeedback(.impact, trigger: self.didTap)
+							.conditionalHaptic(.impact, trigger: self.didTap)
 							.conditionalShadow(color: .black.opacity(0.5), radius: 4, x: 4, y: 4)
 						}
 					} else {
@@ -326,6 +335,9 @@ struct GameRecordView: View {
 								.foregroundColor(.white)
 								.conditionalShadow(color: .black.opacity(0.05), radius: 2, x: 1, y: 1)
 								.font(.title2).bold()
+								.lineLimit(2)
+								.minimumScaleFactor(0.8)
+								.multilineTextAlignment(.center)
 								.padding(14)
 								.frame(maxWidth: .infinity)
 								.background {
@@ -341,11 +353,12 @@ struct GameRecordView: View {
 								}
 								.padding(.horizontal, 40)
 						}
+						.accessibilityHint("Opens the definition for this word.")
 						.simultaneousGesture(TapGesture().onEnded {
 							self.didTap.toggle()
 						})
 						.padding(.vertical, 10)
-						.sensoryFeedback(.impact, trigger: self.didTap)
+						.conditionalHaptic(.impact, trigger: self.didTap)
 						.buttonStyle(GrowingButton())
 						.conditionalShadow(color: .black.opacity(0.5), radius: 4, x: 4, y: 4)
 
@@ -356,6 +369,9 @@ struct GameRecordView: View {
 									.foregroundColor(.white)
 									.conditionalShadow(color: .black.opacity(0.05), radius: 1.5, x: 1, y: 1)
 									.font(.title2).bold()
+									.lineLimit(2)
+									.minimumScaleFactor(0.8)
+									.multilineTextAlignment(.center)
 									.padding(14)
 									.frame(maxWidth: .infinity)
 									.background {
@@ -364,40 +380,40 @@ struct GameRecordView: View {
 									}
 									.padding(.horizontal, 40)
 							}
+							.accessibilityHint("Opens the completed board with letter feedback.")
 							.simultaneousGesture(TapGesture().onEnded {
 								self.didTap.toggle()
 							})
 							.padding(.vertical, 10)
-							.sensoryFeedback(.impact, trigger: self.didTap)
+							.conditionalHaptic(.impact, trigger: self.didTap)
 							.buttonStyle(GrowingButton())
 							.conditionalShadow(color: .black.opacity(0.5), radius: 4, x: 4, y: 4)
 						}
 					}
 					
-					if let board = gameRecord.board, gameRecord.mode == .dailyWord {
+					if gameRecord.mode == .dailyWord {
 						HStack {
 							Spacer()
 							
 							Button {
 								withAnimation {
-									if let endDate = gameRecord.endDate {
-										UIPasteboard.general.string = self.getShareResult(row: gameRecord.numberOfGuesses, numberOfLetters: gameRecord.numberOfLetters, maxRows: gameRecord.effectiveMaxRows, date: gameRecord.date, board: board, timeUsedString: self.getTimeUsedString(startDate: self.gameRecord.date, endDate: endDate))
-									} else {
-										UIPasteboard.general.string = self.getShareResult(row: gameRecord.numberOfGuesses, numberOfLetters: gameRecord.numberOfLetters, maxRows: gameRecord.effectiveMaxRows, date: gameRecord.date, board: board)
-									}
+									UIPasteboard.general.string = GameResultShareFormatter.shareText(for: gameRecord)
+									AnalyticsManager.shared.logDidCopyResultEvent(copySource: "game_record_button")
 									self.hasSharedResult = true
 									self.didTap.toggle()
 								}
 							} label: {
 								Label("Copy result", systemImage: self.hasSharedResult ? "doc.on.doc.fill" : "doc.on.doc")
 									.font(.title2).bold()
-									.contentTransition(.symbolEffect(.replace))
+									.contentTransition(reduceMotion ? .identity : .symbolEffect(.replace))
 									.conditionalShadow(color: .black.opacity(0.5), radius: 4, x: 4, y: 4)
 									.tint(.primary)
 								
 							}
+							.accessibilityHint("Copies the shareable result for this game.")
+							.accessibilityInputLabels(["Copy result", "Copy"])
 							.padding(.vertical, 15)
-							.sensoryFeedback(.impact, trigger: self.didTap)
+							.conditionalHaptic(.impact, trigger: self.didTap)
 							
 							Spacer()
 							
@@ -406,66 +422,26 @@ struct GameRecordView: View {
 					
 				}
 				.padding(10)
-				.background {
-					RoundedRectangle(cornerRadius: 20)
-						.foregroundStyle(Color(uiColor: .secondarySystemBackground))
-				}
+				.wordlrSurface(cornerRadius: 20)
 				.padding(.horizontal, 15)
 				.padding(.top, 20)
 				
 				
 			}
+			.darkGradientBackground(colorScheme: colorScheme)
 			.navigationTitle(gameRecord.word)
 			.navigationBarTitleDisplayMode(.inline)
 			.safeAreaPadding(.bottom, adManager.isBannerAdLoaded ? (UIDevice.current.userInterfaceIdiom == .pad || UIDevice.current.userInterfaceIdiom == .mac ? 100 : 75) : 0)
 			.onAppear {
 				AnalyticsManager.shared.logScreenViewed(screenName: "GameRecordView")
 				if let endDate = gameRecord.endDate {
-					self.timeUsedString = self.getTimeUsedString(startDate: self.gameRecord.date, endDate: endDate).trimmingCharacters(in: .whitespaces)
+					self.timeUsedString = GameResultShareFormatter.timeUsedString(startDate: self.gameRecord.date, endDate: endDate).trimmingCharacters(in: .whitespaces)
 				}
 			}
 			
 		}
 	}
-	
-	func getShareResult(row: Int, numberOfLetters: Int, maxRows: Int, date: Date, board: [[Letter]], timeUsedString: String = "") -> String {
-		let numberOfRows = maxRows
-		
-		var letterString = String(format: NSLocalizedString("share_letter", comment: "Letter"), numberOfLetters)
-		if numberOfLetters > 1 {
-			letterString = String(format: NSLocalizedString("share_letters", comment: "Letters"), numberOfLetters)
-		}
-		
-		let rowString = String(format: NSLocalizedString("share_row", comment: "Row"))
-		let usedString = String(format: NSLocalizedString("share_used", comment: "Used"))
-		
-		
-		var shareText = "Wordlr \(formatter1.string(from: date)), \(letterString), \(row)/\(numberOfRows) \(rowString)\(timeUsedString != "" ? ", \(timeUsedString) \(usedString)" : ""):\n"
-		
-		var shouldBreak: Bool = false
-		for row in board {
-			for letter in row {
-				switch letter.state {
-					case .correctPosition:
-						shareText += "🟩"
-					case .correctLetter:
-						shareText += "🟧"
-					case .usedButNotCorrect:
-						shareText += "⬜️"
-					default:
-						shouldBreak = true
-						break
-				}
-			}
-			if shouldBreak {
-				break
-			}
-			shareText += "\n"
-			
-		}
-		return shareText
-	}
-	
+
 	func getTimeUsedString(startDate: Date, endDate: Date) -> String {
 		print("End date: \(endDate)")
 		print("startDate: \(startDate)")
