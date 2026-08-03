@@ -67,7 +67,7 @@
 		6344F4FE2EB9500D00948552 /* KeyPress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyPress.swift; sourceTree = "<group>"; };
 		634900002FC2A00100A11CE5 /* AccessibilitySupport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessibilitySupport.swift; sourceTree = "<group>"; };
 		635799602FC033F300B31921 /* SelectGameModeButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectGameModeButton.swift; sourceTree = "<group>"; };
-		6382E3BC2D12FE0500B61353 /* Wordly.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Wordly.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		6382E3BC2D12FE0500B61353 /* Wordlr.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Wordlr.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		63A1C1002FA0000100A00001 /* StoreManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreManager.swift; sourceTree = "<group>"; };
 		63B0C6502E056A710047E4E9 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS26.0.sdk/System/Library/Frameworks/WebKit.framework; sourceTree = DEVELOPER_DIR; };
 		63B1E1352F795EA500F36987 /* AdManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdManager.swift; sourceTree = "<group>"; };
@@ -136,7 +136,7 @@
 		6382E3B32D12FE0500B61353 = {
 			isa = PBXGroup;
 			children = (
-				63B9B4142EA58ED2008483FB /* Wordly */,
+				63B9B4142EA58ED2008483FB /* Wordlr */,
 				63B0C64F2E056A710047E4E9 /* Frameworks */,
 				6382E3BD2D12FE0500B61353 /* Products */,
 			);
@@ -145,7 +145,7 @@
 		6382E3BD2D12FE0500B61353 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				6382E3BC2D12FE0500B61353 /* Wordly.app */,
+				6382E3BC2D12FE0500B61353 /* Wordlr.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -255,7 +255,7 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
-		63B9B4142EA58ED2008483FB /* Wordly */ = {
+		63B9B4142EA58ED2008483FB /* Wordlr */ = {
 			isa = PBXGroup;
 			children = (
 				63BF73DE2F447CCA0065D40B /* AnalyticsManager.swift */,
@@ -277,15 +277,15 @@
 				63B9B40F2EA58ED2008483FB /* PrivacyInfo.xcprivacy */,
 				63B9B40C2EA58ED2008483FB /* Info.plist */,
 			);
-			path = Wordly;
+			path = Wordlr;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		6382E3BB2D12FE0500B61353 /* Wordly */ = {
+		6382E3BB2D12FE0500B61353 /* Wordlr */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 6382E3CB2D12FE0700B61353 /* Build configuration list for PBXNativeTarget "Wordly" */;
+			buildConfigurationList = 6382E3CB2D12FE0700B61353 /* Build configuration list for PBXNativeTarget "Wordlr" */;
 			buildPhases = (
 				6382E3B82D12FE0500B61353 /* Sources */,
 				6382E3B92D12FE0500B61353 /* Frameworks */,
@@ -295,7 +295,7 @@
 			);
 			dependencies = (
 			);
-			name = Wordly;
+			name = Wordlr;
 			packageProductDependencies = (
 				63F697CA2E05A328008B0B6E /* GoogleMobileAds */,
 				63F225942E53B24100248D30 /* GoogleUserMessagingPlatform */,
@@ -303,7 +303,7 @@
 				63432AF92FBD42BB005529C4 /* TelemetryDeck */,
 			);
 			productName = Wordle;
-			productReference = 6382E3BC2D12FE0500B61353 /* Wordly.app */;
+			productReference = 6382E3BC2D12FE0500B61353 /* Wordlr.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -321,7 +321,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 6382E3B72D12FE0500B61353 /* Build configuration list for PBXProject "Wordly" */;
+			buildConfigurationList = 6382E3B72D12FE0500B61353 /* Build configuration list for PBXProject "Wordlr" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -345,7 +345,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				6382E3BB2D12FE0500B61353 /* Wordly */,
+				6382E3BB2D12FE0500B61353 /* Wordlr */,
 			);
 		};
 /* End PBXProject section */
@@ -651,7 +651,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		6382E3B72D12FE0500B61353 /* Build configuration list for PBXProject "Wordly" */ = {
+		6382E3B72D12FE0500B61353 /* Build configuration list for PBXProject "Wordlr" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				6382E3C92D12FE0700B61353 /* Debug */,
@@ -660,7 +660,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		6382E3CB2D12FE0700B61353 /* Build configuration list for PBXNativeTarget "Wordly" */ = {
+		6382E3CB2D12FE0700B61353 /* Build configuration list for PBXNativeTarget "Wordlr" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				6382E3CC2D12FE0700B61353 /* Debug */,

@@ -17,9 +17,9 @@
                   <BuildableReference
                      BuildableIdentifier = "primary"
                      BlueprintIdentifier = "6382E3BB2D12FE0500B61353"
-                     BuildableName = "Wordly.app"
-                     BlueprintName = "Wordly"
-                     ReferencedContainer = "container:Wordly.xcodeproj">
+                     BuildableName = "Wordlr.app"
+                     BlueprintName = "Wordlr"
+                     ReferencedContainer = "container:Wordlr.xcodeproj">
                   </BuildableReference>
                </EnvironmentBuildable>
             </ActionContent>
@@ -35,9 +35,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "6382E3BB2D12FE0500B61353"
-               BuildableName = "Wordly.app"
-               BlueprintName = "Wordly"
-               ReferencedContainer = "container:Wordly.xcodeproj">
+               BuildableName = "Wordlr.app"
+               BlueprintName = "Wordlr"
+               ReferencedContainer = "container:Wordlr.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -64,9 +64,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "6382E3BB2D12FE0500B61353"
-            BuildableName = "Wordly.app"
-            BlueprintName = "Wordly"
-            ReferencedContainer = "container:Wordly.xcodeproj">
+            BuildableName = "Wordlr.app"
+            BlueprintName = "Wordlr"
+            ReferencedContainer = "container:Wordlr.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <CommandLineArguments>
@@ -97,9 +97,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "6382E3BB2D12FE0500B61353"
-            BuildableName = "Wordly.app"
-            BlueprintName = "Wordly"
-            ReferencedContainer = "container:Wordly.xcodeproj">
+            BuildableName = "Wordlr.app"
+            BlueprintName = "Wordlr"
+            ReferencedContainer = "container:Wordlr.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

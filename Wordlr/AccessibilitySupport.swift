@@ -1,6 +1,6 @@
 //
 //  AccessibilitySupport.swift
-//  Wordly
+//  Wordlr
 //
 //  Created by Kristoffer Melen on 25/05/2026.
 //
