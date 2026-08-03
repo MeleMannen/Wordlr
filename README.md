@@ -1,1 +1,1 @@
-# Wordly - Guess the Word
+# Wordlr - Guess the word
