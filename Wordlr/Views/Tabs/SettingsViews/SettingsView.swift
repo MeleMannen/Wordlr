@@ -12,8 +12,9 @@ import StoreKit
 
 struct SettingsView: View {
 	@Environment(\.modelContext) private var context
-	@Environment(\.colorScheme) private var colorScheme
-	@Environment(\.accessibilityReduceMotion) private var reduceMotion
+		@Environment(\.colorScheme) private var colorScheme
+		@Environment(\.accessibilityReduceMotion) private var reduceMotion
+		@Environment(\.accessibilityReduceTransparency) private var reduceTransparency
 	@Environment(AdManager.self) private var adManager
 	@Environment(StoreManager.self) private var storeManager
 	@AppStorage("appTheme") private var appTheme: AppTheme = .dark
@@ -251,13 +252,17 @@ struct SettingsView: View {
 						}
 					}
 
-					if #available(iOS 26.0, *), self.colorScheme == .dark {
-						Toggle(isOn: $usesTransparentLists) {
-							SettingsRowLabel(title: "Transparent lists", systemImage: "list.bullet.rectangle")
-						}
-						.wordlrListSectionRowBackground(.middle)
-						.tint(.green)
-						.conditionalHaptic(.selection, trigger: usesTransparentLists)
+						if #available(iOS 26.0, *), self.colorScheme == .dark {
+							Toggle(isOn: Binding(
+								get: { usesTransparentLists && !reduceTransparency },
+								set: { usesTransparentLists = $0 }
+							)) {
+								SettingsRowLabel(title: "Transparent lists", systemImage: "list.bullet.rectangle")
+							}
+							.wordlrListSectionRowBackground(.middle)
+							.tint(.green)
+							.disabled(reduceTransparency)
+							.conditionalHaptic(.selection, trigger: usesTransparentLists)
 						.onChange(of: usesTransparentLists) { _, newValue in
 							AnalyticsManager.shared.logDidToggleTransparentListsEvent(isEnabled: newValue)
 						}
@@ -615,7 +620,7 @@ struct SettingsView: View {
 					Color(uiColor: .secondarySystemBackground)
 						.ignoresSafeArea()
 				} else {
-					if #available(iOS 26.0, *) {
+					if #available(iOS 26.0, *), usesTransparentLists {
 						if ProcessInfo.processInfo.isiOSAppOnMac && !storeManager.isAdRemovalPurchased {
 							GeometryReader { geometry in
 								let isLandscape = geometry.size.width > geometry.size.height

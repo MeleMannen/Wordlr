@@ -202,6 +202,8 @@ struct SelectView: View {
 					.conditionalHaptic(.selection, trigger: self.didTapInfoButton)
 				}
 			}
+            
+            
 		}
 		.navigationTitle(self.userWantsThePhraseNameBack ? "The Phrase" : "Wordlr")
 		.onChange(of: appState.navigateHomeTrigger) {
@@ -478,6 +480,8 @@ extension View {
 		)
 	}
 }
+
+
 
 
 #Preview {

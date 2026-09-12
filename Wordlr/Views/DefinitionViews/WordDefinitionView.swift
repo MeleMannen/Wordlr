@@ -8,24 +8,20 @@
 import SwiftUI
 
 struct WordDefinitionView: View {
-    @State var word: String = ""
-    @State var language: LanguageSelection = .english
-    
+    var word: String = ""
+    var language: LanguageSelection = .english
+    @StateObject private var definitionManager = DefinitionManager()
+
     var body: some View {
-        if self.language == .english {
-            EnglishWordDefinitionView(word: self.word)
-                .environmentObject(DefinitionManager())
-        } else if self.language == .norwegian {
-            NorwegianWordDefinitionView(word: self.word)
-                .environmentObject(DefinitionManager())
-		} else if self.language == .spanish {
-			SpanishWordDefinitionView(word: self.word)
-				.environmentObject(DefinitionManager())
-		} else if self.language == .french || self.language == .polish {
-			FreeDictionaryWordDefinitionView(word: self.word, language: self.language)
-				.environmentObject(DefinitionManager())
-		
-		}
+        Group {
+            if language == .norwegian {
+                NorwegianWordDefinitionView(word: word)
+            } else {
+                LocalizedWordDefinitionView(word: word, language: language)
+                    .id("\(word)|\(language.rawValue)|\(Locale.preferredLanguages.first ?? "en")")
+            }
+        }
+        .environmentObject(definitionManager)
     }
 }
 

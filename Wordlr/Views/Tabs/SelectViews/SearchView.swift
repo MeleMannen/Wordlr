@@ -196,6 +196,7 @@ struct SearchView: View {
                 .presentationDetents(UIDevice.current.userInterfaceIdiom == .phone ? [.large, .fraction(0.8)] : [.large], selection: $selectedDetent)
                 .presentationDragIndicator(.hidden)
                 .navigationTransition(.zoom(sourceID: "filter", in: namespace))
+                .conditionalScrollEdgeEffect()
         } else {
             FilterOptionsView(isShowingFilterOptions: $isShowingFilterOptions)
                 .environment(appManager)

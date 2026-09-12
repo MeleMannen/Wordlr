@@ -311,21 +311,7 @@ private enum HistorySectionBuilder {
 extension View {
 	@ViewBuilder
 	func darkGradientBackground(colorScheme: ColorScheme, opacity: Double = 1.0) -> some View {
-		if colorScheme == .light {
-			self.background {
-				Color(uiColor: .secondarySystemBackground)
-					.ignoresSafeArea()
-			}
-		} else if #available(iOS 26.0, *) {
-			self.background {
-				if !ProcessInfo.processInfo.isiOSAppOnMac &&
-					(UIDevice.current.userInterfaceIdiom == .phone || UIDevice.current.userInterfaceIdiom == .pad) {
-					WordlrGreenBackgroundGradient(opacity: opacity)
-				}
-			}
-		} else {
-			self
-		}
+		self.modifier(WordlrDarkGradientBackgroundModifier(colorScheme: colorScheme, opacity: opacity))
 	}
 
 	func conditionalHaptic<V: Equatable>(_ feedback: SensoryFeedback, trigger: V) -> some View {
@@ -346,6 +332,31 @@ extension View {
 			self.searchPresentationToolbarBehavior(.avoidHidingContent)
 		} else {
 			self
+		}
+	}
+}
+
+private struct WordlrDarkGradientBackgroundModifier: ViewModifier {
+    @Environment(\.accessibilityReduceTransparency) private var reduceTransparency
+    @AppStorage("usesTransparentLists") private var usesTransparentLists: Bool = true
+	let colorScheme: ColorScheme
+	let opacity: Double
+
+	func body(content: Content) -> some View {
+		if colorScheme == .light {
+			content.background {
+				Color(uiColor: .secondarySystemBackground)
+					.ignoresSafeArea()
+			}
+        } else if #available(iOS 26.0, *), usesTransparentLists && !reduceTransparency {
+			content.background {
+				if !ProcessInfo.processInfo.isiOSAppOnMac &&
+					(UIDevice.current.userInterfaceIdiom == .phone || UIDevice.current.userInterfaceIdiom == .pad) {
+					WordlrGreenBackgroundGradient(opacity: opacity)
+				}
+			}
+		} else {
+			content
 		}
 	}
 }

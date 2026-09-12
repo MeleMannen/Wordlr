@@ -257,6 +257,7 @@ struct StatsView: View {
 				.safeAreaInset(edge: .top) {
 					if #available(iOS 26.0, *) {
 						FilterView(numberOfLetters: $numberOfLetters, selectedLanguage: $selectedLanguage, gameMode: $gameMode, showsWhenHintsUsed: $showsWhenHintsUsed)
+                            .padding(.top, 10)
 					}
 				}
 				.onChange(of: self.numberOfLetters) {

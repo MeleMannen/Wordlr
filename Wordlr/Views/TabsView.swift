@@ -15,18 +15,27 @@ import UserNotifications
 
 struct TabsView: View {
     @Environment(\.scenePhase) private var scenePhase
+    @Environment(\.colorScheme) private var colorScheme
+    @Environment(\.accessibilityReduceTransparency) private var reduceTransparency
     @Environment(\.modelContext) var modelContext
     @AppStorage("appTheme") private var appTheme: AppTheme = .dark
     @AppStorage("notificationsEnabled") private var notificationsEnabled: Bool = false
     @AppStorage("userWantsThePhraseNameBack") private var userWantsThePhraseNameBack = false
     @AppStorage("hasSeenOnboarding") private var hasSeenOnboarding: Bool = false
     @AppStorage("proAdsEnabled") private var proAdsEnabled: Bool = false
+    @AppStorage("usesTransparentLists") private var usesTransparentLists: Bool = true
     @State var selection: TabSelection = .home
-    @State var tintColor: Color = .green
     @State private var isResolvingStartupPrivacyFlow = false
 	@ObservedObject private var appState = AppState.shared
 	@State private var adManager: AdManager = AdManager()
 	@State private var storeManager: StoreManager = StoreManager()
+
+    private var tintColor: Color {
+        if #available(iOS 26.0, *), usesTransparentLists && !reduceTransparency {
+            return .green
+        }
+        return colorScheme == .dark ? .white : .black
+    }
 
     var body: some View {
         GeometryReader { geometry in
@@ -101,13 +110,6 @@ struct TabsView: View {
             }
             .safeAreaInset(edge: .bottom) { bottomAd(for: geometry) }
             .preferredColorScheme(appTheme == .system ? nil : (appTheme == .light ? .light : .dark))
-            .onAppear {
-                if #available(iOS 26.0, *) {
-                    self.tintColor = .green
-                } else {
-                    self.tintColor = .primary
-                }
-            }
             .onChange(of: storeManager.isAdRemovalPurchased) { _, purchased in
                 if purchased && !shouldDisplayAds {
                     withAnimation {

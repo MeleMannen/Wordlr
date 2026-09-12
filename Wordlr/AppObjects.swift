@@ -929,6 +929,64 @@ struct License2: Codable {
 }
 
 
+struct WiktDefinition: Decodable, Sendable {
+    let word: String
+    let edition: String
+    var definitions: [Entry]
+    
+    struct Entry: Decodable, Sendable {
+        let pos: String
+        let lang_code: String
+        var senses: [Sense]
+    }
+    
+    struct Sense: Decodable, Sendable {
+        let glosses: [String]?
+        let examples: [Example]?
+        let tags: [String]?
+        
+        var explanations: [String] {
+            (glosses ?? []).filter { !$0.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }
+        }
+    }
+    
+    struct Example: Decodable, Sendable {
+        let text: String?
+        let translation: String?
+        let english: String?
+        let roman: String?
+        let ref: String?
+    }
+    
+    var sourceURL: URL? {
+        var components = URLComponents()
+        components.scheme = "https"
+        components.host = "\(edition).wiktionary.org"
+        components.path = "/wiki/\(word)"
+        return components.url
+    }
+}
+
+
+
+struct ConditionalScrollEdgeEffect: ViewModifier {
+    func body(content: Content) -> some View {
+        if #available(iOS 26.0, *) {
+            content
+                .scrollEdgeEffectStyle(.soft, for: .top)
+        } else {
+            content
+        }
+    }
+}
+
+extension View {
+    func conditionalScrollEdgeEffect() -> some View {
+        modifier(ConditionalScrollEdgeEffect())
+    }
+}
+
+
 
 
 final class WordleDataManager {
@@ -937,6 +995,14 @@ final class WordleDataManager {
 }
 
 extension WordleDataManager {
+    /// Keep the definition screen responsive when one provider is unavailable.
+    /// Every provider still gets a chance before we show its fallback result.
+    private static let dictionaryRequestTimeout: TimeInterval = 3
+
+    private func dictionaryRequest(for url: URL) -> URLRequest {
+        URLRequest(url: url, timeoutInterval: Self.dictionaryRequestTimeout)
+    }
+
     func loadWordsFromJSONFile(selectedLanguage: LanguageSelection) -> Words? {
 		guard let filePath = Bundle.main.path(forResource: selectedLanguage.fileName, ofType: "json") else {
             print("File not found")
@@ -980,7 +1046,7 @@ extension WordleDataManager {
             return
         }
         
-        URLSession.shared.dataTask(with: url) { data, response, error in
+        URLSession.shared.dataTask(with: self.dictionaryRequest(for: url)) { data, response, error in
             guard let data = data, error == nil else {
                 completion(.networkError)
                 return
@@ -1350,15 +1416,11 @@ extension WordleDataManager {
     }
     
     func fetchArticleDetails(articleID: Int, completion: @escaping (DefinitionFetchResult<NorwegianDefinition>) -> Void) {
-        let request = NSMutableURLRequest(url: NSURL(string: "https://ord.uib.no/bm/article/\(articleID).json")! as URL,
-                                          cachePolicy: .useProtocolCachePolicy,
-                                          timeoutInterval: 20)
-        request.httpMethod = "GET"
-        
-        let session = URLSession.shared
-        session.configuration.timeoutIntervalForResource = 120
-        session.configuration.timeoutIntervalForRequest = 120
-        let dataTask = session.dataTask(with: request as URLRequest, completionHandler: { (data, response, error) -> Void in
+        guard let url = URL(string: "https://ord.uib.no/bm/article/\(articleID).json") else {
+            completion(.notFound)
+            return
+        }
+        let dataTask = URLSession.shared.dataTask(with: self.dictionaryRequest(for: url), completionHandler: { (data, response, error) -> Void in
             if let error = error {
                 completion(.networkError)
                 print(error)
@@ -1461,20 +1523,24 @@ extension WordleDataManager {
             return
         }
         
-        URLSession.shared.dataTask(with: url) { data, response, error in
+        URLSession.shared.dataTask(with: self.dictionaryRequest(for: url)) { data, response, error in
             guard let data = data, error == nil else {
                 self.fetchEnglishDefinition(from: requests, index: index + 1, hadReachableResponse: hadReachableResponse, completion: completion)
                 return
             }
+
+            let httpResponse = response as? HTTPURLResponse
+            let contentType = httpResponse?.value(forHTTPHeaderField: "Content-Type") ?? "unknown"
+            print("English definition provider response: HTTP \(httpResponse?.statusCode.description ?? "unknown"), \(data.count) bytes, Content-Type: \(contentType)")
+
+            if let httpResponse, !(200..<300).contains(httpResponse.statusCode) {
+                let body = String(decoding: data.prefix(1_000), as: UTF8.self)
+                print("English definition provider returned HTTP \(httpResponse.statusCode): \(body)")
+                self.fetchEnglishDefinition(from: requests, index: index + 1, hadReachableResponse: true, completion: completion)
+                return
+            }
             
-            print("data: \(data)")
             do {
-                let jsonObject = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers)
-                print("jsonObject: \(jsonObject)")
-                if let jsonDict = jsonObject as? [NSDictionary] {
-                    print("jsonDict: \(jsonDict)")
-                }
-                
                 let result: [EnglishDefinition]
                 if request.usesFallbackSchema {
                     let fallbackDefinition = try JSONDecoder().decode(EnglishFallbackDefinition.self, from: data)
@@ -1491,7 +1557,9 @@ extension WordleDataManager {
                     completion(.success(result))
                 }
             } catch {
-                print("Error decoding English Definition: \(error)")
+                let body = String(decoding: data.prefix(1_000), as: UTF8.self)
+                    .replacingOccurrences(of: "\n", with: "\\n")
+                print("Error decoding English Definition: \(error). Response body: \(body.isEmpty ? "<empty>" : body)")
                 self.fetchEnglishDefinition(from: requests, index: index + 1, hadReachableResponse: true, completion: completion)
             }
         }.resume()
@@ -1613,7 +1681,7 @@ extension WordleDataManager {
 			return
 		}
 		
-		URLSession.shared.dataTask(with: url) { data, response, error in
+		URLSession.shared.dataTask(with: self.dictionaryRequest(for: url)) { data, response, error in
 			guard let data = data, error == nil else {
 				completion(.networkError)
 				return
@@ -1677,7 +1745,7 @@ extension WordleDataManager {
 			return
 		}
 
-		URLSession.shared.dataTask(with: url) { data, response, error in
+		URLSession.shared.dataTask(with: self.dictionaryRequest(for: url)) { data, response, error in
 			guard let data = data, error == nil else {
 				self.fetchFreeDictionaryDefinition(from: requests, index: index + 1, hadReachableResponse: hadReachableResponse, completion: completion)
 				return
@@ -1751,6 +1819,100 @@ extension WordleDataManager {
 			entry.senses.contains { !$0.definition.isEmpty }
 		}
 	}
+    
+    
+    
+    
+    // MARK: - WiktAPI
+    
+    static func explanationLanguage(for preferredLanguage: String) -> String {
+        Locale(identifier: preferredLanguage).language.languageCode?.identifier ?? "en"
+    }
+    
+    static func requestURL(word: String, edition: String, wordLanguage: String?) -> URL? {
+        var components = URLComponents()
+        components.scheme = "https"
+        components.host = "api.wiktapi.dev"
+        components.path = "/v1/\(edition)/word/\(word)/definitions"
+        components.queryItems = wordLanguage.map { [URLQueryItem(name: "lang", value: $0)] }
+        return components.url
+    }
+    
+    
+    func fetchWiktAPI(word: String, wordLanguage: String?, preferredLanguage: String) async throws -> WiktDefinition? {
+        guard let wordLanguage, !["no", "nb", "nn"].contains(wordLanguage) else { return nil }
+        let explanationLanguage = Self.explanationLanguage(for: preferredLanguage)
+        let trimmed = word.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty else { return nil }
+        let normalizedWord = trimmed.lowercased(with: Locale(identifier: wordLanguage))
+        let editions = explanationLanguage == "en" ? [explanationLanguage] : [explanationLanguage, "en"]
+        for requestedEdition in editions {
+            try Task.checkCancellation()
+            guard let url = Self.requestURL(
+                word: normalizedWord,
+                edition: requestedEdition,
+                wordLanguage: wordLanguage
+            ) else { return nil }
+            print("[WiktAPI] Request: \(url.absoluteString)")
+            do {
+                let (data, response) = try await URLSession.shared.data(for: URLRequest(url: url, timeoutInterval: 3))
+                try Task.checkCancellation()
+                guard let response = response as? HTTPURLResponse else {
+                    print("[WiktAPI] Invalid non-HTTP response")
+                    return nil
+                }
+                let contentType = response.value(forHTTPHeaderField: "Content-Type") ?? "unknown"
+                print("[WiktAPI] Response: HTTP \(response.statusCode), \(data.count) bytes, Content-Type: \(contentType)")
+                if response.statusCode == 404 {
+                    print(requestedEdition == "en"
+                          ? "[WiktAPI] No English Wiktionary entry for the requested word language."
+                          : "[WiktAPI] No entry in the \(requestedEdition) Wiktionary; trying English Wiktionary.")
+                    continue
+                }
+                guard (200..<300).contains(response.statusCode) else {
+                    print("[WiktAPI] Non-success response body: \(responsePreview(data))")
+                    continue
+                }
+                
+                var result: WiktDefinition
+                do {
+                    result = try JSONDecoder().decode(WiktDefinition.self, from: data)
+                } catch {
+                    print("[WiktAPI] Could not decode response: \(error). Body: \(responsePreview(data))")
+                    continue
+                }
+                guard result.edition == requestedEdition else {
+                    print("[WiktAPI] Ignoring response for unexpected edition \"\(result.edition)\".")
+                    continue
+                }
+                result.definitions = result.definitions.compactMap { entry in
+                    guard entry.lang_code == wordLanguage else { return nil }
+                    var entry = entry
+                    entry.senses = entry.senses.filter { !$0.explanations.isEmpty }
+                    return entry.senses.isEmpty ? nil : entry
+                }
+                if !result.definitions.isEmpty {
+                    let senseCount = result.definitions.reduce(into: 0) { $0 += $1.senses.count }
+                    print("[WiktAPI] Decoded \(result.definitions.count) entries and \(senseCount) senses.")
+                    return result
+                }
+                print(requestedEdition == "en"
+                      ? "[WiktAPI] English Wiktionary had no usable \(wordLanguage) definitions."
+                      : "[WiktAPI] The \(requestedEdition) Wiktionary had no usable \(wordLanguage) definitions; trying English Wiktionary.")
+            } catch {
+                try Task.checkCancellation()
+                if error is CancellationError { throw error }
+                print("[WiktAPI] Request failed: \(error.localizedDescription)")
+                continue
+            }
+        }
+        return nil
+    }
+    
+    private func responsePreview(_ data: Data) -> String {
+        let text = String(decoding: data.prefix(1_000), as: UTF8.self)
+        return text.isEmpty ? "<empty>" : text.replacingOccurrences(of: "\n", with: "\\n")
+    } 
 }
 
 

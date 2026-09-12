@@ -40,8 +40,10 @@ struct WordleApp: App {
     var body: some Scene {
         WindowGroup {
             TabsView()
+                .conditionalScrollEdgeEffect()
                 .fullScreenCover(isPresented: $showingOnboarding) {
                     OnboardingView(isShowingOnboarding: $showingOnboarding)
+                        .conditionalScrollEdgeEffect()
                 }
                 .task {
                     showingOnboarding = !hasSeenOnboarding

@@ -463,7 +463,7 @@ struct GameView18: View {
 			}
 			.darkGradientBackground(colorScheme: colorScheme)
 			.navigationDestination(isPresented: self.$isShowingCurrentDefinition, destination: {
-				WordDefinitionView(word: appManager.word)
+				WordDefinitionView(word: appManager.word, language: appManager.language)
 					.environment(appManager)
 			})
 			.navigationTitle(appManager.numberOfLetters == 1 ? "Guess the letter" : "Guess the word")
