@@ -52,7 +52,6 @@
 		63B9B4412EA58ED2008483FB /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 63B9B3E42EA58ED2008483FB /* Localizable.xcstrings */; };
 		63B9B4422EA58ED2008483FB /* shortedNorwegainWords.json in Resources */ = {isa = PBXBuildFile; fileRef = 63B9B3E62EA58ED2008483FB /* shortedNorwegainWords.json */; };
 		63BF73DA2F4477E80065D40B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 63BF73D92F4477E80065D40B /* GoogleService-Info.plist */; };
-		63BF73DD2F4479CB0065D40B /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 63BF73DC2F4479CB0065D40B /* FirebaseAnalytics */; };
 		63BF73DF2F447CD50065D40B /* AnalyticsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63BF73DE2F447CCA0065D40B /* AnalyticsManager.swift */; };
 		63D084C62FD77DA900FBBBE8 /* englishWords.json in Resources */ = {isa = PBXBuildFile; fileRef = 63D084C52FD77DA900FBBBE8 /* englishWords.json */; };
 		63D084C82FD77E0100FBBBE8 /* spanishWords.json in Resources */ = {isa = PBXBuildFile; fileRef = 63D084C72FD77E0100FBBBE8 /* spanishWords.json */; };
@@ -131,7 +130,6 @@
 			files = (
 				63F225952E53B24100248D30 /* GoogleUserMessagingPlatform in Frameworks */,
 				63F697CB2E05A328008B0B6E /* GoogleMobileAds in Frameworks */,
-				63BF73DD2F4479CB0065D40B /* FirebaseAnalytics in Frameworks */,
 				63432AFA2FBD42BB005529C4 /* TelemetryDeck in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -308,7 +306,6 @@
 			packageProductDependencies = (
 				63F697CA2E05A328008B0B6E /* GoogleMobileAds */,
 				63F225942E53B24100248D30 /* GoogleUserMessagingPlatform */,
-				63BF73DC2F4479CB0065D40B /* FirebaseAnalytics */,
 				63432AF92FBD42BB005529C4 /* TelemetryDeck */,
 			);
 			productName = Wordle;
@@ -346,7 +343,6 @@
 			packageReferences = (
 				63F697C92E05A328008B0B6E /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */,
 				63F225932E53B24100248D30 /* XCRemoteSwiftPackageReference "swift-package-manager-google-user-messaging-platform" */,
-				63BF73DB2F4479CB0065D40B /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				63432AF82FBD42BB005529C4 /* XCRemoteSwiftPackageReference "SwiftSDK" */,
 			);
 			preferredProjectObjectVersion = 77;
@@ -692,14 +688,6 @@
 				minimumVersion = 2.13.0;
 			};
 		};
-		63BF73DB2F4479CB0065D40B /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 12.13.0;
-			};
-		};
 		63F225932E53B24100248D30 /* XCRemoteSwiftPackageReference "swift-package-manager-google-user-messaging-platform" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/googleads/swift-package-manager-google-user-messaging-platform.git";
@@ -723,11 +711,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 63432AF82FBD42BB005529C4 /* XCRemoteSwiftPackageReference "SwiftSDK" */;
 			productName = TelemetryDeck;
-		};
-		63BF73DC2F4479CB0065D40B /* FirebaseAnalytics */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 63BF73DB2F4479CB0065D40B /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
-			productName = FirebaseAnalytics;
 		};
 		63F225942E53B24100248D30 /* GoogleUserMessagingPlatform */ = {
 			isa = XCSwiftPackageProductDependency;
