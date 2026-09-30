@@ -581,6 +581,40 @@
         }
       }
     },
+    "About NAOB" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "About NAOB"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Acerca de NAOB"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "À propos de NAOB"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Om NAOB"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "O NAOB"
+          }
+        }
+      }
+    },
     "Add reminder" : {
       "localizations" : {
         "en" : {
@@ -1131,6 +1165,41 @@
         }
       }
     },
+    "Bokmålsordboka & Nynorskordboka" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bokmålsordboka & Nynorskordboka"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bokmålsordboka y Nynorskordboka"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bokmålsordboka et Nynorskordboka"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bokmålsordboka og Nynorskordboka"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bokmålsordboka i Nynorskordboka"
+          }
+        }
+      }
+    },
     "Both" : {
       "localizations" : {
         "en" : {
@@ -1234,6 +1303,40 @@
         }
       }
     },
+    "CC BY-SA 4.0" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "CC BY-SA 4.0"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "CC BY-SA 4.0"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "CC BY-SA 4.0"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "CC BY-SA 4.0"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "CC BY-SA 4.0"
+          }
+        }
+      }
+    },
     "Checks the current guess." : {
       "localizations" : {
         "en" : {
@@ -1300,6 +1403,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Wybierz język definicji"
+          }
+        }
+      }
+    },
+    "Citation guidance" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Citation guidance"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cómo citar"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Conseils de citation"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Siteringsveiledning"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jak cytować"
           }
         }
       }
@@ -1817,6 +1954,40 @@
         }
       }
     },
+    "Credits" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Credits"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Créditos"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Crédits"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Krediteringer"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Źródła i podziękowania"
+          }
+        }
+      }
+    },
     "Current" : {
       "localizations" : {
         "en" : {
@@ -2159,6 +2330,176 @@
         }
       }
     },
+    "Definitions from Bokmålsordboka and Nynorskordboka, published by Språkrådet and the University of Bergen." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Definitions from Bokmålsordboka and Nynorskordboka, published by Språkrådet and the University of Bergen."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Definiciones de Bokmålsordboka y Nynorskordboka, publicadas por Språkrådet y la Universidad de Bergen."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Définitions de Bokmålsordboka et Nynorskordboka, publiées par Språkrådet et l’Université de Bergen."
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Definisjoner fra Bokmålsordboka og Nynorskordboka, utgitt av Språkrådet og Universitetet i Bergen."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Definicje z Bokmålsordboka i Nynorskordboka, publikowane przez Språkrådet i Uniwersytet w Bergen."
+          }
+        }
+      }
+    },
+    "Definitions from Det Norske Akademis ordbok (NAOB)." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Definitions from Det Norske Akademis ordbok (NAOB)."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Definiciones de Det Norske Akademis ordbok (NAOB)."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Définitions de Det Norske Akademis ordbok (NAOB)."
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Definisjoner fra Det Norske Akademis ordbok (NAOB)."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Definicje z Det Norske Akademis ordbok (NAOB)."
+          }
+        }
+      }
+    },
+    "Definitions from Wiktionary, provided by FreeDictionaryAPI.com." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Definitions from Wiktionary, provided by FreeDictionaryAPI.com."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Definiciones de Wiktionary, proporcionadas por FreeDictionaryAPI.com."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Définitions de Wiktionary, fournies par FreeDictionaryAPI.com."
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Definisjoner fra Wiktionary, levert av FreeDictionaryAPI.com."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Definicje z Wiktionary, udostępniane przez FreeDictionaryAPI.com."
+          }
+        }
+      }
+    },
+    "Definitions from Wiktionary, provided by WiktAPI.dev using data processed by kaikki.org." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Definitions from Wiktionary, provided by WiktAPI.dev using data processed by kaikki.org."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Definiciones de Wiktionary, proporcionadas por WiktAPI.dev con datos procesados por kaikki.org."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Définitions de Wiktionary, fournies par WiktAPI.dev à partir de données traitées par kaikki.org."
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Definisjoner fra Wiktionary, levert av WiktAPI.dev med data behandlet av kaikki.org."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Definicje z Wiktionary, udostępniane przez WiktAPI.dev na podstawie danych przetworzonych przez kaikki.org."
+          }
+        }
+      }
+    },
+    "Definitions provided by DictionaryAPI.dev." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Definitions provided by DictionaryAPI.dev."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Definiciones proporcionadas por DictionaryAPI.dev."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Définitions fournies par DictionaryAPI.dev."
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Definisjoner levert av DictionaryAPI.dev."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Definicje udostępniane przez DictionaryAPI.dev."
+          }
+        }
+      }
+    },
     "Delete" : {
       "localizations" : {
         "en" : {
@@ -2261,6 +2602,40 @@
         }
       }
     },
+    "Det Norske Akademis ordbok (NAOB)" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Det Norske Akademis ordbok (NAOB)"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Det Norske Akademis ordbok (NAOB)"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Det Norske Akademis ordbok (NAOB)"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Det Norske Akademis ordbok (NAOB)"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Det Norske Akademis ordbok (NAOB)"
+          }
+        }
+      }
+    },
     "Determiner" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -2292,6 +2667,74 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Określnik"
+          }
+        }
+      }
+    },
+    "Dictionary sources" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dictionary sources"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fuentes de diccionarios"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sources des dictionnaires"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ordbokskilder"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Źródła słownikowe"
+          }
+        }
+      }
+    },
+    "DictionaryAPI.dev" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "DictionaryAPI.dev"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "DictionaryAPI.dev"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "DictionaryAPI.dev"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "DictionaryAPI.dev"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "DictionaryAPI.dev"
           }
         }
       }
@@ -3082,40 +3525,6 @@
         }
       }
     },
-    "Follow for updates" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Follow for updates"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sigue las novedades"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Suivre les nouveautés"
-          }
-        },
-        "nb" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Følg for oppdateringer"
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Obserwuj aktualizacje"
-          }
-        }
-      }
-    },
     "FIXED EXPRESSIONS" : {
       "localizations" : {
         "en" : {
@@ -3146,6 +3555,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "UTARTE WYRAŻENIA"
+          }
+        }
+      }
+    },
+    "Follow for updates" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Follow for updates"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sigue las novedades"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Suivre les nouveautés"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Følg for oppdateringer"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Obserwuj aktualizacje"
           }
         }
       }
@@ -3181,6 +3624,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Formalnie"
+          }
+        }
+      }
+    },
+    "FreeDictionaryAPI.com" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "FreeDictionaryAPI.com"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "FreeDictionaryAPI.com"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "FreeDictionaryAPI.com"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "FreeDictionaryAPI.com"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "FreeDictionaryAPI.com"
           }
         }
       }
@@ -4863,6 +5340,40 @@
         }
       }
     },
+    "kaikki.org" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "kaikki.org"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "kaikki.org"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "kaikki.org"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "kaikki.org"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "kaikki.org"
+          }
+        }
+      }
+    },
     "Keep your streak going?" : {
       "localizations" : {
         "en" : {
@@ -6201,6 +6712,40 @@
         }
       }
     },
+    "Open data" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open data"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Datos abiertos"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Données ouvertes"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Åpne data"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Otwarte dane"
+          }
+        }
+      }
+    },
     "Opens the completed board with letter feedback." : {
       "localizations" : {
         "en" : {
@@ -6401,6 +6946,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "ordbokene.no"
+          }
+        }
+      }
+    },
+    "Ordbøkene.no" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ordbøkene.no"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ordbøkene.no"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ordbøkene.no"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ordbøkene.no"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ordbøkene.no"
           }
         }
       }
@@ -10027,6 +10606,109 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Witamy w %@"
+          }
+        }
+      }
+    },
+    "WiktAPI.dev" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "WiktAPI.dev"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "WiktAPI.dev"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "WiktAPI.dev"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "WiktAPI.dev"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "WiktAPI.dev"
+          }
+        }
+      }
+    },
+    "Wiktionary" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wiktionary"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wiktionary"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wiktionary"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wiktionary"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wiktionary"
+          }
+        }
+      }
+    },
+    "Wiktionary via WiktAPI.dev" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wiktionary via WiktAPI.dev"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wiktionary a través de WiktAPI.dev"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wiktionary via WiktAPI.dev"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wiktionary via WiktAPI.dev"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wiktionary przez WiktAPI.dev"
           }
         }
       }

@@ -564,6 +564,14 @@ struct SettingsView: View {
 					})
                     .alignmentGuide(.listRowSeparatorLeading) { _ in 40 }
 					.wordlrListSectionRowBackground(.middle)
+
+					NavigationLink {
+						CreditsView()
+					} label: {
+						SettingsRowLabel(title: "Credits", systemImage: "books.vertical")
+					}
+					.alignmentGuide(.listRowSeparatorLeading) { _ in 40 }
+					.wordlrListSectionRowBackground(.middle)
 					
 #if targetEnvironment(simulator)
 					Button(action: {

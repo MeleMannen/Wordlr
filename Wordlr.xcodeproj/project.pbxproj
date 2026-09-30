@@ -29,6 +29,7 @@
 		63B9B4202EA58ED2008483FB /* NorwegianWordDefinitionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B9B3EC2EA58ED2008483FB /* NorwegianWordDefinitionView.swift */; };
 		63B9B4212EA58ED2008483FB /* EnglishWordDefinitionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B9B3EA2EA58ED2008483FB /* EnglishWordDefinitionView.swift */; };
 		63B9B4222EA58ED2008483FB /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B9B4022EA58ED2008483FB /* SettingsView.swift */; };
+		F00000000000000000000001 /* CreditsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00000000000000000000002 /* CreditsView.swift */; };
 		63B9B4232EA58ED2008483FB /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B9B3FE2EA58ED2008483FB /* SearchView.swift */; };
 		63B9B4242EA58ED2008483FB /* WordleApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B9B4062EA58ED2008483FB /* WordleApp.swift */; };
 		63B9B4252EA58ED2008483FB /* GameView18.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B9B3FA2EA58ED2008483FB /* GameView18.swift */; };
@@ -65,6 +66,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		F00000000000000000000002 /* CreditsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditsView.swift; sourceTree = "<group>"; };
 		63027ED42FD8DEE70007A5BF /* norwegianWords.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = norwegianWords.json; sourceTree = "<group>"; };
 		6344F4FE2EB9500D00948552 /* KeyPress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyPress.swift; sourceTree = "<group>"; };
 		634900002FC2A00100A11CE5 /* AccessibilitySupport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessibilitySupport.swift; sourceTree = "<group>"; };
@@ -236,6 +238,7 @@
 			isa = PBXGroup;
 			children = (
 				63B9B4022EA58ED2008483FB /* SettingsView.swift */,
+				F00000000000000000000002 /* CreditsView.swift */,
 				63B9B4012EA58ED2008483FB /* NotificationView.swift */,
 			);
 			path = SettingsViews;
@@ -400,6 +403,7 @@
 				63B9B4202EA58ED2008483FB /* NorwegianWordDefinitionView.swift in Sources */,
 				63B9B4212EA58ED2008483FB /* EnglishWordDefinitionView.swift in Sources */,
 				63B9B4222EA58ED2008483FB /* SettingsView.swift in Sources */,
+				F00000000000000000000001 /* CreditsView.swift in Sources */,
 				63B9B4232EA58ED2008483FB /* SearchView.swift in Sources */,
 				63B9B4242EA58ED2008483FB /* WordleApp.swift in Sources */,
 				63B9B4252EA58ED2008483FB /* GameView18.swift in Sources */,
