@@ -26,9 +26,8 @@ struct EnglishWordDefinitionView: View {
 							ForEach(self.englishDefinition) { definition in
 								VStack {
 									VStack(alignment: .leading) {
-										Text(self.word.uppercased())
-											.font(.largeTitle)
-											.bold()
+										Text(self.word.lowercased(with: Locale(identifier: "en")))
+											.font(.system(.largeTitle, design: .serif, weight: .bold))
 										
 										self.pronunciationSection(for: definition)
 										
@@ -95,7 +94,7 @@ struct EnglishWordDefinitionView: View {
 			}
 		}
 		.frame(maxWidth: .infinity, maxHeight: .infinity)
-		.navigationTitle("\(self.word)")
+		.navigationTitle("Definition")
 		.darkGradientBackground(colorScheme: colorScheme)
 		.onAppear {
 			definitionManager.getEnglishDefinition(for: self.word) { result in

@@ -97,11 +97,7 @@ struct SettingsView: View {
 					Section {
 						VStack(spacing: 16) {
 							HStack(spacing: 12) {
-								Image(systemName: "crown.fill")
-									.font(.title2)
-									.foregroundStyle(.white)
-									.frame(width: 48, height: 48)
-									.background(.green, in: Circle())
+								self.proIcon
 								
 								Text("Upgrade to Pro")
 									.font(.title2).bold()
@@ -619,38 +615,14 @@ struct SettingsView: View {
 				if colorScheme == .light {
 					Color(uiColor: .secondarySystemBackground)
 						.ignoresSafeArea()
-				} else {
-					if #available(iOS 26.0, *), usesTransparentLists {
-						if ProcessInfo.processInfo.isiOSAppOnMac && !storeManager.isAdRemovalPurchased {
-							GeometryReader { geometry in
-								let isLandscape = geometry.size.width > geometry.size.height
-								let endRadius = min(max(geometry.size.width * 0.85, 520), isLandscape ? 680 : 900)
-								let gradientOpacity = 0.34 * max(0, min(1, proSectionMaxY / 300))
-								RadialGradient(
-									colors: [
-										.green.opacity(gradientOpacity),
-										.green.opacity(gradientOpacity * 0.43),
-										.clear
-									],
-									center: .top,
-									startRadius: 0,
-									endRadius: endRadius
-								)
-									.opacity(gradientVisibility)
-									.ignoresSafeArea()
-							}
-						} else {
-							let userInterfaceIdiom = UIDevice.current.userInterfaceIdiom
-							let isPhone = userInterfaceIdiom == .phone
-							let isIPad = userInterfaceIdiom == .pad
-							let iPadAndMacOpacity = !storeManager.isAdRemovalPurchased ? max(0, min(1, proSectionMaxY / 300)) : 0
-							let gradientOpacity = isPhone || isIPad ? 1 : iPadAndMacOpacity
-
-							WordlrGreenBackgroundGradient(opacity: gradientOpacity)
-								.opacity(isPhone || isIPad ? 1 : gradientVisibility)
-								.ignoresSafeArea()
-						}
-					} else if !storeManager.isAdRemovalPurchased {
+				} else if !storeManager.isAdRemovalPurchased {
+					if #available(iOS 26.0, *) {
+						let scrollVisibility = max(0, min(1, proSectionMaxY / 300))
+						let gradientOpacity = usesTransparentLists ? 1 : scrollVisibility
+						WordlrGreenBackgroundGradient(opacity: gradientOpacity)
+							.opacity(gradientVisibility)
+							.ignoresSafeArea()
+					} else {
 						GeometryReader { geometry in
 							let isPhone = UIDevice.current.userInterfaceIdiom == .phone
 							let isLandscape = geometry.size.width > geometry.size.height
@@ -666,8 +638,8 @@ struct SettingsView: View {
 								startRadius: 0,
 								endRadius: endRadius
 							)
-								.opacity(gradientVisibility)
-								.ignoresSafeArea()
+							.opacity(gradientVisibility)
+							.ignoresSafeArea()
 						}
 					}
 				}
@@ -686,7 +658,29 @@ struct SettingsView: View {
 			}
 		}
 	}
-	
+
+	@ViewBuilder
+	private var proIcon: some View {
+		if #available(iOS 26.0, *) {
+			Image(systemName: "crown.fill")
+				.font(.title2)
+				.foregroundStyle(.white)
+				.frame(width: 48, height: 48)
+				.background {
+					Circle()
+						.foregroundStyle(Color(uiColor: .systemGreen))
+				}
+				.glassEffect(.regular.tint(Color(uiColor: .systemGreen)).interactive(), in: .circle)
+				.conditionalShadow(color: .black.opacity(0.3), radius: 3, x: 4, y: 4)
+		} else {
+			Image(systemName: "crown.fill")
+				.font(.title2)
+				.foregroundStyle(.white)
+				.frame(width: 48, height: 48)
+				.background(.green, in: Circle())
+		}
+	}
+
 	private func openSupportEmail() {
 		guard let url = supportEmailURL, UIApplication.shared.canOpenURL(url) else {
 			copySupportEmailAndShowAlert()

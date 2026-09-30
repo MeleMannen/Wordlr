@@ -9,7 +9,7 @@ import Foundation
 import GoogleMobileAds
 import UserMessagingPlatform
 import AppTrackingTransparency
-import FirebaseAnalytics
+//import FirebaseAnalytics
 // import PostHog
 
 extension Notification.Name {
@@ -62,31 +62,31 @@ final class AdManager {
 		}
 	}
 	
-	func updateFirebaseAnalyticsConsent() {
-		let purposeConsents = UserDefaults.standard.string(forKey: "IABTCF_PurposeConsents") ?? ""
-		let hasConsentForPurpose1 = purposeConsents.first == "1"
-		let status = ConsentInformation.shared.consentStatus
-		
-		if status == .notRequired {
-			Analytics.setConsent([
-				.analyticsStorage: .granted
-			])
-			Analytics.setAnalyticsCollectionEnabled(true)
-			print("Analytics enabled with explicit non-EU consent defaults")
-		} else if hasConsentForPurpose1 {
-			Analytics.setAnalyticsCollectionEnabled(true)
-			print("Analytics enabled using UMP-managed consent state")
-		} else {
-			Analytics.setConsent([
-				.analyticsStorage: .denied,
-				.adStorage: .denied,
-				.adUserData: .denied,
-				.adPersonalization: .denied
-			])
-			Analytics.setAnalyticsCollectionEnabled(false)
-			print("Analytics disabled")
-		}
-	}
+//	func updateFirebaseAnalyticsConsent() {
+//		let purposeConsents = UserDefaults.standard.string(forKey: "IABTCF_PurposeConsents") ?? ""
+//		let hasConsentForPurpose1 = purposeConsents.first == "1"
+//		let status = ConsentInformation.shared.consentStatus
+//		
+//		if status == .notRequired {
+//			Analytics.setConsent([
+//				.analyticsStorage: .granted
+//			])
+//			Analytics.setAnalyticsCollectionEnabled(true)
+//			print("Analytics enabled with explicit non-EU consent defaults")
+//		} else if hasConsentForPurpose1 {
+//			Analytics.setAnalyticsCollectionEnabled(true)
+//			print("Analytics enabled using UMP-managed consent state")
+//		} else {
+//			Analytics.setConsent([
+//				.analyticsStorage: .denied,
+//				.adStorage: .denied,
+//				.adUserData: .denied,
+//				.adPersonalization: .denied
+//			])
+//			Analytics.setAnalyticsCollectionEnabled(false)
+//			print("Analytics disabled")
+//		}
+//	}
 	
 	func prepareAds() async {
 		guard !isPreparingAds else { return }
@@ -102,7 +102,7 @@ final class AdManager {
 		do {
 			try await gatherConsent()
 			
-			updateFirebaseAnalyticsConsent()
+//			updateFirebaseAnalyticsConsent()
             // PostHogSDK.shared.optIn()
 			guard canRequestAds else {
 				print("Ads cannot be requested yet.")
@@ -180,7 +180,7 @@ final class AdManager {
 	
 	func presentPrivacyOptionsForm() async throws {
 		try await ConsentForm.presentPrivacyOptionsForm(from: nil)
-		updateFirebaseAnalyticsConsent()
+//		updateFirebaseAnalyticsConsent()
 	}
 	
 	func presentAdInspector(from viewController: UIViewController? = nil) {

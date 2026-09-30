@@ -402,7 +402,7 @@ enum LanguageSelection: String, Codable, CaseIterable, Identifiable {
 		switch self {
 			case .english: return "en"
 			case .spanish: return "es"
-			case .norwegian: return nil
+			case .norwegian: return "nb"
 			case .french: return "fr"
 			case .polish: return "pl"
 			case .all: return nil
@@ -658,14 +658,20 @@ struct DefinitionElement: Codable {
     let elements: [DefinitionElement]?
     let content: String?
     let quote: Quote?
+    let explanation: Quote?
     let items: [DefinitionItem]?
+    let article: Article?
+    let lemmas: [String]?
     
     enum CodingKeys: String, CodingKey {
         case type = "type_"
         case elements
         case content
         case quote
+        case explanation
         case items
+        case article
+        case lemmas
     }
 }
 
@@ -721,7 +727,7 @@ struct QuoteItem: Codable {
     }
 }
 
-struct NorwegianDefinition: Identifiable {
+struct NorwegianDefinition: Identifiable, Sendable {
     let id = UUID()
     let words: [String]?
     let wordClass: String?
@@ -731,17 +737,24 @@ struct NorwegianDefinition: Identifiable {
     let definitions: [ProcessedDefinition]?
 }
 
-struct ProcessedDefinition: Identifiable {
+struct ProcessedDefinition: Identifiable, Sendable {
     let id = UUID()
     let explanations: [String]
     let examples: [ProcessedExample]
     let quotes: [String]
     let nestedDefinitions: [ProcessedDefinition]
+    let subArticles: [ProcessedSubArticle]
     let wordClass: String?
     let gender: String?
 }
 
-struct ProcessedExample: Identifiable, Hashable {
+struct ProcessedSubArticle: Identifiable, Sendable {
+    let id = UUID()
+    let title: String
+    let definitions: [ProcessedDefinition]
+}
+
+struct ProcessedExample: Identifiable, Hashable, Sendable {
     let id = UUID()
     let text: String
     let explanation: String
@@ -1094,9 +1107,10 @@ extension WordleDataManager {
         lemmas: [Lemma]?
     ) -> ProcessedDefinition {
         var explanations: [String] = []
-        let examples: [ProcessedExample] = []
+        var examples: [ProcessedExample] = []
         var quotes: [String] = []
         var nestedDefinitions: [ProcessedDefinition] = []
+        var subArticles: [ProcessedSubArticle] = []
         
         let wordClass: String?
         let gender: String?
@@ -1109,6 +1123,21 @@ extension WordleDataManager {
         }
         
         for element in elements {
+            if element.type == "sub_article", let article = element.article {
+                let title = element.lemmas?.first
+                    ?? article.lemmas?.first?.lemma
+                    ?? ""
+                if !title.isEmpty {
+                    subArticles.append(
+                        ProcessedSubArticle(
+                            title: title,
+                            definitions: processDefinitions(article: article)
+                        )
+                    )
+                }
+                continue
+            }
+
             if let subElements = element.elements {
                 let nestedDef = processDefinitionElements(subElements, lemmas: lemmas)
                 nestedDefinitions.append(nestedDef)
@@ -1116,7 +1145,17 @@ extension WordleDataManager {
             
             if let quote = element.quote, let content = quote.content, let items = quote.items {
                 let replacedQuote = replaceQuotePlaceholders(in: content, with: items)
-                quotes.append(replacedQuote)
+                if element.type == "example" {
+                    let explanation = element.explanation
+                        .flatMap { explanation in
+                            guard let content = explanation.content else { return nil }
+                            return replaceQuotePlaceholders(in: content, with: explanation.items ?? [])
+                        }
+                        ?? ""
+                    examples.append(ProcessedExample(text: replacedQuote, explanation: explanation))
+                } else {
+                    quotes.append(replacedQuote)
+                }
             }
             
             if let items = element.items, let content = element.content {
@@ -1132,6 +1171,7 @@ extension WordleDataManager {
             examples: examples,
             quotes: quotes,
             nestedDefinitions: nestedDefinitions,
+            subArticles: subArticles,
             wordClass: wordClass,
             gender: gender
         )
@@ -1839,13 +1879,16 @@ extension WordleDataManager {
     }
     
     
-    func fetchWiktAPI(word: String, wordLanguage: String?, preferredLanguage: String) async throws -> WiktDefinition? {
-        guard let wordLanguage, !["no", "nb", "nn"].contains(wordLanguage) else { return nil }
+    func fetchWiktAPI(word: String, wordLanguage: String?, preferredLanguage: String, fallsBackToEnglishEdition: Bool = true) async throws -> WiktDefinition? {
+        guard let wordLanguage else { return nil }
         let explanationLanguage = Self.explanationLanguage(for: preferredLanguage)
+        guard explanationLanguage != "nb", explanationLanguage != "nn", explanationLanguage != "no" else { return nil }
         let trimmed = word.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmed.isEmpty else { return nil }
         let normalizedWord = trimmed.lowercased(with: Locale(identifier: wordLanguage))
-        let editions = explanationLanguage == "en" ? [explanationLanguage] : [explanationLanguage, "en"]
+        let editions = fallsBackToEnglishEdition && explanationLanguage != "en"
+            ? [explanationLanguage, "en"]
+            : [explanationLanguage]
         for requestedEdition in editions {
             try Task.checkCancellation()
             guard let url = Self.requestURL(
@@ -1864,8 +1907,8 @@ extension WordleDataManager {
                 let contentType = response.value(forHTTPHeaderField: "Content-Type") ?? "unknown"
                 print("[WiktAPI] Response: HTTP \(response.statusCode), \(data.count) bytes, Content-Type: \(contentType)")
                 if response.statusCode == 404 {
-                    print(requestedEdition == "en"
-                          ? "[WiktAPI] No English Wiktionary entry for the requested word language."
+                    print(requestedEdition == editions.last
+                          ? "[WiktAPI] No \(requestedEdition) Wiktionary entry for the requested word language."
                           : "[WiktAPI] No entry in the \(requestedEdition) Wiktionary; trying English Wiktionary.")
                     continue
                 }
@@ -1896,8 +1939,8 @@ extension WordleDataManager {
                     print("[WiktAPI] Decoded \(result.definitions.count) entries and \(senseCount) senses.")
                     return result
                 }
-                print(requestedEdition == "en"
-                      ? "[WiktAPI] English Wiktionary had no usable \(wordLanguage) definitions."
+                print(requestedEdition == editions.last
+                      ? "[WiktAPI] The \(requestedEdition) Wiktionary had no usable \(wordLanguage) definitions."
                       : "[WiktAPI] The \(requestedEdition) Wiktionary had no usable \(wordLanguage) definitions; trying English Wiktionary.")
             } catch {
                 try Task.checkCancellation()
@@ -1913,6 +1956,139 @@ extension WordleDataManager {
         let text = String(decoding: data.prefix(1_000), as: UTF8.self)
         return text.isEmpty ? "<empty>" : text.replacingOccurrences(of: "\n", with: "\\n")
     } 
+}
+
+actor DefinitionRepository {
+    static let shared = DefinitionRepository()
+
+    enum Content: Sendable {
+        case wikt(WiktDefinition)
+        case norwegian([NorwegianDefinition])
+    }
+
+    struct ResolvedDefinition: Sendable {
+        let content: Content
+        let languageCode: String
+    }
+
+    private struct CacheKey: Hashable, Sendable {
+        let word: String
+        let wordLanguage: String
+        let definitionLanguage: String
+    }
+
+    private let preferenceKey = "preferredDefinitionLanguageByWordLanguage"
+    private var cache: [CacheKey: Content] = [:]
+
+    func resolvedDefinition(word: String, wordLanguage: String, appLanguage: String) async throws -> ResolvedDefinition? {
+        let candidates = definitionLanguageCandidates(wordLanguage: wordLanguage, appLanguage: appLanguage)
+        for language in initialLanguageOrder(wordLanguage: wordLanguage, candidates: candidates) {
+            try Task.checkCancellation()
+            if let content = try await definition(word: word, wordLanguage: wordLanguage, definitionLanguage: language) {
+                return ResolvedDefinition(content: content, languageCode: language)
+            }
+        }
+        return nil
+    }
+
+    func availableDefinitionLanguages(word: String, wordLanguage: String, appLanguage: String) async -> [ResolvedDefinition] {
+        let candidates = definitionLanguageCandidates(wordLanguage: wordLanguage, appLanguage: appLanguage)
+        let uncached = candidates.filter {
+            cache[CacheKey(word: normalizedWord(word, wordLanguage: wordLanguage), wordLanguage: wordLanguage, definitionLanguage: $0)] == nil
+        }
+
+        let fetched = await withTaskGroup(of: ResolvedDefinition?.self, returning: [ResolvedDefinition].self) { group in
+            for language in uncached {
+                group.addTask {
+                    guard let content = try? await Self.fetchContent(
+                        word: word,
+                        wordLanguage: wordLanguage,
+                        definitionLanguage: language
+                    ) else { return nil }
+                    return ResolvedDefinition(content: content, languageCode: language)
+                }
+            }
+
+            var results: [ResolvedDefinition] = []
+            for await result in group {
+                if let result { results.append(result) }
+            }
+            return results
+        }
+
+        for result in fetched {
+            cache[CacheKey(word: normalizedWord(word, wordLanguage: wordLanguage), wordLanguage: wordLanguage, definitionLanguage: result.languageCode)] = result.content
+        }
+
+        return candidates.compactMap { language in
+            let key = CacheKey(word: normalizedWord(word, wordLanguage: wordLanguage), wordLanguage: wordLanguage, definitionLanguage: language)
+            return cache[key].map { ResolvedDefinition(content: $0, languageCode: language) }
+        }
+    }
+
+    func remember(definitionLanguage: String, forWordLanguage wordLanguage: String) {
+        var preferences = UserDefaults.standard.dictionary(forKey: preferenceKey) as? [String: String] ?? [:]
+        preferences[wordLanguage] = definitionLanguage
+        UserDefaults.standard.set(preferences, forKey: preferenceKey)
+    }
+
+    private func definitionLanguageCandidates(wordLanguage: String, appLanguage: String) -> [String] {
+        if wordLanguage == "nb" {
+            return ["no", "nb", "nn"].contains(appLanguage) ? ["nb", "en"] : ["en", "nb"]
+        }
+        return [appLanguage, wordLanguage, "en"].reduce(into: [String]()) { result, language in
+            if !result.contains(language) { result.append(language) }
+        }
+    }
+
+    private func initialLanguageOrder(wordLanguage: String, candidates: [String]) -> [String] {
+        let remembered = (UserDefaults.standard.dictionary(forKey: preferenceKey) as? [String: String])?[wordLanguage]
+        return [remembered].compactMap { $0 }.filter(candidates.contains) + candidates.filter { $0 != remembered }
+    }
+
+    private func definition(word: String, wordLanguage: String, definitionLanguage: String) async throws -> Content? {
+        let key = CacheKey(word: normalizedWord(word, wordLanguage: wordLanguage), wordLanguage: wordLanguage, definitionLanguage: definitionLanguage)
+        if let cached = cache[key] { return cached }
+        let fetched = try await Self.fetchContent(
+            word: word,
+            wordLanguage: wordLanguage,
+            definitionLanguage: definitionLanguage
+        )
+        if let fetched { cache[key] = fetched }
+        return fetched
+    }
+
+    private nonisolated static func fetchContent(
+        word: String,
+        wordLanguage: String,
+        definitionLanguage: String
+    ) async throws -> Content? {
+        if wordLanguage == "nb", definitionLanguage == "nb" {
+            let result = await withCheckedContinuation { continuation in
+                WordleDataManager.shared.fetchNorwegianDefinition(for: word) { result in
+                    continuation.resume(returning: result)
+                }
+            }
+            try Task.checkCancellation()
+            guard case .success(let definitions) = result, !definitions.isEmpty else { return nil }
+            return .norwegian(definitions)
+        }
+
+        guard definitionLanguage != "no", definitionLanguage != "nb", definitionLanguage != "nn" else {
+            return nil
+        }
+        guard let definition = try await WordleDataManager.shared.fetchWiktAPI(
+            word: word,
+            wordLanguage: wordLanguage,
+            preferredLanguage: definitionLanguage,
+            fallsBackToEnglishEdition: false
+        ) else { return nil }
+        return .wikt(definition)
+    }
+
+    private func normalizedWord(_ word: String, wordLanguage: String) -> String {
+        word.trimmingCharacters(in: .whitespacesAndNewlines).lowercased(with: Locale(identifier: wordLanguage))
+    }
 }
 
 

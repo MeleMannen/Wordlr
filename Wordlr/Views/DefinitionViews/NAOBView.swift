@@ -14,13 +14,13 @@ struct NAOBView: View {
     var body: some View {
         if #available(iOS 26, *) {
             WebView(url: URL(string: "https://naob.no/ordbok/\(word)")!)
-                .navigationTitle("NAOB – \(word)")
+                .navigationTitle("Definition")
                 .ignoresSafeArea(.all, edges: .bottom)
         } else {
             MyWebView(request: URLRequest(
                 url: URL(string: "https://naob.no/ordbok/\(word)")!
             ))
-            .navigationTitle("NAOB – \(word)")
+            .navigationTitle("Definition")
         }
     }
 }

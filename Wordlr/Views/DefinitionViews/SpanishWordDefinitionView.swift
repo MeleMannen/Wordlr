@@ -25,9 +25,8 @@ struct SpanishWordDefinitionView: View {
 							ForEach(spanishDefinition.entries) { entry in
 								VStack {
 									VStack(alignment: .leading) {
-										Text(self.word.uppercased())
-											.font(.largeTitle)
-											.bold()
+										Text(self.word.lowercased(with: Locale(identifier: "es")))
+											.font(.system(.largeTitle, design: .serif, weight: .bold))
 										
 										HStack {
 											Text("\(entry.partOfSpeech.uppercased())  ")
@@ -236,7 +235,7 @@ struct SpanishWordDefinitionView: View {
 			}
 		}
 		.frame(maxWidth: .infinity, maxHeight: .infinity)
-		.navigationTitle("\(self.word)")
+		.navigationTitle("Definition")
 		.darkGradientBackground(colorScheme: colorScheme)
 		.onAppear {
 			definitionManager.getSpanishDefinition(for: self.word) { result in

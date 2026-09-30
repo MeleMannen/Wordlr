@@ -14,12 +14,8 @@ struct WordDefinitionView: View {
 
     var body: some View {
         Group {
-            if language == .norwegian {
-                NorwegianWordDefinitionView(word: word)
-            } else {
-                LocalizedWordDefinitionView(word: word, language: language)
-                    .id("\(word)|\(language.rawValue)|\(Locale.preferredLanguages.first ?? "en")")
-            }
+            LocalizedWordDefinitionView(word: word, language: language)
+                .id("\(word)|\(language.rawValue)|\(Locale.preferredLanguages.first ?? "en")")
         }
         .environmentObject(definitionManager)
     }
@@ -87,7 +83,7 @@ struct FreeDictionaryWordDefinitionView: View {
 			}
 		}
 		.frame(maxWidth: .infinity, maxHeight: .infinity)
-		.navigationTitle("\(self.word)")
+		.navigationTitle("Definition")
 		.darkGradientBackground(colorScheme: colorScheme)
 		.onAppear {
 			loadDefinition(shouldLogAnalytics: true)
@@ -97,9 +93,8 @@ struct FreeDictionaryWordDefinitionView: View {
 	private func definitionCard(entry: Entry2, source: Source) -> some View {
 		VStack {
 			VStack(alignment: .leading) {
-				Text(self.word.uppercased())
-					.font(.largeTitle)
-					.bold()
+				Text(self.word.lowercased(with: self.language.sortLocale))
+					.font(.system(.largeTitle, design: .serif, weight: .bold))
 
 				if !entry.partOfSpeech.isEmpty {
 					HStack {

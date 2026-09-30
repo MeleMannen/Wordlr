@@ -7,8 +7,8 @@
 
 import SwiftUI
 import SwiftData
-import FirebaseCore
-import FirebaseAnalytics
+//import FirebaseCore
+//import FirebaseAnalytics
 import TelemetryDeck
 // import PostHog
 
@@ -19,8 +19,8 @@ struct WordleApp: App {
     @State private var showingOnboarding = false
 
 	init() {
-        FirebaseApp.configure()
-        Analytics.setAnalyticsCollectionEnabled(false)
+//        FirebaseApp.configure()
+//        Analytics.setAnalyticsCollectionEnabled(false)
         
         TelemetryDeck.initialize(config: .init(appID: "2CB2FADD-4FFE-4E4E-A41A-701488B32556"))
         

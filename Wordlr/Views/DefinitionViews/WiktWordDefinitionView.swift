@@ -20,8 +20,8 @@ struct WiktWordDefinitionView: View {
     private func entryCard(_ entry: WiktDefinition.Entry) -> some View {
         VStack(alignment: .leading, spacing: 18) {
             VStack(alignment: .leading, spacing: 6) {
-                Text(definition.word)
-                    .font(.largeTitle.bold())
+                Text(definition.word.lowercased(with: Locale(identifier: entry.lang_code)))
+                    .font(.system(.largeTitle, design: .serif, weight: .bold))
                     .accessibilityAddTraits(.isHeader)
                 Text(partOfSpeech(entry.pos))
                     .font(.subheadline.weight(.semibold))

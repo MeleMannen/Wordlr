@@ -12,6 +12,7 @@
 		6344F4FF2EB9502300948552 /* KeyPress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6344F4FE2EB9500D00948552 /* KeyPress.swift */; };
 		634900012FC2A00100A11CE5 /* AccessibilitySupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634900002FC2A00100A11CE5 /* AccessibilitySupport.swift */; };
 		635799612FC033F300B31921 /* SelectGameModeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 635799602FC033F300B31921 /* SelectGameModeButton.swift */; };
+		637BE1A930575958004721A3 /* Wordlr.icon in Resources */ = {isa = PBXBuildFile; fileRef = 637BE1A830575958004721A3 /* Wordlr.icon */; };
 		63A1C1012FA0000100A00001 /* StoreManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63A1C1002FA0000100A00001 /* StoreManager.swift */; };
 		63B1E1362F795EA500F36987 /* AdManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B1E1352F795EA500F36987 /* AdManager.swift */; };
 		63B9B4152EA58ED2008483FB /* FilterOptionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B9B3F72EA58ED2008483FB /* FilterOptionsView.swift */; };
@@ -69,6 +70,7 @@
 		6344F4FE2EB9500D00948552 /* KeyPress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyPress.swift; sourceTree = "<group>"; };
 		634900002FC2A00100A11CE5 /* AccessibilitySupport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessibilitySupport.swift; sourceTree = "<group>"; };
 		635799602FC033F300B31921 /* SelectGameModeButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectGameModeButton.swift; sourceTree = "<group>"; };
+		637BE1A830575958004721A3 /* Wordlr.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = Wordlr.icon; sourceTree = "<group>"; };
 		6382E3BC2D12FE0500B61353 /* Wordlr.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Wordlr.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		63A1C1002FA0000100A00001 /* StoreManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreManager.swift; sourceTree = "<group>"; };
 		63B0C6502E056A710047E4E9 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS26.0.sdk/System/Library/Frameworks/WebKit.framework; sourceTree = DEVELOPER_DIR; };
@@ -173,6 +175,7 @@
 		63B9B3E92EA58ED2008483FB /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				637BE1A830575958004721A3 /* Wordlr.icon */,
 				63B9B3E42EA58ED2008483FB /* Localizable.xcstrings */,
 				63D084C52FD77DA900FBBBE8 /* englishWords.json */,
 				63027ED42FD8DEE70007A5BF /* norwegianWords.json */,
@@ -361,6 +364,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				637BE1A930575958004721A3 /* Wordlr.icon in Resources */,
 				63B9B4372EA58ED2008483FB /* Preview Assets.xcassets in Resources */,
 				63BF73DA2F4477E80065D40B /* GoogleService-Info.plist in Resources */,
 				63B9B43C2EA58ED2008483FB /* Assets.xcassets in Resources */,
@@ -561,7 +565,7 @@
 		6382E3CC2D12FE0700B61353 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = Wordlr;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = Wordlr/Wordlr.entitlements;
@@ -594,7 +598,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 15.0;
-				MARKETING_VERSION = 3.0.2;
+				MARKETING_VERSION = 3.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = SwoshEB.ThePhrase;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
@@ -610,7 +614,7 @@
 		6382E3CD2D12FE0700B61353 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = Wordlr;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = Wordlr/Wordlr.entitlements;
@@ -643,7 +647,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 15.0;
-				MARKETING_VERSION = 3.0.2;
+				MARKETING_VERSION = 3.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = SwoshEB.ThePhrase;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;

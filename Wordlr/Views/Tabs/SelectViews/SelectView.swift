@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct SelectView: View {
 	@Environment(\.modelContext) var modelContext

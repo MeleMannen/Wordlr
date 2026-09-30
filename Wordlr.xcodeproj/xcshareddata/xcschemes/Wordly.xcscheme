@@ -72,7 +72,7 @@
       <CommandLineArguments>
          <CommandLineArgument
             argument = "-FIRDebugEnabled "
-            isEnabled = "YES">
+            isEnabled = "NO">
          </CommandLineArgument>
       </CommandLineArguments>
       <EnvironmentVariables>
@@ -83,7 +83,7 @@
          </EnvironmentVariable>
       </EnvironmentVariables>
       <StoreKitConfigurationFileReference
-         identifier = "../../Wordly/Wordlr - Guess the Word.storekit">
+         identifier = "../../Wordlr/Wordlr - Guess the word.storekit">
       </StoreKitConfigurationFileReference>
    </LaunchAction>
    <ProfileAction

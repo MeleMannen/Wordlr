@@ -9,6 +9,7 @@ import SwiftUI
 import UIKit
 import GoogleMobileAds
 import TipKit
+import SwiftData
 
 struct GameView26: View {
 	@Environment(AppManager.self) private var appManager

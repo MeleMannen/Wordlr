@@ -16,6 +16,14 @@ struct NorwegianWordDefinitionView: View {
 	@State var isLoading: Bool = true
 	@State var didTap: Bool = false
 	@State private var fetchResult: DefinitionFetchResult<[NorwegianDefinition]>?
+	private let initialDefinitions: [NorwegianDefinition]?
+
+	init(word: String, initialDefinitions: [NorwegianDefinition]? = nil) {
+		self._word = State(initialValue: word)
+		self.initialDefinitions = initialDefinitions
+		self._processedWords = State(initialValue: initialDefinitions ?? [])
+		self._isLoading = State(initialValue: initialDefinitions == nil)
+	}
 	
 	var body: some View {
 		VStack {
@@ -27,13 +35,11 @@ struct NorwegianWordDefinitionView: View {
 								VStack {
 									VStack(alignment: .leading) {
 										if let words = processedWord.words {
-											Text(words.joined(separator: ", ").uppercased())
-												.font(.largeTitle)
-												.bold()
+											Text(words.joined(separator: ", ").lowercased(with: Locale(identifier: "nb")))
+												.font(.system(.largeTitle, design: .serif, weight: .bold))
 										} else {
-											Text(self.word.uppercased())
-												.font(.largeTitle)
-												.bold()
+											Text(self.word.lowercased(with: Locale(identifier: "nb")))
+												.font(.system(.largeTitle, design: .serif, weight: .bold))
 										}
 										
 										
@@ -88,13 +94,17 @@ struct NorwegianWordDefinitionView: View {
 											
 										}
 										
-										if let definitions = processedWord.definitions {
-											ForEach(definitions, id: \.id) { definition in
-												DefinitionView(definition: definition, isNested: false, index: 1)
+										if let definitions = processedWord.definitions, !definitions.isEmpty {
+											Text("EXPLANATION AND USAGE")
+												.font(.headline)
+												.padding(.bottom, 3)
+											ForEach(Array(definitions.enumerated()), id: \.element.id) { index, definition in
+												NorwegianDefinitionTreeView(definition: definition, level: 0, index: index + 1)
 											}
 										}
 									}
 									.padding(25)
+									.padding(.bottom, self.sourceURL == nil ? 0 : 26)
 								}
 									.wordlrSurface(cornerRadius: 20)
 								.overlay(alignment: .bottomTrailing) {
@@ -158,9 +168,10 @@ struct NorwegianWordDefinitionView: View {
 			}
 		}
 		.frame(maxWidth: .infinity, maxHeight: .infinity)
-		.navigationTitle("\(self.word)")
+		.navigationTitle("Definition")
 		.darkGradientBackground(colorScheme: colorScheme)
 		.onAppear {
+			guard initialDefinitions == nil else { return }
 			definitionManager.getNorwegianDefinition(for: self.word) { result in
 				self.apply(result)
 				AnalyticsManager.shared.logDidViewWordDefinitionEvent(word: self.word, language: .norwegian, numberOfLetters: self.word.count, viewSuccess: !self.processedWords.isEmpty)
@@ -301,6 +312,89 @@ struct DefinitionView: View {
 				}
 			}
 		}
+	}
+}
+
+private struct NorwegianDefinitionTreeView: View {
+	let definition: ProcessedDefinition
+	let level: Int
+	let index: Int
+
+	var body: some View {
+		VStack(alignment: .leading, spacing: 14) {
+			self.definitionText
+			self.examples
+
+			ForEach(Array(self.definition.nestedDefinitions.enumerated()), id: \.element.id) { childIndex, nestedDefinition in
+				NorwegianDefinitionTreeView(definition: nestedDefinition, level: self.level + 1, index: childIndex + 1)
+			}
+
+			ForEach(self.definition.subArticles) { subArticle in
+				VStack(alignment: .leading, spacing: 10) {
+					Text("FIXED EXPRESSIONS")
+						.font(.headline)
+					Text(subArticle.title.lowercased(with: Locale(identifier: "nb")))
+						.font(.headline)
+					ForEach(Array(subArticle.definitions.enumerated()), id: \.element.id) { subIndex, subDefinition in
+						NorwegianDefinitionTreeView(definition: subDefinition, level: 0, index: subIndex + 1)
+					}
+				}
+				.padding(.top, 12)
+			}
+		}
+		.padding(.bottom, self.level == 0 ? 6 : 2)
+		.padding(.leading, self.level > 1 ? 36 : 0)
+	}
+
+	@ViewBuilder
+	private var definitionText: some View {
+		if !self.definition.explanations.isEmpty {
+			HStack(alignment: .firstTextBaseline, spacing: 12) {
+				if self.showsNumber {
+					Text("\(self.index).")
+						.bold()
+						.frame(minWidth: 24, alignment: .trailing)
+				} else if self.level > 1 {
+					Text("•")
+						.frame(minWidth: 24, alignment: .trailing)
+				}
+
+				Text(self.definition.explanations.joined(separator: ";\n"))
+					.fixedSize(horizontal: false, vertical: true)
+			}
+			.foregroundStyle(.secondary)
+		}
+	}
+
+	@ViewBuilder
+	private var examples: some View {
+		let allExamples = self.definition.examples + self.definition.quotes.map {
+			ProcessedExample(text: $0, explanation: "")
+		}
+		if !allExamples.isEmpty {
+			VStack(alignment: .leading, spacing: 8) {
+				if self.level < 2 {
+					Text("Example")
+						.font(.headline)
+				}
+				ForEach(allExamples) { example in
+					Text(self.exampleText(example))
+						.italic()
+						.foregroundStyle(.secondary)
+						.fixedSize(horizontal: false, vertical: true)
+				}
+			}
+			.padding(.leading, self.showsNumber || self.level > 1 ? 36 : 0)
+		}
+	}
+
+	private var showsNumber: Bool {
+		self.level == 1 || (self.level == 0 && self.definition.nestedDefinitions.isEmpty)
+	}
+
+	private func exampleText(_ example: ProcessedExample) -> String {
+		guard !example.explanation.isEmpty else { return example.text }
+		return "\(example.text) – \(example.explanation)"
 	}
 }
 
