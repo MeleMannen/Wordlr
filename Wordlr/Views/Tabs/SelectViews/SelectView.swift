@@ -275,7 +275,7 @@ struct SelectView: View {
 				adManager.shouldShowAds = true
 			}
 			DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-				reviewManager.checkForReviewPrompt()
+				reviewManager.checkForReviewPrompt(totalGamesPlayed: appManager.gameRecords.count)
 			}
 			AnalyticsManager.shared.logScreenViewed(screenName: "SelectView")
 		}

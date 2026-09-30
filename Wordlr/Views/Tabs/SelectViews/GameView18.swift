@@ -577,7 +577,7 @@ struct GameView18: View {
 			secondaryButton: .cancel(Text("Not now")) {
 				let currentWins = UserDefaults.standard.integer(forKey: "notificationPromptWinCount")
 				let currentThreshold = UserDefaults.standard.object(forKey: "notificationPromptNextWinThreshold") as? Int ?? 1
-				let increment = currentThreshold <= 1 ? 25 : 50
+				let increment = currentThreshold <= 10 ? 25 : 50
 				UserDefaults.standard.set(currentWins + increment, forKey: "notificationPromptNextWinThreshold")
 				appManager.shouldPromptForNotificationsAfterFirstWin = false
 			}

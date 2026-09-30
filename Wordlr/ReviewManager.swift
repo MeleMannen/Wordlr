@@ -19,7 +19,7 @@ class ReviewManager: ObservableObject {
 		}
 	}
 	
-	func checkForReviewPrompt() {
+	func checkForReviewPrompt(totalGamesPlayed: Int) {
 		let now = Date().timeIntervalSince1970
 		let day: TimeInterval = 24 * 60 * 60
 		
@@ -30,6 +30,7 @@ class ReviewManager: ObservableObject {
 		
 		let appAge = now - firstLaunchTime
 		let timeSinceLastPrompt = now - self.lastReviewPrompt
+		guard totalGamesPlayed >= 20 else { return }
 		
 		var shouldPrompt = false
 		
@@ -38,7 +39,7 @@ class ReviewManager: ObservableObject {
 			// Never prompted before: at least 14 days of app age
 			shouldPrompt = appAge >= 14 * day
 		case 1:
-			// Prompted once before: at least 40 days of app age
+			// Prompted once before: at least 50 days of app age
 			shouldPrompt = appAge >= 50 * day
 		case 2:
 			// Prompted twice before: at least 180 days of app age

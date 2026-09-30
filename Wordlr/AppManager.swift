@@ -1017,7 +1017,7 @@ final class AppManager: NSObject, FullScreenContentDelegate {
 		let currentWins = UserDefaults.standard.integer(forKey: winsKey) + 1
 		UserDefaults.standard.set(currentWins, forKey: winsKey)
 		
-		let nextPromptThreshold = UserDefaults.standard.object(forKey: nextPromptKey) as? Int ?? 1
+		let nextPromptThreshold = UserDefaults.standard.object(forKey: nextPromptKey) as? Int ?? 10
 		guard currentWins >= nextPromptThreshold else { return }
 		
 		self.shouldPromptForNotificationsAfterFirstWin = true
@@ -1028,7 +1028,7 @@ final class AppManager: NSObject, FullScreenContentDelegate {
 		guard !UserDefaults.standard.bool(forKey: promptDismissedKey) else { return }
 
 		let completedGamesKey = "proPromptCompletedGamesCount"
-		let promptThreshold = 15
+		let promptThreshold = 20
 		let completedGames = UserDefaults.standard.integer(forKey: completedGamesKey) + 1
 		UserDefaults.standard.set(completedGames, forKey: completedGamesKey)
 
