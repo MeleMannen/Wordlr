@@ -348,16 +348,46 @@ private struct WordlrDarkGradientBackgroundModifier: ViewModifier {
 				Color(uiColor: .secondarySystemBackground)
 					.ignoresSafeArea()
 			}
-        } else if #available(iOS 26.0, *), usesTransparentLists && !reduceTransparency {
+		} else if #available(iOS 26.0, *), usesTransparentLists && !reduceTransparency {
 			content.background {
-				if !ProcessInfo.processInfo.isiOSAppOnMac &&
-					(UIDevice.current.userInterfaceIdiom == .phone || UIDevice.current.userInterfaceIdiom == .pad) {
-					WordlrGreenBackgroundGradient(opacity: opacity)
+				GeometryReader { _ in
+					let idiom = UIDevice.current.userInterfaceIdiom
+					let isMac = ProcessInfo.processInfo.isiOSAppOnMac || idiom == .mac
+					let isPad = idiom == .pad
+
+					if isMac || isPad {
+						WordlrTopGreenBackgroundGradient(
+							opacity: opacity * (isMac ? 0.82 : 1),
+							tint: isMac ? Color(red: 0.20, green: 0.74, blue: 0.36) : .green
+						)
+					} else if idiom == .phone {
+						WordlrGreenBackgroundGradient(opacity: opacity)
+					}
 				}
 			}
 		} else {
 			content
 		}
+	}
+}
+
+struct WordlrTopGreenBackgroundGradient: View {
+	let opacity: Double
+	let tint: Color
+
+	var body: some View {
+		LinearGradient(
+			colors: [
+				tint.opacity(0.28 * opacity),
+				tint.opacity(0.14 * opacity),
+				.clear
+			],
+			startPoint: .top,
+			endPoint: .bottom
+		)
+		.frame(height: 460)
+		.frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+		.ignoresSafeArea()
 	}
 }
 

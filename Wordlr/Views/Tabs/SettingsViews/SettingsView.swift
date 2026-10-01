@@ -12,9 +12,8 @@ import StoreKit
 
 struct SettingsView: View {
 	@Environment(\.modelContext) private var context
-		@Environment(\.colorScheme) private var colorScheme
-		@Environment(\.accessibilityReduceMotion) private var reduceMotion
-		@Environment(\.accessibilityReduceTransparency) private var reduceTransparency
+	@Environment(\.colorScheme) private var colorScheme
+	@Environment(\.accessibilityReduceTransparency) private var reduceTransparency
 	@Environment(AdManager.self) private var adManager
 	@Environment(StoreManager.self) private var storeManager
 	@AppStorage("appTheme") private var appTheme: AppTheme = .dark
@@ -34,7 +33,6 @@ struct SettingsView: View {
 	@State private var showingNotificationSettingsAlert: Bool = false
 	@State private var showingSupportEmailUnavailableAlert: Bool = false
 	@State private var proSectionMaxY: CGFloat = 300
-	@State private var gradientVisibility: Double = 0
 	@State private var versionTapCount: Int = 0
 	@State private var lastVersionTapDate: Date?
 	
@@ -623,32 +621,41 @@ struct SettingsView: View {
 				if colorScheme == .light {
 					Color(uiColor: .secondarySystemBackground)
 						.ignoresSafeArea()
-				} else if !storeManager.isAdRemovalPurchased {
-					if #available(iOS 26.0, *) {
-						let scrollVisibility = max(0, min(1, proSectionMaxY / 300))
-						let gradientOpacity = usesTransparentLists ? 1 : scrollVisibility
-						WordlrGreenBackgroundGradient(opacity: gradientOpacity)
-							.opacity(gradientVisibility)
-							.ignoresSafeArea()
-					} else {
-						GeometryReader { geometry in
-							let isPhone = UIDevice.current.userInterfaceIdiom == .phone
-							let isLandscape = geometry.size.width > geometry.size.height
-							let endRadius = isPhone ? 420 : min(max(geometry.size.width * 0.85, 520), isLandscape ? 680 : 900)
-							let gradientOpacity = 0.34 * max(0, min(1, proSectionMaxY / 300))
-							RadialGradient(
-								colors: [
-									.green.opacity(gradientOpacity),
-									.green.opacity(gradientOpacity * 0.43),
-									.clear
-								],
-								center: .top,
-								startRadius: 0,
-								endRadius: endRadius
+				} else if #available(iOS 26.0, *), !reduceTransparency,
+					(usesTransparentLists || !storeManager.isAdRemovalPurchased) {
+					GeometryReader { _ in
+						let idiom = UIDevice.current.userInterfaceIdiom
+						let isMac = ProcessInfo.processInfo.isiOSAppOnMac || idiom == .mac
+						let isPad = idiom == .pad
+						let shouldFadeGradient = !usesTransparentLists && !storeManager.isAdRemovalPurchased
+						let gradientOpacity = shouldFadeGradient ? max(0, min(1, proSectionMaxY / 300)) : 1
+
+						if isMac || isPad {
+							WordlrTopGreenBackgroundGradient(
+								opacity: gradientOpacity * (isMac ? 0.82 : 1),
+								tint: isMac ? Color(red: 0.20, green: 0.74, blue: 0.36) : .green
 							)
-							.opacity(gradientVisibility)
-							.ignoresSafeArea()
+						} else if idiom == .phone {
+							WordlrGreenBackgroundGradient(opacity: gradientOpacity)
 						}
+					}
+				} else if !storeManager.isAdRemovalPurchased {
+					GeometryReader { geometry in
+						let isPhone = UIDevice.current.userInterfaceIdiom == .phone
+						let isLandscape = geometry.size.width > geometry.size.height
+						let endRadius = isPhone ? 420 : min(max(geometry.size.width * 0.85, 520), isLandscape ? 680 : 900)
+						let gradientOpacity = 0.34 * max(0, min(1, proSectionMaxY / 300))
+						RadialGradient(
+							colors: [
+								.green.opacity(gradientOpacity),
+								.green.opacity(gradientOpacity * 0.43),
+								.clear
+							],
+							center: .top,
+							startRadius: 0,
+							endRadius: endRadius
+						)
+						.ignoresSafeArea()
 					}
 				}
 			}
@@ -657,7 +664,6 @@ struct SettingsView: View {
 			.tint(.secondary)
 			.onAppear {
 				AnalyticsManager.shared.logScreenViewed(screenName: "SettingsView")
-				showInitialGradientIfNeeded()
 			}
 			.alert("No mail app available", isPresented: $showingSupportEmailUnavailableAlert) {
 				Button("OK", role: .cancel) { }
@@ -679,7 +685,7 @@ struct SettingsView: View {
 						.foregroundStyle(Color(uiColor: .systemGreen))
 				}
 				.glassEffect(.regular.tint(Color(uiColor: .systemGreen)).interactive(), in: .circle)
-				.conditionalShadow(color: .black.opacity(0.3), radius: 3, x: 4, y: 4)
+				.conditionalShadow(color: .black.opacity(0.2), radius: 2, x:  3, y: 3)
 		} else {
 			Image(systemName: "crown.fill")
 				.font(.title2)
@@ -712,16 +718,6 @@ struct SettingsView: View {
 	private func scheduleNotification(reminder: DailyWordReminder) {
 		if notificationsEnabled {
 			NotificationManager.scheduleDailyWordReminder(reminder: reminder, context: context)
-		}
-	}
-
-	private func showInitialGradientIfNeeded() {
-		if reduceMotion {
-			gradientVisibility = 1
-		} else {
-			withAnimation(.easeInOut(duration: 0.8)) {
-				gradientVisibility = 1
-			}
 		}
 	}
 
